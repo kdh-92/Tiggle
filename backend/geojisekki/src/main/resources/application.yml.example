@@ -3,7 +3,7 @@ spring:
     hibernate:
       ddl-auto: update
   datasource:
-    url: jdbc:mysql://localhost:3306/geogisekki
+    url: ####
     username: "####"
     password: "####"
     driver-class-name: com.mysql.cj.jdbc.Driver
