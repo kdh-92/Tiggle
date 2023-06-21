@@ -1,10 +1,10 @@
-package com.side.geogisekki;
+package com.side.geojisekki;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class GeogisekkiApplicationTests {
+class GeojisekkiApplicationTests {
 
 	@Test
 	void contextLoads() {
