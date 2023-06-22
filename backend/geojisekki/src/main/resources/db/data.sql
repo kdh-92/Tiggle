@@ -1,3 +1,3 @@
-INSERT INTO member (name, password)
-VALUES ('test1', 'password1'),
-       ('test2', 'password2');
+INSERT INTO geoji (username, email, birth, password, nickname)
+VALUES ('kdh', 'kdh@email.com', 920411, 'kdh', 'kdh'),
+       ('권동현', 'kwondonghyun@email.com', 920411, '권동현', '권동현');
