@@ -1,4 +1,4 @@
-# geoji-sekki
+# tiggle
 
 ## Branch
 - main : 배포 가능한 상태만 관리하는 브랜치
