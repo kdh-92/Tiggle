@@ -1,10 +1,10 @@
-package com.side.geojisekki;
+package com.side.tiggle;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class GeojisekkiApplicationTests {
+class TiggleApplicationTests {
 
 	@Test
 	void contextLoads() {
