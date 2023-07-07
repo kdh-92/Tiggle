@@ -1,0 +1,18 @@
+app:
+  oauth2:
+    google:
+      client-id: 11539140822-cbmckcrgi6bp67o86vat84acgkrqi5vp.apps.googleusercontent.com
+      client-secret: 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
+      token-uri: https://oauth2.googleapis.com/token
+      resource-uri: https://www.googleapis.com/oauth2/v2/userinfo
+      redirect-uri: http://localhost:8080/auth/oauth2/google
+spring:
+  h2:
+    console:
+      enabled: true
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:~/tiggle
+    username: sa
+    password:
+
