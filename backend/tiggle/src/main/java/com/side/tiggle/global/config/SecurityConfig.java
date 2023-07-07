@@ -1,5 +1,6 @@
 package com.side.tiggle.global.config;
 
+import com.side.tiggle.domain.oauth.OAuth2FailureHandler;
 import com.side.tiggle.domain.oauth.OAuth2Service;
 import com.side.tiggle.domain.oauth.OAuth2SuccessHandler;
 import com.side.tiggle.global.auth.JwtTokenProvider;
@@ -20,6 +21,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
 
     private final OAuth2SuccessHandler oAuth2SuccessHandler;
+    private final OAuth2FailureHandler oAuth2FailureHandler;
     private final OAuth2Service oAuth2Service;
     private final JwtTokenProvider jwtTokenProvider;
 
@@ -30,14 +32,18 @@ public class SecurityConfig {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
+                .antMatchers("/api/**").permitAll()
+                .antMatchers("/").permitAll()
                 .anyRequest().authenticated()
+//                .anyRequest().permitAll()
                 .and()
                 .logout().logoutSuccessUrl("/") // 로그아웃 리다이렉트 위치
                 .and()
+                .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class)
                 .oauth2Login()
-                .successHandler(oAuth2SuccessHandler).loginPage("https://google.com") // 로그인 리다이렉트 위치
+                .failureHandler(oAuth2FailureHandler)
+                .successHandler(oAuth2SuccessHandler)
                 .userInfoEndpoint().userService(oAuth2Service);
-        http.addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 }

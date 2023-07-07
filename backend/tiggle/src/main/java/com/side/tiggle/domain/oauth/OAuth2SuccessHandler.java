@@ -15,6 +15,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.Optional;
 
@@ -27,7 +28,6 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
     private final MemberRepository memberRepository;
     private final JwtTokenProvider jwtTokenProvider;
     private final ObjectMapper objectMapper;
-
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication)
             throws IOException {
@@ -48,6 +48,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         else {
             authMember = member.get();
         }
+
         String token = jwtTokenProvider.getAccessToken(authMember.getId(), "ROLE_USER");
         String refreshToken = jwtTokenProvider.getRefreshToken(authMember.getId(), "ROLE_USER");
         String targetUrl = UriComponentsBuilder.fromUriString("/home")
