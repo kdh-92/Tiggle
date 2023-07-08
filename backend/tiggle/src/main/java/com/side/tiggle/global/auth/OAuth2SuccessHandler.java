@@ -28,10 +28,8 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication)
             throws IOException {
+
         OAuth2User oAuth2User = (OAuth2User)authentication.getPrincipal();
-        /**
-         * TODO: 회원가입 처리 및 로그인 처리를 하고 토큰을 발급한다
-         */
         Optional<Member> member = this.memberRepository.findByEmail(oAuth2User.getAttribute("email"));
         Member authMember;
         log.info("oAuth2User : {}", oAuth2User);
@@ -48,6 +46,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
             authMember = member.get();
         }
 
+        // 토큰 발급
         String token = jwtTokenProvider.getAccessToken(authMember.getId(), "ROLE_USER");
         String refreshToken = jwtTokenProvider.getRefreshToken(authMember.getId(), "ROLE_USER");
         String targetUrl = UriComponentsBuilder.fromUriString("/api/external")
