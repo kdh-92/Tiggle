@@ -1,5 +1,6 @@
 package com.side.tiggle.global.auth;
 
+import com.side.tiggle.domain.member.MemberDto;
 import com.side.tiggle.domain.member.model.Member;
 import com.side.tiggle.domain.member.repository.MemberRepository;
 import io.jsonwebtoken.Claims;
@@ -67,13 +68,12 @@ public class JwtTokenProvider {
     public Authentication getAuthentication(String token) {
         long memberId = this.getUserId(token);
 
-        // TODO member에 대한 AuthMember DTO를 만들고 이걸로 auth를 생성한다
         Optional<Member> member = this.memberRepository.findById(memberId);
         if (member.isEmpty()) {
             return null;
         }
         SimpleGrantedAuthority authority = new SimpleGrantedAuthority("ROLE_USER");
-        return new UsernamePasswordAuthenticationToken(member, null, List.of(authority));
+        return new UsernamePasswordAuthenticationToken(MemberDto.fromEntity(member.get()), null, List.of(authority));
     }
 
     public String resolveTokenFromRequest(HttpServletRequest request) {
