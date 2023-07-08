@@ -32,6 +32,12 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 //	testImplementation 'org.springframework.security:spring-security-test'
+
+	// DB 셋업이 없는 동안 임시 설정
+	runtimeOnly 'com.h2database:h2'
+
+	// Swagger
+	implementation 'org.springdoc:springdoc-openapi-ui:1.6.15'
 }
 
 tasks.named('test') {
