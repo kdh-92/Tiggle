@@ -1,8 +1,8 @@
 package com.side.tiggle.global.config;
 
-import com.side.tiggle.domain.oauth.OAuth2FailureHandler;
-import com.side.tiggle.domain.oauth.OAuth2Service;
-import com.side.tiggle.domain.oauth.OAuth2SuccessHandler;
+import com.side.tiggle.global.auth.OAuth2FailureHandler;
+import com.side.tiggle.global.auth.OAuth2Service;
+import com.side.tiggle.global.auth.OAuth2SuccessHandler;
 import com.side.tiggle.global.auth.JwtTokenProvider;
 import com.side.tiggle.global.filter.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
@@ -11,7 +11,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.oauth2.client.web.OAuth2LoginAuthenticationFilter;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
@@ -32,7 +31,7 @@ public class SecurityConfig {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .antMatchers("/api/**").permitAll()
+                .antMatchers("/api/external/**").permitAll()
                 .antMatchers("/").permitAll()
                 .anyRequest().authenticated()
 //                .anyRequest().permitAll()

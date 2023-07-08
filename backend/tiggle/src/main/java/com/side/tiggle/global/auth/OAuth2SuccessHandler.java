@@ -1,9 +1,8 @@
-package com.side.tiggle.domain.oauth;
+package com.side.tiggle.global.auth;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.side.tiggle.domain.member.model.Member;
 import com.side.tiggle.domain.member.repository.MemberRepository;
-import com.side.tiggle.global.auth.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
@@ -12,10 +11,8 @@ import org.springframework.security.web.authentication.SimpleUrlAuthenticationSu
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.Optional;
 
@@ -37,12 +34,14 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
          */
         Optional<Member> member = this.memberRepository.findByEmail(oAuth2User.getAttribute("email"));
         Member authMember;
-        log.info("Principal에서 꺼낸 OAuth2User = {}", oAuth2User);
+        log.info("oAuth2User : {}", oAuth2User);
         // 최초 로그인이라면 회원가입 처리를 한다.
-
-        log.info("토큰 발행 시작");
         if (member.isEmpty()) {
-            authMember = new Member(oAuth2User.getAttribute("email"), oAuth2User.getAttribute("profileUrl"));
+            authMember = new Member(
+                    oAuth2User.getAttribute("email"),
+                    oAuth2User.getAttribute("profile_url"),
+                    oAuth2User.getAttribute("nickname")
+            );
             this.memberRepository.save(authMember);
         }
         else {
@@ -51,7 +50,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
         String token = jwtTokenProvider.getAccessToken(authMember.getId(), "ROLE_USER");
         String refreshToken = jwtTokenProvider.getRefreshToken(authMember.getId(), "ROLE_USER");
-        String targetUrl = UriComponentsBuilder.fromUriString("/home")
+        String targetUrl = UriComponentsBuilder.fromUriString("/api/external")
                 .queryParam("token", token)
                 .queryParam("refreshToken", refreshToken)
                 .build().toUriString();

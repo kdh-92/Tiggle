@@ -1,10 +1,9 @@
-package com.side.tiggle.domain.oauth;
+package com.side.tiggle.global.auth;
 
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 
-import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,6 +15,7 @@ public class OAuth2Attribute {
     private String email;
     private String profileUrl;
     private String birthString;
+    private String nickname;
 
     static OAuth2Attribute of(String provider, String attributeKey,
                               Map<String, Object> attributes) {
@@ -37,8 +37,9 @@ public class OAuth2Attribute {
         return OAuth2Attribute.builder()
                 .email((String) attributes.get("email"))
                 .profileUrl((String)attributes.get("picture"))
+                .nickname((String)attributes.get("name"))
                 .attributes(attributes)
-                .attributeKey(attributeKey)
+                .attributeKey((String)attributes.get(attributeKey))
                 .build();
     }
 
@@ -48,6 +49,7 @@ public class OAuth2Attribute {
         map.put("key", attributeKey);
         map.put("email", email);
         map.put("profile_url", profileUrl);
+        map.put("nickname", nickname);
 
         return map;
     }

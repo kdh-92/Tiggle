@@ -31,8 +31,9 @@ public class Member extends BaseEntity {
     @Column(name = "provider_id")
     private String providerId;
 
-    public Member(String email, String profileUrl) {
+    public Member(String email, String profileUrl, String nickname) {
         this.email = email;
         this.profileUrl = profileUrl;
+        this.nickname = nickname;
     }
 }

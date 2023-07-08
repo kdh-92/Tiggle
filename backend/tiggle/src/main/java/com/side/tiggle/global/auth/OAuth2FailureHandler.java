@@ -1,4 +1,4 @@
-package com.side.tiggle.domain.oauth;
+package com.side.tiggle.global.auth;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.AuthenticationException;
