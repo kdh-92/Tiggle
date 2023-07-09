@@ -76,12 +76,12 @@ public class JwtTokenProvider {
         return new UsernamePasswordAuthenticationToken(MemberDto.fromEntity(member.get()), null, List.of(authority));
     }
 
-    public String resolveTokenFromRequest(HttpServletRequest request) {
-        String token = request.getHeader("token");
-        if (token == null || token.length() < 1) {
-            return null;
-        }
-        return token;
+    public String resolveAccessToken(HttpServletRequest request) {
+        return request.getHeader("x-access-token");
+    }
+
+    public String resolveRefreshToken(HttpServletRequest request){
+        return request.getHeader("x-refresh-token");
     }
 
     public long getUserId(String jwtToken){
@@ -90,7 +90,7 @@ public class JwtTokenProvider {
 
     public boolean isTokenValid(String token) {
         final Date expiry = extractClaims(token).getExpiration();
-        return expiry.before(new Date());
+        return expiry.after(new Date());
     }
 
     private Claims extractClaims(String jwtToken) {

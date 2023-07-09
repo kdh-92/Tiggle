@@ -49,10 +49,12 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         // 토큰 발급
         String token = jwtTokenProvider.getAccessToken(authMember.getId(), "ROLE_USER");
         String refreshToken = jwtTokenProvider.getRefreshToken(authMember.getId(), "ROLE_USER");
-        String targetUrl = UriComponentsBuilder.fromUriString("/api/external")
-                .queryParam("token", token)
-                .queryParam("refreshToken", refreshToken)
+        String targetUrl = UriComponentsBuilder.fromUriString("/login/success")
                 .build().toUriString();
+        
+        // 토큰을 redirectUrl로 보내지 않고 원래 response의 헤더에 붙여서 보낸다
+        response.setHeader("x-access-token", token);
+        response.setHeader("x-refresh-token", refreshToken);
         getRedirectStrategy().sendRedirect(request, response, targetUrl);
     }
 }

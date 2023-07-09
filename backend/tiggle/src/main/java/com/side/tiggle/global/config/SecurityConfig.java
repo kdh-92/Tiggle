@@ -23,6 +23,7 @@ public class SecurityConfig {
     private final OAuth2FailureHandler oAuth2FailureHandler;
     private final OAuth2Service oAuth2Service;
     private final JwtTokenProvider jwtTokenProvider;
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -32,13 +33,13 @@ public class SecurityConfig {
                 .and()
                 .authorizeRequests()
                 .antMatchers("/api/external/**").permitAll()
-                .antMatchers("/").permitAll()
+                .antMatchers("/login/**").permitAll()
                 .anyRequest().authenticated()
 //                .anyRequest().permitAll()
                 .and()
-                .logout().logoutSuccessUrl("/") // 로그아웃 리다이렉트 위치
+                .logout().logoutSuccessUrl("/logout") // 로그아웃 리다이렉트 위치
                 .and()
-                .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .oauth2Login()
                 .failureHandler(oAuth2FailureHandler)
                 .successHandler(oAuth2SuccessHandler)
