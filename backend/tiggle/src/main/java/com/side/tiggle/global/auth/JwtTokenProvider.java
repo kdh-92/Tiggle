@@ -77,11 +77,11 @@ public class JwtTokenProvider {
     }
 
     public String resolveAccessToken(HttpServletRequest request) {
-        return request.getHeader("x-access-token");
+        return request.getHeader("Authorization").substring("Bearer ".length());
     }
 
     public String resolveRefreshToken(HttpServletRequest request){
-        return request.getHeader("x-refresh-token");
+        return request.getHeader("Refresh");
     }
 
     public long getUserId(String jwtToken){

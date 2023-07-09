@@ -5,6 +5,7 @@ import com.side.tiggle.domain.member.model.Member;
 import com.side.tiggle.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseCookie;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
@@ -51,10 +52,10 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         String refreshToken = jwtTokenProvider.getRefreshToken(authMember.getId(), "ROLE_USER");
         String targetUrl = UriComponentsBuilder.fromUriString("/login/success")
                 .build().toUriString();
-        
+
         // 토큰을 redirectUrl로 보내지 않고 원래 response의 헤더에 붙여서 보낸다
-        response.setHeader("x-access-token", token);
-        response.setHeader("x-refresh-token", refreshToken);
+        response.setHeader("Authorization", "Bearer " + token);
+        response.setHeader("Refresh", refreshToken);
         getRedirectStrategy().sendRedirect(request, response, targetUrl);
     }
 }
