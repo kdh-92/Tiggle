@@ -23,7 +23,7 @@ public class Transaction extends BaseEntity {
     @Column(name = "member_id", nullable = false)
     private Long memberId;
 
-    @Column(name = "parent_id", nullable = true)
+    @Column(name = "parent_id")
     private Long parentId;
 
     @Enumerated(EnumType.STRING)

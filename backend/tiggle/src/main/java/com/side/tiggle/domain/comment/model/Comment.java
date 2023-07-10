@@ -22,7 +22,7 @@ public class Comment extends BaseEntity {
     @Column(name = "tx_id", nullable = false)
     private Long txId;
 
-    @Column(name = "parent_id", nullable = true)
+    @Column(name = "parent_id")
     private Long parentId;
 
     @Column(name = "sender_id", nullable = false)
