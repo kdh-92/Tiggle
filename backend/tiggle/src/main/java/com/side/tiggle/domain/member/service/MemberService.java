@@ -12,6 +12,7 @@ import java.util.List;
 /**
  * 임시 CRUD (추가 작업 필요)
  */
+
 @Service
 @RequiredArgsConstructor
 public class MemberService {
@@ -26,9 +27,7 @@ public class MemberService {
                 .birth(memberDto.getBirth())
                 .build();
 
-        Member createdMember = memberRepository.save(member);
-
-        return memberDto.fromEntity(createdMember);
+        return memberDto.fromEntity(memberRepository.save(member));
     }
 
     public MemberDto getMember(Long memberId) {
@@ -37,12 +36,12 @@ public class MemberService {
     }
 
     public List<MemberDto> getAllMember() {
-        List<MemberDto> memberDtos = new ArrayList<>();
+        List<MemberDto> memberDtoList = new ArrayList<>();
         for (Member member : memberRepository.findAll()) {
-            memberDtos.add(MemberDto.fromEntity(member));
+            memberDtoList.add(MemberDto.fromEntity(member));
         }
 
-        return memberDtos;
+        return memberDtoList;
     }
 
     public MemberDto updateMember(Long id, MemberDto memberDto) {
@@ -55,5 +54,7 @@ public class MemberService {
 
         return memberDto.fromEntity(memberRepository.save(member));
     }
+
+    // delete
 }
 

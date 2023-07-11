@@ -8,7 +8,6 @@ import javax.persistence.*;
 @Entity
 @Data
 @EqualsAndHashCode(callSuper = false)
-@Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Table(name = "comments")
@@ -35,8 +34,9 @@ public class Comment extends BaseEntity {
     private String content;
 
     @Builder
-    public Comment(Long txId, Long senderId, Long receiverId, String content) {
+    public Comment(Long txId, Long parentId, Long senderId, Long receiverId, String content) {
         this.txId = txId;
+        this.parentId = parentId;
         this.senderId = senderId;
         this.receiverId = receiverId;
         this.content = content;
