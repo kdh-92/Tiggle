@@ -22,6 +22,7 @@ public class MemberDto {
         dto.email = member.getEmail();
         dto.nickname = member.getNickname();
         dto.profileUrl = member.getProfileUrl();
+
         return dto;
     }
 }

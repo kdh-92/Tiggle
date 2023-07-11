@@ -22,6 +22,7 @@ public class CommentDto {
         dto.senderId = comment.getSenderId();
         dto.receiverId = comment.getReceiverId();
         dto.content = comment.getContent();
+
         return dto;
     }
 }
