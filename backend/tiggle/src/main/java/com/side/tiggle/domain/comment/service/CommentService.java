@@ -3,7 +3,6 @@ package com.side.tiggle.domain.comment.service;
 import com.side.tiggle.domain.comment.CommentDto;
 import com.side.tiggle.domain.comment.repository.CommentRepository;
 import com.side.tiggle.domain.comment.model.Comment;
-import com.side.tiggle.domain.comment.repository.CommentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -46,8 +45,8 @@ public class CommentService {
         return CommentDtoList;
     }
 
-    public CommentDto updateComment(Long id, CommentDto commentDto) {
-        Comment comment = commentRepository.findById(id)
+    public CommentDto updateComment(Long commentId, CommentDto commentDto) {
+        Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 댓글이 존재하지 않습니다."));
 
         comment.setContent(commentDto.getContent());

@@ -1,6 +1,5 @@
 package com.side.tiggle.domain.transaction.model;
 
-import com.side.tiggle.domain.reaction.model.ReactionType;
 import com.side.tiggle.global.common.model.BaseEntity;
 import lombok.*;
 
@@ -10,7 +9,6 @@ import java.time.LocalDate;
 @Entity
 @Data
 @EqualsAndHashCode(callSuper = false)
-@Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Table(name = "transactions")
@@ -46,8 +44,9 @@ public class Transaction extends BaseEntity {
     private String reason;
 
     @Builder
-    public Transaction(Long memberId, TransactionType type, String imageUrl, Integer amount, LocalDate date, String content, String reason) {
+    public Transaction(Long memberId, Long parentId, TransactionType type, String imageUrl, Integer amount, LocalDate date, String content, String reason) {
         this.memberId = memberId;
+        this.parentId = parentId;
         this.type = type;
         this.imageUrl = imageUrl;
         this.amount = amount;

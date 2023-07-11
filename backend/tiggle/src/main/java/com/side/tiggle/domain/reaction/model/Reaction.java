@@ -8,7 +8,6 @@ import javax.persistence.*;
 @Entity
 @Data
 @EqualsAndHashCode(callSuper = false)
-@Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Table(name = "reactions")

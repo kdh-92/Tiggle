@@ -1,7 +1,5 @@
 package com.side.tiggle.domain.reaction.service;
 
-import com.side.tiggle.domain.member.MemberDto;
-import com.side.tiggle.domain.member.model.Member;
 import com.side.tiggle.domain.reaction.ReactionDto;
 import com.side.tiggle.domain.reaction.model.Reaction;
 import com.side.tiggle.domain.reaction.repository.ReactionRepository;

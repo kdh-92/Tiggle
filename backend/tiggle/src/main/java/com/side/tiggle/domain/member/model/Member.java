@@ -2,12 +2,9 @@ package com.side.tiggle.domain.member.model;
 
 import com.side.tiggle.global.common.model.BaseEntity;
 import lombok.*;
-import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Entity
 @Data

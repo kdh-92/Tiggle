@@ -2,7 +2,6 @@ package com.side.tiggle.domain.reaction;
 
 import com.side.tiggle.domain.reaction.model.Reaction;
 import com.side.tiggle.domain.reaction.model.ReactionType;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 

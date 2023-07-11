@@ -44,8 +44,8 @@ public class MemberService {
         return memberDtoList;
     }
 
-    public MemberDto updateMember(Long id, MemberDto memberDto) {
-        Member member = memberRepository.findById(id)
+    public MemberDto updateMember(Long memberId, MemberDto memberDto) {
+        Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 유저가 존재하지 않습니다."));
 
         member.setProfileUrl(memberDto.getProfileUrl());

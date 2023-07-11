@@ -16,13 +16,12 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/member")
+@RequestMapping("/api/v1/member")
 public class MemberApiController {
 
     private final MemberService memberService;
 
     @PostMapping
-    @Transactional
     public ResponseEntity<MemberDto> createMember(@RequestBody MemberDto memberDto) {
         return new ResponseEntity<>(memberService.createMember(memberDto), HttpStatus.CREATED);
     }
@@ -38,7 +37,6 @@ public class MemberApiController {
     }
 
     @PutMapping("/{id}")
-    @Transactional
     public ResponseEntity<MemberDto> updateMember(@PathVariable("id") Long memberId,
                                                   @RequestBody MemberDto memberDto) {
         return new ResponseEntity<>(memberService.updateMember(memberId, memberDto), HttpStatus.OK);
