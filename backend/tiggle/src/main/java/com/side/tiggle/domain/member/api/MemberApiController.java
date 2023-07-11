@@ -10,6 +10,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * 임시 CRUD (추가 작업 필요)
+ */
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/member")
