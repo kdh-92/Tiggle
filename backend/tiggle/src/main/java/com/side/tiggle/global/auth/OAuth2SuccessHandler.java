@@ -39,7 +39,8 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
             authMember = new Member(
                     oAuth2User.getAttribute("email"),
                     oAuth2User.getAttribute("profile_url"),
-                    oAuth2User.getAttribute("nickname")
+                    oAuth2User.getAttribute("nickname"),
+                    oAuth2User.getAttribute("birth")
             );
             this.memberRepository.save(authMember);
         }

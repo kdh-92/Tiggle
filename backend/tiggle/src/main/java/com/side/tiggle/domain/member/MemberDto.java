@@ -3,7 +3,6 @@ package com.side.tiggle.domain.member;
 import com.side.tiggle.domain.member.model.Member;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import java.time.LocalDate;
 
@@ -23,6 +22,7 @@ public class MemberDto {
         dto.email = member.getEmail();
         dto.nickname = member.getNickname();
         dto.profileUrl = member.getProfileUrl();
+
         return dto;
     }
 }
