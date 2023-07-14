@@ -14,6 +14,7 @@ CREATE TABLE `comments`
     `content`     varchar(255) NOT NULL ,
     `sender_id`   bigint NOT NULL ,
     `receiver_id` bigint NOT NULL ,
+    `deleted` TinyInt(1) DEFAULT 0,
     `created_at` timestamp DEFAULT CURRENT_TIMESTAMP,
     `updated_at` timestamp DEFAULT NULL ,
     `deleted_at` timestamp DEFAULT NULL ,
@@ -32,7 +33,7 @@ CREATE TABLE `grades`
 
 CREATE TABLE `members` (
     `id` bigint NOT NULL AUTO_INCREMENT,
-    `email` varchar(30) NOT NULL,
+    `email` varchar(100) NOT NULL,
     `profile_url` varchar(255) DEFAULT NULL,
     `birth` date NOT NULL,
     `nickname` varchar(30) NOT NULL,
