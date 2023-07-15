@@ -35,7 +35,7 @@ CREATE TABLE `members` (
     `id` bigint NOT NULL AUTO_INCREMENT,
     `email` varchar(100) NOT NULL,
     `profile_url` varchar(255) DEFAULT NULL,
-    `birth` date NOT NULL,
+    `birth` date NULL,
     `nickname` varchar(30) NOT NULL,
     `provider` VARCHAR(255) DEFAULT NULL,
     `provider_id` VARCHAR(255) DEFAULT NULL,
