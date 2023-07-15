@@ -33,8 +33,8 @@ public class CommentService {
     public Comment updateComment(Long memberId, Long commentId, String content) {
         Comment comment = commentRepository.findById(commentId).stream().filter( it -> it.getSenderId().equals(memberId)).findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("해당 댓글이 존재하지 않습니다."));
-
         comment.setContent(content);
+        commentRepository.save(comment);
         return comment;
     }
 
