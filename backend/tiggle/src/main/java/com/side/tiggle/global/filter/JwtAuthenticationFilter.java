@@ -22,9 +22,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtTokenProvider jwtTokenProvider;
     private final String[] excludePatterns = {
-            "/api/external",
-            "/login",
-//            "/"
+//            "/api/v1",
+//            "/login",
+            "/"
     };
 
     @Override

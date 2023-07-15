@@ -32,10 +32,10 @@ public class SecurityConfig {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .antMatchers("/api/external/**").permitAll()
+                .antMatchers("/api/v1/**").permitAll()
                 .antMatchers("/login/**").permitAll()
-                .anyRequest().authenticated()
-//                .anyRequest().permitAll()
+//                .anyRequest().authenticated()
+                .anyRequest().permitAll() // 개발 단계에서는 모든 접근 허용
                 .and()
                 .logout().logoutSuccessUrl("/logout") // 로그아웃 리다이렉트 위치
                 .and()
