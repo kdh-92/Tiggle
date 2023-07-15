@@ -2,7 +2,7 @@ INSERT INTO members (email, birth, nickname)
 VALUES ('csw@email.com', 20000101, '최선우'),
        ('kdh@email.com', 20000102, '권동현'),
        ('jhr@email.com', 20000201, '정해림'),
-       ('kjk@email.com', 20000202, '김진경');
+       ('kjk@email.com', 20000202, '송진경');
 
 INSERT INTO transactions (member_id, member_assets_id, member_categories_id, type, amount, date, content, reason)
 VALUES (1, 1, 1, 'OUTCOME', 10000, '20230101', '첫 번째 지출 제목', '첫 번째 지출 내역'),
