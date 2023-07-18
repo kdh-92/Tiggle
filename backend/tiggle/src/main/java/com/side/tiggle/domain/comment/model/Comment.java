@@ -1,7 +1,9 @@
 package com.side.tiggle.domain.comment.model;
 
+import com.side.tiggle.domain.transaction.model.Transaction;
 import com.side.tiggle.global.common.model.BaseEntity;
 import lombok.*;
+import org.hibernate.annotations.SQLDelete;
 
 import javax.persistence.*;
 
@@ -10,6 +12,7 @@ import javax.persistence.*;
 @EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
+@SQLDelete(sql = "UPDATE comments SET deleted_at = CURRENT_TIMESTAMP, deleted = true where id = ?")
 @Table(name = "comments")
 public class Comment extends BaseEntity {
 
@@ -17,9 +20,9 @@ public class Comment extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-
-    @Column(name = "tx_id", nullable = false)
-    private Long txId;
+    @JoinColumn(name = "tx_id", nullable = false)
+    @ManyToOne
+    private Transaction tx;
 
     @Column(name = "parent_id")
     private Long parentId;
@@ -34,8 +37,8 @@ public class Comment extends BaseEntity {
     private String content;
 
     @Builder
-    public Comment(Long txId, Long parentId, Long senderId, Long receiverId, String content) {
-        this.txId = txId;
+    public Comment(Transaction tx, Long parentId, Long senderId, Long receiverId, String content) {
+        this.tx = tx;
         this.parentId = parentId;
         this.senderId = senderId;
         this.receiverId = receiverId;

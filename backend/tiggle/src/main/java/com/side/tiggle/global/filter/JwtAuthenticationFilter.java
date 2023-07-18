@@ -22,9 +22,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtTokenProvider jwtTokenProvider;
     private final String[] excludePatterns = {
-//            "/api/v1",
-//            "/login",
-            "/"
+            "/login.*",
+            "/swagger.*",
+            "/v3/api-docs.*",
+            "/webjars/swagger-ui/VERSION.*",
+            "^/api/\\d/external/[^/]+(/[^/]+)?$"
+//            "/api/v1"
     };
 
     @Override
@@ -53,6 +56,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
         String path = request.getRequestURI();
-        return Arrays.stream(excludePatterns).anyMatch(path::startsWith);
+        return Arrays.stream(excludePatterns).anyMatch(path::matches);
     }
 }

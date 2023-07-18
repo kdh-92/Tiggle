@@ -34,7 +34,7 @@ public class JwtTokenProvider {
     private String secret = "secrettigglesecrettigglesecrettiggle";
     private SecretKey secretKey;
 
-    private final long tokenExpiry = 60L * 30L; // sec
+    private final long tokenExpiry = 60L * 60L * 1000000000L; // sec
     private final long refreshTokenExpiry = 60L * 60L * 24L; // sec
 
     @PostConstruct
