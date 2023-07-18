@@ -11,9 +11,9 @@ import java.time.LocalDate;
 @Setter
 public class TransactionDto {
 
-    long id;
-    long memberId;
-    long parentId;
+    Long id;
+    Long memberId;
+    Long parentId;
     TransactionType type;
     String imageUrl;
     Integer amount;
