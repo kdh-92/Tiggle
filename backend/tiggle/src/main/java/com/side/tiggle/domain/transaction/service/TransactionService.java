@@ -1,13 +1,16 @@
 package com.side.tiggle.domain.transaction.service;
 
-import com.side.tiggle.domain.transaction.TransactionDto;
+import com.side.tiggle.domain.transaction.dto.TransactionDto;
 import com.side.tiggle.domain.transaction.model.Transaction;
 import com.side.tiggle.domain.transaction.repository.TransactionRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 임시 CRUD (추가 작업 필요)
@@ -37,6 +40,18 @@ public class TransactionService {
     public TransactionDto getTransaction(Long transactionId) {
         return TransactionDto.fromEntity(transactionRepository.findById(transactionId)
                 .orElseThrow(() -> new RuntimeException("")));
+    }
+
+    public List<TransactionDto> getMemberCountOffsetTransaction(Long memberId, int count, int offset) {
+        return transactionRepository.findByMemberId(
+                memberId, PageRequest.of(offset, count, Sort.by(Sort.Direction.DESC, "createdAt"))
+        ).stream().map(tx -> TransactionDto.fromEntity(tx)).collect(Collectors.toList());
+    }
+
+    public List<TransactionDto> getCountOffsetTransaction(int count, int offset) {
+        return transactionRepository.findAll(
+                PageRequest.of(offset, count, Sort.by(Sort.Direction.DESC, "createdAt"))
+        ).getContent().stream().map(tx -> TransactionDto.fromEntity(tx)).collect(Collectors.toList());
     }
 
     public List<TransactionDto> getAllTransaction() {

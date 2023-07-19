@@ -1,4 +1,4 @@
-package com.side.tiggle.domain.transaction;
+package com.side.tiggle.domain.transaction.dto;
 
 import com.side.tiggle.domain.transaction.model.Transaction;
 import com.side.tiggle.domain.transaction.model.TransactionType;
