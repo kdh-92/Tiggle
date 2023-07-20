@@ -1,16 +1,17 @@
 package com.side.tiggle.domain.transaction.api;
 
+import com.side.tiggle.domain.member.MemberDto;
 import com.side.tiggle.domain.transaction.dto.TransactionDto;
 import com.side.tiggle.domain.transaction.service.TransactionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -18,11 +19,15 @@ import java.util.Optional;
 public class TransactionApiController {
 
     private final TransactionService transactionService;
-    private final int defaultCount = 5;
+    private final String DEFAULT_COUNT = "5";
+    private final String DEFAULT_OFFSET = "0";
 
     @PostMapping
-    public ResponseEntity<TransactionDto> createTransaction(@RequestBody TransactionDto transactionDto) {
-        return new ResponseEntity<>(transactionService.createTransaction(transactionDto), HttpStatus.CREATED);
+    public ResponseEntity<TransactionDto.TransactionResponseDto> createTransaction(@RequestBody TransactionDto.TransactionRequestDto dto) {
+        return new ResponseEntity<>(
+                TransactionDto.fromEntity(transactionService.createTransaction(dto)),
+                HttpStatus.CREATED
+        );
     }
 
     /**
@@ -31,8 +36,11 @@ public class TransactionApiController {
      * @return
      */
     @GetMapping("/{id}")
-    public ResponseEntity<TransactionDto> getTransaction(@PathVariable("id") Long transactionId) {
-        return new ResponseEntity<>(transactionService.getTransaction(transactionId), HttpStatus.OK);
+    public ResponseEntity<TransactionDto.TransactionResponseDto> getTransaction(@PathVariable("id") Long transactionId) {
+        return new ResponseEntity<>(
+                TransactionDto.fromEntity(transactionService.getTransaction(transactionId)),
+                HttpStatus.OK
+        );
     }
 
     /**
@@ -45,9 +53,14 @@ public class TransactionApiController {
      */
 
     @GetMapping
-    public ResponseEntity<List<TransactionDto>> getCountOffsetTransaction(@NotBlank @RequestParam("count") int count, @RequestParam(defaultValue = "0") int offset) {
-        if (count > 0) return new ResponseEntity<>(transactionService.getCountOffsetTransaction(count, offset), HttpStatus.OK);
-        else return new ResponseEntity<>(transactionService.getCountOffsetTransaction(defaultCount, offset), HttpStatus.OK);
+    public ResponseEntity<List<TransactionDto.TransactionResponseDto>> getCountOffsetTransaction(@NotBlank @RequestParam(defaultValue = DEFAULT_COUNT) int count, @RequestParam(defaultValue = DEFAULT_OFFSET) int offset) {
+        return new ResponseEntity<>(
+                transactionService.getCountOffsetTransaction(count, offset)
+                        .stream()
+                        .map(tx -> TransactionDto.fromEntity(tx))
+                        .collect(Collectors.toList()),
+                HttpStatus.OK
+        );
     }
 
     /**
@@ -58,24 +71,43 @@ public class TransactionApiController {
      * @return
      */
     @GetMapping("/member")
-    public ResponseEntity<List<TransactionDto>> getMemberCountOffsetTransaction(@NotBlank @RequestParam Long memberId, @NotBlank @RequestParam("count") int count, @RequestParam(defaultValue = "0") int offset) {
-        if (count > 0) return new ResponseEntity<>(transactionService.getMemberCountOffsetTransaction(memberId, count, offset), HttpStatus.OK);
-        else return new ResponseEntity<>(transactionService.getMemberCountOffsetTransaction(memberId, defaultCount, offset), HttpStatus.OK);
+    public ResponseEntity<List<TransactionDto.TransactionResponseDto>> getMemberCountOffsetTransaction(@NotBlank @RequestParam Long memberId, @NotBlank @RequestParam(defaultValue = DEFAULT_COUNT) int count, @RequestParam(defaultValue = DEFAULT_OFFSET) int offset) {
+        return new ResponseEntity<>(
+                transactionService.getMemberCountOffsetTransaction(memberId, count, offset)
+                        .stream()
+                        .map(tx -> TransactionDto.fromEntity(tx))
+                        .collect(Collectors.toList()),
+                HttpStatus.OK
+        );
     }
 
 
 
     @GetMapping("/all")
-    public ResponseEntity<List<TransactionDto>> getAllTransaction() {
-        return new ResponseEntity<>(transactionService.getAllTransaction(), HttpStatus.OK);
+    public ResponseEntity<List<TransactionDto.TransactionResponseDto>> getAllTransaction() {
+        return new ResponseEntity<>(
+                transactionService.getAllTransaction()
+                        .stream()
+                        .map(tx -> TransactionDto.fromEntity(tx))
+                        .collect(Collectors.toList()),
+                HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<TransactionDto> updateTransaction(@PathVariable("id") Long transactionId,
-                                                    @RequestBody TransactionDto transactionDto) {
-        return new ResponseEntity<>(transactionService.updateTransaction(transactionId, transactionDto), HttpStatus.OK);
+    public ResponseEntity<TransactionDto.TransactionResponseDto> updateTransaction(@PathVariable("id") Long transactionId,
+                                                                                   @RequestBody TransactionDto.TransactionUpdateRequestDto dto) {
+        return new ResponseEntity<>(
+                TransactionDto.fromEntity(transactionService.updateTransaction(transactionId, dto)),
+                HttpStatus.OK
+        );
     }
 
-    // delete
-
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteTransaction(
+            @AuthenticationPrincipal MemberDto memberDto,
+            @PathVariable("id") Long transactionId
+    ) {
+        transactionService.deleteTransaction(memberDto.getId(), transactionId);
+        return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
+    }
 }
