@@ -1,8 +1,15 @@
 package com.side.tiggle.domain.transaction.api;
 
+import com.side.tiggle.domain.comment.CommentDto;
+import com.side.tiggle.domain.comment.model.Comment;
+import com.side.tiggle.domain.comment.service.CommentService;
 import com.side.tiggle.domain.transaction.TransactionDto;
 import com.side.tiggle.domain.transaction.service.TransactionService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +22,7 @@ import java.util.List;
 public class TransactionApiController {
 
     private final TransactionService transactionService;
+    private final CommentService commentService;
 
     @PostMapping
     public ResponseEntity<TransactionDto> createComment(@RequestBody TransactionDto transactionDto) {
@@ -39,4 +47,16 @@ public class TransactionApiController {
 
     // delete
 
+
+    @GetMapping("/{id}/comments")
+    public ResponseEntity<Page<CommentDto.Response.CommentRespDto>> getAllCommentsByTx(
+            @PathVariable Long id,
+            @RequestParam(name = "index", defaultValue = "0") int index,
+            @RequestParam(name = "pageSize", defaultValue = "5") int pageSize
+    ){
+        Pageable pageable = PageRequest.of(index, pageSize, Sort.Direction.DESC, "id");
+        Page<Comment> pagedComments = commentService.getParentsByTxId(id, pageable);
+        Page<CommentDto.Response.CommentRespDto> pagedResult = CommentDto.Response.CommentRespDto.fromEntityPage(pagedComments);
+        return new ResponseEntity<>(pagedResult, HttpStatus.OK);
+    }
 }

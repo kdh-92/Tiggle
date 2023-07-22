@@ -1,17 +1,15 @@
 package com.side.tiggle.domain.comment.service;
 
-import com.side.tiggle.domain.comment.dto.CommentDto;
+import com.side.tiggle.domain.comment.CommentDto;
 import com.side.tiggle.domain.comment.model.Comment;
 import com.side.tiggle.domain.comment.repository.CommentRepository;
 import com.side.tiggle.domain.member.repository.MemberRepository;
 import com.side.tiggle.domain.transaction.model.Transaction;
 import com.side.tiggle.domain.transaction.repository.TransactionRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-/**
- * 임시 CRUD (추가 작업 필요)
- */
 
 @Service
 @RequiredArgsConstructor
@@ -20,6 +18,16 @@ public class CommentService {
     private final CommentRepository commentRepository;
     private final MemberRepository memberRepository;
     private final TransactionRepository transactionRepository;
+
+    public Page<Comment> getParentsByTxId(Long txId, Pageable pageable){
+        Transaction tx = transactionRepository.findById(txId)
+                .orElseThrow(()-> new IllegalArgumentException("거래를 찾을 수 없습니다"));
+        return commentRepository.findAllByTxAndParentIdNull(tx, pageable);
+    }
+
+    public Page<Comment> getChildrenByParentId(Long parentId, Pageable pageable){
+        return commentRepository.findAllByParentId(parentId, pageable);
+    }
 
     public Comment createComment(CommentDto commentDto) {
         Transaction tx = transactionRepository.findById(commentDto.getTxId())
