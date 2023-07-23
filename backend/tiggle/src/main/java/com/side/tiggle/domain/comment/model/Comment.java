@@ -1,5 +1,6 @@
 package com.side.tiggle.domain.comment.model;
 
+import com.side.tiggle.domain.member.model.Member;
 import com.side.tiggle.domain.transaction.model.Transaction;
 import com.side.tiggle.global.common.model.BaseEntity;
 import lombok.*;
@@ -8,7 +9,8 @@ import org.hibernate.annotations.SQLDelete;
 import javax.persistence.*;
 
 @Entity
-@Data
+@Getter
+@Setter
 @EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
@@ -27,8 +29,9 @@ public class Comment extends BaseEntity {
     @Column(name = "parent_id")
     private Long parentId;
 
-    @Column(name = "sender_id", nullable = false)
-    private Long senderId;
+    @JoinColumn(name = "sender_id", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Member sender;
 
     @Column(name = "receiver_id", nullable = false)
     private Long receiverId;
@@ -37,10 +40,10 @@ public class Comment extends BaseEntity {
     private String content;
 
     @Builder
-    public Comment(Transaction tx, Long parentId, Long senderId, Long receiverId, String content) {
+    public Comment(Transaction tx, Member sender, Long parentId, Long receiverId, String content) {
         this.tx = tx;
+        this.sender = sender;
         this.parentId = parentId;
-        this.senderId = senderId;
         this.receiverId = receiverId;
         this.content = content;
     }

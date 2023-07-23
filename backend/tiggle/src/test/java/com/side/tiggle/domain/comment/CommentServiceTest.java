@@ -113,15 +113,20 @@ public class CommentServiceTest {
     @Test
     @DisplayName("사용자는 코멘트 삭제에 성공한다, 삭제는 Soft Delete 되어야 한다")
     void 코멘트_삭제(){
-        CommentDto.Request.Update dto = new CommentDto.Request.Update();
-        dto.setContent("Updated comment");
 
-        Long commentId = 1L;
+        // TODO 이 테스트는 실패한다
         Long senderId = 3L;
+        CommentDto dto = new CommentDto();
+        dto.setSenderId(senderId);
+        dto.setReceiverId(2L);
+        dto.setTxId(1L);
+        dto.setContent("Comment");
+
+        Long commentId = commentService.createComment(dto).getId();
         commentService.deleteComment(senderId, commentId);
 
         Optional<Comment> comment = commentRepository.findById(commentId);
-        Assertions.assertFalse(comment.isEmpty());
+        Assertions.assertTrue(comment.isPresent());
         Assertions.assertTrue(comment.get().isDeleted());
         Assertions.assertNotNull(comment.get().getDeletedAt());
     }

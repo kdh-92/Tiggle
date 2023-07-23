@@ -7,9 +7,6 @@ import com.side.tiggle.domain.transaction.TransactionDto;
 import com.side.tiggle.domain.transaction.service.TransactionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -44,9 +41,6 @@ public class TransactionApiController {
                                                     @RequestBody TransactionDto transactionDto) {
         return new ResponseEntity<>(transactionService.updateTransaction(transactionId, transactionDto), HttpStatus.OK);
     }
-
-    // delete
-
 
     @GetMapping("/{id}/comments")
     public ResponseEntity<Page<CommentDto.Response.CommentRespDto>> getAllCommentsByTx(

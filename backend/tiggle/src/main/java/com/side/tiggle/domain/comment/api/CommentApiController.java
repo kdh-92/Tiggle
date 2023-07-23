@@ -40,12 +40,13 @@ public class CommentApiController {
         return new ResponseEntity<>(pagedResult, HttpStatus.OK);
     }
 
-
+    @PostMapping
     public ResponseEntity<CommentDto.Response.CommentRespDto> createComment(
             @AuthenticationPrincipal MemberDto memberDto,
             @RequestBody @Valid CommentDto commentDto) {
         commentDto.setSenderId(memberDto.getId());
-        CommentDto.Response.CommentRespDto respDto = CommentDto.Response.CommentRespDto.fromEntity(commentService.createComment(commentDto));
+        CommentDto.Response.CommentRespDto respDto = CommentDto.Response.CommentRespDto
+                .fromEntity(commentService.createComment(commentDto));
         return new ResponseEntity<>(respDto, HttpStatus.CREATED);
     }
 
@@ -54,7 +55,8 @@ public class CommentApiController {
             @AuthenticationPrincipal MemberDto memberDto,
             @PathVariable("id") Long commentId,
             @RequestBody CommentDto.Request.Update dto) {
-        CommentDto.Response.CommentRespDto respDto = CommentDto.Response.CommentRespDto.fromEntity(commentService.updateComment(memberDto.getId(), commentId, dto.getContent()));
+        CommentDto.Response.CommentRespDto respDto = CommentDto.Response.CommentRespDto
+                .fromEntity(commentService.updateComment(memberDto.getId(), commentId, dto.getContent()));
         return new ResponseEntity<>(respDto, HttpStatus.OK);
     }
 

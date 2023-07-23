@@ -1,6 +1,8 @@
 package com.side.tiggle.domain.comment;
 
 import com.side.tiggle.domain.comment.model.Comment;
+import com.side.tiggle.domain.member.MemberDto;
+import com.side.tiggle.domain.member.model.Member;
 import com.side.tiggle.domain.transaction.model.Transaction;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,11 +29,11 @@ public class CommentDto {
     @NotNull @Size(max = 255)
     String content;
 
-    public Comment toEntity(Transaction tx) {
+    public Comment toEntity(Transaction tx, Member sender) {
         return Comment.builder()
             .tx(tx)
             .parentId(parentId)
-            .senderId(senderId)
+            .sender(sender)
             .receiverId(receiverId)
             .content(content)
             .build();
@@ -41,7 +43,7 @@ public class CommentDto {
         CommentDto dto = new CommentDto();
         dto.txId = comment.getTx().getId();
         dto.parentId = comment.getParentId();
-        dto.senderId = comment.getSenderId();
+        dto.senderId = comment.getSender().getId();
         dto.receiverId = comment.getReceiverId();
         dto.content = comment.getContent();
 
@@ -66,32 +68,29 @@ public class CommentDto {
 
             Long id;
             LocalDateTime createdAt;
-            @NotNull
             Long txId;
             Long parentId;
-            @NotNull
-            Long senderId;
-            @NotNull
             Long receiverId;
-            @NotNull @Size(max = 255)
             String content;
+
+            MemberDto sender; // 작성자 정보
 
             public static CommentRespDto fromEntity(Comment comment) {
                 CommentRespDto dto = new CommentRespDto();
                 dto.setContent(comment.getContent());
                 dto.setParentId(comment.getParentId());
                 dto.setReceiverId(comment.getReceiverId());
-                dto.setSenderId(comment.getSenderId());
                 dto.setTxId(comment.getTx().getId());
                 dto.setId(comment.getId());
                 dto.setCreatedAt(comment.getCreatedAt());
+                dto.setSender(MemberDto.fromEntity(comment.getSender()));
                 return dto;
             }
 
-            public static Page<CommentRespDto> fromEntityPage(Page<Comment> commentPage){
-                List<CommentRespDto> commentRespDtos = commentPage.getContent()
+            public static Page<CommentRespDto> fromEntityPage(Page<Comment> comments){
+                List<CommentRespDto> dtoList = comments.getContent()
                         .stream().map(CommentRespDto::fromEntity).collect(Collectors.toList());
-                return new PageImpl<>(commentRespDtos, commentPage.getPageable(), commentPage.getTotalElements());
+                return new PageImpl<>(dtoList, comments.getPageable(), comments.getTotalElements());
             }
         }
     }
