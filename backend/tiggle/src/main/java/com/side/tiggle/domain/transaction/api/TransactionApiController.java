@@ -51,11 +51,10 @@ public class TransactionApiController {
     @GetMapping("/{id}/comments")
     public ResponseEntity<Page<CommentDto.Response.CommentRespDto>> getAllCommentsByTx(
             @PathVariable Long id,
-            @RequestParam(name = "index", defaultValue = "0") int index,
-            @RequestParam(name = "pageSize", defaultValue = "5") int pageSize
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "size", defaultValue = "5") int size
     ){
-        Pageable pageable = PageRequest.of(index, pageSize, Sort.Direction.DESC, "id");
-        Page<Comment> pagedComments = commentService.getParentsByTxId(id, pageable);
+        Page<Comment> pagedComments = commentService.getParentsByTxId(id, page, size);
         Page<CommentDto.Response.CommentRespDto> pagedResult = CommentDto.Response.CommentRespDto.fromEntityPage(pagedComments);
         return new ResponseEntity<>(pagedResult, HttpStatus.OK);
     }

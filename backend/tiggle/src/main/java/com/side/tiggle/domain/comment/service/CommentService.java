@@ -6,9 +6,12 @@ import com.side.tiggle.domain.comment.repository.CommentRepository;
 import com.side.tiggle.domain.member.repository.MemberRepository;
 import com.side.tiggle.domain.transaction.model.Transaction;
 import com.side.tiggle.domain.transaction.repository.TransactionRepository;
+import com.side.tiggle.domain.transaction.service.TransactionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -19,13 +22,15 @@ public class CommentService {
     private final MemberRepository memberRepository;
     private final TransactionRepository transactionRepository;
 
-    public Page<Comment> getParentsByTxId(Long txId, Pageable pageable){
+    public Page<Comment> getParentsByTxId(Long txId, int page, int size){
         Transaction tx = transactionRepository.findById(txId)
                 .orElseThrow(()-> new IllegalArgumentException("거래를 찾을 수 없습니다"));
+        Pageable pageable = PageRequest.of(page, size, Sort.Direction.DESC, "id");
         return commentRepository.findAllByTxAndParentIdNull(tx, pageable);
     }
 
-    public Page<Comment> getChildrenByParentId(Long parentId, Pageable pageable){
+    public Page<Comment> getChildrenByParentId(Long parentId, int page, int size){
+        Pageable pageable = PageRequest.of(page, size, Sort.Direction.DESC, "id");
         return commentRepository.findAllByParentId(parentId, pageable);
     }
 

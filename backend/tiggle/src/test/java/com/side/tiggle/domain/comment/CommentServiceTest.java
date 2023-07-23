@@ -151,9 +151,7 @@ public class CommentServiceTest {
 
         commentService.createComment(dto);
 
-        Page<Comment> comment = commentService.getChildrenByParentId(dto.parentId,
-                PageRequest.of(0, Integer.MAX_VALUE)
-        );
+        Page<Comment> comment = commentService.getChildrenByParentId(dto.parentId, 0, Integer.MAX_VALUE );
         Assertions.assertFalse(comment.isEmpty());
         Assertions.assertFalse(comment.getContent().isEmpty());
     }
@@ -178,9 +176,7 @@ public class CommentServiceTest {
         commentService.createComment(dto);
         commentService.createComment(dto1);
 
-        Page<Comment> comments = commentService.getParentsByTxId(txId, PageRequest.of(
-                0, Integer.MAX_VALUE
-        ));
+        Page<Comment> comments = commentService.getParentsByTxId(txId, 0, Integer.MAX_VALUE );
 
         // 댓글을 반환한다
         Optional<Comment> shouldReturn = comments.getContent().stream().filter(it ->

@@ -32,11 +32,10 @@ public class CommentApiController {
     @GetMapping("/{id}/replies")
     public ResponseEntity<Page<CommentDto.Response.CommentRespDto>> getAllCommentsByCommentId(
             @PathVariable Long id,
-            @RequestParam(name = "index", defaultValue = "0") int index,
-            @RequestParam(name = "pageSize", defaultValue = "5") int pageSize
+            @RequestParam(name = "index", defaultValue = "0") int page,
+            @RequestParam(name = "pageSize", defaultValue = "5") int size
     ){
-        Pageable pageable = PageRequest.of(index, pageSize, Sort.Direction.DESC, "id");
-        Page<Comment> pagedComments = commentService.getChildrenByParentId(id, pageable);
+        Page<Comment> pagedComments = commentService.getChildrenByParentId(id, page, size);
         Page<CommentDto.Response.CommentRespDto> pagedResult = CommentDto.Response.CommentRespDto.fromEntityPage(pagedComments);
         return new ResponseEntity<>(pagedResult, HttpStatus.OK);
     }
