@@ -3,7 +3,13 @@ package com.side.tiggle.domain.transaction.api;
 import com.side.tiggle.domain.member.MemberDto;
 import com.side.tiggle.domain.transaction.dto.TransactionDto;
 import com.side.tiggle.domain.transaction.service.TransactionService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -23,81 +29,81 @@ public class TransactionApiController {
     private final String DEFAULT_OFFSET = "0";
 
     @PostMapping
-    public ResponseEntity<TransactionDto.TransactionResponseDto> createTransaction(@RequestBody TransactionDto.TransactionRequestDto dto) {
+    public ResponseEntity<TransactionDto.Response.RespDto> createTransaction(@RequestBody TransactionDto.Request.ReqDto dto) {
+        ;
         return new ResponseEntity<>(
-                TransactionDto.fromEntity(transactionService.createTransaction(dto)),
+                TransactionDto.Response.RespDto.fromEntity(transactionService.createTransaction(dto)),
                 HttpStatus.CREATED
         );
     }
 
-    /**
-     * tx 상세 조회
-     * @param transactionId
-     * @return
-     */
+    @Operation(summary = "tx 상세 조회", description = "tx의 id에 대한 상세 정보를 반환합니다.", responses = {
+            @ApiResponse(responseCode = "200", description = "tx 상세 조회 성공", content = @Content(schema = @Schema(implementation = TransactionDto.Response.RespDto.class))),
+            @ApiResponse(responseCode = "400", description = "존재하지 않는 리소스 접근"),
+    })
     @GetMapping("/{id}")
-    public ResponseEntity<TransactionDto.TransactionResponseDto> getTransaction(@PathVariable("id") Long transactionId) {
+    public ResponseEntity<TransactionDto.Response.RespDto> getTransaction(@Parameter(name = "id", description = "tx의 id") @PathVariable("id") Long transactionId) {
         return new ResponseEntity<>(
-                TransactionDto.fromEntity(transactionService.getTransaction(transactionId)),
+                TransactionDto.Response.RespDto.fromEntity(transactionService.getTransaction(transactionId)),
                 HttpStatus.OK
         );
     }
 
-    /**
-     * 최신 n개 & page 처리 된 tx 조회
-     * n개의 tx가 있고 n개를 넘긴 tx page 조회 요청이 있을 때 빈 배열이 반환되는데 이 부분에 대해 어떻게 처리할지 논의하기
-     *
-     * @param count
-     * @param offset
-     * @return
-     */
-
+    @Operation(
+            summary = "tx 페이지 조회 API",
+            description = "페이지(index)에 해당하는 tx 개수(pageSize)의 정보를 반환합니다.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "tx 페이지 조회 성공", content = @Content(schema = @Schema(implementation = TransactionDto.Response.RespDto.class))),
+                    @ApiResponse(responseCode = "400", description = "존재하지 않는 리소스 접근")
+            })
     @GetMapping
-    public ResponseEntity<List<TransactionDto.TransactionResponseDto>> getCountOffsetTransaction(@NotBlank @RequestParam(defaultValue = DEFAULT_COUNT) int count, @RequestParam(defaultValue = DEFAULT_OFFSET) int offset) {
+    public ResponseEntity<Page<TransactionDto.Response.RespDto>> getCountOffsetTransaction(
+            @Parameter(name = "index", description = "tx 페이지") @NotBlank @RequestParam(defaultValue = DEFAULT_COUNT) int index,
+            @Parameter(name = "pageSize", description = "페이지 개수") @RequestParam(defaultValue = DEFAULT_OFFSET) int pageSize
+    ) {
         return new ResponseEntity<>(
-                transactionService.getCountOffsetTransaction(count, offset)
-                        .stream()
-                        .map(tx -> TransactionDto.fromEntity(tx))
-                        .collect(Collectors.toList()),
+                TransactionDto.Response.RespDto.fromEntityPage(transactionService.getCountOffsetTransaction(pageSize, index)),
                 HttpStatus.OK
         );
     }
 
-    /**
-     * 특정 memberId에 해당하는 tx 조회
-     * @param memberId
-     * @param count
-     * @param offset
-     * @return
-     */
+    @Operation(
+            summary = "특정 유저 tx 페이지 조회 API",
+            description = "memberId 유저의 페이지(index)에 해당하는 tx 개수(pageSize)의 정보를 반환합니다.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "tx 페이지 조회 성공", content = @Content(schema = @Schema(implementation = TransactionDto.Response.RespDto.class))),
+                    @ApiResponse(responseCode = "400", description = "존재하지 않는 리소스 접근")
+            })
     @GetMapping("/member")
-    public ResponseEntity<List<TransactionDto.TransactionResponseDto>> getMemberCountOffsetTransaction(@NotBlank @RequestParam Long memberId, @NotBlank @RequestParam(defaultValue = DEFAULT_COUNT) int count, @RequestParam(defaultValue = DEFAULT_OFFSET) int offset) {
+    public ResponseEntity<Page<TransactionDto.Response.RespDto>> getMemberCountOffsetTransaction(
+            @Parameter(name = "memberId", description = "유저 id") @NotBlank @RequestParam Long memberId,
+            @Parameter(name = "index", description = "tx 페이지") @NotBlank @RequestParam(defaultValue = DEFAULT_COUNT) int index,
+            @Parameter(name = "pageSize", description = "페이지 개수") @RequestParam(defaultValue = DEFAULT_OFFSET) int pageSize
+    ) {
         return new ResponseEntity<>(
-                transactionService.getMemberCountOffsetTransaction(memberId, count, offset)
-                        .stream()
-                        .map(tx -> TransactionDto.fromEntity(tx))
-                        .collect(Collectors.toList()),
+                TransactionDto.Response.RespDto.fromEntityPage(transactionService.getMemberCountOffsetTransaction(memberId, pageSize, index)),
                 HttpStatus.OK
         );
     }
-
-
 
     @GetMapping("/all")
-    public ResponseEntity<List<TransactionDto.TransactionResponseDto>> getAllTransaction() {
+    public ResponseEntity<List<TransactionDto.Response.RespDto>> getAllTransaction() {
         return new ResponseEntity<>(
                 transactionService.getAllTransaction()
                         .stream()
-                        .map(tx -> TransactionDto.fromEntity(tx))
+                        .map(TransactionDto.Response.RespDto::fromEntity)
                         .collect(Collectors.toList()),
                 HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<TransactionDto.TransactionResponseDto> updateTransaction(@PathVariable("id") Long transactionId,
-                                                                                   @RequestBody TransactionDto.TransactionUpdateRequestDto dto) {
+    public ResponseEntity<TransactionDto.Response.RespDto> updateTransaction(
+            @PathVariable("id") Long transactionId,
+            @AuthenticationPrincipal MemberDto memberDto,
+            @RequestBody TransactionDto.Request.ReqDto dto
+    ) {
         return new ResponseEntity<>(
-                TransactionDto.fromEntity(transactionService.updateTransaction(transactionId, dto)),
+                TransactionDto.Response.RespDto.fromEntity(transactionService.updateTransaction(memberDto.getId(), transactionId, dto)),
                 HttpStatus.OK
         );
     }
