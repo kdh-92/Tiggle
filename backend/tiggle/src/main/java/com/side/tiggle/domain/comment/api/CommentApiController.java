@@ -1,6 +1,8 @@
 package com.side.tiggle.domain.comment.api;
 
-import com.side.tiggle.domain.comment.CommentDto;
+import com.side.tiggle.domain.comment.dto.req.CommentCreateReqDto;
+import com.side.tiggle.domain.comment.dto.req.CommentUpdateReqDto;
+import com.side.tiggle.domain.comment.dto.resp.CommentRespDto;
 import com.side.tiggle.domain.comment.model.Comment;
 import com.side.tiggle.domain.comment.service.CommentService;
 import com.side.tiggle.domain.member.MemberDto;
@@ -8,9 +10,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -30,33 +29,31 @@ public class CommentApiController {
 
     @Operation(summary = "대댓글 조회 API", description = "댓글의 id를 가지고 대댓글을 조회한다")
     @GetMapping("/{id}/replies")
-    public ResponseEntity<Page<CommentDto.Response.CommentRespDto>> getAllCommentsByCommentId(
+    public ResponseEntity<Page<CommentRespDto>> getAllCommentsByCommentId(
             @PathVariable Long id,
             @RequestParam(name = "index", defaultValue = "0") int page,
             @RequestParam(name = "pageSize", defaultValue = "5") int size
     ){
         Page<Comment> pagedComments = commentService.getChildrenByParentId(id, page, size);
-        Page<CommentDto.Response.CommentRespDto> pagedResult = CommentDto.Response.CommentRespDto.fromEntityPage(pagedComments);
+        Page<CommentRespDto> pagedResult = CommentRespDto.fromEntityPage(pagedComments);
         return new ResponseEntity<>(pagedResult, HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<CommentDto.Response.CommentRespDto> createComment(
+    public ResponseEntity<CommentRespDto> createComment(
             @AuthenticationPrincipal MemberDto memberDto,
-            @RequestBody @Valid CommentDto commentDto) {
+            @RequestBody @Valid CommentCreateReqDto commentDto) {
         commentDto.setSenderId(memberDto.getId());
-        CommentDto.Response.CommentRespDto respDto = CommentDto.Response.CommentRespDto
-                .fromEntity(commentService.createComment(commentDto));
+        CommentRespDto respDto = CommentRespDto.fromEntity(commentService.createComment(commentDto));
         return new ResponseEntity<>(respDto, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<CommentDto.Response.CommentRespDto> updateComment(
+    public ResponseEntity<CommentRespDto> updateComment(
             @AuthenticationPrincipal MemberDto memberDto,
             @PathVariable("id") Long commentId,
-            @RequestBody CommentDto.Request.Update dto) {
-        CommentDto.Response.CommentRespDto respDto = CommentDto.Response.CommentRespDto
-                .fromEntity(commentService.updateComment(memberDto.getId(), commentId, dto.getContent()));
+            @RequestBody CommentUpdateReqDto dto) {
+        CommentRespDto respDto = CommentRespDto.fromEntity(commentService.updateComment(memberDto.getId(), commentId, dto.getContent()));
         return new ResponseEntity<>(respDto, HttpStatus.OK);
     }
 

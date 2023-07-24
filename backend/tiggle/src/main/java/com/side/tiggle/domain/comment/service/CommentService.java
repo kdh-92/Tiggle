@@ -1,6 +1,6 @@
 package com.side.tiggle.domain.comment.service;
 
-import com.side.tiggle.domain.comment.CommentDto;
+import com.side.tiggle.domain.comment.dto.req.CommentCreateReqDto;
 import com.side.tiggle.domain.comment.model.Comment;
 import com.side.tiggle.domain.comment.repository.CommentRepository;
 import com.side.tiggle.domain.member.model.Member;
@@ -39,7 +39,7 @@ public class CommentService {
         return commentRepository.findAllByParentId(parentId, pageable);
     }
 
-    public Comment createComment(CommentDto commentDto) {
+    public Comment createComment(CommentCreateReqDto commentDto) {
         // TODO : Service 메소드로 수정한다
         Transaction tx = transactionRepository.findById(commentDto.getTxId())
                 .orElseThrow(() -> new IllegalArgumentException("유효하지 않은 요청입니다"));
@@ -67,7 +67,7 @@ public class CommentService {
         commentRepository.delete(comment);
     }
 
-    private void assertValid(CommentDto dto) {
+    private void assertValid(CommentCreateReqDto dto) {
         if (dto.getParentId() != null) {
             commentRepository.findById(dto.getParentId())
                     .orElseThrow(()-> new IllegalArgumentException("유효하지 않은 요청입니다"));

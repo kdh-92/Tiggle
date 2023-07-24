@@ -1,6 +1,6 @@
 package com.side.tiggle.domain.transaction.api;
 
-import com.side.tiggle.domain.comment.CommentDto;
+import com.side.tiggle.domain.comment.dto.resp.CommentRespDto;
 import com.side.tiggle.domain.comment.model.Comment;
 import com.side.tiggle.domain.comment.service.CommentService;
 import com.side.tiggle.domain.transaction.TransactionDto;
@@ -43,13 +43,13 @@ public class TransactionApiController {
     }
 
     @GetMapping("/{id}/comments")
-    public ResponseEntity<Page<CommentDto.Response.CommentRespDto>> getAllCommentsByTx(
+    public ResponseEntity<Page<CommentRespDto>> getAllCommentsByTx(
             @PathVariable Long id,
             @RequestParam(name = "page", defaultValue = "0") int page,
             @RequestParam(name = "size", defaultValue = "5") int size
     ){
         Page<Comment> pagedComments = commentService.getParentsByTxId(id, page, size);
-        Page<CommentDto.Response.CommentRespDto> pagedResult = CommentDto.Response.CommentRespDto.fromEntityPage(pagedComments);
+        Page<CommentRespDto> pagedResult = CommentRespDto.fromEntityPage(pagedComments);
         return new ResponseEntity<>(pagedResult, HttpStatus.OK);
     }
 }
