@@ -1,18 +1,19 @@
+import styled from "styled-components";
 import { Content } from "antd/es/layout/layout"
 import ContentSection from "../molecules/ContentSection";
-import { ContentProps } from "../../utils/types";
 
-export const ContentOrganism = ({theme}: ContentProps) => {
+const StyledContent = styled(Content)`
+  min-height: 100vh;
+  min-width: 100%;
+  padding: 1rem;
+  display: flex;
+  justify-content: center;
+`;
+
+export const ContentOrganism = () => {
     return(
-        <Content
-        className="site-layout"
-        style={{
-          padding: "0 50px",
-          display: "flex",
-          justifyContent: "center",
-        }}
-      >
-        <ContentSection theme={theme} />
-      </Content>
+        <StyledContent>
+          <ContentSection />
+        </StyledContent>
     );
 };

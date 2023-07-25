@@ -3,7 +3,7 @@ import HeaderLeft from "../atoms/HeaderLeft"
 
 export default function HeaderSection () {
     return (
-        <div className="header-wrap">
+        <div>
             <HeaderLeft />
             <HeaderRight />
         </div>
