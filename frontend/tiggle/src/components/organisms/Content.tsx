@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { Content } from "antd/es/layout/layout"
+import { Content } from "antd/es/layout/layout";
 import ContentSection from "../molecules/ContentSection";
 
 const StyledContent = styled(Content)`
@@ -11,9 +11,9 @@ const StyledContent = styled(Content)`
 `;
 
 export const ContentOrganism = () => {
-    return(
-        <StyledContent>
-          <ContentSection />
-        </StyledContent>
-    );
+  return (
+    <StyledContent>
+      <ContentSection />
+    </StyledContent>
+  );
 };

@@ -11,11 +11,11 @@ const StyledHeaderRight = styled.div`
   }
 `;
 
-export default function HeaderRight () {
+export default function HeaderRight() {
   return (
     <StyledHeaderRight>
       <Bell className="bell" />
       <Avatar />
     </StyledHeaderRight>
   );
-};
+}

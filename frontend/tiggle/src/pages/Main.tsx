@@ -3,7 +3,6 @@ import { FooterOrganism as Footer } from "../components/organisms/Footer";
 import { ContentOrganism as Content } from "../components/organisms/Content";
 
 const Main = () => {
-
   return (
     <>
       <Header />

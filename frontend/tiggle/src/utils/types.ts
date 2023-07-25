@@ -1,4 +1,3 @@
-
 export type ContentProps = {
-    theme: string;
-}
+  theme: string;
+};

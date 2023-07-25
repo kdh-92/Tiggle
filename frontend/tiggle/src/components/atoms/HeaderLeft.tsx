@@ -10,16 +10,15 @@ const StyledHeaderLeft = styled.div`
   > ul {
     width: 70%;
     border-bottom: none;
-    color: #667BA3;
+    color: #667ba3;
 
     @media (max-width: 768px) {
-      display : none;
+      display: none;
     }
   }
 `;
 
 export default function HeaderLeft() {
-
   const item = ["통계", "랭킹"].map((el, index) => ({
     key: String(index + 1),
     label: el,
@@ -27,11 +26,8 @@ export default function HeaderLeft() {
 
   return (
     <StyledHeaderLeft>
-        <h2>tiggle</h2>
-        <Menu
-          mode="horizontal"
-          items={item}
-        />
+      <h2>tiggle</h2>
+      <Menu mode="horizontal" items={item} />
     </StyledHeaderLeft>
   );
-};
+}

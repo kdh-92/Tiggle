@@ -1,4 +1,4 @@
-import { ReactNode  } from "react";
+import { ReactNode } from "react";
 
 type FooterIconProps = {
   icon: ReactNode;
@@ -6,11 +6,15 @@ type FooterIconProps = {
   iconClass?: string;
 };
 
-export default function FooterIcon ( {icon, iconName, iconClass} : FooterIconProps ) {
+export default function FooterIcon({
+  icon,
+  iconName,
+  iconClass,
+}: FooterIconProps) {
   return (
     <div className={iconClass}>
       {icon}
       <span>{iconName}</span>
     </div>
   );
-};
+}
