@@ -1,6 +1,7 @@
 package com.side.tiggle.domain.transaction.service;
 
 import com.side.tiggle.domain.transaction.dto.TransactionDto;
+import com.side.tiggle.domain.transaction.dto.req.TransactionUpdateReqDto;
 import com.side.tiggle.domain.transaction.model.Transaction;
 import com.side.tiggle.domain.transaction.repository.TransactionRepository;
 import lombok.RequiredArgsConstructor;
@@ -16,8 +17,8 @@ public class TransactionService {
 
     private final TransactionRepository transactionRepository;
 
-    public Transaction createTransaction(TransactionDto.Request.ReqDto dto) {
-        return transactionRepository.save(TransactionDto.Request.ReqDto.toEntity(dto));
+    public Transaction createTransaction(TransactionDto dto) {
+        return transactionRepository.save(dto.toEntity(dto));
     }
 
     public Transaction getTransaction(Long transactionId) {
@@ -49,16 +50,14 @@ public class TransactionService {
         return transactionRepository.findAll();
     }
 
-    public Transaction updateTransaction(Long memberId, Long transactionId, TransactionDto.Request.ReqDto dto) {
+    public Transaction updateTransaction(Long memberId, Long transactionId, TransactionUpdateReqDto dto) {
         Transaction transaction = transactionRepository.findById(transactionId)
                 .stream().filter(item -> item.getMemberId().equals(memberId)).findAny()
                 .orElseThrow(() -> new IllegalArgumentException("해당 거래가 존재하지 않습니다."));
 
-        transaction.setParentId(dto.getParentId());
         transaction.setType(dto.getType());
-        transaction.setImageUrl(dto.getImageUrl());
         transaction.setAmount(dto.getAmount());
-        transaction.setDate(dto.getDate());;
+        transaction.setDate(dto.getDate());
         transaction.setContent(dto.getContent());
         transaction.setReason(dto.getReason());
 

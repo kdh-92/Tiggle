@@ -4,12 +4,14 @@ VALUES ('csw@email.com', '20000101', '최선우'),
        ('jhr@email.com', '20000201', '정해림'),
        ('kjk@email.com', '20000202', '송진경');
 
-INSERT INTO transactions (member_id, type, amount, date, content, reason)
-VALUES (1, 'OUTCOME', 10000, '20230101', '첫 번째 지출 제목', '첫 번째 지출 내역'),
-       (1, 'INCOME', 15000, '20230201', '월급', '첫 번째 수익 내역'),
-       (2, 'OUTCOME', 20000, '20230303', '커피', '커피 지출 내역'),
-       (3, 'OUTCOME', 10000, '20230401', '식비', '식비 지출 내역'),
-       (4, 'OUTCOME', 22000, '20230505', '비상금', '비상금 지출 내역');
+INSERT INTO transactions (member_id, parent_id, type, amount, date, content, reason)
+VALUES (1, null, 'OUTCOME', 10000, '20230101', '첫 번째 지출 제목', '첫 번째 지출 내역'),
+       (1, null, 'INCOME', 15000, '20230201', '월급', '첫 번째 수익 내역'),
+       (2, null, 'OUTCOME', 20000, '20230303', '커피', '커피 지출 내역'),
+       (3, null, 'OUTCOME', 10000, '20230401', '식비', '식비 지출 내역'),
+       (4, null, 'OUTCOME', 22000, '20230505', '비상금', '비상금 지출 내역'),
+       (1, null, 'OUTCOME', 10000, '20230401', '식비', '식비 지출 내역'),
+       (1, 1, 'REFUND', 5000, '20230401', '첫 환불', '첫 번째 지출 일부 환불');
 
 INSERT INTO comments (tx_id, content, sender_id, receiver_id)
 VALUES (1, '첫 번째 지출 내역 첫 댓글', 3, 1),
