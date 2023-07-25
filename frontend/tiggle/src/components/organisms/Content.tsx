@@ -1,19 +1,10 @@
-import styled from "styled-components";
-import { Content } from "antd/es/layout/layout";
+import { StyledContent } from "./content.styled";
 import ContentSection from "../molecules/ContentSection";
 
-const StyledContent = styled(Content)`
-  min-height: 100vh;
-  min-width: 100%;
-  padding: 1rem;
-  display: flex;
-  justify-content: center;
-`;
-
-export const ContentOrganism = () => {
+export default function Content() {
   return (
     <StyledContent>
       <ContentSection />
     </StyledContent>
   );
-};
+}
