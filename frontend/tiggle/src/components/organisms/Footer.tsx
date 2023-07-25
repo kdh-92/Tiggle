@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { Footer } from "antd/es/layout/layout";
 import { Award, Home, PieChart } from "react-feather";
+import FooterIcon from "../atoms/FooterIcon";
 
 const StyledFooter = styled(Footer)`
   position: sticky;
@@ -31,24 +32,14 @@ const StyledFooter = styled(Footer)`
       color: #000;
     }
   }
-  
 `;
 
 export const FooterOrganism = () => {
   return (
     <StyledFooter>
-      <div className="focus">
-        <Home />
-        홈
-      </div>
-      <div>
-        <PieChart />
-        통계
-      </div>
-      <div>
-        <Award />
-        랭킹
-      </div>
+      <FooterIcon icon={<Home />} iconName="홈" iconClass="focus" />
+      <FooterIcon icon={<PieChart />} iconName="통계" />
+      <FooterIcon icon={<Award />} iconName="랭킹" />
     </StyledFooter>
   );
 };
