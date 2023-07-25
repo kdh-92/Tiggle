@@ -11,6 +11,10 @@ const StyledHeaderLeft = styled.div`
     width: 70%;
     border-bottom: none;
     color: #667BA3;
+
+    @media (max-width: 768px) {
+      display : none;
+    }
   }
 `;
 
@@ -20,10 +24,10 @@ export default function HeaderLeft() {
     key: String(index + 1),
     label: el,
   }));
-  
+
   return (
     <StyledHeaderLeft>
-        <p>tiggle</p>
+        <h2>tiggle</h2>
         <Menu
           mode="horizontal"
           items={item}

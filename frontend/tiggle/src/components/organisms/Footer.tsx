@@ -18,6 +18,7 @@ const StyledFooter = styled(Footer)`
     grid-auto-flow: column;
     background: #fff;
     border-top: 1px solid #dfe4ec;
+    padding: 1rem 0.25rem 1rem 0.25rem;
     color: #AFBBCF;
 
     > div {
