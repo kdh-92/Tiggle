@@ -7,4 +7,10 @@ export const StyledContent = styled(Content)`
   padding: 1rem;
   display: flex;
   justify-content: center;
+  position: relative;
+  top: 50px;
+
+  @media (max-width: 375px) {
+    top: 80px;
+  }
 `;
