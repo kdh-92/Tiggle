@@ -1,5 +1,6 @@
 import { StyledHeaderLeft } from "./headerLeft.styled";
 import { Menu } from "antd";
+import Logo from "../../assets/logo.svg";
 
 export default function HeaderLeft() {
   const item = ["통계", "랭킹"].map((el, index) => ({
@@ -9,7 +10,7 @@ export default function HeaderLeft() {
 
   return (
     <StyledHeaderLeft>
-      <h2>tiggle</h2>
+      <Logo />
       <Menu mode="horizontal" items={item} />
     </StyledHeaderLeft>
   );
