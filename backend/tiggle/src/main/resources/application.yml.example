@@ -10,14 +10,3 @@ spring:
       mode: always
       schema-locations: classpath*:db/schema.sql
       data-locations: classpath*:db/data.sql
-  security:
-    oauth2:
-      client:
-        registration:
-          google:
-            client-id: ####
-            client-secret: ####
-            authorization-grant-type: authorization_code
-            scope:
-              - profile
-              - email
