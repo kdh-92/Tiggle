@@ -1,6 +1,7 @@
 package com.side.tiggle.domain.comment.model;
 
 import com.side.tiggle.domain.member.model.Member;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.side.tiggle.domain.transaction.model.Transaction;
 import com.side.tiggle.global.common.model.BaseEntity;
 import lombok.*;
@@ -22,6 +23,7 @@ public class Comment extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @JsonIgnore
     @JoinColumn(name = "tx_id", nullable = false)
     @ManyToOne
     private Transaction tx;
