@@ -3,7 +3,6 @@ package com.side.tiggle.domain.transaction.api;
 import com.side.tiggle.domain.comment.dto.resp.CommentRespDto;
 import com.side.tiggle.domain.comment.model.Comment;
 import com.side.tiggle.domain.comment.service.CommentService;
-import com.side.tiggle.domain.transaction.TransactionDto;
 import com.side.tiggle.domain.member.MemberDto;
 import com.side.tiggle.domain.transaction.dto.TransactionDto;
 import com.side.tiggle.domain.transaction.dto.req.TransactionUpdateReqDto;
@@ -32,9 +31,10 @@ import java.util.stream.Collectors;
 public class TransactionApiController {
 
     private final TransactionService transactionService;
-    private final String DEFAULT_COUNT = "5";
-    private final String DEFAULT_OFFSET = "0";
     private final CommentService commentService;
+    private final String DEFAULT_PAGE_SIZE = "5";
+    private final String DEFAULT_INDEX = "0";
+
 
     @PostMapping
     public ResponseEntity<TransactionRespDto> createTransaction(@RequestBody TransactionDto dto) {
@@ -75,8 +75,8 @@ public class TransactionApiController {
             })
     @GetMapping
     public ResponseEntity<Page<TransactionRespDto>> getCountOffsetTransaction(
-            @Parameter(name = "index", description = "tx 페이지 번호") @NotBlank @RequestParam(defaultValue = DEFAULT_COUNT) int index,
-            @Parameter(name = "pageSize", description = "페이지 내부 tx 개수") @RequestParam(defaultValue = DEFAULT_OFFSET) int pageSize
+            @Parameter(name = "index", description = "tx 페이지 번호") @NotBlank @RequestParam(defaultValue = DEFAULT_PAGE_SIZE) int index,
+            @Parameter(name = "pageSize", description = "페이지 내부 tx 개수") @RequestParam(defaultValue = DEFAULT_INDEX) int pageSize
     ) {
         return new ResponseEntity<>(
                 TransactionRespDto.fromEntityPage(transactionService.getCountOffsetTransaction(pageSize, index)),
@@ -94,8 +94,8 @@ public class TransactionApiController {
     @GetMapping("/member")
     public ResponseEntity<Page<TransactionRespDto>> getMemberCountOffsetTransaction(
             @Parameter(name = "memberId", description = "유저 id") @NotBlank @RequestParam Long memberId,
-            @Parameter(name = "index", description = "tx 페이지 번호") @NotBlank @RequestParam(defaultValue = DEFAULT_COUNT) int index,
-            @Parameter(name = "pageSize", description = "페이지 내부 tx 개수") @RequestParam(defaultValue = DEFAULT_OFFSET) int pageSize
+            @Parameter(name = "index", description = "tx 페이지 번호") @NotBlank @RequestParam(defaultValue = DEFAULT_PAGE_SIZE) int index,
+            @Parameter(name = "pageSize", description = "페이지 내부 tx 개수") @RequestParam(defaultValue = DEFAULT_INDEX) int pageSize
     ) {
         return new ResponseEntity<>(
                 TransactionRespDto.fromEntityPage(transactionService.getMemberCountOffsetTransaction(memberId, pageSize, index)),
@@ -124,17 +124,6 @@ public class TransactionApiController {
                 HttpStatus.OK
         );
     }
-
-    @GetMapping("/{id}/comments")
-    public ResponseEntity<Page<CommentRespDto>> getAllCommentsByTx(
-            @PathVariable Long id,
-            @RequestParam(name = "page", defaultValue = "0") int page,
-            @RequestParam(name = "size", defaultValue = "5") int size
-    ){
-        Page<Comment> pagedComments = commentService.getParentsByTxId(id, page, size);
-        Page<CommentRespDto> pagedResult = CommentRespDto.fromEntityPage(pagedComments);
-        return new ResponseEntity<>(pagedResult, HttpStatus.OK);
-    }
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteTransaction(
             @AuthenticationPrincipal MemberDto memberDto,
@@ -142,5 +131,16 @@ public class TransactionApiController {
     ) {
         transactionService.deleteTransaction(memberDto.getId(), transactionId);
         return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
+    }
+
+    @GetMapping("/{id}/comments")
+    public ResponseEntity<Page<CommentRespDto>> getAllCommentsByTx(
+            @PathVariable Long id,
+            @RequestParam(name = "index", defaultValue = DEFAULT_INDEX) int page,
+            @RequestParam(name = "pageSize", defaultValue = DEFAULT_PAGE_SIZE) int size
+    ){
+        Page<Comment> pagedComments = commentService.getParentsByTxId(id, page, size);
+        Page<CommentRespDto> pagedResult = CommentRespDto.fromEntityPage(pagedComments);
+        return new ResponseEntity<>(pagedResult, HttpStatus.OK);
     }
 }
