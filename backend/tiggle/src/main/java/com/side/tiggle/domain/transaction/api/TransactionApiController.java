@@ -3,12 +3,12 @@ package com.side.tiggle.domain.transaction.api;
 import com.side.tiggle.domain.comment.dto.resp.CommentRespDto;
 import com.side.tiggle.domain.comment.model.Comment;
 import com.side.tiggle.domain.comment.service.CommentService;
-import com.side.tiggle.domain.member.MemberDto;
 import com.side.tiggle.domain.transaction.dto.TransactionDto;
 import com.side.tiggle.domain.transaction.dto.req.TransactionUpdateReqDto;
 import com.side.tiggle.domain.transaction.dto.resp.TransactionRespDto;
 import com.side.tiggle.domain.transaction.model.Transaction;
 import com.side.tiggle.domain.transaction.service.TransactionService;
+import com.side.tiggle.global.common.constants.HttpHeaders;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -18,7 +18,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotBlank;
@@ -115,21 +114,21 @@ public class TransactionApiController {
 
     @PutMapping("/{id}")
     public ResponseEntity<TransactionRespDto> updateTransaction(
+            @RequestHeader(name = HttpHeaders.MEMBER_ID) long memberId,
             @PathVariable("id") Long transactionId,
-            @AuthenticationPrincipal MemberDto memberDto,
             @RequestBody TransactionUpdateReqDto dto
     ) {
         return new ResponseEntity<>(
-                TransactionRespDto.fromEntity(transactionService.updateTransaction(memberDto.getId(), transactionId, dto)),
+                TransactionRespDto.fromEntity(transactionService.updateTransaction(memberId, transactionId, dto)),
                 HttpStatus.OK
         );
     }
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteTransaction(
-            @AuthenticationPrincipal MemberDto memberDto,
+            @RequestHeader(name = HttpHeaders.MEMBER_ID) long memberId,
             @PathVariable("id") Long transactionId
     ) {
-        transactionService.deleteTransaction(memberDto.getId(), transactionId);
+        transactionService.deleteTransaction(memberId, transactionId);
         return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
     }
 
