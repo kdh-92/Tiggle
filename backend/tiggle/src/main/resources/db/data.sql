@@ -34,3 +34,13 @@ VALUES ('태그 이름 1', 1),
 
 INSERT INTO tx_tags (tx_id, member_id, tag_name)
 VALUES (1, 1, '태그 이름 1,태그 이름3');
+
+INSERT INTO comments (tx_id, parent_id, content, sender_id, receiver_id, deleted, created_at, updated_at,
+                             deleted_at)
+VALUES (1, 1, '대댓글 1', 1, 3, DEFAULT, DEFAULT, null, null);
+INSERT INTO comments (tx_id, parent_id, content, sender_id, receiver_id, deleted, created_at, updated_at,
+                             deleted_at)
+VALUES (1, 1, '대댓글 2', 2, 3, DEFAULT, DEFAULT, null, null);
+INSERT INTO comments (tx_id, parent_id, content, sender_id, receiver_id, deleted, created_at, updated_at,
+                             deleted_at)
+VALUES (1, 1, '대댓글 3', 4, 3, DEFAULT, DEFAULT, null, null);
