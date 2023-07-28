@@ -109,22 +109,22 @@ public class TransactionApiController {
 
     @PutMapping("/{id}")
     public ResponseEntity<TransactionRespDto> updateTransaction(
-            @RequestHeader(name = HttpHeaders.USER_ID) long userId,
+            @RequestHeader(name = HttpHeaders.MEMBER_ID) long memberId,
             @PathVariable("id") Long transactionId,
             @RequestBody TransactionUpdateReqDto dto
     ) {
         return new ResponseEntity<>(
-                TransactionRespDto.fromEntity(transactionService.updateTransaction(userId, transactionId, dto)),
+                TransactionRespDto.fromEntity(transactionService.updateTransaction(memberId, transactionId, dto)),
                 HttpStatus.OK
         );
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteTransaction(
-            @RequestHeader(name = HttpHeaders.USER_ID) long userId,
+            @RequestHeader(name = HttpHeaders.MEMBER_ID) long memberId,
             @PathVariable("id") Long transactionId
     ) {
-        transactionService.deleteTransaction(userId, transactionId);
+        transactionService.deleteTransaction(memberId, transactionId);
         return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
     }
 }

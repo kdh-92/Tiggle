@@ -23,27 +23,27 @@ public class CommentApiController {
 
     @PostMapping
     public ResponseEntity<CommentRespDto> createComment(
-            @RequestHeader(name = HttpHeaders.USER_ID) long userId,
+            @RequestHeader(name = HttpHeaders.MEMBER_ID) long memberId,
             @RequestBody @Valid CommentDto commentDto) {
-        commentDto.setSenderId(userId);
+        commentDto.setSenderId(memberId);
         CommentRespDto respDto = CommentRespDto.fromEntity(commentService.createComment(commentDto));
         return new ResponseEntity<>(respDto, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<CommentDto> updateComment(
-            @RequestHeader(name = HttpHeaders.USER_ID) long userId,
+            @RequestHeader(name = HttpHeaders.MEMBER_ID) long memberId,
             @PathVariable("id") Long commentId,
             @RequestBody CommentUpdateReqDto dto) {
-        CommentRespDto respDto = CommentRespDto.fromEntity(commentService.updateComment(userId, commentId, dto.getContent()));
+        CommentRespDto respDto = CommentRespDto.fromEntity(commentService.updateComment(memberId, commentId, dto.getContent()));
         return new ResponseEntity<>(respDto, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteComment(
-            @RequestHeader(name = HttpHeaders.USER_ID) long userId,
+            @RequestHeader(name = HttpHeaders.MEMBER_ID) long memberId,
             @PathVariable("id") Long commentId){
-        commentService.deleteComment(userId, commentId);
+        commentService.deleteComment(memberId, commentId);
         return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
     }
 
