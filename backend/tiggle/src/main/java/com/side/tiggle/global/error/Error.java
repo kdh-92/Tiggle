@@ -1,4 +1,5 @@
 package com.side.tiggle.global.error;
 
-public class Error {
+public class Error extends RuntimeException {
+
 }
