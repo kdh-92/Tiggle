@@ -1,5 +1,6 @@
 package com.side.tiggle.domain.comment.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.side.tiggle.domain.transaction.model.Transaction;
 import com.side.tiggle.global.common.model.BaseEntity;
 import lombok.*;
@@ -8,7 +9,8 @@ import org.hibernate.annotations.SQLDelete;
 import javax.persistence.*;
 
 @Entity
-@Data
+@Getter
+@Setter
 @EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
@@ -20,6 +22,7 @@ public class Comment extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @JsonIgnore
     @JoinColumn(name = "tx_id", nullable = false)
     @ManyToOne
     private Transaction tx;

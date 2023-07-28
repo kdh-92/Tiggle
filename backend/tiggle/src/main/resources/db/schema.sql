@@ -74,8 +74,6 @@ CREATE TABLE `transactions`
     `id`                bigint NOT NULL AUTO_INCREMENT,
     `member_id`            bigint NOT NULL ,
     `parent_id`            bigint NULL ,
-    `member_assets_id`     bigint NOT NULL ,
-    `member_categories_id` bigint NOT NULL ,
     `type`                 ENUM('INCOME', 'OUTCOME', 'REFUND') NOT NULL ,
     `image_url`            varchar(255) NULL ,
     `amount`               int NOT NULL ,
