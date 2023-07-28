@@ -5,16 +5,13 @@ import com.side.tiggle.domain.comment.dto.req.CommentUpdateReqDto;
 import com.side.tiggle.domain.comment.dto.resp.CommentRespDto;
 import com.side.tiggle.domain.comment.model.Comment;
 import com.side.tiggle.domain.comment.service.CommentService;
-import com.side.tiggle.domain.member.MemberDto;
-import io.swagger.v3.oas.annotations.Operation;
 import com.side.tiggle.global.common.constants.HttpHeaders;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -43,7 +40,7 @@ public class CommentApiController {
     public ResponseEntity<CommentRespDto> createComment(
             @RequestHeader(name = HttpHeaders.MEMBER_ID) long memberId,
             @RequestBody @Valid CommentCreateReqDto commentDto) {
-        commentDto.setSenderId(memberDto.getId());
+        commentDto.setSenderId(memberId);
         CommentRespDto respDto = CommentRespDto.fromEntity(commentService.createComment(commentDto));
         return new ResponseEntity<>(respDto, HttpStatus.CREATED);
     }

@@ -3,7 +3,6 @@ package com.side.tiggle.domain.transaction.api;
 import com.side.tiggle.domain.comment.dto.resp.CommentRespDto;
 import com.side.tiggle.domain.comment.model.Comment;
 import com.side.tiggle.domain.comment.service.CommentService;
-import com.side.tiggle.domain.member.MemberDto;
 import com.side.tiggle.domain.transaction.dto.TransactionDto;
 import com.side.tiggle.domain.transaction.dto.req.TransactionUpdateReqDto;
 import com.side.tiggle.domain.transaction.dto.resp.TransactionRespDto;
