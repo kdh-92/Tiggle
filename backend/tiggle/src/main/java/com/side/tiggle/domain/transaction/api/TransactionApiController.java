@@ -17,10 +17,13 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotBlank;
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -34,9 +37,12 @@ public class TransactionApiController {
     private final String DEFAULT_INDEX = "0";
     private final String DEFAULT_PAGE_SIZE = "5";
 
-
-    @PostMapping
-    public ResponseEntity<TransactionRespDto> createTransaction(@RequestBody TransactionDto dto) {
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<TransactionRespDto> createTransaction(
+            @RequestPart TransactionDto dto,
+            @RequestPart("multipartFile") MultipartFile file
+    ) throws IOException {
+        dto.setImageUrl(transactionService.uploadFileToFolder(file));
         return new ResponseEntity<>(
                 TransactionRespDto.fromEntity(transactionService.createTransaction(dto)),
                 HttpStatus.CREATED
@@ -137,9 +143,14 @@ public class TransactionApiController {
             @PathVariable Long id,
             @RequestParam(name = "pageSize", defaultValue = DEFAULT_PAGE_SIZE) int pageSize,
             @RequestParam(name = "index", defaultValue = DEFAULT_INDEX) int index
-    ){
+    ) {
         Page<Comment> pagedComments = commentService.getParentsByTxId(id, index, pageSize);
         Page<CommentRespDto> pagedResult = CommentRespDto.fromEntityPage(pagedComments, commentService);
         return new ResponseEntity<>(pagedResult, HttpStatus.OK);
     }
+
+//    @PostMapping(value = "/file", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+//    public void testUpload(@RequestPart("multipartFile") MultipartFile multipartFile) throws IOException {
+//        transactionService.uploadFileToFolder(multipartFile);
+//    }
 }

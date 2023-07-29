@@ -12,3 +12,12 @@ spring:
       mode: always
       schema-locations: classpath*:db/schema.sql
       data-locations: classpath*:db/data.sql
+  servlet:
+    multipart:
+      enabled: true
+      location: upload/image/
+      max-request-size: 20MB
+      max-file-size: 10MB
+part:
+  upload:
+    path: upload/image/
