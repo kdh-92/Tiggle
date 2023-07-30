@@ -3,18 +3,16 @@ import { StyledHeaderLeft } from "../../styles/HeaderStyle";
 import { StyledHeaderRight } from "../../styles/HeaderStyle";
 import Logo from "../../assets/logo.svg";
 import { Avatar, Menu } from "antd";
+import { MenuItems } from "../atoms/MenuItem";
 
 export default function HeaderSection() {
-  const item = ["통계", "랭킹"].map((el, index) => ({
-    key: String(index + 1),
-    label: el,
-  }));
+  const items = MenuItems(["통계", "all"], ["랭킹", "expenses"]);
 
   return (
     <div>
       <StyledHeaderLeft>
         <Logo />
-        <Menu mode="horizontal" items={item} />
+        <Menu mode="horizontal" items={items} />
       </StyledHeaderLeft>
       <StyledHeaderRight>
         <Bell className="bell" />

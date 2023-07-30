@@ -18,16 +18,22 @@ export const NavigationStyle = styled(Menu)`
     align-items: center;
     color: #afbbcf;
 
-    .focus {
+    //TODO: ant design 메뉴 CSS 수정
+    .ant-menu-item-selected {
       display: flex;
       width: 55px;
-      background-color: #f6f7f9;
+      background-color: #f6f7f9 !important;
       text-align: center;
-      border-radius: 1rem;
+      border-radius: 1rem !important;
       height: 30px;
       align-items: center;
       justify-content: center;
-      color: #455573;
+      color: #455573 !important;
+    }
+
+    //TODO: ant design 메뉴 CSS 수정
+    .ant-menu-item-active::after {
+      border-bottom-width: 0 !important;
     }
   }
 `;

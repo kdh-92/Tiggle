@@ -7,7 +7,7 @@ export const FooterStyle = styled(Footer)`
   z-index: 1;
   text-align: center;
 
-  //tab 역할 시킬 예정
+  // TODO: tab 역할 지정
   @media (min-width: 768px) {
     display: none;
   }

@@ -21,7 +21,7 @@ export const StyledHeaderLeft = styled.div`
   width: 50%;
   height: 60px;
 
-  > ul {
+  .ant-menu {
     width: 70%;
     border-bottom: none;
     color: #667ba3;
