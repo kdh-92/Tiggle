@@ -46,6 +46,7 @@
     "babel-loader": "^9.1.2",
     "css-loader": "^6.8.1",
     "eslint": "^8.45.0",
+    "eslint-config-prettier": "^8.9.0",
     "eslint-plugin-prettier": "^5.0.0",
     "html-webpack-plugin": "^5.5.3",
     "install": "^0.13.0",

@@ -1,24 +1,19 @@
 module.exports = {
   root: true,
+  env: {
+    browser: true,
+    node: true,
+  },
   extends: [
     "plugin:@typescript-eslint/eslint-recommended",
     "plugin:@typescript-eslint/recommended",
+    "plugin:prettier/recommended",
   ],
-  plugins: ["prettier", "@typescript-eslint"],
+  plugins: ["prettier"],
   rules: {
-    "prettier/prettier": [
-      "error",
-      {
-        doubleQuote: true,
-        tabWidth: 2,
-        printWidth: 80,
-        bracketSpacing: true,
-        arrowParens: "avoid",
-      },
-    ],
+    "prettier/prettier": "error",
     "@typescript-eslint/no-explicit-any": "off",
     "@typescript-eslint/explicit-function-return-type": "off",
-    "prefer-const": "off",
   },
   parserOptions: {
     parser: "@typescript-eslint/parser",

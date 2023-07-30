@@ -9,7 +9,7 @@ export default function Header() {
       <StyledHeader>
         <HeaderSection />
       </StyledHeader>
-      {/* 375px일 때부터 보이는 부분 */}
+      {/* 768px 이하일 때부터 보이는 부분 */}
       <Navigation />
     </>
   );
