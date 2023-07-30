@@ -1,10 +1,10 @@
-import { StyledContent } from "./content.styled";
+import { ContentStyle } from "../../styles/ContentStyle";
 import ContentSection from "../molecules/ContentSection";
 
 export default function Content() {
   return (
-    <StyledContent>
+    <ContentStyle>
       <ContentSection />
-    </StyledContent>
+    </ContentStyle>
   );
 }

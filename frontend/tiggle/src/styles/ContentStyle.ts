@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { Content } from "antd/es/layout/layout";
 
-export const StyledContent = styled(Content)`
+export const ContentStyle = styled(Content)`
   min-height: 100vh;
   min-width: 100%;
   padding: 1rem;

@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { Footer } from "antd/es/layout/layout";
 
-export const StyledFooter = styled(Footer)`
+export const FooterStyle = styled(Footer)`
   position: sticky;
   bottom: 0;
   z-index: 1;

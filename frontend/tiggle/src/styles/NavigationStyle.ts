@@ -1,7 +1,7 @@
 import { Menu } from "antd";
 import styled from "styled-components";
 
-export const StyledNavigation = styled(Menu)`
+export const NavigationStyle = styled(Menu)`
   display: none;
 
   @media (max-width: 375px) {

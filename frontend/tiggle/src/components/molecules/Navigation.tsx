@@ -1,4 +1,4 @@
-import { StyledNavigation } from "./navigation.styled";
+import { NavigationStyle } from "../../styles/NavigationStyle";
 
 type MenuItem = {
   label: JSX.Element;
@@ -20,5 +20,5 @@ export default function Navigation() {
       key: "expenses",
     },
   ];
-  return <StyledNavigation mode="horizontal" items={menuItems} />;
+  return <NavigationStyle mode="horizontal" items={menuItems} />;
 }
