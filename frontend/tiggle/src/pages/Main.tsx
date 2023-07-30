@@ -1,5 +1,5 @@
 import Header from "../components/organisms/Header";
-import Footer from "../components/organisms/Footer";
+import Tab from "../components/organisms/Tab";
 import Content from "../components/organisms/Content";
 
 const Main = () => {
@@ -7,7 +7,7 @@ const Main = () => {
     <>
       <Header />
       <Content />
-      <Footer />
+      <Tab />
     </>
   );
 };
