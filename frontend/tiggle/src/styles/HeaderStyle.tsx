@@ -8,21 +8,17 @@ export const HeaderStyle = styled(Header)`
   background: #fff;
   border-bottom: 1px solid #dfe4ec;
   padding-inline: 0;
-
-  > div {
-    display: flex;
-    justify-content: center;
-  }
+  display: flex;
+  justify-content: space-between;
+  padding: 0 20px 0 24px;
 `;
 
 export const StyledHeaderLeft = styled.div`
   display: flex;
   align-items: center;
-  width: 50%;
-  height: 60px;
 
+  //TODO: ant design 메뉴 CSS 수정
   .ant-menu {
-    width: 70%;
     border-bottom: none;
     color: #667ba3;
 
@@ -35,8 +31,14 @@ export const StyledHeaderLeft = styled.div`
 export const StyledHeaderRight = styled.div`
   display: flex;
   align-items: center;
+  gap: 10px;
 
-  .bell {
-    margin-right: 1rem;
+  .right-bar-btn {
+    display: flex;
+    align-items: center;
+    background: #fff;
+    border: none;
+    padding: 0 4px;
+    height: 40px;
   }
 `;

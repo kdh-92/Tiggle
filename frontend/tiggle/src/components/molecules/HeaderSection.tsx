@@ -9,15 +9,19 @@ export default function HeaderSection() {
   const items = MenuItems(["통계", "all"], ["랭킹", "expenses"]);
 
   return (
-    <div>
+    <>
       <StyledHeaderLeft>
         <Logo />
         <Menu mode="horizontal" items={items} />
       </StyledHeaderLeft>
       <StyledHeaderRight>
-        <Bell className="bell" />
-        <Avatar />
+        <button className="right-bar-btn">
+          <Bell size={20} color={"#455573"} />
+        </button>
+        <button className="right-bar-btn">
+          <Avatar size={24} />
+        </button>
       </StyledHeaderRight>
-    </div>
+    </>
   );
 }

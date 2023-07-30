@@ -5,9 +5,9 @@ import FooterIcon from "../atoms/FooterIcon";
 export default function Footer() {
   return (
     <FooterStyle>
-      <FooterIcon icon={<Home />} iconName="홈" iconClass="focus" />
-      <FooterIcon icon={<PieChart />} iconName="통계" />
-      <FooterIcon icon={<Award />} iconName="랭킹" />
+      <FooterIcon icon={<Home size={16} />} iconName="홈" iconClass="focus" />
+      <FooterIcon icon={<PieChart size={16} />} iconName="통계" />
+      <FooterIcon icon={<Award size={16} />} iconName="랭킹" />
     </FooterStyle>
   );
 }

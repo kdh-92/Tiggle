@@ -12,9 +12,9 @@ export default function FooterIcon({
   iconClass,
 }: FooterIconProps) {
   return (
-    <div className={iconClass}>
+    <button className={iconClass ? `tab-button ${iconClass}` : "tab-button"}>
       {icon}
       <span>{iconName}</span>
-    </div>
+    </button>
   );
 }
