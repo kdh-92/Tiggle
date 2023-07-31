@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 export const NavigationStyle = styled(Menu)`
   display: none;
-  position: fixed;
+  position: sticky;
   top: 64px;
   left: 0;
   right: 0;
