@@ -20,7 +20,7 @@ const root = createRoot(container);
 root.render(
   <Provider store={store}>
     <QueryClientProvider client={queryClient}>
-      <ThemeProvider theme={{ ...theme, ...mq }}>
+      <ThemeProvider theme={{ ...theme, mq }}>
         {process.env.NODE_ENV === "development" && <ReactQueryDevtools />}
         <GlobalStyle />
         <BrowserRouter>

@@ -2,6 +2,7 @@ import type { Preview } from "@storybook/react";
 import { ThemeProvider } from "styled-components";
 import { theme } from "@/styles/config/theme";
 import { GlobalStyle } from "@/styles/config/GlobalStyle";
+import { mq } from "@/styles/config/mediaQueries";
 
 const preview: Preview = {
   parameters: {
@@ -15,7 +16,7 @@ const preview: Preview = {
   },
   decorators: [
     Story => (
-      <ThemeProvider theme={theme}>
+      <ThemeProvider theme={{ ...theme, mq }}>
         <GlobalStyle />
         <Story />
       </ThemeProvider>
