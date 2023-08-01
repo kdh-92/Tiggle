@@ -8,7 +8,8 @@
     "build": "webpack --config webpack.config.prod.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+    "transform-token": "node transform-token.js"
   },
   "author": "",
   "license": "ISC",
@@ -24,7 +25,8 @@
     "react-feather": "^2.0.10",
     "react-redux": "^8.1.1",
     "react-router-dom": "^6.14.2",
-    "styled-components": "^6.0.5"
+    "styled-components": "^6.0.5",
+    "token-transformer": "^0.0.33"
   },
   "devDependencies": {
     "@babel/core": "^7.22.5",

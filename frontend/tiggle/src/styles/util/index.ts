@@ -1,0 +1,1 @@
+export { expandTypography } from "./expandTypography";
