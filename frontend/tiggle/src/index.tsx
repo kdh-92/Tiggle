@@ -1,15 +1,17 @@
 import { createRoot } from "react-dom/client";
-import { ThemeProvider } from "styled-components";
-import Router from "./Router";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { Provider } from "react-redux";
 import { BrowserRouter } from "react-router-dom";
-import { store } from "./store";
-import { GlobalStyle } from "./styles/config/GlobalStyle";
 
-import { theme } from "@/styles/config/theme";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { ThemeProvider } from "styled-components";
+
+import { store } from "@/store";
+import { GlobalStyle } from "@/styles/config/GlobalStyle";
 import { mq } from "@/styles/config/mediaQueries";
+import { theme } from "@/styles/config/theme";
+
+import Router from "./Router";
 
 const queryClient = new QueryClient();
 const container = document.getElementById("root");

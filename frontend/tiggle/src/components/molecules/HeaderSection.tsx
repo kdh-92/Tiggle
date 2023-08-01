@@ -1,9 +1,9 @@
-import { Bell } from "react-feather";
-import { StyledHeaderLeft } from "../../styles/HeaderStyle";
-import { StyledHeaderRight } from "../../styles/HeaderStyle";
-import Logo from "../../assets/logo.svg";
 import { Avatar, Menu } from "antd";
-import { MenuItems } from "../atoms/MenuItem";
+import { Bell } from "react-feather";
+
+import Logo from "@/assets/logo.svg";
+import { MenuItems } from "@/components/atoms/MenuItem";
+import { StyledHeaderLeft, StyledHeaderRight } from "@/styles/HeaderStyle";
 
 export default function HeaderSection() {
   const items = MenuItems(["통계", "all"], ["랭킹", "expenses"]);
