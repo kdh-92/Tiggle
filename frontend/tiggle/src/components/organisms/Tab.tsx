@@ -1,7 +1,7 @@
 import { Award, Home, PieChart } from "react-feather";
 
 import TabButton from "@/components/atoms/TabButton";
-import { TabStyle } from "@/styles/TabStyle";
+import { TabStyle } from "@/styles/components/TabStyle";
 
 export default function Tab() {
   return (
