@@ -40,17 +40,33 @@ export const StyledReactionButton = styled.button`
   &:hover {
     background-color: ${({ theme: { color } }) => color.bluishGray[50].value};
   }
+  &:active {
+    background-color: ${({ theme: { color } }) => color.bluishGray[100].value};
+    color: ${({ theme: { color } }) => color.bluishGray[600].value};
+  }
 
   &.checked {
     &.outcome {
       background-color: ${({ theme: { color } }) => color.peach[50].value};
-      color: ${({ theme: { color } }) => color.peach[500].value};
-      border-color: ${({ theme: { color } }) => color.peach[200].value};
+      color: ${({ theme: { color } }) => color.peach[600].value};
+      border-color: ${({ theme: { color } }) => color.peach[300].value};
+      &:hover {
+        background-color: ${({ theme: { color } }) => color.peach[100].value};
+      }
+      &:active {
+        background-color: ${({ theme: { color } }) => color.peach[200].value};
+      }
     }
     &.refund {
       background-color: ${({ theme: { color } }) => color.blue[50].value};
-      color: ${({ theme: { color } }) => color.blue[500].value};
-      border-color: ${({ theme: { color } }) => color.blue[200].value};
+      color: ${({ theme: { color } }) => color.blue[600].value};
+      border-color: ${({ theme: { color } }) => color.blue[300].value};
+      &:hover {
+        background-color: ${({ theme: { color } }) => color.blue[100].value};
+      }
+      &:active {
+        background-color: ${({ theme: { color } }) => color.blue[200].value};
+      }
     }
   }
 
