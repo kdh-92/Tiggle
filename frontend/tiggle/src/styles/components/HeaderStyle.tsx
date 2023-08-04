@@ -10,8 +10,14 @@ export const HeaderStyle = styled(Header)`
     ${({ theme: { color } }) => color.bluishGray[200].value};
   padding-inline: 0;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   padding: 0 20px 0 24px;
+
+  .header-wrap {
+    width: 768px;
+    display: flex;
+    justify-content: space-between;
+  }
 `;
 
 export const StyledHeaderLeft = styled.div`

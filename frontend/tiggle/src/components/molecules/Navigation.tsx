@@ -1,7 +1,14 @@
 import { MenuItems } from "@/components/atoms/MenuItem";
-import { NavigationStyle } from "@/styles/components/NavigationStyle";
+import {
+  NavigationStyle,
+  NavigationWrapStyle,
+} from "@/styles/components/NavigationStyle";
 
 export default function Navigation() {
   const items = MenuItems(["전체", "all"], ["내 지출", "expenses"]);
-  return <NavigationStyle mode="horizontal" items={items} />;
+  return (
+    <NavigationWrapStyle>
+      <NavigationStyle mode="horizontal" items={items} />
+    </NavigationWrapStyle>
+  );
 }

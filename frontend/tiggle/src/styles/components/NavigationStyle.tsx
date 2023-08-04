@@ -3,14 +3,10 @@ import styled from "styled-components";
 
 export const NavigationStyle = styled(Menu)`
   display: none;
-  position: sticky;
-  top: 64px;
-  left: 0;
-  right: 0;
   background-color: ${({ theme: { color } }) => color.white.value};
   border-bottom: 0;
   z-index: 100;
-  padding: 0 20px 0 24px;
+  width: 769px;
   height: 52px;
   display: flex;
   align-items: center;
@@ -49,4 +45,14 @@ export const NavigationStyle = styled(Menu)`
     border-bottom-color: ${({ theme: { color } }) =>
       color.white.value} !important;
   }
+`;
+
+export const NavigationWrapStyle = styled.div`
+  display: flex;
+  justify-content: center;
+  position: sticky;
+  top: 64px;
+  left: 0;
+  right: 0;
+  padding: 0 20px 0 24px;
 `;
