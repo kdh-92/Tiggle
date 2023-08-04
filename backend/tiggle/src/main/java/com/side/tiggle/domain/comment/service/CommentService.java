@@ -7,6 +7,7 @@ import com.side.tiggle.domain.member.model.Member;
 import com.side.tiggle.domain.member.repository.MemberRepository;
 import com.side.tiggle.domain.transaction.model.Transaction;
 import com.side.tiggle.domain.transaction.repository.TransactionRepository;
+import com.side.tiggle.domain.transaction.service.TransactionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -20,16 +21,25 @@ public class CommentService {
 
     private final CommentRepository commentRepository;
     private final MemberRepository memberRepository;
-    private final TransactionRepository transactionRepository;
+    private final TransactionService transactionService;
 
     public Comment getById(Long id) {
         return commentRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException(""));
     }
 
+    public int getParentCount(long txId) {
+        Transaction transaction = this.transactionService.getTransaction(txId);
+        return commentRepository.countAllByTxAndParentId(transaction, null);
+    }
+
+    public int getChildCount(long txId, long parentId) {
+        Transaction transaction = this.transactionService.getTransaction(txId);
+        return commentRepository.countAllByTxAndParentId(transaction, parentId);
+    }
+
     public Page<Comment> getParentsByTxId(Long txId, int page, int size){
-        Transaction tx = transactionRepository.findById(txId)
-                .orElseThrow(()-> new IllegalArgumentException("거래를 찾을 수 없습니다"));
+        Transaction tx = transactionService.getTransaction(txId);
         Pageable pageable = PageRequest.of(page, size, Sort.Direction.DESC, "id");
         return commentRepository.findAllByTxAndParentIdNull(tx, pageable);
     }
@@ -41,8 +51,7 @@ public class CommentService {
 
     public Comment createComment(CommentCreateReqDto commentDto) {
         // TODO : Service 메소드로 수정한다
-        Transaction tx = transactionRepository.findById(commentDto.getTxId())
-                .orElseThrow(() -> new IllegalArgumentException("유효하지 않은 요청입니다"));
+        Transaction tx = transactionService.getTransaction(commentDto.getTxId());
         Member sender = memberRepository.findById(commentDto.getSenderId())
                 .orElseThrow(() -> new IllegalArgumentException("유효하지 않은 요청입니다"));
 

@@ -1,51 +1,45 @@
 package com.side.tiggle.domain.reaction.service;
 
-import com.side.tiggle.domain.reaction.ReactionDto;
+import com.side.tiggle.domain.reaction.dto.req.ReactionCreateDto;
 import com.side.tiggle.domain.reaction.model.Reaction;
+import com.side.tiggle.domain.reaction.dto.resp.ReactionSummaryDto;
+import com.side.tiggle.domain.reaction.model.ReactionType;
 import com.side.tiggle.domain.reaction.repository.ReactionRepository;
+import com.side.tiggle.domain.transaction.model.Transaction;
+import com.side.tiggle.domain.transaction.service.TransactionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-
-/**
- * 임시 CRUD (추가 작업 필요)
- */
 @Service
 @RequiredArgsConstructor
 public class ReactionService {
 
     private final ReactionRepository reactionRepository;
+    private final TransactionService transactionService;
 
-    public ReactionDto createReaction(ReactionDto reactionDto) {
-        Reaction reaction = Reaction.builder()
-                .txId(reactionDto.getTxId())
-                .senderId(reactionDto.getSenderId())
-                .receiverId(reactionDto.getReceiverId())
-                .type(reactionDto.getType())
-                .build();
-
-        return reactionDto.fromEntity(reactionRepository.save(reaction));
+    public Reaction getReaction(long txId, long senderId) {
+        return reactionRepository.findByTxIdAndSenderId(txId, senderId);
     }
 
-    public ReactionDto getReaction(Long reactionId) {
-        return ReactionDto.fromEntity(reactionRepository.findById(reactionId)
-                .orElseThrow(() -> new RuntimeException("")));
+    public int getReactionCount(long txId, ReactionType type){
+        return reactionRepository.countAllByTxIdAndType(txId, type);
     }
 
-    public List<ReactionDto> getAllReaction() {
-        List<ReactionDto> reactionDtoList = new ArrayList<>();
-
-        for (Reaction reaction : reactionRepository.findAll()) {
-            reactionDtoList.add(ReactionDto.fromEntity(reaction));
+    public Reaction upsertReaction(long txId, long senderId, ReactionCreateDto reactionDto) {
+        Transaction transaction = transactionService.getTransaction(txId); // transaction 유효성 확인을 위해 한번 조회
+        Reaction reaction = reactionRepository.findByTxIdAndSenderId(txId, senderId);
+        if (reaction == null) {
+            reaction = reactionDto.toEntity(senderId, transaction);
         }
-
-        return reactionDtoList;
+        reaction.setType(reactionDto.getType());
+        reactionRepository.save(reaction);
+        return reaction;
     }
 
-    // update
-
-    // delete
+    @Transactional
+    public void deleteReaction(long txId, long senderId) {
+        reactionRepository.deleteByTxIdAndSenderId(txId, senderId);
+    }
 }
 
