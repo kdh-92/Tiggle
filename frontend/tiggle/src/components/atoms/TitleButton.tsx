@@ -1,5 +1,5 @@
 import Pencil from "@/assets/pencil.svg";
-import { TitleButtonStyle } from "@/styles/components/ButtonStyle";
+import { TitleButtonStyle } from "@/styles/components/TitleButtonStyle";
 
 export default function TitleButton() {
   return (

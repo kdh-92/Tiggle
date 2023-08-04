@@ -12,4 +12,9 @@ export const TitleButtonStyle = styled(Button)`
   align-items: center;
   gap: 8px;
   padding: 0 32px 0 32px;
+
+  &:hover {
+    border: none !important;
+    color: ${({ theme: { color } }) => color.white.value} !important;
+  }
 `;

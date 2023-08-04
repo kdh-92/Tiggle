@@ -6,9 +6,14 @@ import {
 
 export default function Navigation() {
   const items = MenuItems(["전체", "all"], ["내 지출", "expenses"]);
+
   return (
     <NavigationWrapStyle>
-      <NavigationStyle mode="horizontal" items={items} />
+      <NavigationStyle
+        mode="horizontal"
+        items={items}
+        defaultSelectedKeys={["all"]}
+      />
     </NavigationWrapStyle>
   );
 }
