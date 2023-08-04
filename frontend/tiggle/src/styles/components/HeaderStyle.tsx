@@ -15,8 +15,10 @@ export const HeaderStyle = styled(Header)`
 `;
 
 export const StyledHeaderLeft = styled.div`
-  display: flex;
+  display: grid;
   align-items: center;
+  grid-auto-flow: column;
+  width: 204px;
 
   //TODO: ant design 메뉴 CSS 수정
   .ant-menu {

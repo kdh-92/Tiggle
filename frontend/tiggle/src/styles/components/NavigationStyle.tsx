@@ -14,7 +14,7 @@ export const NavigationStyle = styled(Menu)`
   height: 52px;
   display: flex;
   align-items: center;
-  color: ${({ theme: { color } }) => color.bluishGray[50].value};
+  color: ${({ theme: { color } }) => color.bluishGray[400].value};
 
   .ant-menu-item {
     padding-inline: 0;

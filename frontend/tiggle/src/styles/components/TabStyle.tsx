@@ -17,9 +17,9 @@ export const TabStyle = styled(Footer)`
   @media (max-width: 768px) {
     display: grid;
     grid-auto-flow: column;
-    background: ${({ theme: { color } }) => color.white.value}
-    border-top: 1px solid ${({ theme: { color } }) =>
-      color.bluishGray[200].value};
+    background: ${({ theme: { color } }) => color.white.value};
+    border-top: 1px solid
+      ${({ theme: { color } }) => color.bluishGray[200].value};
 
     .tab-button {
       display: flex;
