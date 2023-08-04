@@ -1,6 +1,7 @@
-import { RootState } from "../../store";
 import { useSelector, useDispatch } from "react-redux";
+
 import { decrement, increment } from "../../reducer/counterReducer";
+import { RootState } from "../../store";
 
 export function Counter() {
   const count = useSelector((state: RootState) => state.counter.value);

@@ -1,5 +1,5 @@
-import styled from "styled-components";
 import { Footer } from "antd/es/layout/layout";
+import styled from "styled-components";
 
 export const TabStyle = styled(Footer)`
   position: sticky;
@@ -17,8 +17,9 @@ export const TabStyle = styled(Footer)`
   @media (max-width: 768px) {
     display: grid;
     grid-auto-flow: column;
-    background: #fff;
-    border-top: 1px solid #dfe4ec;
+    background: ${({ theme: { color } }) => color.white.value}
+    border-top: 1px solid ${({ theme: { color } }) =>
+      color.bluishGray[200].value};
 
     .tab-button {
       display: flex;
@@ -28,13 +29,13 @@ export const TabStyle = styled(Footer)`
       padding: 0 0 4px 0;
       font-size: 9px;
       gap: 4px;
-      background: #fff;
+      background: ${({ theme: { color } }) => color.white.value};
       justify-content: center;
-      color: #afbbcf;
+      color: ${({ theme: { color } }) => color.bluishGray[400].value};
     }
 
     .focus {
-      color: #000;
+      color: ${({ theme: { color } }) => color.black.value};
     }
   }
 `;

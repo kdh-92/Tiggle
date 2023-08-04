@@ -5,8 +5,9 @@ export const HeaderStyle = styled(Header)`
   position: sticky;
   top: 0;
   z-index: 1;
-  background: #fff;
-  border-bottom: 1px solid #dfe4ec;
+  background: ${({ theme: { color } }) => color.white.value};
+  border-bottom: 1px solid
+    ${({ theme: { color } }) => color.bluishGray[200].value};
   padding-inline: 0;
   display: flex;
   justify-content: space-between;
@@ -20,7 +21,7 @@ export const StyledHeaderLeft = styled.div`
   //TODO: ant design 메뉴 CSS 수정
   .ant-menu {
     border-bottom: none;
-    color: #667ba3;
+    color: ${({ theme: { color } }) => color.bluishGray[600].value};
 
     @media (max-width: 768px) {
       display: none;
@@ -36,7 +37,7 @@ export const StyledHeaderRight = styled.div`
   .right-bar-btn {
     display: flex;
     align-items: center;
-    background: #fff;
+    background: ${({ theme: { color } }) => color.white.value};
     border: none;
     padding: 0 4px;
     height: 40px;
