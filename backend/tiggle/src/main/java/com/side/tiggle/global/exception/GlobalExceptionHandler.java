@@ -1,9 +1,8 @@
-package com.side.tiggle.global.error;
+package com.side.tiggle.global.exception;
 
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -15,7 +14,7 @@ import java.util.Arrays;
 import java.util.stream.Collectors;
 
 @RestControllerAdvice
-public class GlobalErrorHandler {
+public class GlobalExceptionHandler {
 
     @ExceptionHandler(value = Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -29,15 +28,15 @@ public class GlobalErrorHandler {
         return new ErrorResponse(e, HttpStatus.BAD_REQUEST, request);
     }
 
-    @ExceptionHandler(value = NotFoundError.class)
+    @ExceptionHandler(value = NotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ErrorResponse handleNotFoundError(NotFoundError e, WebRequest request) {
+    public ErrorResponse handleNotFoundException(NotFoundException e, WebRequest request) {
         return new ErrorResponse(e, HttpStatus.NOT_FOUND, request);
     }
 
-    @ExceptionHandler(value = NotAuthorizedError.class)
+    @ExceptionHandler(value = NotAuthorizedException.class)
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
-    public ErrorResponse handleNotAuthorizedError(NotAuthorizedError e, WebRequest request) {
+    public ErrorResponse handleNotAuthorizedException(NotAuthorizedException e, WebRequest request) {
         return new ErrorResponse(e, HttpStatus.UNAUTHORIZED, request);
     }
 
