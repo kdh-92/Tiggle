@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 import { expandTypography } from "@/styles/util";
 
-export const StyledReactionButton = styled.button`
+export const ReactionButtonStyle = styled.button`
   width: 128px;
   padding: 12px 0;
   background-color: ${({ theme: { color } }) => color.white.value};

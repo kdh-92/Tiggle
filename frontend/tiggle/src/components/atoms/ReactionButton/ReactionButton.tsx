@@ -1,14 +1,20 @@
+import { ButtonHTMLAttributes } from "react";
 import { Frown, Smile } from "react-feather";
 
 import cn from "classnames";
 
-import { StyledReactionButton } from "@/styles/components/ReactionButtonStyle";
+import { ReactionButtonStyle } from "@/styles/components/ReactionButtonStyle";
 import { TxType } from "@/types";
 
-interface ReactionButtonProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+const Reaction = {
+  Up: "Up",
+  Down: "Down",
+} as const;
+type ReactionType = (typeof Reaction)[keyof typeof Reaction];
+
+interface ReactionButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   tx: TxType;
-  reaction: "good" | "bad";
+  reaction: ReactionType;
   number: number;
   checked?: boolean;
 }
@@ -21,19 +27,19 @@ export default function ReactionButton({
   ...props
 }: ReactionButtonProps) {
   return (
-    <StyledReactionButton className={cn({ checked }, tx)} {...props}>
+    <ReactionButtonStyle className={cn({ checked }, tx)} {...props}>
       <div className="label">
-        {reaction === "good" && (
+        {reaction === Reaction.Up && (
           <Smile className="label-icon" strokeWidth={1.5} />
         )}
-        {reaction === "bad" && (
+        {reaction === Reaction.Down && (
           <Frown className="label-icon" strokeWidth={1.5} />
         )}
         <span className="label-text">
-          {reaction === "good" ? "칭찬해요" : "아까워요"}
+          {reaction === Reaction.Up ? "칭찬해요" : "아까워요"}
         </span>
       </div>
       <span className="number">{number}</span>
-    </StyledReactionButton>
+    </ReactionButtonStyle>
   );
 }
