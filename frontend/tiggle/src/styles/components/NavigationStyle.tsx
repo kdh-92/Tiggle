@@ -50,9 +50,6 @@ export const NavigationStyle = styled(Menu)`
 export const NavigationWrapStyle = styled.div`
   display: flex;
   justify-content: center;
-  position: sticky;
-  top: 64px;
-  left: 0;
-  right: 0;
+  margin-top: 80px;
   padding: 0 20px 0 24px;
 `;

@@ -13,10 +13,12 @@ export const HeaderStyle = styled(Header)`
   justify-content: center;
   padding: 0 20px 0 24px;
 
-  .header-wrap {
-    width: 768px;
-    display: flex;
-    justify-content: space-between;
+  ${({ theme }) => theme.mq.desktop} {
+    .header-wrap {
+      width: 768px;
+      display: flex;
+      justify-content: space-between;
+    }
   }
 `;
 
@@ -31,7 +33,7 @@ export const StyledHeaderLeft = styled.div`
     border-bottom: none;
     color: ${({ theme: { color } }) => color.bluishGray[600].value};
 
-    @media (max-width: 768px) {
+    ${({ theme }) => theme.mq.desktop} {
       display: none;
     }
   }
