@@ -1,5 +1,5 @@
-import { ContentStyle } from "../../styles/ContentStyle";
-import ContentSection from "../molecules/ContentSection";
+import ContentSection from "@/components/molecules/ContentSection";
+import { ContentStyle } from "@/styles/components/ContentStyle";
 
 export default function Content() {
   return (

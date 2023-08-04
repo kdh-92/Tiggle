@@ -1,5 +1,5 @@
-import { NavigationStyle } from "../../styles/NavigationStyle";
-import { MenuItems } from "../atoms/MenuItem";
+import { MenuItems } from "@/components/atoms/MenuItem";
+import { NavigationStyle } from "@/styles/components/NavigationStyle";
 
 export default function Navigation() {
   const items = MenuItems(["전체", "all"], ["내 지출", "expenses"]);

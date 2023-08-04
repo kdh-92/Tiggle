@@ -1,5 +1,6 @@
 const dotenv = require("dotenv");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
+const path = require("path");
 
 dotenv.config();
 
@@ -33,6 +34,9 @@ module.exports = {
     ],
   },
   resolve: {
+    alias: {
+      "@": path.resolve(__dirname, "src"),
+    },
     extensions: [".tsx", ".ts", ".js"],
   },
   plugins: [
