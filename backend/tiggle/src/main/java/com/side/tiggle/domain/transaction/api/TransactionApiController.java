@@ -139,7 +139,7 @@ public class TransactionApiController {
             @RequestParam(name = "index", defaultValue = DEFAULT_INDEX) int index
     ){
         Page<Comment> pagedComments = commentService.getParentsByTxId(id, index, pageSize);
-        Page<CommentRespDto> pagedResult = CommentRespDto.fromEntityPage(pagedComments);
+        Page<CommentRespDto> pagedResult = CommentRespDto.fromEntityPage(pagedComments, commentService);
         return new ResponseEntity<>(pagedResult, HttpStatus.OK);
     }
 }

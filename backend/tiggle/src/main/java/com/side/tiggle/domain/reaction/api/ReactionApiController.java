@@ -9,12 +9,14 @@ import com.side.tiggle.domain.reaction.model.ReactionType;
 import com.side.tiggle.domain.reaction.service.ReactionService;
 import com.side.tiggle.global.common.constants.HttpHeaders;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+@Tag(name = "Reaction API")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/transaction/{id}/reaction")
