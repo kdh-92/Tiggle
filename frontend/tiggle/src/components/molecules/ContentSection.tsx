@@ -1,7 +1,14 @@
+import Masonry from "react-masonry-css";
+
 import Navigation from "./Navigation";
 import TitleButton from "../atoms/TitleButton";
 
 export default function ContentSection() {
+  const breakpointColumnsObj = {
+    default: 2,
+    767: 1,
+  };
+
   return (
     <div className="content-wrap">
       <div className="content-title-wrap">
@@ -13,20 +20,30 @@ export default function ContentSection() {
       </div>
       <Navigation />
       <div className="feed-wrap">
-        <div className="feed-box-grid">
-          <div className="feed">
+        <Masonry
+          breakpointCols={breakpointColumnsObj}
+          className="feed-box-masonry"
+          columnClassName="feed"
+        >
+          <div>
             <p>티끌 모아 태산 ⛰</p>
             <p>티끌 모아 태산 ⛰</p>
             <p>티끌 모아 태산 ⛰</p>
           </div>
-          <div className="feed">
+          <div>
             <p>티끌 모아 태산 ⛰</p>
           </div>
-          <div className="feed">
+          <div>
             <p>티끌 모아 태산 ⛰</p>
             <p>티끌 모아 태산 ⛰</p>
           </div>
-        </div>
+          <div>
+            <p>티끌 모아 태산 ⛰</p>
+            <p>티끌 모아 태산 ⛰</p>
+            <p>티끌 모아 태산 ⛰</p>
+            <p>티끌 모아 태산 ⛰</p>
+          </div>
+        </Masonry>
       </div>
     </div>
   );
