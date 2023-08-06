@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 import { expandTypography } from "@/styles/util";
 
-export const StyledTypeTag = styled.div`
+export const TypeTagStyle = styled.div`
   width: fit-content;
   padding: 2px 8px;
   border: 1px solid;

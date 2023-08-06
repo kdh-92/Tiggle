@@ -1,16 +1,18 @@
+import { HTMLAttributes } from "react";
+
 import cn from "classnames";
 
-import { StyledTypeTag } from "@/styles/components/TypeTagStyle";
+import { TypeTagStyle } from "@/styles/components/TypeTagStyle";
 import { TxType } from "@/types";
 
-interface TypeTagProps {
+interface TypeTagProps extends HTMLAttributes<HTMLDivElement> {
   txType: TxType;
 }
 
-export default function typeTag({ txType }: TypeTagProps) {
+export default function TypeTag({ txType, className, ...props }: TypeTagProps) {
   return (
-    <StyledTypeTag className={cn("type-tag", txType)}>
+    <TypeTagStyle className={cn("type-tag", txType, className)} {...props}>
       <p className="label">{txType === "outcome" ? "지출" : "환불"}</p>
-    </StyledTypeTag>
+    </TypeTagStyle>
   );
 }
