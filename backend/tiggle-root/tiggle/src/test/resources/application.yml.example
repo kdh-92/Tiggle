@@ -1,0 +1,28 @@
+spring:
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:test;MODE=MySQL;INIT=RUNSCRIPT FROM 'classpath:db/schema.sql'\;RUNSCRIPT FROM 'classpath:db/data.sql';DATABASE_TO_UPPER=false;CASE_INSENSITIVE_IDENTIFIERS=true
+    username: test
+    password:
+  h2:
+    console:
+      enabled: true
+  jpa:
+    show-sql: true
+    database: mysql
+    hibernate:
+      ddl-auto: update
+  sql:
+    init:
+      mode: always
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: ####
+            client-secret: ####
+            authorization-grant-type: authorization_code
+            scope:
+              - profile
+              - email
