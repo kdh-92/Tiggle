@@ -1,12 +1,14 @@
 import { Menu } from "antd";
 import styled from "styled-components";
 
+import { expandTypography } from "@/styles/util";
+
 export const NavigationStyle = styled(Menu)`
   display: none;
   background-color: ${({ theme: { color } }) => color.white.value};
   border-bottom: 0;
   z-index: 100;
-  width: 769px;
+  width: 768px;
   height: 52px;
   display: flex;
   align-items: center;
@@ -51,5 +53,11 @@ export const NavigationWrapStyle = styled.div`
   display: flex;
   justify-content: center;
   margin-top: 80px;
-  padding: 0 20px 0 24px;
+  padding: 0 20px 0 28px;
+  ${({ theme }) => expandTypography(theme.typography.body.medium.bold)}
+
+  ${({ theme }) => theme.mq.mobile} {
+    padding: 0 20px 0 24px;
+    ${({ theme }) => expandTypography(theme.typography.body.small.bold)}
+  }
 `;
