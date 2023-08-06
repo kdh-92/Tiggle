@@ -1,10 +1,10 @@
 import { InputProps } from "antd";
 import cn from "classnames";
 
-import { StyledTextArea } from "@/styles/components/TextAreaStyle";
+import { StyledTextArea } from "@/styles/components/StyledTextArea";
 
 interface TextAreaProps extends InputProps {
-  variant: "default" | "filled";
+  variant?: "default" | "filled";
 }
 
 export default function TextArea({
