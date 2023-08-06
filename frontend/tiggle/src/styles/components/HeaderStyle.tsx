@@ -13,11 +13,20 @@ export const HeaderStyle = styled(Header)`
   justify-content: center;
   padding: 0 20px 0 24px;
 
+  .header-wrap {
+    display: flex;
+    justify-content: space-between;
+  }
+
   ${({ theme }) => theme.mq.desktop} {
     .header-wrap {
       width: 768px;
-      display: flex;
-      justify-content: space-between;
+    }
+  }
+
+  ${({ theme }) => theme.mq.mobile} {
+    .header-wrap {
+      width: 100%;
     }
   }
 `;
@@ -33,7 +42,7 @@ export const StyledHeaderLeft = styled.div`
     border-bottom: none;
     color: ${({ theme: { color } }) => color.bluishGray[600].value};
 
-    ${({ theme }) => theme.mq.desktop} {
+    ${({ theme }) => theme.mq.mobile} {
       display: none;
     }
   }
