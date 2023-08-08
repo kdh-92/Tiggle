@@ -4,7 +4,6 @@ import styled from "styled-components";
 import { expandTypography } from "@/styles/util";
 
 export const NavigationStyle = styled(Menu)`
-  display: none;
   background-color: ${({ theme: { color } }) => color.white.value};
   border-bottom: 0;
   z-index: 100;
@@ -15,19 +14,17 @@ export const NavigationStyle = styled(Menu)`
   color: ${({ theme: { color } }) => color.bluishGray[400].value};
 
   .ant-menu-item {
-    padding-inline: 0;
-    margin-right: 4px;
-    width: 50px;
+    padding: 8px 16px;
+    gap: 10px;
     text-align: center;
   }
 
   .ant-menu-item-selected {
     display: flex;
-    width: 55px;
     background-color: ${({ theme: { color } }) =>
       color.bluishGray[50].value} !important;
     border-radius: 1rem !important;
-    height: 30px;
+    height: 36px;
     align-items: center;
     justify-content: center;
     color: ${({ theme: { color } }) => color.bluishGray[700].value} !important;

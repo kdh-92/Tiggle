@@ -11,22 +11,17 @@ export const HeaderStyle = styled(Header)`
   padding-inline: 0;
   display: flex;
   justify-content: center;
-  padding: 0 20px 0 24px;
 
   .header-wrap {
     display: flex;
     justify-content: space-between;
-  }
+    padding: 0 20px 0 24px;
+    width: 100%;
+    height: 64px;
 
-  ${({ theme }) => theme.mq.desktop} {
-    .header-wrap {
+    ${({ theme }) => theme.mq.desktop} {
       width: 768px;
-    }
-  }
-
-  ${({ theme }) => theme.mq.mobile} {
-    .header-wrap {
-      width: 100%;
+      padding: 0 28px 0 32px;
     }
   }
 `;
@@ -34,12 +29,13 @@ export const HeaderStyle = styled(Header)`
 export const StyledHeaderLeft = styled.div`
   display: grid;
   align-items: center;
+  grid-gap: 40px;
   grid-auto-flow: column;
-  width: 204px;
 
-  //TODO: ant design 메뉴 CSS 수정
   .ant-menu {
-    border-bottom: none;
+    width: 120px;
+    border-bottom: 1px solid
+      ${({ theme: { color } }) => color.bluishGray[200].value};
     color: ${({ theme: { color } }) => color.bluishGray[600].value};
 
     ${({ theme }) => theme.mq.mobile} {
