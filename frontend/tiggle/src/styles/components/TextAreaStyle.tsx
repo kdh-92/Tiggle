@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 import { expandTypography } from "@/styles/util";
 
-export const StyledTextArea = styled(Input.TextArea)`
+export const TextAreaStyle = styled(Input.TextArea)`
   color: ${({ theme }) => theme.color.bluishGray[600].value};
   border: 1px solid ${({ theme }) => theme.color.bluishGray[200].value};
   font-family: "Pretendard Variable", Pretendard, system-ui, sans-serif;

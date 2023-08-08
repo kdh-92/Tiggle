@@ -1,7 +1,7 @@
 import { InputProps } from "antd";
 import cn from "classnames";
 
-import { StyledTextArea } from "@/styles/components/StyledTextArea";
+import { TextAreaStyle } from "@/styles/components/TextAreaStyle";
 
 interface TextAreaProps extends InputProps {
   variant?: "default" | "filled";
@@ -13,6 +13,6 @@ export default function TextArea({
   ...props
 }: TextAreaProps) {
   return (
-    <StyledTextArea className={cn(className, variant)} rows={3} {...props} />
+    <TextAreaStyle className={cn(className, variant)} rows={3} {...props} />
   );
 }

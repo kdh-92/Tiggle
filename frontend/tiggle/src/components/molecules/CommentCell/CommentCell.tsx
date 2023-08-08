@@ -1,16 +1,14 @@
 import { useState } from "react";
-import { MinusSquare, PlusSquare } from "react-feather";
 
-import {
-  CommentCellStyle,
-  StyledComment,
-  StyledRepliesSection,
-} from "@/styles/components/CommentCellStyle";
-import { TxType } from "@/types";
-import TextArea from "@/components/atoms/TextArea/TextArea";
-import { Button } from "antd";
 import CTAButton from "@/components/atoms/CTAButton/CTAButton";
 import ReplyToggleButton from "@/components/atoms/ReplyToggleButton/ReplyToggleButton";
+import TextArea from "@/components/atoms/TextArea/TextArea";
+import {
+  CommentCellStyle,
+  CommentStyle,
+  RepliesSectionStyle,
+} from "@/styles/components/CommentCellStyle";
+import { TxType } from "@/types";
 
 export interface Comment {
   id: number;
@@ -44,7 +42,7 @@ export default function CommentCell({ txType, comment }: CommentCellProps) {
       />
 
       <div>
-        <StyledComment className={txType}>
+        <CommentStyle className={txType}>
           <div>
             <p className="name">{comment.user.name}</p>
             <p className="date">{comment.createdAt}</p>
@@ -56,10 +54,10 @@ export default function CommentCell({ txType, comment }: CommentCellProps) {
             repliesCount={comment.replies.length}
             onClick={toggleReplySection}
           />
-        </StyledComment>
+        </CommentStyle>
 
         {replyOpen && (
-          <StyledRepliesSection>
+          <RepliesSectionStyle>
             <div className="divider" />
 
             {comment.replies.map(reply => (
@@ -86,7 +84,7 @@ export default function CommentCell({ txType, comment }: CommentCellProps) {
               <TextArea variant="filled" placeholder="답글 남기기" />
               <CTAButton size="md">답글 등록</CTAButton>
             </div>
-          </StyledRepliesSection>
+          </RepliesSectionStyle>
         )}
       </div>
     </CommentCellStyle>

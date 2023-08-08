@@ -33,7 +33,7 @@ export const CommentCellStyle = styled.div`
   }
 `;
 
-export const StyledComment = styled.div`
+export const CommentStyle = styled.div`
   display: flex;
   flex-direction: column;
   gap: 16px;
@@ -66,7 +66,7 @@ export const StyledComment = styled.div`
   }
 `;
 
-export const StyledRepliesSection = styled.div`
+export const RepliesSectionStyle = styled.div`
   margin-top: 24px;
   display: flex;
   flex-direction: column;
