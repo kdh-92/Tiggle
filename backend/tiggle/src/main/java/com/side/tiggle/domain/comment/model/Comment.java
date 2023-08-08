@@ -1,5 +1,6 @@
 package com.side.tiggle.domain.comment.model;
 
+import com.side.tiggle.domain.comment.service.CommentService;
 import com.side.tiggle.domain.member.model.Member;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.side.tiggle.domain.transaction.model.Transaction;

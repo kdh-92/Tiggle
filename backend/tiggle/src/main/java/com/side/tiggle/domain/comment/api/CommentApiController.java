@@ -32,7 +32,7 @@ public class CommentApiController {
             @RequestParam(name = "pageSize", defaultValue = "5") int size
     ){
         Page<Comment> pagedComments = commentService.getChildrenByParentId(id, page, size);
-        Page<CommentRespDto> pagedResult = CommentRespDto.fromEntityPage(pagedComments);
+        Page<CommentRespDto> pagedResult = CommentRespDto.fromEntityPage(pagedComments, commentService);
         return new ResponseEntity<>(pagedResult, HttpStatus.OK);
     }
 
