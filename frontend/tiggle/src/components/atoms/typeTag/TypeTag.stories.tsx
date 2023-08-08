@@ -1,5 +1,7 @@
 import { Meta, StoryObj } from "@storybook/react";
 
+import { Tx } from "@/types";
+
 import TypeTag from "./TypeTag";
 
 export default {
@@ -8,7 +10,7 @@ export default {
   argTypes: {
     txType: {
       control: "radio",
-      options: ["outcome", "refund"],
+      options: Object.keys(Tx),
     },
   },
 } as Meta<typeof TypeTag>;
@@ -17,6 +19,6 @@ type Story = StoryObj<typeof TypeTag>;
 
 export const Default: Story = {
   args: {
-    txType: "outcome",
+    txType: Tx.Outcome,
   },
 };

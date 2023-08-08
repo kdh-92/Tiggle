@@ -1,6 +1,7 @@
 import { Meta, StoryObj } from "@storybook/react";
 
 import PostHeader from "@/components/molecules/PostHeader/PostHeader";
+import { Tx } from "@/types";
 
 export default {
   title: "molecules/PostHeader",
@@ -14,7 +15,7 @@ export const Default: Story = {
     id: 0,
     title: "제목 텍스트",
     amount: 50000,
-    txType: "outcome",
+    txType: Tx.Outcome,
     user: {
       name: "사용자 이름",
       profileUrl: "image.jpg",
