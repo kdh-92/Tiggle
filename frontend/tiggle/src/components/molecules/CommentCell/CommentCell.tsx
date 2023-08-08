@@ -10,8 +10,9 @@ import { TxType } from "@/types";
 import TextArea from "@/components/atoms/TextArea/TextArea";
 import { Button } from "antd";
 import CTAButton from "@/components/atoms/CTAButton/CTAButton";
+import ReplyToggleButton from "@/components/atoms/ReplyToggleButton/ReplyToggleButton";
 
-interface Comment {
+export interface Comment {
   id: number;
   user: {
     name: string;
@@ -48,22 +49,13 @@ export default function CommentCell({ txType, comment }: CommentCellProps) {
             <p className="name">{comment.user.name}</p>
             <p className="date">{comment.createdAt}</p>
           </div>
-
           <p className="content">{comment.content}</p>
-
-          <button className="reply" onClick={toggleReplySection}>
-            {replyOpen ? (
-              <MinusSquare className="reply-icon" />
-            ) : (
-              <PlusSquare className="reply-icon" />
-            )}
-            {comment.replies.length > 0 && (
-              <p className="reply-count">답글 {comment.replies.length}개</p>
-            )}
-            <p className="reply-text">
-              {replyOpen ? "답글 숨기기" : "답글 달기"}
-            </p>
-          </button>
+          <ReplyToggleButton
+            txType={txType}
+            open={replyOpen}
+            repliesCount={comment.replies.length}
+            onClick={toggleReplySection}
+          />
         </StyledComment>
 
         {replyOpen && (

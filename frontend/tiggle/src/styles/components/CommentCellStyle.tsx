@@ -53,43 +53,6 @@ export const StyledComment = styled.div`
     color: ${({ theme }) => theme.color.bluishGray[900].value};
   }
 
-  .reply {
-    display: flex;
-    justify-content: left;
-    align-items: center;
-    gap: 8px;
-    &-icon {
-      width: 14px;
-      height: 14px;
-    }
-    &-count {
-      ${({ theme }) => expandTypography(theme.typography.body.small.medium)}
-    }
-    &-text {
-      ${({ theme }) => expandTypography(theme.typography.body.small.bold)}
-    }
-  }
-
-  &.outcome {
-    .reply-icon,
-    .reply-count {
-      color: ${({ theme }) => theme.color.peach[400].value};
-    }
-    .reply-text {
-      color: ${({ theme }) => theme.color.peach[500].value};
-    }
-  }
-
-  &.refund {
-    .reply-icon,
-    .reply-count {
-      color: ${({ theme }) => theme.color.blue[400].value};
-    }
-    .reply-text {
-      color: ${({ theme }) => theme.color.blue[500].value};
-    }
-  }
-
   ${({ theme }) => theme.mq.desktop} {
     .name {
       ${({ theme }) => expandTypography(theme.typography.body.large.bold)}
@@ -99,18 +62,6 @@ export const StyledComment = styled.div`
     }
     .content {
       ${({ theme }) => expandTypography(theme.typography.body.large.medium)}
-    }
-    .reply {
-      &-icon {
-        width: 18px;
-        height: 18px;
-      }
-      &-count {
-        ${({ theme }) => expandTypography(theme.typography.body.medium.medium)}
-      }
-      &-text {
-        ${({ theme }) => expandTypography(theme.typography.body.medium.bold)}
-      }
     }
   }
 `;
