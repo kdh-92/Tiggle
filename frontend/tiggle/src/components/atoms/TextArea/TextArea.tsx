@@ -1,9 +1,9 @@
-import { InputProps } from "antd";
+import { TextAreaProps as AntTextAreaProps } from "antd/lib/input";
 import cn from "classnames";
 
 import { TextAreaStyle } from "@/styles/components/TextAreaStyle";
 
-interface TextAreaProps extends InputProps {
+interface TextAreaProps extends AntTextAreaProps {
   variant?: "default" | "filled";
 }
 

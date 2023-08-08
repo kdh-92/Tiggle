@@ -1,4 +1,4 @@
-import { ButtonHTMLAttributes, ReactNode, cloneElement } from "react";
+import { ButtonHTMLAttributes, ReactElement, cloneElement } from "react";
 
 import cn from "classnames";
 
@@ -6,7 +6,7 @@ import { CTAButtonStyle } from "@/styles/components/CTAButtonStyle";
 
 interface CTAButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   size: "md" | "lg";
-  icon?: ReactNode;
+  icon?: ReactElement;
 }
 
 export default function CTAButton({

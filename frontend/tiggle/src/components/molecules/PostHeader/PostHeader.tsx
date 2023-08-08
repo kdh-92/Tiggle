@@ -34,7 +34,7 @@ export default function PostHeader({
   asset,
 }: PostHeaderProps) {
   return (
-    <PostHeaderStyle id={id}>
+    <PostHeaderStyle id={`post-header-${id}`}>
       <StyledPostHeaderTitle>
         <TypeTag className="tag" txType={txType} />
         <div className={cn("amount", txType)}>
