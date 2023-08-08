@@ -21,7 +21,6 @@ export const NavigationStyle = styled(Menu)`
     text-align: center;
   }
 
-  //TODO: ant design 메뉴 CSS 수정
   .ant-menu-item-selected {
     display: flex;
     width: 55px;
@@ -34,14 +33,12 @@ export const NavigationStyle = styled(Menu)`
     color: ${({ theme: { color } }) => color.bluishGray[700].value} !important;
   }
 
-  //TODO: ant design 메뉴 CSS 수정
   .ant-menu-item-selected::after {
     border-bottom-width: 0 !important;
     border-bottom-color: ${({ theme: { color } }) =>
       color.white.value} !important;
   }
 
-  //TODO: ant design 메뉴 CSS 수정
   .ant-menu-item-active::after {
     border-bottom-width: 0 !important;
     border-bottom-color: ${({ theme: { color } }) =>

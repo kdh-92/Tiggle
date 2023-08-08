@@ -9,7 +9,6 @@ export const TabStyle = styled(Footer)`
   height: 58px;
   padding: 0;
 
-  // TODO: tab 역할 지정
   @media (min-width: 768px) {
     display: none;
   }
