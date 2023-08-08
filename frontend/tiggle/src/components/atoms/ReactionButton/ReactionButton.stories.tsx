@@ -2,6 +2,8 @@ import { useState } from "react";
 
 import { Meta, StoryObj } from "@storybook/react";
 
+import { Tx } from "@/types";
+
 import ReactionButton from "./ReactionButton";
 
 export default {
@@ -13,7 +15,7 @@ type Story = StoryObj<typeof ReactionButton>;
 
 export const Default: Story = {
   args: {
-    tx: "outcome",
+    tx: Tx.Outcome,
     reaction: "Up",
     number: 964,
   },
@@ -21,7 +23,7 @@ export const Default: Story = {
 
 export const WithToggle: Story = {
   args: {
-    tx: "outcome",
+    tx: Tx.Outcome,
     reaction: "Up",
     number: 144,
   },

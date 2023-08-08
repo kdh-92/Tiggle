@@ -2,8 +2,10 @@ package com.side.tiggle.domain.reaction.model;
 
 import com.side.tiggle.global.common.model.BaseEntity;
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Data
@@ -11,7 +13,7 @@ import javax.persistence.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Table(name = "reactions")
-public class Reaction extends BaseEntity {
+public class Reaction {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,6 +31,10 @@ public class Reaction extends BaseEntity {
     @Enumerated(EnumType.STRING)
     @Column(name = "type", nullable = false)
     private ReactionType type;
+
+    @Column(name = "created_at", nullable = false, updatable = false)
+    @CreatedDate
+    private LocalDateTime createdAt;
 
 
     @Builder
