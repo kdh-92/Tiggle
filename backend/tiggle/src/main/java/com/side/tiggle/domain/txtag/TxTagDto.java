@@ -1,24 +1,35 @@
 package com.side.tiggle.domain.txtag;
 
 import com.side.tiggle.domain.txtag.model.TxTag;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
+
+import java.util.List;
 
 @Getter
 @Setter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
+@Builder
 public class TxTagDto {
     long id;
     long txId;
     long memberId;
-    String tagName;
+    String tagNames;
 
     public static TxTagDto fromEntity(TxTag txTag) {
-        TxTagDto dto = new TxTagDto();
-        dto.id = txTag.getId();
-        dto.txId = txTag.getTxId();
-        dto.memberId = txTag.getMemberId();
-        dto.tagName = txTag.getTagName();
+        return TxTagDto.builder()
+                .id(txTag.getId())
+                .txId(txTag.getTxId())
+                .memberId(txTag.getMemberId())
+                .tagNames(txTag.getTagNames())
+                .build();
+    }
 
-        return dto;
+    public TxTag toEntity(TxTagDto dto) {
+        return TxTag.builder()
+                .txId(dto.getTxId())
+                .memberId(dto.getMemberId())
+                .tagNames(dto.getTagNames())
+                .build();
     }
 }

@@ -1,5 +1,9 @@
 package com.side.tiggle.domain.transaction.api;
 
+import com.side.tiggle.domain.asset.model.Asset;
+import com.side.tiggle.domain.asset.service.AssetService;
+import com.side.tiggle.domain.category.model.Category;
+import com.side.tiggle.domain.category.service.CategoryService;
 import com.side.tiggle.domain.comment.dto.resp.CommentRespDto;
 import com.side.tiggle.domain.comment.model.Comment;
 import com.side.tiggle.domain.comment.service.CommentService;
@@ -8,6 +12,8 @@ import com.side.tiggle.domain.transaction.dto.req.TransactionUpdateReqDto;
 import com.side.tiggle.domain.transaction.dto.resp.TransactionRespDto;
 import com.side.tiggle.domain.transaction.model.Transaction;
 import com.side.tiggle.domain.transaction.service.TransactionService;
+import com.side.tiggle.domain.txtag.model.TxTag;
+import com.side.tiggle.domain.txtag.service.TxTagService;
 import com.side.tiggle.global.common.constants.HttpHeaders;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -34,6 +40,9 @@ public class TransactionApiController {
 
     private final TransactionService transactionService;
     private final CommentService commentService;
+    private final AssetService assetService;
+    private final CategoryService categoryService;
+    private final TxTagService txTagService;
     private final String DEFAULT_INDEX = "0";
     private final String DEFAULT_PAGE_SIZE = "5";
 
@@ -55,8 +64,13 @@ public class TransactionApiController {
     })
     @GetMapping("/{id}")
     public ResponseEntity<TransactionRespDto> getTransaction(@Parameter(name = "id", description = "tx의 id") @PathVariable("id") Long transactionId) {
+        Transaction transaction = transactionService.getTransaction(transactionId);
+        Asset asset = assetService.getAsset(transaction.getAssetId());
+        Category category = categoryService.getCategory(transaction.getCategoryId());
+        TxTag txTag = txTagService.getListTxTag(transactionId);
+
         return new ResponseEntity<>(
-                TransactionRespDto.fromEntity(transactionService.getTransaction(transactionId)),
+                TransactionRespDto.fromEntityDetailTx(transactionService.getTransaction(transactionId), asset, category, txTag),
                 HttpStatus.OK
         );
     }
@@ -111,7 +125,7 @@ public class TransactionApiController {
     @GetMapping("/all")
     public ResponseEntity<List<TransactionRespDto>> getAllTransaction() {
         return new ResponseEntity<>(
-                transactionService.getAllTransaction()
+                transactionService.getAllUndeletedTransaction()
                         .stream()
                         .map(TransactionRespDto::fromEntity)
                         .collect(Collectors.toList()),
@@ -148,9 +162,4 @@ public class TransactionApiController {
         Page<CommentRespDto> pagedResult = CommentRespDto.fromEntityPage(pagedComments, commentService);
         return new ResponseEntity<>(pagedResult, HttpStatus.OK);
     }
-
-//    @PostMapping(value = "/file", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-//    public void testUpload(@RequestPart("multipartFile") MultipartFile multipartFile) throws IOException {
-//        transactionService.uploadFileToFolder(multipartFile);
-//    }
 }

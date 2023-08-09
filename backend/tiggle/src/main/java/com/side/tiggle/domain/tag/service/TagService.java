@@ -1,6 +1,6 @@
 package com.side.tiggle.domain.tag.service;
 
-import com.side.tiggle.domain.tag.TagDto;
+import com.side.tiggle.domain.tag.dto.TagDto;
 import com.side.tiggle.domain.tag.model.Tag;
 import com.side.tiggle.domain.tag.repository.TagRepository;
 import lombok.RequiredArgsConstructor;

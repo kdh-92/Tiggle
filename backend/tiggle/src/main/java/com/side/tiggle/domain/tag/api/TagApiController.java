@@ -1,6 +1,6 @@
 package com.side.tiggle.domain.tag.api;
 
-import com.side.tiggle.domain.tag.TagDto;
+import com.side.tiggle.domain.tag.dto.TagDto;
 import com.side.tiggle.domain.tag.service.TagService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

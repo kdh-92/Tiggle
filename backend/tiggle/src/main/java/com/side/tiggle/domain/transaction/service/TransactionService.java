@@ -80,7 +80,7 @@ public class TransactionService {
         return memberTxPage;
     }
 
-    public List<Transaction> getAllTransaction() {
+    public List<Transaction> getAllUndeletedTransaction() {
         return transactionRepository.findAll();
     }
 

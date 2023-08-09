@@ -4,6 +4,8 @@ DROP TABLE if exists members;
 DROP TABLE if exists reactions;
 DROP TABLE if exists tags;
 DROP TABLE if exists transactions;
+DROP TABLE if exists assets;
+DROP TABLE if exists categories;
 DROP TABLE if exists tx_tags;
 
 CREATE TABLE `comments`
@@ -80,6 +82,9 @@ CREATE TABLE `transactions`
     `date`                 date NOT NULL ,
     `content`              varchar(255) NOT NULL ,
     `reason`               varchar(255) NOT NULL ,
+    `asset_id`             bigint NOT NULL ,
+    `category_id`          bigint NOT NULL ,
+    `tag_names`            varchar(100) NULL ,
     `deleted`              tinyint DEFAULT 0 ,
     `created_at`           timestamp DEFAULT CURRENT_TIMESTAMP ,
     `updated_at`           timestamp DEFAULT NULL ,
@@ -88,12 +93,43 @@ CREATE TABLE `transactions`
     PRIMARY KEY (`id`)
 );
 
+CREATE TABLE `assets`
+(
+    `id`       bigint NOT NULL AUTO_INCREMENT,
+    `name`     varchar(100) NOT NULL ,
+    `default`  tinyint DEFAULT 0 ,
+    `deleted`              tinyint DEFAULT 0 ,
+    `created_at`           timestamp DEFAULT CURRENT_TIMESTAMP ,
+    `updated_at`           timestamp DEFAULT NULL ,
+    `deleted_at`           timestamp DEFAULT NULL ,
+
+    PRIMARY KEY (`id`)
+);
+
+CREATE TABLE `categories`
+(
+    `id`       bigint NOT NULL AUTO_INCREMENT,
+    `name`     varchar(100) NOT NULL ,
+    `default`  tinyint DEFAULT 0 ,
+    `deleted`              tinyint DEFAULT 0 ,
+    `created_at`           timestamp DEFAULT CURRENT_TIMESTAMP ,
+    `updated_at`           timestamp DEFAULT NULL ,
+    `deleted_at`           timestamp DEFAULT NULL ,
+
+    PRIMARY KEY (`id`)
+);
+
+
 CREATE TABLE `tx_tags`
 (
     `id`        bigint NOT NULL AUTO_INCREMENT,
     `tx_id`     bigint NOT NULL ,
     `member_id` bigint NOT NULL ,
-    `tag_name`  varchar(100) NOT NULL ,
+    `tag_names`  varchar(100) NOT NULL ,
+    `deleted`              tinyint DEFAULT 0 ,
+    `created_at`           timestamp DEFAULT CURRENT_TIMESTAMP ,
+    `updated_at`           timestamp DEFAULT NULL ,
+    `deleted_at`           timestamp DEFAULT NULL ,
 
     PRIMARY KEY (`id`)
 );

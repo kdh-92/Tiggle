@@ -26,6 +26,12 @@ public class TransactionDto {
     private String content;
     private String reason;
 
+    private Long assetId;
+
+    private Long categoryId;
+
+    private String tagNames;
+
     public Transaction toEntity(TransactionDto dto) {
         return Transaction.builder()
                 .memberId(dto.getMemberId())
@@ -36,6 +42,9 @@ public class TransactionDto {
                 .date(dto.getDate())
                 .content(dto.getContent())
                 .reason(dto.getReason())
+                .assetId(dto.getAssetId())
+                .categoryId(dto.getCategoryId())
+                .tagNames(dto.getTagNames())
                 .build();
     }
 

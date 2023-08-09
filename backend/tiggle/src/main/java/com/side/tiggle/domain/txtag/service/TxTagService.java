@@ -7,7 +7,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -15,19 +17,18 @@ public class TxTagService {
 
     private final TxTagRepository txTagRepository;
 
-    public TxTagDto createTxTag(TxTagDto txTagDto) {
-        TxTag txTag = TxTag.builder()
-                .txId(txTagDto.getTxId())
-                .memberId(txTagDto.getMemberId())
-                .tagName(txTagDto.getTagName())
-                .build();
-
-        return txTagDto.fromEntity(txTagRepository.save(txTag));
+    public TxTag createTxTag(TxTagDto dto) {
+        return txTagRepository.save(dto.toEntity(dto));
     }
 
-    public TxTagDto getTxTag(Long txTagId) {
-        return TxTagDto.fromEntity(txTagRepository.findById(txTagId)
-                .orElseThrow(() -> new RuntimeException("")));
+    public TxTag getTxTag(Long txTagId) {
+        return txTagRepository.findById(txTagId)
+                .orElseThrow(() -> new RuntimeException(""));
+    }
+
+    public TxTag getListTxTag(Long txId) {
+        return txTagRepository.findByTxId(txId)
+                .orElseThrow(() -> new RuntimeException(""));
     }
 
     public List<TxTagDto> getAllTxTag() {
@@ -39,15 +40,13 @@ public class TxTagService {
         return txTagDtoList;
     }
 
-    public TxTagDto updateTxTag(Long txTagId, TxTagDto txTagDto) {
-        TxTag txTag = txTagRepository.findById(txTagId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 유저가 존재하지 않습니다."));
-
-        txTag.setTagName(txTagDto.getTagName());
-
-        return txTagDto.fromEntity(txTagRepository.save(txTag));
-    }
-
-    // delete
+//    public TxTag updateTxTag(Long txId, TxTagDto dto) {
+//        TxTag txTag = txTagRepository.findById(txTagId)
+//                .orElseThrow(() -> new IllegalArgumentException("해당 태그가 존재하지 않습니다."));
+//
+//        txTag.setTagNames(txTagDto.getTagNames());
+//
+//        return txTagDto.fromEntity(txTagRepository.save(txTag));
+//    }
 }
 

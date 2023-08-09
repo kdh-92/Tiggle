@@ -1,4 +1,4 @@
-package com.side.tiggle.domain.tag;
+package com.side.tiggle.domain.tag.dto;
 
 import com.side.tiggle.domain.tag.model.Tag;
 import lombok.Getter;
