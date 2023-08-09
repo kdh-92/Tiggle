@@ -1,11 +1,18 @@
-const baseConfig = require("./webpack.config");
-const { merge } = require("webpack-merge");
+const path = require("path");
+
 const webpack = require("webpack");
+const { merge } = require("webpack-merge");
+
+const baseConfig = require("./webpack.config");
 
 module.exports = merge(baseConfig, {
   mode: "development",
   devServer: {
+    host: "localhost",
     port: 3000,
+    historyApiFallback: true,
+    open: true,
+    static: path.join(__dirname, "public"),
   },
   plugins: [
     new webpack.DefinePlugin({
