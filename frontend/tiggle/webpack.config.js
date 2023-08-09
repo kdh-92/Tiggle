@@ -8,8 +8,10 @@ dotenv.config();
 module.exports = {
   entry: "./src/index.tsx",
   output: {
-    filename: "bundle.[hash].js",
     path: path.resolve(__dirname, "dist"),
+    filename: "bundle.[hash].js",
+    publicPath: "/",
+    clean: true,
   },
   devtool: "source-map",
   module: {
@@ -23,7 +25,7 @@ module.exports = {
         },
       },
       {
-        test: /\.tsx?$/,
+        test: /\.(tsx|ts)?$/,
         exclude: /node_module/,
         use: {
           loader: "ts-loader",

@@ -8,11 +8,13 @@ const baseConfig = require("./webpack.config");
 module.exports = merge(baseConfig, {
   mode: "development",
   devServer: {
+    static: path.join(__dirname, "dist"),
     host: "localhost",
     port: 3000,
     historyApiFallback: true,
     open: true,
-    static: path.join(__dirname, "public"),
+    allowedHosts: "all",
+    liveReload: true,
   },
   plugins: [
     new webpack.DefinePlugin({
