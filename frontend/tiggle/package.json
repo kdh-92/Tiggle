@@ -9,7 +9,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "transform-token": "node transform-token.js"
+    "transform-token": "node transform-token.js",
+    "chromatic": "npx chromatic --project-token=chpt_bf3f5c4ddba9975"
   },
   "author": "",
   "license": "ISC",
@@ -48,12 +49,14 @@
     "@typescript-eslint/eslint-plugin": "^6.2.0",
     "@typescript-eslint/parser": "^6.2.0",
     "babel-loader": "^9.1.2",
+    "chromatic": "^6.20.0",
     "css-loader": "^6.8.1",
     "eslint": "^8.45.0",
     "eslint-config-prettier": "^8.9.0",
     "eslint-import-resolver-typescript": "^3.5.5",
     "eslint-plugin-import": "^2.28.0",
     "eslint-plugin-prettier": "^5.0.0",
+    "html-loader": "^4.2.0",
     "html-webpack-plugin": "^5.5.3",
     "install": "^0.13.0",
     "npm": "^9.7.1",
@@ -77,5 +80,7 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  }
+  },
+  "readme": "ERROR: No README data found!",
+  "_id": "tiggle@1.0.0"
 }
