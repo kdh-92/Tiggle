@@ -1,7 +1,9 @@
+import { Link } from "react-router-dom";
+
 export default function ContentSection() {
   return (
     <div>
-      여기 이제 내용 들어갈 것 여기 이제 내용 들어갈 것 여기 이제 내용 들어갈 것
+      <Link to={"/sample"}>sample</Link>
     </div>
   );
 }
