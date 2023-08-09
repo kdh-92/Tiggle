@@ -1,7 +1,8 @@
+import { Edit3 } from "react-feather";
 import Masonry from "react-masonry-css";
 
 import Navigation from "./Navigation";
-import TitleButton from "../atoms/TitleButton";
+import CTAButton from "../atoms/CTAButton/CTAButton";
 
 export default function ContentSection() {
   const breakpointColumnsObj = {
@@ -15,7 +16,12 @@ export default function ContentSection() {
         <div className="content-title">
           <p>티끌 모아 태산 ⛰</p>
           <p>지출을 기록하고, 조언을 받아보세요!</p>
-          <TitleButton />
+          <CTAButton
+            size={"lg"}
+            icon={<Edit3 />}
+            children={"기록하기"}
+            className="title-button"
+          />
         </div>
       </div>
       <Navigation />

@@ -18,6 +18,10 @@ export const ContentStyle = styled(Content)`
     padding: 80px 32px 0 32px;
     ${({ theme }) => expandTypography(theme.typography.title.medium.bold)};
 
+    > .title-button {
+      margin-top: 24px;
+    }
+
     ${({ theme }) => theme.mq.desktop} {
       width: 768px;
     }
