@@ -5,7 +5,6 @@ import com.side.tiggle.domain.transaction.dto.req.TransactionUpdateReqDto;
 import com.side.tiggle.domain.transaction.model.Transaction;
 import com.side.tiggle.domain.transaction.repository.TransactionRepository;
 import com.side.tiggle.domain.txtag.model.TxTag;
-import com.side.tiggle.domain.txtag.repository.TxTagRepository;
 import com.side.tiggle.domain.txtag.service.TxTagService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -30,7 +29,6 @@ public class TransactionService {
 
     private final TxTagService txTagService;
     private final TransactionRepository transactionRepository;
-    private final TxTagRepository txTagRepository;
     private final String FOLDER_PATH = System.getProperty("user.dir") + "/upload/image";
 
     public String uploadFileToFolder(MultipartFile uploadFile) throws IOException {
@@ -107,6 +105,8 @@ public class TransactionService {
         transaction.setContent(dto.getContent());
         transaction.setReason(dto.getReason());
         transaction.setTagNames(dto.getTagNames());
+        transaction.setAssetId(dto.getAssetId());
+        transaction.setCategoryId(dto.getCategoryId());
 
         txTagService.updateTxTag(transactionId, dto.getTagNames());
 
@@ -114,7 +114,12 @@ public class TransactionService {
     }
 
     public void deleteTransaction(Long memberId, Long transactionId) {
-        transactionRepository.delete(transactionRepository.findById(transactionId).stream().filter(item -> item.getMemberId().equals(memberId)).findAny().orElseThrow(() -> new IllegalArgumentException("해당 거래가 존재하지 않습니다.")));
+        transactionRepository.delete(transactionRepository.findById(transactionId)
+                .stream()
+                .filter(item -> item.getMemberId().equals(memberId))
+                .findAny()
+                .orElseThrow(() -> new IllegalArgumentException("해당 거래가 존재하지 않습니다."))
+        );
     }
 }
 

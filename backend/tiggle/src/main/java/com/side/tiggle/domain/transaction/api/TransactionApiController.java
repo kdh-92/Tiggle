@@ -1,9 +1,5 @@
 package com.side.tiggle.domain.transaction.api;
 
-import com.side.tiggle.domain.asset.model.Asset;
-import com.side.tiggle.domain.asset.service.AssetService;
-import com.side.tiggle.domain.category.model.Category;
-import com.side.tiggle.domain.category.service.CategoryService;
 import com.side.tiggle.domain.comment.dto.resp.CommentRespDto;
 import com.side.tiggle.domain.comment.model.Comment;
 import com.side.tiggle.domain.comment.service.CommentService;
@@ -12,8 +8,6 @@ import com.side.tiggle.domain.transaction.dto.req.TransactionUpdateReqDto;
 import com.side.tiggle.domain.transaction.dto.resp.TransactionRespDto;
 import com.side.tiggle.domain.transaction.model.Transaction;
 import com.side.tiggle.domain.transaction.service.TransactionService;
-import com.side.tiggle.domain.txtag.model.TxTag;
-import com.side.tiggle.domain.txtag.service.TxTagService;
 import com.side.tiggle.global.common.constants.HttpHeaders;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -40,9 +34,6 @@ public class TransactionApiController {
 
     private final TransactionService transactionService;
     private final CommentService commentService;
-    private final AssetService assetService;
-    private final CategoryService categoryService;
-    private final TxTagService txTagService;
     private final String DEFAULT_INDEX = "0";
     private final String DEFAULT_PAGE_SIZE = "5";
 
