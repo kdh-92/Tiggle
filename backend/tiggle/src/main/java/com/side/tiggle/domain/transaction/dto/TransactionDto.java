@@ -19,7 +19,6 @@ public class TransactionDto {
     private Long memberId;
     private Long parentId;
     private TransactionType type;
-    @NotBlank(message = "이미지 입력이 필요합니다.")
     private String imageUrl;
     private int amount;
     private LocalDate date;

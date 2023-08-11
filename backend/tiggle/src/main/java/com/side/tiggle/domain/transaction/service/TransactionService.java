@@ -4,11 +4,15 @@ import com.side.tiggle.domain.transaction.dto.TransactionDto;
 import com.side.tiggle.domain.transaction.dto.req.TransactionUpdateReqDto;
 import com.side.tiggle.domain.transaction.model.Transaction;
 import com.side.tiggle.domain.transaction.repository.TransactionRepository;
+import com.side.tiggle.domain.txtag.model.TxTag;
+import com.side.tiggle.domain.txtag.repository.TxTagRepository;
+import com.side.tiggle.domain.txtag.service.TxTagService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -24,7 +28,9 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class TransactionService {
 
+    private final TxTagService txTagService;
     private final TransactionRepository transactionRepository;
+    private final TxTagRepository txTagRepository;
     private final String FOLDER_PATH = System.getProperty("user.dir") + "/upload/image";
 
     public String uploadFileToFolder(MultipartFile uploadFile) throws IOException {
@@ -51,7 +57,12 @@ public class TransactionService {
         return folderPath;
     }
 
+    @Transactional
     public Transaction createTransaction(TransactionDto dto) {
+        Transaction tx = transactionRepository.save(dto.toEntity(dto));
+        TxTag txTag = new TxTag(tx.getId(), dto.getMemberId(), dto.getTagNames());
+
+        txTagService.createTxTag(txTag);
         return transactionRepository.save(dto.toEntity(dto));
     }
 
@@ -84,6 +95,7 @@ public class TransactionService {
         return transactionRepository.findAll();
     }
 
+    @Transactional
     public Transaction updateTransaction(Long memberId, Long transactionId, TransactionUpdateReqDto dto) {
         Transaction transaction = transactionRepository.findById(transactionId)
                 .stream().filter(item -> item.getMemberId().equals(memberId)).findAny()
@@ -94,6 +106,9 @@ public class TransactionService {
         transaction.setDate(dto.getDate());
         transaction.setContent(dto.getContent());
         transaction.setReason(dto.getReason());
+        transaction.setTagNames(dto.getTagNames());
+
+        txTagService.updateTxTag(transactionId, dto.getTagNames());
 
         return transactionRepository.save(transaction);
     }

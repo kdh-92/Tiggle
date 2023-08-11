@@ -52,8 +52,9 @@ public class TransactionApiController {
             @RequestPart("multipartFile") MultipartFile file
     ) throws IOException {
         dto.setImageUrl(transactionService.uploadFileToFolder(file));
+
         return new ResponseEntity<>(
-                TransactionRespDto.fromEntity(transactionService.createTransaction(dto)),
+                TransactionRespDto.fromEntityDetailTx(transactionService.createTransaction(dto), dto.getAssetId(), dto.getCategoryId(), dto.getTagNames()),
                 HttpStatus.CREATED
         );
     }
@@ -64,25 +65,19 @@ public class TransactionApiController {
     })
     @GetMapping("/{id}")
     public ResponseEntity<TransactionRespDto> getTransaction(@Parameter(name = "id", description = "tx의 id") @PathVariable("id") Long transactionId) {
-        Transaction transaction = transactionService.getTransaction(transactionId);
-        Asset asset = assetService.getAsset(transaction.getAssetId());
-        Category category = categoryService.getCategory(transaction.getCategoryId());
-        TxTag txTag = txTagService.getListTxTag(transactionId);
+        Transaction tx = transactionService.getTransaction(transactionId);
 
-        return new ResponseEntity<>(
-                TransactionRespDto.fromEntityDetailTx(transactionService.getTransaction(transactionId), asset, category, txTag),
-                HttpStatus.OK
-        );
-    }
-
-    @GetMapping("{id}/refund")
-    public ResponseEntity<TransactionRespDto> getRefundTransaction(@Parameter(name = "id", description = "tx의 id") @PathVariable("id") Long transactionId) {
-        Transaction refundTx = transactionService.getTransaction(transactionId);
-        Transaction parentTx = transactionService.getTransaction(refundTx.getParentId());
-        return new ResponseEntity<>(
-                TransactionRespDto.fromEntityParentTx(refundTx, parentTx),
-                HttpStatus.OK
-        );
+        if (tx.getParentId() == null) {
+            return new ResponseEntity<>(
+                    TransactionRespDto.fromEntityDetailTx(transactionService.getTransaction(transactionId), tx.getAssetId(), tx.getCategoryId(), tx.getTagNames()),
+                    HttpStatus.OK
+            );
+        } else {
+            return new ResponseEntity<>(
+                    TransactionRespDto.fromEntityParentTx(transactionService.getTransaction(transactionId), transactionService.getTransaction(tx.getParentId()), tx.getAssetId(), tx.getCategoryId(), tx.getTagNames()),
+                    HttpStatus.OK
+            );
+        }
     }
 
     @Operation(
