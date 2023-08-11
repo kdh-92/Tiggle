@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # backend/tiggle 디렉토리로 이동
-cd backend/tiggle
+cd backend/tiggle-root/tiggle
 
 # ./gradlew bootjar 실행
 ./gradlew bootjar
