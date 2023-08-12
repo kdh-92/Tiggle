@@ -1,11 +1,20 @@
-import { Routes, Route } from "react-router-dom";
+import {
+  Route,
+  createBrowserRouter,
+  createRoutesFromElements,
+} from "react-router-dom";
 
-import Main from "./pages/Main";
+import DetailPage from "@/pages/DetailPage";
+import Main from "@/pages/Main";
+import GeneralTemplate from "@/templates/GeneralTemplate";
 
-export default function Router() {
-  return (
-    <Routes>
+export default createBrowserRouter(
+  createRoutesFromElements(
+    <>
+      <Route element={<GeneralTemplate />}>
+        <Route path="/detail/:id" element={<DetailPage />} />
+      </Route>
       <Route path="/" element={<Main />} />
-    </Routes>
-  );
-}
+    </>,
+  ),
+);
