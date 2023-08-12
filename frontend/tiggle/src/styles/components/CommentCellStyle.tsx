@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { expandTypography } from "@/styles/util";
 
 export const CommentCellStyle = styled.div`
-  width: 327px;
+  width: 100%;
   padding: 20px;
   background-color: ${({ theme }) => theme.color.white.value};
   border-radius: 8px;
@@ -72,7 +72,7 @@ export const RepliesSectionStyle = styled.div`
   flex-direction: column;
   gap: 24px;
 
-  .divider {
+  .reply-cell-divider {
     width: 100%;
     min-height: 1px;
     background-color: ${({ theme }) => theme.color.bluishGray[200].value};
