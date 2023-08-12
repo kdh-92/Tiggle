@@ -58,7 +58,9 @@ export default function CommentCell({ txType, comment }: CommentCellProps) {
 
         {replyOpen && (
           <RepliesSectionStyle>
-            <div className="divider" />
+            {comment.replies.length > 0 && (
+              <div className="reply-cell-divider" />
+            )}
 
             {comment.replies.map(reply => (
               <div

@@ -6,11 +6,11 @@ import cn from "classnames";
 import { ReactionButtonStyle } from "@/styles/components/ReactionButtonStyle";
 import { TxType } from "@/types";
 
-const Reaction = {
+export const Reaction = {
   Up: "Up",
   Down: "Down",
 } as const;
-type ReactionType = (typeof Reaction)[keyof typeof Reaction];
+export type ReactionType = (typeof Reaction)[keyof typeof Reaction];
 
 interface ReactionButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   tx: TxType;
