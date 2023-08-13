@@ -1,36 +1,21 @@
 package com.side.tiggle.authgateway.oauth;
 
-import com.side.tiggle.domain.member.MemberDto;
-import com.side.tiggle.domain.member.model.Member;
-import com.side.tiggle.domain.member.repository.MemberRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import javax.crypto.SecretKey;
-import javax.servlet.http.HttpServletRequest;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
-import java.util.List;
-import java.util.Optional;
 
 @Component
 public class JwtTokenProvider {
-
-    private final MemberRepository memberRepository;
-
-    JwtTokenProvider(MemberRepository memberRepository){
-        this.memberRepository = memberRepository;
-    }
-
     private String secret = "secrettigglesecrettigglesecrettiggle";
     private SecretKey secretKey;
 
@@ -65,26 +50,15 @@ public class JwtTokenProvider {
                 .compact();
     }
 
-    public Authentication getAuthentication(String token) {
-        long memberId = this.getUserId(token);
-
-        Optional<Member> member = this.memberRepository.findById(memberId);
-        if (member.isEmpty()) {
-            return null;
-        }
-        SimpleGrantedAuthority authority = new SimpleGrantedAuthority("ROLE_USER");
-        return new UsernamePasswordAuthenticationToken(MemberDto.fromEntity(member.get()), null, List.of(authority));
+    public String resolveAccessToken(ServerHttpRequest request) {
+        return request.getHeaders().get("Authorization").get(0).substring("Bearer ".length());
     }
 
-    public String resolveAccessToken(HttpServletRequest request) {
-        return request.getHeader("Authorization").substring("Bearer ".length());
+    public String resolveRefreshToken(ServerHttpRequest request){
+        return request.getHeaders().get("Refresh").get(0);
     }
 
-    public String resolveRefreshToken(HttpServletRequest request){
-        return request.getHeader("Refresh");
-    }
-
-    public long getUserId(String jwtToken){
+    public long getMemberId(String jwtToken){
         return Long.parseLong(extractClaims(jwtToken).getSubject());
     }
 
