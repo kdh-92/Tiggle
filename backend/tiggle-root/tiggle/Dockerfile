@@ -7,6 +7,7 @@ WORKDIR $HOME_DIR
 COPY . ./
 COPY ./src/main/resources/application.yml.example ./src/main/resources/application.yml
 RUN ./gradlew bootJar
+RUN ls ./build/libs/
 
 ARG JAR_FILE=./build/libs/*.jar
 RUN cp ${JAR_FILE} ./app.jar
