@@ -3,9 +3,6 @@
 # backend/tiggle 디렉토리로 이동
 cd backend/tiggle-root/tiggle
 
-# ./gradlew bootjar 실행
-./gradlew bootjar
-
 # 실행 중인 tiggle & mysql 컨테이너 제거
 docker-compose down
 
