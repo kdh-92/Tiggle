@@ -59,9 +59,11 @@
     "html-loader": "^4.2.0",
     "html-webpack-plugin": "^5.5.3",
     "install": "^0.13.0",
+    "msw": "^1.2.3",
     "npm": "^9.7.1",
     "openapi-typescript-codegen": "^0.25.0",
     "prettier": "^3.0.0",
+    "process": "^0.11.10",
     "storybook": "^7.0.25",
     "style-loader": "^3.3.3",
     "ts-loader": "^9.4.3",
@@ -83,5 +85,7 @@
     ]
   },
   "readme": "ERROR: No README data found!",
-  "_id": "tiggle@1.0.0"
+  "msw": {
+    "workerDirectory": "public"
+  }
 }
