@@ -1,14 +1,73 @@
+import { useState } from "react";
 import { Edit3 } from "react-feather";
-import Masonry from "react-masonry-css";
 
+import { FeedsStyle } from "@/styles/components/FeedsStyle";
+import { Tx } from "@/types";
+
+import Feeds from "./Feed/Feeds";
 import Navigation from "./Navigation";
 import CTAButton from "../atoms/CTAButton/CTAButton";
 
+const feedData = [
+  {
+    id: 1,
+    txType: Tx.Outcome,
+    amount: 50000,
+    title: "거래 제목 텍스트 텍스트",
+    content:
+      "거래 설명 텍스트 텍스트 텍스트 텍스트 텍스트 텍스트 텍스트 텍스트 텍스트 텍스트 텍스트 텍스트 ",
+    user: {
+      name: "사용자 이름",
+      profileUrl: "",
+    },
+    createdAt: "4시간 전",
+    number: 89,
+  },
+  {
+    id: 2,
+    txType: Tx.Refund,
+    amount: 50000,
+    title: "거래 제목 텍스트 텍스트",
+    content:
+      "거래 설명 텍스트 텍스트 텍스트 텍스트 텍스트 텍스트 텍스트 텍스트 텍스트 텍스트 텍스트 텍스트 텍스트 텍스트 텍스트 텍스트 텍스트 텍스트 텍스트 텍스트 텍스트 ",
+    user: {
+      name: "사용자 이름",
+      profileUrl: "",
+    },
+    createdAt: "4시간 전",
+    number: 89,
+  },
+  {
+    id: 3,
+    txType: Tx.Outcome,
+    amount: 50000,
+    title: "거래 제목 텍스트 텍스트",
+    content: "거래 설명 텍스트 텍스트 텍스트",
+    user: {
+      name: "사용자 이름",
+      profileUrl: "",
+    },
+    createdAt: "4시간 전",
+    number: 89,
+  },
+  {
+    id: 4,
+    txType: Tx.Refund,
+    amount: 50000,
+    title: "거래 제목 텍스트 텍스트",
+    content:
+      "거래 설명 텍스트 텍스트 텍스트 텍스트 텍스트 텍스트 텍스트 텍스트 텍스트 텍스트 텍스트 텍스트 ",
+    user: {
+      name: "사용자 이름",
+      profileUrl: "",
+    },
+    createdAt: "4시간 전",
+    number: 89,
+  },
+];
+
 export default function ContentSection() {
-  const breakpointColumnsObj = {
-    default: 2,
-    767: 1,
-  };
+  const [dataList, setDataList] = useState(feedData);
 
   return (
     <div className="content-wrap">
@@ -25,32 +84,9 @@ export default function ContentSection() {
         </div>
       </div>
       <Navigation />
-      <div className="feed-wrap">
-        <Masonry
-          breakpointCols={breakpointColumnsObj}
-          className="feed-box-masonry"
-          columnClassName="feed"
-        >
-          <div>
-            <p>티끌 모아 태산 ⛰</p>
-            <p>티끌 모아 태산 ⛰</p>
-            <p>티끌 모아 태산 ⛰</p>
-          </div>
-          <div>
-            <p>티끌 모아 태산 ⛰</p>
-          </div>
-          <div>
-            <p>티끌 모아 태산 ⛰</p>
-            <p>티끌 모아 태산 ⛰</p>
-          </div>
-          <div>
-            <p>티끌 모아 태산 ⛰</p>
-            <p>티끌 모아 태산 ⛰</p>
-            <p>티끌 모아 태산 ⛰</p>
-            <p>티끌 모아 태산 ⛰</p>
-          </div>
-        </Masonry>
-      </div>
+      <FeedsStyle>
+        <Feeds dataList={dataList} />
+      </FeedsStyle>
     </div>
   );
 }
