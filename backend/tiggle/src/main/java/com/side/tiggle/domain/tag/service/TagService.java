@@ -28,13 +28,12 @@ public class TagService {
                 .orElseThrow(() -> new RuntimeException("")));
     }
 
-    public List<TagDto> getAllTag() {
-        List<TagDto> tagDtoList = new ArrayList<>();
-        for (Tag tag : tagRepository.findAll()) {
-            tagDtoList.add(TagDto.fromEntity(tag));
-        }
+    public List<Tag> getAllTag() {
+        return tagRepository.findAll();
+    }
 
-        return tagDtoList;
+    public List<Tag> getAllDefaultTag() {
+        return tagRepository.findByDefaultsTrue();
     }
 
     public TagDto updateTag(Long tagId, TagDto tagDto) {

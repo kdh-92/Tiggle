@@ -28,7 +28,7 @@ public class MemberApiController {
 
     @GetMapping("/{id}")
     public ResponseEntity<MemberDto> getMember(@PathVariable("id") Long memberId) {
-        return new ResponseEntity<>(memberService.getMember(memberId), HttpStatus.OK);
+        return new ResponseEntity<>(MemberDto.fromEntity(memberService.getMember(memberId)), HttpStatus.OK);
     }
 
     @GetMapping("/all")

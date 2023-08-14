@@ -1,5 +1,6 @@
 package com.side.tiggle.domain.asset.model;
 
+import com.side.tiggle.domain.asset.dto.AssetDto;
 import lombok.*;
 
 import javax.persistence.*;

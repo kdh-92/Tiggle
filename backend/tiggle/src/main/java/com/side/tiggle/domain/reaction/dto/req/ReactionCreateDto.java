@@ -20,7 +20,7 @@ public class ReactionCreateDto {
 
     public Reaction toEntity(long senderId, Transaction tx) {
         return Reaction.builder()
-                .receiverId(tx.getMemberId())
+                .receiverId(tx.getMember().getId())
                 .senderId(senderId)
                 .txId(tx.getId())
                 .type(type)

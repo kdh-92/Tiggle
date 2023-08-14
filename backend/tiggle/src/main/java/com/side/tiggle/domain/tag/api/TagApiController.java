@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -27,8 +28,15 @@ public class TagApiController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<TagDto>> getAllTag() {
-        return new ResponseEntity<>(tagService.getAllTag(), HttpStatus.OK);
+    public ResponseEntity<List<TagDto>> getAllDefaultTag() {
+        return new ResponseEntity<>(
+                tagService.getAllDefaultTag()
+                        .stream()
+                        .map(TagDto::fromEntity)
+                        .collect(Collectors.toList()
+                ),
+                HttpStatus.OK
+        );
     }
 
     @PutMapping("/{id}")

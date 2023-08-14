@@ -1,6 +1,5 @@
 package com.side.tiggle.domain.comment.model;
 
-import com.side.tiggle.domain.comment.service.CommentService;
 import com.side.tiggle.domain.member.model.Member;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.side.tiggle.domain.transaction.model.Transaction;
@@ -32,6 +31,7 @@ public class Comment extends BaseEntity {
     @Column(name = "parent_id")
     private Long parentId;
 
+    @JsonIgnore
     @JoinColumn(name = "sender_id", nullable = false)
     @ManyToOne(fetch = FetchType.LAZY)
     private Member sender;

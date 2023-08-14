@@ -1,5 +1,7 @@
 package com.side.tiggle.domain.transaction.service;
 
+import com.side.tiggle.domain.member.model.Member;
+import com.side.tiggle.domain.member.service.MemberService;
 import com.side.tiggle.domain.transaction.dto.TransactionDto;
 import com.side.tiggle.domain.transaction.dto.req.TransactionUpdateReqDto;
 import com.side.tiggle.domain.transaction.model.Transaction;
@@ -28,6 +30,7 @@ import java.util.UUID;
 public class TransactionService {
 
     private final TxTagService txTagService;
+    private final MemberService memberService;
     private final TransactionRepository transactionRepository;
     private final String FOLDER_PATH = System.getProperty("user.dir") + "/upload/image";
 
@@ -57,11 +60,12 @@ public class TransactionService {
 
     @Transactional
     public Transaction createTransaction(TransactionDto dto) {
-        Transaction tx = transactionRepository.save(dto.toEntity(dto));
+        Member member = memberService.getMember(dto.getMemberId());
+        Transaction tx = transactionRepository.save(dto.toEntity(member));
         TxTag txTag = new TxTag(tx.getId(), dto.getMemberId(), dto.getTagNames());
 
         txTagService.createTxTag(txTag);
-        return transactionRepository.save(dto.toEntity(dto));
+        return tx;
     }
 
     public Transaction getTransaction(Long transactionId) {
@@ -96,7 +100,7 @@ public class TransactionService {
     @Transactional
     public Transaction updateTransaction(Long memberId, Long transactionId, TransactionUpdateReqDto dto) {
         Transaction transaction = transactionRepository.findById(transactionId)
-                .stream().filter(item -> item.getMemberId().equals(memberId)).findAny()
+                .stream().filter(item -> item.getMember().getId().equals(memberId)).findAny()
                 .orElseThrow(() -> new IllegalArgumentException("해당 거래가 존재하지 않습니다."));
 
         transaction.setType(dto.getType());
@@ -116,7 +120,7 @@ public class TransactionService {
     public void deleteTransaction(Long memberId, Long transactionId) {
         transactionRepository.delete(transactionRepository.findById(transactionId)
                 .stream()
-                .filter(item -> item.getMemberId().equals(memberId))
+                .filter(item -> item.getMember().getId().equals(memberId))
                 .findAny()
                 .orElseThrow(() -> new IllegalArgumentException("해당 거래가 존재하지 않습니다."))
         );

@@ -30,9 +30,9 @@ public class MemberService {
         return memberDto.fromEntity(memberRepository.save(member));
     }
 
-    public MemberDto getMember(Long memberId) {
-        return MemberDto.fromEntity(memberRepository.findById(memberId)
-                .orElseThrow(() -> new RuntimeException("")));
+    public Member getMember(Long memberId) {
+        return memberRepository.findById(memberId)
+                .orElseThrow(() -> new RuntimeException(""));
     }
 
     public List<MemberDto> getAllMember() {

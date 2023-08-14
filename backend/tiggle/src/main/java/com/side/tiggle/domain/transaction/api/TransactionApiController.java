@@ -1,5 +1,7 @@
 package com.side.tiggle.domain.transaction.api;
 
+import com.side.tiggle.domain.asset.service.AssetService;
+import com.side.tiggle.domain.category.service.CategoryService;
 import com.side.tiggle.domain.comment.dto.resp.CommentRespDto;
 import com.side.tiggle.domain.comment.model.Comment;
 import com.side.tiggle.domain.comment.service.CommentService;
@@ -33,6 +35,8 @@ import java.util.stream.Collectors;
 public class TransactionApiController {
 
     private final TransactionService transactionService;
+    private final AssetService assetService;
+    private final CategoryService categoryService;
     private final CommentService commentService;
     private final String DEFAULT_INDEX = "0";
     private final String DEFAULT_PAGE_SIZE = "5";
@@ -45,7 +49,12 @@ public class TransactionApiController {
         dto.setImageUrl(transactionService.uploadFileToFolder(file));
 
         return new ResponseEntity<>(
-                TransactionRespDto.fromEntityDetailTx(transactionService.createTransaction(dto), dto.getAssetId(), dto.getCategoryId(), dto.getTagNames()),
+                TransactionRespDto.fromEntityDetailTx(
+                        transactionService.createTransaction(dto),
+                        assetService.getAsset(dto.getAssetId()),
+                        categoryService.getCategory(dto.getCategoryId()),
+                        dto.getTagNames()
+                ),
                 HttpStatus.CREATED
         );
     }
@@ -60,12 +69,23 @@ public class TransactionApiController {
 
         if (tx.getParentId() == null) {
             return new ResponseEntity<>(
-                    TransactionRespDto.fromEntityDetailTx(transactionService.getTransaction(transactionId), tx.getAssetId(), tx.getCategoryId(), tx.getTagNames()),
+                    TransactionRespDto.fromEntityDetailTx(
+                            transactionService.getTransaction(transactionId),
+                            assetService.getAsset(tx.getAssetId()),
+                            categoryService.getCategory(tx.getCategoryId()),
+                            tx.getTagNames()
+                    ),
                     HttpStatus.OK
             );
         } else {
             return new ResponseEntity<>(
-                    TransactionRespDto.fromEntityParentTx(transactionService.getTransaction(transactionId), transactionService.getTransaction(tx.getParentId()), tx.getAssetId(), tx.getCategoryId(), tx.getTagNames()),
+                    TransactionRespDto.fromEntityParentTx(
+                            transactionService.getTransaction(transactionId),
+                            transactionService.getTransaction(tx.getParentId()),
+                            assetService.getAsset(tx.getAssetId()),
+                            categoryService.getCategory(tx.getCategoryId()),
+                            tx.getTagNames()
+                    ),
                     HttpStatus.OK
             );
         }

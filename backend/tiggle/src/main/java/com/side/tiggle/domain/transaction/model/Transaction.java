@@ -1,8 +1,10 @@
 package com.side.tiggle.domain.transaction.model;
 
 import com.side.tiggle.domain.comment.model.Comment;
+import com.side.tiggle.domain.member.model.Member;
 import com.side.tiggle.global.common.model.BaseEntity;
 import lombok.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.*;
 
 import javax.persistence.*;
@@ -26,8 +28,10 @@ public class Transaction extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "member_id", nullable = false)
-    private Long memberId;
+    @JsonIgnore
+    @JoinColumn(name = "member_id", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Member member;
 
     @Column(name = "parent_id")
     private Long parentId;
@@ -60,14 +64,13 @@ public class Transaction extends BaseEntity {
     @Column(name = "tag_names", nullable = false)
     private String tagNames;
 
-
-
     @OneToMany(mappedBy = "tx", fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<Comment> commentList;
 
     @Builder
-    public Transaction(Long memberId, Long parentId, TransactionType type, String imageUrl, Integer amount, LocalDate date, String content, String reason, Long assetId, Long categoryId, String tagNames) {
-        this.memberId = memberId;
+    public Transaction(Member member, Long parentId, TransactionType type, String imageUrl, Integer amount, LocalDate date, String content, String reason, Long assetId, Long categoryId, String tagNames) {
+        this.member = member;
         this.parentId = parentId;
         this.type = type;
         this.imageUrl = imageUrl;

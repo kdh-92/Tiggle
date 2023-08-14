@@ -11,18 +11,22 @@ import javax.persistence.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Table(name = "tags")
-public class Tag extends BaseEntity {
+public class Tag {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-
     @Column(name = "name", nullable = false)
     private String name;
 
+    @Column(name = "default", nullable = false)
+    private boolean defaults;
+
     @Builder
-    public Tag(String name) {
+    public Tag(String name, boolean defaults) {
         this.name = name;
+        this.defaults = defaults;
+
     }
 }
