@@ -1,12 +1,11 @@
 package com.side.tiggle.domain.comment.service;
 
+import com.side.tiggle.domain.comment.repository.CommentRepository;
 import com.side.tiggle.domain.comment.dto.req.CommentCreateReqDto;
 import com.side.tiggle.domain.comment.model.Comment;
-import com.side.tiggle.domain.comment.repository.CommentRepository;
 import com.side.tiggle.domain.member.model.Member;
 import com.side.tiggle.domain.member.repository.MemberRepository;
 import com.side.tiggle.domain.transaction.model.Transaction;
-import com.side.tiggle.domain.transaction.repository.TransactionRepository;
 import com.side.tiggle.domain.transaction.service.TransactionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

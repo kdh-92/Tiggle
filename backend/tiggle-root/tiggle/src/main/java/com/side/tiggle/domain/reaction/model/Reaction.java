@@ -1,6 +1,5 @@
 package com.side.tiggle.domain.reaction.model;
 
-import com.side.tiggle.global.common.model.BaseEntity;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 

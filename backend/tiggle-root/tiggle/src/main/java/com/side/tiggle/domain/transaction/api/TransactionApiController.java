@@ -1,11 +1,14 @@
 package com.side.tiggle.domain.transaction.api;
 
+import com.side.tiggle.domain.asset.service.AssetService;
+import com.side.tiggle.domain.category.service.CategoryService;
 import com.side.tiggle.domain.comment.dto.resp.CommentRespDto;
-import com.side.tiggle.domain.comment.model.Comment;
 import com.side.tiggle.domain.comment.service.CommentService;
-import com.side.tiggle.domain.transaction.dto.TransactionDto;
 import com.side.tiggle.domain.transaction.dto.req.TransactionUpdateReqDto;
+import com.side.tiggle.domain.comment.model.Comment;
+import com.side.tiggle.domain.transaction.dto.TransactionDto;
 import com.side.tiggle.domain.transaction.dto.resp.TransactionRespDto;
+import com.side.tiggle.domain.transaction.dto.resp.TransactionUpdateRespDto;
 import com.side.tiggle.domain.transaction.model.Transaction;
 import com.side.tiggle.domain.transaction.service.TransactionService;
 import com.side.tiggle.global.common.constants.HttpHeaders;
@@ -17,10 +20,13 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotBlank;
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -30,15 +36,26 @@ import java.util.stream.Collectors;
 public class TransactionApiController {
 
     private final TransactionService transactionService;
+    private final AssetService assetService;
+    private final CategoryService categoryService;
     private final CommentService commentService;
     private final String DEFAULT_INDEX = "0";
     private final String DEFAULT_PAGE_SIZE = "5";
 
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<TransactionRespDto> createTransaction(
+            @RequestPart TransactionDto dto,
+            @RequestPart("multipartFile") MultipartFile file
+    ) throws IOException {
+        dto.setImageUrl(transactionService.uploadFileToFolder(file));
 
-    @PostMapping
-    public ResponseEntity<TransactionRespDto> createTransaction(@RequestBody TransactionDto dto) {
         return new ResponseEntity<>(
-                TransactionRespDto.fromEntity(transactionService.createTransaction(dto)),
+                TransactionRespDto.fromEntityDetailTx(
+                        transactionService.createTransaction(dto),
+                        assetService.getAsset(dto.getAssetId()),
+                        categoryService.getCategory(dto.getCategoryId()),
+                        dto.getTagNames()
+                ),
                 HttpStatus.CREATED
         );
     }
@@ -49,20 +66,30 @@ public class TransactionApiController {
     })
     @GetMapping("/{id}")
     public ResponseEntity<TransactionRespDto> getTransaction(@Parameter(name = "id", description = "tx의 id") @PathVariable("id") Long transactionId) {
-        return new ResponseEntity<>(
-                TransactionRespDto.fromEntity(transactionService.getTransaction(transactionId)),
-                HttpStatus.OK
-        );
-    }
+        Transaction tx = transactionService.getTransaction(transactionId);
 
-    @GetMapping("{id}/refund")
-    public ResponseEntity<TransactionRespDto> getRefundTransaction(@Parameter(name = "id", description = "tx의 id") @PathVariable("id") Long transactionId) {
-        Transaction refundTx = transactionService.getTransaction(transactionId);
-        Transaction parentTx = transactionService.getTransaction(refundTx.getParentId());
-        return new ResponseEntity<>(
-                TransactionRespDto.fromEntityParentTx(refundTx, parentTx),
-                HttpStatus.OK
-        );
+        if (tx.getParentId() == null) {
+            return new ResponseEntity<>(
+                    TransactionRespDto.fromEntityDetailTx(
+                            transactionService.getTransaction(transactionId),
+                            assetService.getAsset(tx.getAssetId()),
+                            categoryService.getCategory(tx.getCategoryId()),
+                            tx.getTagNames()
+                    ),
+                    HttpStatus.OK
+            );
+        } else {
+            return new ResponseEntity<>(
+                    TransactionRespDto.fromEntityParentTx(
+                            transactionService.getTransaction(transactionId),
+                            transactionService.getTransaction(tx.getParentId()),
+                            assetService.getAsset(tx.getAssetId()),
+                            categoryService.getCategory(tx.getCategoryId()),
+                            tx.getTagNames()
+                    ),
+                    HttpStatus.OK
+            );
+        }
     }
 
     @Operation(
@@ -105,7 +132,7 @@ public class TransactionApiController {
     @GetMapping("/all")
     public ResponseEntity<List<TransactionRespDto>> getAllTransaction() {
         return new ResponseEntity<>(
-                transactionService.getAllTransaction()
+                transactionService.getAllUndeletedTransaction()
                         .stream()
                         .map(TransactionRespDto::fromEntity)
                         .collect(Collectors.toList()),
@@ -118,8 +145,13 @@ public class TransactionApiController {
             @PathVariable("id") Long transactionId,
             @RequestBody TransactionUpdateReqDto dto
     ) {
+        Transaction tx = transactionService.updateTransaction(memberId, transactionId, dto);
         return new ResponseEntity<>(
-                TransactionRespDto.fromEntity(transactionService.updateTransaction(memberId, transactionId, dto)),
+                TransactionUpdateRespDto.fromEntity(
+                        tx,
+                        assetService.getAsset(tx.getAssetId()),
+                        categoryService.getCategory(tx.getCategoryId()),
+                        tx.getTagNames()),
                 HttpStatus.OK
         );
     }
@@ -137,7 +169,7 @@ public class TransactionApiController {
             @PathVariable Long id,
             @RequestParam(name = "pageSize", defaultValue = DEFAULT_PAGE_SIZE) int pageSize,
             @RequestParam(name = "index", defaultValue = DEFAULT_INDEX) int index
-    ){
+    ) {
         Page<Comment> pagedComments = commentService.getParentsByTxId(id, index, pageSize);
         Page<CommentRespDto> pagedResult = CommentRespDto.fromEntityPage(pagedComments, commentService);
         return new ResponseEntity<>(pagedResult, HttpStatus.OK);

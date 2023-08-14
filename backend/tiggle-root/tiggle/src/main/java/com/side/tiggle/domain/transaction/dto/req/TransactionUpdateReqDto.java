@@ -13,4 +13,7 @@ public class TransactionUpdateReqDto {
     private LocalDate date;
     private String content;
     private String reason;
+    private Long assetId;
+    private Long categoryId;
+    private String tagNames;
 }

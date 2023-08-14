@@ -1,8 +1,8 @@
 package com.side.tiggle.domain.member.service;
 
 import com.side.tiggle.domain.member.MemberDto;
-import com.side.tiggle.domain.member.model.Member;
 import com.side.tiggle.domain.member.repository.MemberRepository;
+import com.side.tiggle.domain.member.model.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -30,9 +30,9 @@ public class MemberService {
         return memberDto.fromEntity(memberRepository.save(member));
     }
 
-    public MemberDto getMember(Long memberId) {
-        return MemberDto.fromEntity(memberRepository.findById(memberId)
-                .orElseThrow(() -> new RuntimeException("")));
+    public Member getMember(Long memberId) {
+        return memberRepository.findById(memberId)
+                .orElseThrow(() -> new RuntimeException(""));
     }
 
     public List<MemberDto> getAllMember() {

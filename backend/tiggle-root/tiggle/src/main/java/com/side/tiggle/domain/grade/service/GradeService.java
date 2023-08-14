@@ -1,8 +1,8 @@
 package com.side.tiggle.domain.grade.service;
 
+import com.side.tiggle.domain.grade.repository.GradeRepository;
 import com.side.tiggle.domain.grade.GradeDto;
 import com.side.tiggle.domain.grade.model.Grade;
-import com.side.tiggle.domain.grade.repository.GradeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
