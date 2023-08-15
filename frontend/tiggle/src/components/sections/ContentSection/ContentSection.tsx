@@ -1,12 +1,12 @@
 import { useState } from "react";
 import { Edit3 } from "react-feather";
 
+import CTAButton from "@/components/atoms/CTAButton/CTAButton";
+import Feeds from "@/components/molecules/Feed/Feeds";
+import Navigation from "@/components/molecules/Navigation";
+import { ContentStyle } from "@/styles/components/ContentStyle";
 import { FeedsStyle } from "@/styles/components/FeedsStyle";
 import { Tx } from "@/types";
-
-import Feeds from "./Feed/Feeds";
-import Navigation from "./Navigation";
-import CTAButton from "../atoms/CTAButton/CTAButton";
 
 const feedData = [
   {
@@ -68,9 +68,8 @@ const feedData = [
 
 export default function ContentSection() {
   const [dataList, setDataList] = useState(feedData);
-
   return (
-    <div className="content-wrap">
+    <ContentStyle>
       <div className="content-title-wrap">
         <div className="content-title">
           <p>티끌 모아 태산 ⛰</p>
@@ -87,6 +86,6 @@ export default function ContentSection() {
       <FeedsStyle>
         <Feeds dataList={dataList} />
       </FeedsStyle>
-    </div>
+    </ContentStyle>
   );
 }
