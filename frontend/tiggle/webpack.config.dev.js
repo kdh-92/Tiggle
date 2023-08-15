@@ -22,9 +22,6 @@ module.exports = merge(baseConfig, {
       "process.env.REACT_APP_API_URL": JSON.stringify(
         process.env.REACT_APP_DEV_API_URL,
       ),
-      "process.env.REACT_APP_API_MOCKING": JSON.stringify(
-        process.env.REACT_APP_API_MOCKING,
-      ),
     }),
     new webpack.ProvidePlugin({
       process: "process/browser",

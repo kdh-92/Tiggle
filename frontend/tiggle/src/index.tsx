@@ -17,14 +17,6 @@ const queryClient = new QueryClient();
 const container = document.getElementById("root");
 const root = createRoot(container);
 
-if (
-  process.env.NODE_ENV === "development" &&
-  process.env.REACT_APP_API_MOCKING === "enabled"
-) {
-  const { worker } = require("./mocks/browser");
-  worker.start({ onUnhandledRequest: "bypass" });
-}
-
 root.render(
   <Provider store={store}>
     <QueryClientProvider client={queryClient}>
