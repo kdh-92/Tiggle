@@ -1,16 +1,13 @@
 import styled from "styled-components";
 
 export const FeedsStyle = styled.div`
-  padding: 0 32px;
+  padding: 0 24px;
   margin-top: 16px;
 
   ${({ theme }) => theme.mq.desktop} {
     display: flex;
     justify-content: center;
-  }
-
-  ${({ theme }) => theme.mq.mobile} {
-    padding: 0 24px;
+    padding: 0 32px;
   }
 
   .feed-box-masonry {
@@ -27,10 +24,10 @@ export const FeedsStyle = styled.div`
 
   .feeds {
     background-clip: padding-box;
-    width: 340px;
+    width: 327px;
 
-    ${({ theme }) => theme.mq.mobile} {
-      width: 327px;
+    ${({ theme }) => theme.mq.desktop} {
+      width: 340px;
     }
   }
 `;

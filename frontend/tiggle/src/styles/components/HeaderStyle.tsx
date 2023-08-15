@@ -33,13 +33,14 @@ export const StyledHeaderLeft = styled.div`
   grid-auto-flow: column;
 
   .ant-menu {
+    display: none;
     width: 120px;
     border-bottom: 1px solid
       ${({ theme: { color } }) => color.bluishGray[200].value};
     color: ${({ theme: { color } }) => color.bluishGray[600].value};
 
-    ${({ theme }) => theme.mq.mobile} {
-      display: none;
+    ${({ theme }) => theme.mq.desktop} {
+      display: block;
     }
   }
 `;

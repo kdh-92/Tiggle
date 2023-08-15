@@ -15,8 +15,8 @@ export const ContentStyle = styled(Content)`
   }
 
   .content-title {
-    padding: 80px 32px 0 32px;
-    ${({ theme }) => expandTypography(theme.typography.title.medium.bold)};
+    padding: 80px 24px 0 24px;
+    ${({ theme }) => expandTypography(theme.typography.title.small.bold)};
 
     > .title-button {
       margin-top: 24px;
@@ -24,11 +24,8 @@ export const ContentStyle = styled(Content)`
 
     ${({ theme }) => theme.mq.desktop} {
       width: 768px;
-    }
-
-    ${({ theme }) => theme.mq.mobile} {
-      padding: 80px 24px 0 24px;
-      ${({ theme }) => expandTypography(theme.typography.title.small.bold)};
+      padding: 80px 32px 0 32px;
+      ${({ theme }) => expandTypography(theme.typography.title.medium.bold)};
     }
   }
 `;
