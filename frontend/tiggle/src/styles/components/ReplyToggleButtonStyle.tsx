@@ -19,7 +19,7 @@ export const ReplyToggleButtonStyle = styled.button`
     ${({ theme }) => expandTypography(theme.typography.body.small.bold)}
   }
 
-  &.outcome {
+  &.OUTCOME {
     .icon,
     .count {
       color: ${({ theme }) => theme.color.peach[400].value};
@@ -29,7 +29,7 @@ export const ReplyToggleButtonStyle = styled.button`
     }
   }
 
-  &.refund {
+  &.REFUND {
     .icon,
     .count {
       color: ${({ theme }) => theme.color.blue[400].value};

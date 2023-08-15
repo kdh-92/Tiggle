@@ -11,7 +11,7 @@ type Story = StoryObj<typeof CommentCell>;
 
 export const Default: Story = {
   args: {
-    txType: "outcome",
+    txType: "OUTCOME",
     comment: {
       id: 0,
       user: {

@@ -10,7 +10,8 @@
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
     "transform-token": "node transform-token.js",
-    "chromatic": "npx chromatic --project-token=chpt_bf3f5c4ddba9975"
+    "chromatic": "npx chromatic --project-token=chpt_bf3f5c4ddba9975",
+    "generate": "openapi --input swagger.json --output ./src/generated --useUnionTypes"
   },
   "author": "",
   "license": "ISC",
@@ -59,7 +60,9 @@
     "html-webpack-plugin": "^5.5.3",
     "install": "^0.13.0",
     "npm": "^9.7.1",
+    "openapi-typescript-codegen": "^0.25.0",
     "prettier": "^3.0.0",
+    "process": "^0.11.10",
     "storybook": "^7.0.25",
     "style-loader": "^3.3.3",
     "ts-loader": "^9.4.3",
@@ -81,5 +84,7 @@
     ]
   },
   "readme": "ERROR: No README data found!",
-  "_id": "tiggle@1.0.0"
+  "msw": {
+    "workerDirectory": "public"
+  }
 }
