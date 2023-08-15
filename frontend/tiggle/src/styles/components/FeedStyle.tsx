@@ -55,7 +55,7 @@ export const FeedStyle = styled.div`
   .feed-section {
     padding: 32px 0;
 
-    > .title {
+    > .content {
       ${({ theme }) => expandTypography(theme.typography.body.large.bold)};
 
       ${({ theme }) => theme.mq.desktop} {
@@ -63,7 +63,7 @@ export const FeedStyle = styled.div`
       }
     }
 
-    > .content {
+    > .reason {
       opacity: 0.6;
       ${({ theme }) => expandTypography(theme.typography.body.small.regular)};
 
