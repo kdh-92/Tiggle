@@ -12,12 +12,12 @@ export const TypeTagStyle = styled.div`
     ${({ theme }) => expandTypography(theme.typography.body.small2x.bold)}
   }
 
-  &.outcome {
+  &.OUTCOME {
     border-color: ${({ theme: { color } }) => color.peach[300].value};
     color: ${({ theme: { color } }) => color.peach[500].value};
   }
 
-  &.refund {
+  &.REFUND {
     border-color: ${({ theme: { color } }) => color.blue[300].value};
     color: ${({ theme: { color } }) => color.blue[500].value};
   }

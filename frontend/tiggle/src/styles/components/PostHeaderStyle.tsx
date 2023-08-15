@@ -41,10 +41,10 @@ export const StyledPostHeaderTitle = styled.div`
       ${({ theme }) => expandTypography(theme.typography.title.large2x.bold)}
     }
 
-    &.outcome {
+    &.OUTCOME {
       color: ${({ theme }) => theme.color.peach[600].value};
     }
-    &.refund {
+    &.REFUND {
       color: ${({ theme }) => theme.color.blue[600].value};
     }
   }

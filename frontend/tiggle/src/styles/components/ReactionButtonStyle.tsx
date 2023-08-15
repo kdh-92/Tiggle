@@ -46,7 +46,7 @@ export const ReactionButtonStyle = styled.button`
   }
 
   &.checked {
-    &.outcome {
+    &.OUTCOME {
       background-color: ${({ theme: { color } }) => color.peach[50].value};
       color: ${({ theme: { color } }) => color.peach[600].value};
       border-color: ${({ theme: { color } }) => color.peach[300].value};
@@ -57,7 +57,7 @@ export const ReactionButtonStyle = styled.button`
         background-color: ${({ theme: { color } }) => color.peach[200].value};
       }
     }
-    &.refund {
+    &.REFUND {
       background-color: ${({ theme: { color } }) => color.blue[50].value};
       color: ${({ theme: { color } }) => color.blue[600].value};
       border-color: ${({ theme: { color } }) => color.blue[300].value};
