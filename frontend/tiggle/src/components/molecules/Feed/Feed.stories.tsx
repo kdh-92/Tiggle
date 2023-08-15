@@ -13,15 +13,15 @@ type Story = StoryObj<typeof Feed>;
 export const Default: Story = {
   args: {
     id: 1,
-    txType: Tx.Outcome,
+    type: Tx.Outcome,
     amount: 50000,
-    title: "거래 제목",
-    content: "거래 설명",
+    content: "거래 제목",
+    reason: "거래 설명",
     user: {
       name: "사용자 이름",
-      profileUrl: "image.jpg",
+      imageUrl: "image.jpg",
     },
-    createdAt: "4시간 전",
+    createdAt: "2023-08-15T08:47:19",
     number: 89,
   },
 };

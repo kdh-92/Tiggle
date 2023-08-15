@@ -10,57 +10,58 @@ import { Tx } from "@/types";
 const feedData = [
   {
     id: 1,
-    txType: Tx.Outcome,
+    type: Tx.Outcome,
     amount: 50000,
-    title: "거래 제목 텍스트 텍스트",
-    content:
+    content: "거래 제목 텍스트 텍스트",
+    reason:
       "거래 설명 텍스트 텍스트 텍스트 텍스트 텍스트 텍스트 텍스트 텍스트 텍스트 텍스트 텍스트 텍스트 ",
     user: {
       name: "사용자 이름",
-      profileUrl: "",
+      imageUrl: "",
     },
-    createdAt: "4시간 전",
+    //TODO: 현재 시간과의 diff를 반환하는 util 함수 작성
+    createdAt: "2023-08-15T08:47:19",
     number: 89,
   },
   {
     id: 2,
-    txType: Tx.Refund,
+    type: Tx.Refund,
     amount: 50000,
-    title: "거래 제목 텍스트 텍스트",
-    content:
+    content: "거래 제목 텍스트 텍스트",
+    reason:
       "거래 설명 텍스트 텍스트 텍스트 텍스트 텍스트 텍스트 텍스트 텍스트 텍스트 텍스트 텍스트 텍스트 텍스트 텍스트 텍스트 텍스트 텍스트 텍스트 텍스트 텍스트 텍스트 ",
     user: {
       name: "사용자 이름",
-      profileUrl: "",
+      imageUrl: "",
     },
-    createdAt: "4시간 전",
+    createdAt: "2023-08-15T08:47:19",
     number: 89,
   },
   {
     id: 3,
-    txType: Tx.Outcome,
+    type: Tx.Outcome,
     amount: 50000,
-    title: "거래 제목 텍스트 텍스트",
-    content: "거래 설명 텍스트 텍스트 텍스트",
+    content: "거래 제목 텍스트 텍스트",
+    reason: "거래 설명 텍스트 텍스트 텍스트",
     user: {
       name: "사용자 이름",
-      profileUrl: "",
+      imageUrl: "",
     },
-    createdAt: "4시간 전",
+    createdAt: "2023-08-15T08:47:19",
     number: 89,
   },
   {
     id: 4,
-    txType: Tx.Refund,
+    type: Tx.Refund,
     amount: 50000,
-    title: "거래 제목 텍스트 텍스트",
-    content:
+    content: "거래 제목 텍스트 텍스트",
+    reason:
       "거래 설명 텍스트 텍스트 텍스트 텍스트 텍스트 텍스트 텍스트 텍스트 텍스트 텍스트 텍스트 텍스트 ",
     user: {
       name: "사용자 이름",
-      profileUrl: "",
+      imageUrl: "",
     },
-    createdAt: "4시간 전",
+    createdAt: "2023-08-15T08:47:19",
     number: 89,
   },
 ];
