@@ -17,10 +17,9 @@ export default function Feeds({ dataList }: { dataList: FeedProps[] }) {
         className="feed-box-masonry"
         columnClassName="feeds"
       >
-        {dataList &&
-          dataList.map(el => {
-            return <Feed key={el.id} {...el} />;
-          })}
+        {dataList?.map(el => {
+          return <Feed key={el.id} {...el} />;
+        })}
       </Masonry>
     </FeedsStyle>
   );
