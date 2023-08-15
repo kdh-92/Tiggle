@@ -9,13 +9,13 @@ import { TxType } from "@/types";
 
 export type FeedProps = {
   id: number;
-  title: string;
   content: string;
+  reason: string;
   amount: number;
-  txType: TxType;
+  type: TxType;
   user: {
     name: string;
-    profileUrl: string;
+    imageUrl: string;
   };
   createdAt: string;
   number: number;
@@ -23,31 +23,31 @@ export type FeedProps = {
 
 export default function Feed({
   id,
-  txType,
+  type,
   amount,
-  title,
   content,
+  reason,
   user,
   createdAt,
   number,
 }: FeedProps) {
   return (
-    <FeedStyle className={cn(txType, id)}>
-      <TypeTag className="tag" txType={txType} />
-      <div className={cn("amount", txType)}>
+    <FeedStyle className={cn(type, id)}>
+      <TypeTag className="tag" txType={type} />
+      <div className={cn("amount", type)}>
         <span className="amount-unit">₩ {amount}</span>
       </div>
       <div className="feed-section">
-        <p className="title">{title}</p>
         <p className="content">{content}</p>
+        <p className="reason">{reason}</p>
       </div>
       <div className="feed-footer">
         <div className="user">
-          {user.profileUrl ? (
+          {user.imageUrl ? (
             <img
               className="user-profile"
               alt="user profile"
-              src={user.profileUrl}
+              src={user.imageUrl}
             />
           ) : (
             <Avatar />
