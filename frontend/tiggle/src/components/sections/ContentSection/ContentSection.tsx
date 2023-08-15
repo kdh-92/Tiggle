@@ -5,7 +5,6 @@ import CTAButton from "@/components/atoms/CTAButton/CTAButton";
 import Feeds from "@/components/molecules/Feed/Feeds";
 import Navigation from "@/components/molecules/Navigation";
 import { ContentStyle } from "@/styles/components/ContentStyle";
-import { FeedsStyle } from "@/styles/components/FeedsStyle";
 import { Tx } from "@/types";
 
 const feedData = [
@@ -83,9 +82,7 @@ export default function ContentSection() {
         </div>
       </div>
       <Navigation />
-      <FeedsStyle>
-        <Feeds dataList={dataList} />
-      </FeedsStyle>
+      <Feeds dataList={dataList} />
     </ContentStyle>
   );
 }
