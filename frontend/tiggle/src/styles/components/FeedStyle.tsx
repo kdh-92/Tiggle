@@ -30,11 +30,7 @@ export const FeedStyle = styled.div`
     gap: 8px;
 
     &-unit {
-      ${({ theme }) => expandTypography(theme.typography.title.medium.bold)};
-
-      ${({ theme }) => theme.mq.mobile} {
-        ${({ theme }) => expandTypography(theme.typography.title.small.bold)};
-      }
+      ${({ theme }) => expandTypography(theme.typography.title.small.bold)};
     }
 
     &.outcome {
@@ -44,25 +40,30 @@ export const FeedStyle = styled.div`
     &.refund {
       color: ${({ theme }) => theme.color.blue[600].value};
     }
+
+    ${({ theme }) => theme.mq.desktop} {
+      ${({ theme }) => expandTypography(theme.typography.title.medium.bold)};
+    }
   }
 
   .feed-section {
     padding: 32px 0;
 
     > .title {
-      ${({ theme }) => expandTypography(theme.typography.title.small2x.bold)};
+      ${({ theme }) => expandTypography(theme.typography.body.large.bold)};
 
-      ${({ theme }) => theme.mq.mobile} {
-        ${({ theme }) => expandTypography(theme.typography.body.large.bold)};
+      ${({ theme }) => theme.mq.desktop} {
+        ${({ theme }) => expandTypography(theme.typography.title.small2x.bold)};
       }
     }
 
     > .content {
       opacity: 0.6;
-      ${({ theme }) => expandTypography(theme.typography.body.medium.regular)};
+      ${({ theme }) => expandTypography(theme.typography.body.small.regular)};
 
-      ${({ theme }) => theme.mq.mobile} {
-        ${({ theme }) => expandTypography(theme.typography.body.small.regular)};
+      ${({ theme }) => theme.mq.desktop} {
+        ${({ theme }) =>
+          expandTypography(theme.typography.body.medium.regular)};
       }
     }
   }
@@ -80,32 +81,31 @@ export const FeedStyle = styled.div`
     gap: 8px;
 
     &-profile {
-      width: 34px;
-      height: 34px;
+      width: 30px;
+      height: 30px;
       border-radius: 50%;
       background-color: ${({ theme }) => theme.color.gray[500].value};
 
-      ${({ theme }) => theme.mq.mobile} {
-        width: 30px;
-        height: 30px;
+      ${({ theme }) => theme.mq.desktop} {
+        width: 34px;
+        height: 34px;
       }
     }
 
     &-name {
-      ${({ theme }) => expandTypography(theme.typography.body.medium.bold)};
+      ${({ theme }) => expandTypography(theme.typography.body.small.bold)};
 
-      ${({ theme }) => theme.mq.mobile} {
-        ${({ theme }) => expandTypography(theme.typography.body.small.bold)};
+      ${({ theme }) => theme.mq.desktop} {
+        ${({ theme }) => expandTypography(theme.typography.body.medium.bold)};
       }
     }
 
     &-createdAt {
       opacity: 0.6;
-      ${({ theme }) => expandTypography(theme.typography.body.small.regular)};
+      ${({ theme }) => expandTypography(theme.typography.body.small2x.regular)};
 
-      ${({ theme }) => theme.mq.mobile} {
-        ${({ theme }) =>
-          expandTypography(theme.typography.body.small2x.regular)};
+      ${({ theme }) => theme.mq.desktop} {
+        ${({ theme }) => expandTypography(theme.typography.body.small.regular)};
       }
     }
   }
@@ -117,10 +117,10 @@ export const FeedStyle = styled.div`
   .icon-unit {
     opacity: 0.5;
     display: flex;
-    ${({ theme }) => expandTypography(theme.typography.body.small.medium)};
+    ${({ theme }) => expandTypography(theme.typography.body.small2x.medium)};
 
-    ${({ theme }) => theme.mq.mobile} {
-      ${({ theme }) => expandTypography(theme.typography.body.small2x.medium)};
+    ${({ theme }) => theme.mq.desktop} {
+      ${({ theme }) => expandTypography(theme.typography.body.small.medium)};
     }
 
     //TODO: 더 간략하게 css를 줄 수 있을 것 같다

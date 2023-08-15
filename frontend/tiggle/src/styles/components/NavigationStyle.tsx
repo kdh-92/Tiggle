@@ -47,11 +47,11 @@ export const NavigationWrapStyle = styled.div`
   display: flex;
   justify-content: center;
   margin-top: 80px;
-  padding: 0 20px 0 28px;
-  ${({ theme }) => expandTypography(theme.typography.body.medium.bold)}
+  padding: 0 20px 0 24px;
+  ${({ theme }) => expandTypography(theme.typography.body.small.bold)}
 
-  ${({ theme }) => theme.mq.mobile} {
-    padding: 0 20px 0 24px;
-    ${({ theme }) => expandTypography(theme.typography.body.small.bold)}
+  ${({ theme }) => theme.mq.desktop} {
+    padding: 0 20px 0 28px;
+    ${({ theme }) => expandTypography(theme.typography.body.medium.bold)}
   }
 `;
