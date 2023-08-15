@@ -15,13 +15,22 @@ export const HeaderStyle = styled(Header)`
   .header-wrap {
     display: flex;
     justify-content: space-between;
-    padding: 0 20px 0 24px;
     width: 100%;
     height: 64px;
 
     ${({ theme }) => theme.mq.desktop} {
       width: 768px;
-      padding: 0 28px 0 32px;
+    }
+  }
+
+  .gnb {
+    width: inherit;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 24px;
+
+    ${({ theme }) => theme.mq.desktop} {
+      padding: 0 32px;
     }
   }
 `;
@@ -57,5 +66,11 @@ export const StyledHeaderRight = styled.div`
     border: none;
     padding: 0 4px;
     height: 40px;
+    color: ${({ theme: { color } }) => color.bluishGray[700].value};
+  }
+
+  .ant-avatar {
+    background-color: ${({ theme }) =>
+      theme.color.bluishGray[300].value} !important;
   }
 `;

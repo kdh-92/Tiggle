@@ -18,16 +18,13 @@ export const FeedsStyle = styled.div`
     gap: 24px;
 
     ${({ theme }) => theme.mq.desktop} {
-      width: 768px;
+      display: flex;
+      justify-content: center;
+      gap: 24px;
     }
   }
 
   .feeds {
     background-clip: padding-box;
-    width: 327px;
-
-    ${({ theme }) => theme.mq.desktop} {
-      width: 340px;
-    }
   }
 `;

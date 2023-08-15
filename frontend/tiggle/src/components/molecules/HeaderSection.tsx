@@ -14,18 +14,20 @@ export default function HeaderSection() {
 
   return (
     <div className="header-wrap">
-      <StyledHeaderLeft>
-        <Logo />
-        <Menu mode="horizontal" items={items} />
-      </StyledHeaderLeft>
-      <StyledHeaderRight>
-        <button className="right-bar-btn">
-          <Bell size={20} color={"#455573"} />
-        </button>
-        <button className="right-bar-btn">
-          <Avatar size={24} />
-        </button>
-      </StyledHeaderRight>
+      <div className="gnb">
+        <StyledHeaderLeft>
+          <Logo />
+          <Menu mode="horizontal" items={items} />
+        </StyledHeaderLeft>
+        <StyledHeaderRight>
+          <button className="right-bar-btn">
+            <Bell size={20} />
+          </button>
+          <button className="right-bar-btn">
+            <Avatar size={24} />
+          </button>
+        </StyledHeaderRight>
+      </div>
     </div>
   );
 }

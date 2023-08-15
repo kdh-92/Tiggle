@@ -13,6 +13,10 @@ export const NavigationStyle = styled(Menu)`
   align-items: center;
   color: ${({ theme: { color } }) => color.bluishGray[400].value};
 
+  ${({ theme }) => theme.mq.desktop} {
+    padding: 0 24px;
+  }
+
   .ant-menu-item {
     padding: 8px 16px;
     gap: 10px;

@@ -10,6 +10,12 @@ export const FeedStyle = styled.div`
   padding: 24px;
   color: ${({ theme }) => theme.color.gray[900].value};
 
+  /*TODO: 자식 div 자체에 width를 주면 padding 값까지 포함되는 문제. 
+  부모에게서 width를 받아오면 스토리북에는 적용 안 되는 문제. */
+  ${({ theme }) => theme.mq.desktop} {
+    width: calc(340px - 48px);
+  }
+
   &.outcome:hover {
     background-color: ${({ theme }) => theme.color.peach[50].value};
     border: 1px solid ${({ theme: { color } }) => color.peach[200].value};
