@@ -25,7 +25,6 @@ export const FeedStyle = styled.div`
   }
 
   .amount {
-    margin-bottom: 4px;
     display: flex;
     align-items: center;
     gap: 8px;
@@ -59,6 +58,7 @@ export const FeedStyle = styled.div`
     }
 
     > .content {
+      opacity: 0.6;
       ${({ theme }) => expandTypography(theme.typography.body.medium.regular)};
 
       ${({ theme }) => theme.mq.mobile} {
@@ -83,7 +83,7 @@ export const FeedStyle = styled.div`
       width: 34px;
       height: 34px;
       border-radius: 50%;
-      background-color: ${({ theme }) => theme.color.bluishGray[500].value};
+      background-color: ${({ theme }) => theme.color.gray[500].value};
 
       ${({ theme }) => theme.mq.mobile} {
         width: 30px;
@@ -100,6 +100,7 @@ export const FeedStyle = styled.div`
     }
 
     &-createdAt {
+      opacity: 0.6;
       ${({ theme }) => expandTypography(theme.typography.body.small.regular)};
 
       ${({ theme }) => theme.mq.mobile} {
@@ -110,11 +111,11 @@ export const FeedStyle = styled.div`
   }
 
   .ant-avatar {
-    background-color: ${({ theme }) =>
-      theme.color.bluishGray[500].value} !important;
+    background-color: ${({ theme }) => theme.color.gray[500].value} !important;
   }
 
   .icon-unit {
+    opacity: 0.5;
     display: flex;
     ${({ theme }) => expandTypography(theme.typography.body.small.medium)};
 
@@ -148,7 +149,11 @@ export const FeedStyle = styled.div`
     }
 
     .label-icon {
-      width: 14px;
+      width: 12px;
+
+      ${({ theme }) => theme.mq.desktop} {
+        width: 14px;
+      }
     }
   }
 `;
