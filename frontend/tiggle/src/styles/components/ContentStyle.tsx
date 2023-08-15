@@ -20,12 +20,20 @@ export const ContentStyle = styled(Content)`
 
     > .title-button {
       margin-top: 24px;
+
+      ${({ theme }) => theme.mq.desktop} {
+        margin-left: 24px;
+      }
     }
 
     ${({ theme }) => theme.mq.desktop} {
       width: 768px;
       padding: 80px 32px 0 32px;
       ${({ theme }) => expandTypography(theme.typography.title.medium.bold)};
+
+      > p {
+        padding: 0 24px;
+      }
     }
   }
 `;
