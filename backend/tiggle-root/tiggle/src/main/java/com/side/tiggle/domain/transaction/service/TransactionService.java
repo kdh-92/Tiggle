@@ -8,6 +8,7 @@ import com.side.tiggle.domain.txtag.service.TxTagService;
 import com.side.tiggle.domain.member.model.Member;
 import com.side.tiggle.domain.transaction.dto.TransactionDto;
 import com.side.tiggle.domain.transaction.model.Transaction;
+import com.side.tiggle.global.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -70,7 +71,7 @@ public class TransactionService {
 
     public Transaction getTransaction(Long transactionId) {
         return transactionRepository.findById(transactionId)
-                .orElseThrow(() -> new RuntimeException(""));
+                .orElseThrow(() -> new NotFoundException());
     }
 
     public Page<Transaction> getCountOffsetTransaction(int pageSize, int index) {
@@ -78,7 +79,7 @@ public class TransactionService {
                 PageRequest.of(index, pageSize, Sort.by(Sort.Direction.DESC, "createdAt"))
         );
 
-        if (txPage.isEmpty()) throw new IllegalArgumentException("거래가 존재하지 않습니다.");
+        if (txPage.isEmpty()) throw new NotFoundException();
 
         return txPage;
     }
@@ -88,7 +89,7 @@ public class TransactionService {
                 memberId, PageRequest.of(offset, count, Sort.by(Sort.Direction.DESC, "createdAt"))
         );
 
-        if (memberTxPage.isEmpty()) throw new IllegalArgumentException("거래가 존재하지 않습니다.");
+        if (memberTxPage.isEmpty()) throw new NotFoundException();
 
         return memberTxPage;
     }
@@ -101,7 +102,7 @@ public class TransactionService {
     public Transaction updateTransaction(Long memberId, Long transactionId, TransactionUpdateReqDto dto) {
         Transaction transaction = transactionRepository.findById(transactionId)
                 .stream().filter(item -> item.getMember().getId().equals(memberId)).findAny()
-                .orElseThrow(() -> new IllegalArgumentException("해당 거래가 존재하지 않습니다."));
+                .orElseThrow(() -> new NotFoundException());
 
         transaction.setType(dto.getType());
         transaction.setAmount(dto.getAmount());
@@ -122,7 +123,7 @@ public class TransactionService {
                 .stream()
                 .filter(item -> item.getMember().getId().equals(memberId))
                 .findAny()
-                .orElseThrow(() -> new IllegalArgumentException("해당 거래가 존재하지 않습니다."))
+                .orElseThrow(() -> new NotFoundException())
         );
     }
 }

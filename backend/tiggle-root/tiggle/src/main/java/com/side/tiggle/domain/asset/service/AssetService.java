@@ -2,6 +2,7 @@ package com.side.tiggle.domain.asset.service;
 
 import com.side.tiggle.domain.asset.repository.AssetRepository;
 import com.side.tiggle.domain.asset.model.Asset;
+import com.side.tiggle.global.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +14,6 @@ public class AssetService {
 
     public Asset getAsset(Long assetId) {
         return assetRepository.findById(assetId)
-                .orElseThrow(() -> new RuntimeException(""));
+                .orElseThrow(() -> new NotFoundException());
     }
 }

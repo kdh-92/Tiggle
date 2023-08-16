@@ -3,6 +3,7 @@ package com.side.tiggle.domain.member.service;
 import com.side.tiggle.domain.member.MemberDto;
 import com.side.tiggle.domain.member.repository.MemberRepository;
 import com.side.tiggle.domain.member.model.Member;
+import com.side.tiggle.global.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -32,7 +33,7 @@ public class MemberService {
 
     public Member getMember(Long memberId) {
         return memberRepository.findById(memberId)
-                .orElseThrow(() -> new RuntimeException(""));
+                .orElseThrow(() -> new NotFoundException());
     }
 
     public List<MemberDto> getAllMember() {
@@ -46,7 +47,7 @@ public class MemberService {
 
     public MemberDto updateMember(Long memberId, MemberDto memberDto) {
         Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 유저가 존재하지 않습니다."));
+                .orElseThrow(() -> new NotFoundException());
 
         member.setProfileUrl(memberDto.getProfileUrl());
         member.setNickname(memberDto.getNickname());
