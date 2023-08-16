@@ -1,48 +1,45 @@
 import cn from "classnames";
+import dayjs from "dayjs";
 
 import MenuButton from "@/components/atoms/MenuButton/MenuButton";
 import TypeTag from "@/components/atoms/typeTag/TypeTag";
+import { MemberDto, TransactionRespDto } from "@/generated";
 import {
   PostHeaderStyle,
   StyledPostHeaderDetail,
   StyledPostHeaderTitle,
 } from "@/styles/components/PostHeaderStyle";
-import { TxType } from "@/types";
-import dayjs from "dayjs";
 
-interface PostHeaderProps {
-  id: number;
-  title: string;
-  amount: number;
-  txType: TxType;
-  user: {
-    name: string;
-    profileUrl: string;
-  };
-  date: string;
+interface PostHeaderProps
+  extends Pick<
+    TransactionRespDto,
+    "id" | "type" | "content" | "amount" | "date"
+  > {
+  // TODO: api response 변경된 후, TransactionDto 에서 Pick 하는 것으로 수정
+  sender: MemberDto;
   category: string;
   asset: string;
 }
 
 export default function PostHeader({
   id,
-  title,
+  type,
+  content,
   amount,
-  txType,
-  user,
   date,
+  sender,
   category,
   asset,
 }: PostHeaderProps) {
   return (
     <PostHeaderStyle id={`post-header-${id}`}>
       <StyledPostHeaderTitle>
-        <TypeTag className="tag" txType={txType} />
-        <div className={cn("amount", txType)}>
+        <TypeTag className="tag" txType={type} />
+        <div className={cn("amount", type)}>
           <span className="amount-unit">₩</span>
           <span className="amount-number">{amount}</span>
         </div>
-        <p className="title">{title}</p>
+        <p className="title">{content}</p>
       </StyledPostHeaderTitle>
 
       <StyledPostHeaderDetail>
@@ -50,9 +47,9 @@ export default function PostHeader({
           <img
             className="user-profile"
             alt="user profile"
-            src={user.profileUrl}
+            src={sender.profileUrl ?? "/assets/user-placeholder.png"}
           />
-          <p className="user-name">{user.name}</p>
+          <p className="user-name">{sender.nickname}</p>
         </div>
         <div className="item-wrapper">
           <div className="item date">

@@ -3,78 +3,89 @@ import { useState } from "react";
 import CTAButton from "@/components/atoms/CTAButton/CTAButton";
 import ReplyToggleButton from "@/components/atoms/ReplyToggleButton/ReplyToggleButton";
 import TextArea from "@/components/atoms/TextArea/TextArea";
+import { CommentApiService, CommentRespDto } from "@/generated";
 import {
   CommentCellStyle,
   CommentStyle,
   RepliesSectionStyle,
 } from "@/styles/components/CommentCellStyle";
 import { TxType } from "@/types";
+import { useQuery } from "@tanstack/react-query";
 
-export interface Comment {
-  id: number;
-  user: {
-    name: string;
-    profileUrl: string;
-  };
-  createdAt: string;
-  content: string;
-  replies: Array<Omit<Comment, "replies">>;
+interface CommentCellProps
+  extends Pick<
+    CommentRespDto,
+    "id" | "txId" | "content" | "createdAt" | "childCount" | "sender"
+  > {
+  type: TxType;
 }
 
-interface CommentCellProps {
-  txType: TxType;
-  comment: Comment;
-}
-
-export default function CommentCell({ txType, comment }: CommentCellProps) {
+export default function CommentCell({
+  id,
+  type,
+  txId,
+  content,
+  createdAt,
+  childCount,
+  sender,
+}: CommentCellProps) {
   const [replyOpen, setReplyOpen] = useState(false);
 
   const toggleReplySection = () => {
     setReplyOpen(!replyOpen);
   };
 
+  console.log(id, txId);
+
+  const { data: repliesData } = useQuery({
+    queryKey: ["comment", "replies", id],
+    queryFn: async () => CommentApiService.getAllCommentsByCommentId(id),
+    enabled: replyOpen,
+    staleTime: 1000 * 60 * 10,
+  });
+
   return (
     <CommentCellStyle>
       <img
         className="comment-cell-profile"
-        src={comment.user.profileUrl}
-        alt={`${comment.user.name} profile`}
+        src={sender.profileUrl ?? "/assets/user-placeholder.png"}
+        alt={`${sender.nickname} profile`}
       />
 
       <div>
-        <CommentStyle className={txType}>
+        <CommentStyle className={type}>
           <div>
-            <p className="name">{comment.user.name}</p>
-            <p className="date">{comment.createdAt}</p>
+            <p className="name">{sender.nickname}</p>
+            <p className="date">{createdAt}</p>
           </div>
-          <p className="content">{comment.content}</p>
+          <p className="content">{content}</p>
           <ReplyToggleButton
-            txType={txType}
+            txType={type}
             open={replyOpen}
-            repliesCount={comment.replies.length}
+            repliesCount={childCount}
             onClick={toggleReplySection}
           />
         </CommentStyle>
 
         {replyOpen && (
           <RepliesSectionStyle>
-            {comment.replies.length > 0 && (
-              <div className="reply-cell-divider" />
-            )}
+            {childCount > 0 && <div className="reply-cell-divider" />}
 
-            {comment.replies.map(reply => (
+            {repliesData?.content?.map(reply => (
               <div
-                key={`comment -${comment.id}-reply-${reply.id}`}
+                key={`comment -${id}-reply-${reply.id}`}
                 className="reply-cell"
               >
                 <img
                   className="profile"
-                  src={reply.user.profileUrl}
-                  alt={`${reply.user.name} profile`}
+                  src={
+                    reply.sender.profileUrl ?? "/assets/user-placeholder.png"
+                  }
+                  alt={`${reply.sender.nickname} profile`}
                 />
                 <div className="wrapper">
                   <div>
-                    <p className="name">{reply.user.name}</p>
+                    <p className="name">{reply.sender.nickname}</p>
                     <p className="date">{reply.createdAt}</p>
                   </div>
                   <p className="content">{reply.content}</p>
