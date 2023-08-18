@@ -1,4 +1,4 @@
-package com.side.tiggle.domain.member;
+package com.side.tiggle.domain.member.dto;
 
 import com.side.tiggle.domain.member.model.Member;
 import lombok.Getter;

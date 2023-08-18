@@ -1,6 +1,6 @@
 package com.side.tiggle.domain.member.service;
 
-import com.side.tiggle.domain.member.MemberDto;
+import com.side.tiggle.domain.member.dto.MemberDto;
 import com.side.tiggle.domain.member.repository.MemberRepository;
 import com.side.tiggle.domain.member.model.Member;
 import com.side.tiggle.global.exception.NotFoundException;

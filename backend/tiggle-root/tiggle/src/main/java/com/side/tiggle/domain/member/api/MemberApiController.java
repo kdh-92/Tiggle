@@ -1,6 +1,6 @@
 package com.side.tiggle.domain.member.api;
 
-import com.side.tiggle.domain.member.MemberDto;
+import com.side.tiggle.domain.member.dto.MemberDto;
 import com.side.tiggle.domain.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

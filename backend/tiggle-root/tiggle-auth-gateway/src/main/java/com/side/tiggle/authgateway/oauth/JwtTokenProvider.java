@@ -1,6 +1,6 @@
 package com.side.tiggle.authgateway.oauth;
 
-import com.side.tiggle.domain.member.MemberDto;
+import com.side.tiggle.domain.member.dto.MemberDto;
 import com.side.tiggle.domain.member.model.Member;
 import com.side.tiggle.domain.member.repository.MemberRepository;
 import io.jsonwebtoken.Claims;
