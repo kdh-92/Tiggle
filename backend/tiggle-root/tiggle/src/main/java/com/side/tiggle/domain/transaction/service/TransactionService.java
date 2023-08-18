@@ -19,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
@@ -59,14 +60,34 @@ public class TransactionService {
         return folderPath;
     }
 
-    @Transactional
-    public Transaction createTransaction(TransactionDto dto) {
-        Member member = memberService.getMember(dto.getMemberId());
-        Transaction tx = transactionRepository.save(dto.toEntity(member));
-        TxTag txTag = new TxTag(tx.getId(), dto.getMemberId(), dto.getTagNames());
+    private void deleteFolder() {
+        String str = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd"));
+        String folderPath = str.replace("/", File.separator);
+        File uploadPathFolder = new File(FOLDER_PATH, folderPath);
 
-        txTagService.createTxTag(txTag);
-        return tx;
+        if (uploadPathFolder.list().length == 0) uploadPathFolder.delete();
+    }
+
+    @Transactional
+    public Transaction createTransaction(TransactionDto dto, MultipartFile file) throws IOException {
+        Path savePath = null;
+        try {
+            String uploadedFilePath = uploadFileToFolder(file);
+            savePath = Paths.get(uploadedFilePath);
+            dto.setImageUrl(uploadedFilePath);
+            Member member = memberService.getMember(dto.getMemberId());
+            Transaction tx = transactionRepository.save(dto.toEntity(member));
+            TxTag txTag = new TxTag(tx.getId(), dto.getMemberId(), dto.getTagNames());
+
+            txTagService.createTxTag(txTag);
+            return tx;
+        } catch (Exception e) {
+            if (savePath != null) {
+                Files.deleteIfExists(savePath);
+            }
+            deleteFolder();
+            throw e;
+        }
     }
 
     public Transaction getTransaction(Long transactionId) {

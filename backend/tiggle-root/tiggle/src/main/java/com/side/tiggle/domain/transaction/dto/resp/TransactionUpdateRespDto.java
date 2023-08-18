@@ -4,6 +4,7 @@ import com.side.tiggle.domain.asset.dto.AssetDto;
 import com.side.tiggle.domain.asset.model.Asset;
 import com.side.tiggle.domain.category.dto.CategoryDto;
 import com.side.tiggle.domain.category.model.Category;
+import com.side.tiggle.domain.member.dto.MemberDto;
 import com.side.tiggle.domain.transaction.dto.req.TransactionUpdateReqDto;
 import com.side.tiggle.domain.transaction.model.Transaction;
 import lombok.AccessLevel;
@@ -16,11 +17,11 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 public class TransactionUpdateRespDto extends TransactionRespDto{
 
-    public static TransactionUpdateRespDto fromEntity(Transaction tx, Asset asset, Category category, String txTagNames) {
+    public static TransactionUpdateRespDto fromEntity(Transaction tx, Asset asset, Category category) {
         return TransactionUpdateRespDto.builder()
                 .id(tx.getId())
                 .parentId(tx.getParentId())
-                .member(tx.getMember())
+                .member(MemberDto.fromEntity(tx.getMember()))
                 .type(tx.getType())
                 .imageUrl(tx.getImageUrl())
                 .amount(tx.getAmount())
@@ -29,7 +30,7 @@ public class TransactionUpdateRespDto extends TransactionRespDto{
                 .reason(tx.getReason())
                 .asset(AssetDto.fromEntity(asset))
                 .category(CategoryDto.fromEntity(category))
-                .txTagNames(txTagNames)
+                .txTagNames(tx.getTagNames())
                 .createdAt(tx.getCreatedAt())
                 .build();
     }

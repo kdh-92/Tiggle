@@ -5,6 +5,7 @@ import com.side.tiggle.domain.asset.dto.AssetDto;
 import com.side.tiggle.domain.asset.model.Asset;
 import com.side.tiggle.domain.category.dto.CategoryDto;
 import com.side.tiggle.domain.category.model.Category;
+import com.side.tiggle.domain.member.dto.MemberDto;
 import com.side.tiggle.domain.member.model.Member;
 import com.side.tiggle.domain.transaction.model.Transaction;
 import com.side.tiggle.domain.transaction.dto.TransactionDto;
@@ -22,7 +23,7 @@ import java.util.stream.Collectors;
 public class TransactionRespDto extends TransactionDto {
 
     private Long id;
-    private Member member;
+    private MemberDto member;
     private TransactionDto parentTx;
     private AssetDto asset;
     private CategoryDto category;
@@ -35,11 +36,29 @@ public class TransactionRespDto extends TransactionDto {
         return super.getMemberId();
     }
 
+    @Override
+    @JsonIgnore
+    public Long getAssetId() {
+        return super.getAssetId();
+    }
+
+    @Override
+    @JsonIgnore
+    public Long getCategoryId() {
+        return super.getCategoryId();
+    }
+
+    @Override
+    @JsonIgnore
+    public String getTagNames() {
+        return super.getTagNames();
+    }
+
     public static TransactionRespDto fromEntity(Transaction tx) {
         return TransactionRespDto.builder()
                 .id(tx.getId())
                 .parentId(tx.getParentId())
-                .member(tx.getMember())
+                .member(MemberDto.fromEntity(tx.getMember()))
                 .type(tx.getType())
                 .imageUrl(tx.getImageUrl())
                 .amount(tx.getAmount())
@@ -50,10 +69,10 @@ public class TransactionRespDto extends TransactionDto {
                 .build();
     }
 
-    public static TransactionRespDto fromEntityDetailTx(Transaction tx, Asset asset, Category category, String txTagNames) {
-        return TransactionRespDto.builder()
+    public static TransactionRespDto fromEntityDetailTx(Transaction tx, Transaction parentTx, Asset asset, Category category) {
+        TransactionRespDtoBuilder builder = TransactionRespDto.builder()
                 .id(tx.getId())
-                .member(tx.getMember())
+                .member(MemberDto.fromEntity(tx.getMember()))
                 .type(tx.getType())
                 .imageUrl(tx.getImageUrl())
                 .amount(tx.getAmount())
@@ -62,27 +81,12 @@ public class TransactionRespDto extends TransactionDto {
                 .reason(tx.getReason())
                 .asset(AssetDto.fromEntity(asset))
                 .category(CategoryDto.fromEntity(category))
-                .txTagNames(txTagNames)
-                .createdAt(tx.getCreatedAt())
-                .build();
-    }
+                .txTagNames(tx.getTagNames())
+                .createdAt(tx.getCreatedAt());
 
-    public static TransactionRespDto fromEntityParentTx(Transaction refundTx, Transaction parentTx, Asset asset, Category category, String txTagNames) {
-        return TransactionRespDto.builder()
-                .id(refundTx.getId())
-                .member(refundTx.getMember())
-                .type(refundTx.getType())
-                .imageUrl(refundTx.getImageUrl())
-                .amount(refundTx.getAmount())
-                .date(refundTx.getDate())
-                .content(refundTx.getContent())
-                .reason(refundTx.getReason())
-                .asset(AssetDto.fromEntity(asset))
-                .category(CategoryDto.fromEntity(category))
-                .txTagNames(txTagNames)
-                .createdAt(refundTx.getCreatedAt())
-                .parentTx(TransactionDto.fromEntity(parentTx))
-                .build();
+        if (parentTx != null) builder.parentTx(TransactionDto.fromEntity(parentTx));
+
+        return builder.build();
     }
 
     public static Page<TransactionRespDto> fromEntityPage(Page<Transaction> txPage) {

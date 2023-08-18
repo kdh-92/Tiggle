@@ -47,16 +47,16 @@ public class TransactionApiController {
             @RequestPart TransactionDto dto,
             @RequestPart("multipartFile") MultipartFile file
     ) throws IOException {
-        dto.setImageUrl(transactionService.uploadFileToFolder(file));
+        Transaction tx = transactionService.createTransaction(dto, file);
+        Transaction parentTx = (tx.getParentId() != null) ? transactionService.getTransaction(tx.getParentId()) : null;
 
         return new ResponseEntity<>(
                 TransactionRespDto.fromEntityDetailTx(
-                        transactionService.createTransaction(dto),
+                        tx,
+                        parentTx,
                         assetService.getAsset(dto.getAssetId()),
-                        categoryService.getCategory(dto.getCategoryId()),
-                        dto.getTagNames()
-                ),
-                HttpStatus.CREATED
+                        categoryService.getCategory(dto.getCategoryId())
+                ), HttpStatus.CREATED
         );
     }
 
@@ -67,29 +67,15 @@ public class TransactionApiController {
     @GetMapping("/{id}")
     public ResponseEntity<TransactionRespDto> getTransaction(@Parameter(name = "id", description = "tx의 id") @PathVariable("id") Long transactionId) {
         Transaction tx = transactionService.getTransaction(transactionId);
-
-        if (tx.getParentId() == null) {
-            return new ResponseEntity<>(
-                    TransactionRespDto.fromEntityDetailTx(
-                            transactionService.getTransaction(transactionId),
-                            assetService.getAsset(tx.getAssetId()),
-                            categoryService.getCategory(tx.getCategoryId()),
-                            tx.getTagNames()
-                    ),
-                    HttpStatus.OK
-            );
-        } else {
-            return new ResponseEntity<>(
-                    TransactionRespDto.fromEntityParentTx(
-                            transactionService.getTransaction(transactionId),
-                            transactionService.getTransaction(tx.getParentId()),
-                            assetService.getAsset(tx.getAssetId()),
-                            categoryService.getCategory(tx.getCategoryId()),
-                            tx.getTagNames()
-                    ),
-                    HttpStatus.OK
-            );
-        }
+        Transaction parentTx = (tx.getParentId() != null) ? transactionService.getTransaction(tx.getParentId()) : null;
+        return new ResponseEntity<>(
+                TransactionRespDto.fromEntityDetailTx(
+                        tx,
+                        parentTx,
+                        assetService.getAsset(tx.getAssetId()),
+                        categoryService.getCategory(tx.getCategoryId())
+                ), HttpStatus.OK
+        );
     }
 
     @Operation(
@@ -150,9 +136,8 @@ public class TransactionApiController {
                 TransactionUpdateRespDto.fromEntity(
                         tx,
                         assetService.getAsset(tx.getAssetId()),
-                        categoryService.getCategory(tx.getCategoryId()),
-                        tx.getTagNames()),
-                HttpStatus.OK
+                        categoryService.getCategory(tx.getCategoryId())
+                ), HttpStatus.OK
         );
     }
     @DeleteMapping("/{id}")
