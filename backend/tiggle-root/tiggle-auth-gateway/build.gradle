@@ -29,6 +29,7 @@ dependencies {
 
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
     implementation 'org.springframework.cloud:spring-cloud-starter-gateway'
+    implementation 'org.springdoc:springdoc-openapi-webflux-ui:1.5.10'
 //    implementation 'org.springframework.cloud:spring-cloud-starter-oauth2:2.2.5.RELEASE'
 //    implementation 'org.springframework.cloud:spring-cloud-security:2.2.5.RELEASE'
 

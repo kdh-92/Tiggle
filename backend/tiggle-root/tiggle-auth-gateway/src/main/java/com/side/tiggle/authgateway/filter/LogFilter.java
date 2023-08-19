@@ -14,8 +14,8 @@ public class LogFilter implements GlobalFilter {
     Logger logger = LoggerFactory.getLogger(this.getClass());
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
-        // TODO: 로깅 구현
-        logger.info(exchange.getRequest().getPath().value());
+        // TODO: 로깅 개선
+        logger.info("{} {}", exchange.getRequest().getMethod(), exchange.getRequest().getPath().value());
         return chain.filter(exchange);
     }
 }

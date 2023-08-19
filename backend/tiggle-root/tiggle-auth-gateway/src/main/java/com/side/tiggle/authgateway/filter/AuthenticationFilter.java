@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.stereotype.Component;
@@ -14,7 +15,6 @@ import org.springframework.stereotype.Component;
 public class AuthenticationFilter extends AbstractGatewayFilterFactory<AuthenticationFilter.Config> {
 
     private final JwtTokenProvider jwtTokenProvider;
-    private String accessTokenHeader = "Authorization";
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     public AuthenticationFilter(JwtTokenProvider jwtTokenProvider) {
@@ -27,17 +27,18 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
         return ((exchange, chain) -> {
             ServerHttpRequest request = exchange.getRequest();
             try {
-                if (!request.getHeaders().containsKey(accessTokenHeader)) {
+                if (!request.getHeaders().containsKey(HttpHeaders.AUTHORIZATION)) {
                     throw new Exception("Token Not Provided");
                 }
 
-                String accessToken = request.getHeaders().get(accessTokenHeader).get(0)
+                String accessToken = request.getHeaders().get(HttpHeaders.AUTHORIZATION).get(0)
                         .replace("Bearer ", "");
                 if (!jwtTokenProvider.isTokenValid(accessToken)) {
                     throw new Exception("Invalid Token");
                 }
 
                 long memberId = jwtTokenProvider.getMemberId(accessToken);
+                logger.info("Member authenticated: id {}", memberId);
                 ServerHttpRequest mutatedRequest = request.mutate().header("x-member-id", Long.toString(memberId)).build();
                 return chain.filter(exchange.mutate().request(mutatedRequest).build());
             } catch (Exception e) {

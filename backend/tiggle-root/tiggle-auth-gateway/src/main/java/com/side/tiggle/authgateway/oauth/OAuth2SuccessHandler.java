@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -42,22 +43,18 @@ public class OAuth2SuccessHandler implements ServerAuthenticationSuccessHandler 
                 LocalDate.of(1990, 1, 1)
             );
             this.memberRepository.save(authMember);
-            logger.info("Added new user : {}", authMember);
+            logger.info("Added new user : {}", authMember.getEmail());
         }
         else {
             authMember = member.get();
+            logger.info("Member authenticated: {}", authMember.getEmail());
         }
 
         String token = jwtTokenProvider.getAccessToken(authMember.getId(), "ROLE_USER");
-        String refreshToken = jwtTokenProvider.getRefreshToken(authMember.getId(), "ROLE_USER");
-        String targetUrl = UriComponentsBuilder.fromUriString("/login/success")
-                .build().toUriString();
-
         ServerHttpResponse ex = webFilterExchange.getExchange().getResponse();
-        ex.getHeaders().add(HttpHeaders.LOCATION, targetUrl);
-        ex.getHeaders().add("Authorization", "Bearer " + token);
-        ex.getHeaders().add("Refresh", refreshToken);
-        webFilterExchange.getExchange().mutate().response(ex);
-        return Mono.empty();
+        ex.getHeaders().add(HttpHeaders.AUTHORIZATION, "Bearer " + token);
+
+        ServerWebExchange exchange = webFilterExchange.getExchange().mutate().response(ex).build();
+        return webFilterExchange.getChain().filter(exchange);
     }
 }
