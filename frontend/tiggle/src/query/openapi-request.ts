@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosHeaders } from "axios";
 
 import { CancelablePromise, OpenAPIConfig } from "@/generated";
 import type { ApiRequestOptions } from "@/generated/core/ApiRequestOptions";
@@ -25,6 +25,7 @@ export const request = <T>(
         url,
         data: options.body,
         method: options.method,
+        headers: options.headers as AxiosHeaders,
       })
       .then(({ data }) => resolve(data))
       .catch((error: any) => reject(error));
