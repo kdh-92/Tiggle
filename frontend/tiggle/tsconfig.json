@@ -6,10 +6,11 @@
     "sourceMap": true,
     "noImplicitAny": true,
     "module": "commonjs",
-    "target": "es5",
+    "target": "es2019",
     "allowJs": true,
     "moduleResolution": "node",
     "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true,
     "esModuleInterop": true,
     "baseUrl": ".",
     "paths": {
