@@ -1,11 +1,10 @@
 package com.side.tiggle.domain.member.api;
 
-import com.side.tiggle.domain.member.MemberDto;
+import com.side.tiggle.domain.member.dto.MemberDto;
 import com.side.tiggle.domain.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,7 +27,7 @@ public class MemberApiController {
 
     @GetMapping("/{id}")
     public ResponseEntity<MemberDto> getMember(@PathVariable("id") Long memberId) {
-        return new ResponseEntity<>(memberService.getMember(memberId), HttpStatus.OK);
+        return new ResponseEntity<>(MemberDto.fromEntity(memberService.getMember(memberId)), HttpStatus.OK);
     }
 
     @GetMapping("/all")

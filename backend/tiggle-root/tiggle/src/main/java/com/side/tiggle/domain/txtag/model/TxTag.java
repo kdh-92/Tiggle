@@ -24,13 +24,13 @@ public class TxTag extends BaseEntity {
     @Column(name = "member_id", nullable = false)
     private Long memberId;
 
-    @Column(name = "tag_name", nullable = false)
-    private String tagName;
+    @Column(name = "tag_names", nullable = false)
+    private String tagNames;
 
     @Builder
-    public TxTag(Long txId, Long memberId, String tagName) {
+    public TxTag(Long txId, Long memberId, String tagNames) {
         this.txId = txId;
         this.memberId = memberId;
-        this.tagName = tagName;
+        this.tagNames = tagNames;
     }
 }

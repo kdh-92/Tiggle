@@ -1,8 +1,9 @@
 package com.side.tiggle.domain.grade.service;
 
+import com.side.tiggle.domain.grade.repository.GradeRepository;
 import com.side.tiggle.domain.grade.GradeDto;
 import com.side.tiggle.domain.grade.model.Grade;
-import com.side.tiggle.domain.grade.repository.GradeRepository;
+import com.side.tiggle.global.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -43,7 +44,7 @@ public class GradeService {
 
     public GradeDto updateGrade(Long gradeId, GradeDto gradeDto) {
         Grade grade = gradeRepository.findById(gradeId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 등급이 존재하지 않습니다."));
+                .orElseThrow(() -> new NotFoundException());
 
         grade.setName(gradeDto.getName());
         grade.setImageUrl(gradeDto.getImageUrl());

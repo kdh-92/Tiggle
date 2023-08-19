@@ -1,9 +1,9 @@
 package com.side.tiggle.domain.comment.dto.resp;
 
+import com.side.tiggle.domain.comment.service.CommentService;
 import com.side.tiggle.domain.comment.dto.CommentDto;
 import com.side.tiggle.domain.comment.model.Comment;
-import com.side.tiggle.domain.comment.service.CommentService;
-import com.side.tiggle.domain.member.MemberDto;
+import com.side.tiggle.domain.member.dto.MemberDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

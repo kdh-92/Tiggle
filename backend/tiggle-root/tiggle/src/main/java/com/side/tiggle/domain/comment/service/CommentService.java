@@ -1,13 +1,13 @@
 package com.side.tiggle.domain.comment.service;
 
+import com.side.tiggle.domain.comment.repository.CommentRepository;
 import com.side.tiggle.domain.comment.dto.req.CommentCreateReqDto;
 import com.side.tiggle.domain.comment.model.Comment;
-import com.side.tiggle.domain.comment.repository.CommentRepository;
 import com.side.tiggle.domain.member.model.Member;
 import com.side.tiggle.domain.member.repository.MemberRepository;
 import com.side.tiggle.domain.transaction.model.Transaction;
-import com.side.tiggle.domain.transaction.repository.TransactionRepository;
 import com.side.tiggle.domain.transaction.service.TransactionService;
+import com.side.tiggle.global.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -25,7 +25,7 @@ public class CommentService {
 
     public Comment getById(Long id) {
         return commentRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException(""));
+                .orElseThrow(() -> new NotFoundException());
     }
 
     public int getParentCount(long txId) {
@@ -53,7 +53,7 @@ public class CommentService {
         // TODO : Service 메소드로 수정한다
         Transaction tx = transactionService.getTransaction(commentDto.getTxId());
         Member sender = memberRepository.findById(commentDto.getSenderId())
-                .orElseThrow(() -> new IllegalArgumentException("유효하지 않은 요청입니다"));
+                .orElseThrow(() -> new NotFoundException());
 
         assertValid(commentDto);
         Comment comment = commentDto.toEntity(tx, sender);
@@ -63,7 +63,7 @@ public class CommentService {
     public Comment updateComment(Long memberId, Long commentId, String content) {
         Comment comment = commentRepository.findById(commentId).stream()
                 .filter( it -> it.getSender().getId().equals(memberId)).findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("해당 댓글이 존재하지 않습니다."));
+                .orElseThrow(() -> new NotFoundException());
         comment.setContent(content);
         commentRepository.save(comment);
         return comment;
@@ -72,19 +72,19 @@ public class CommentService {
     public void deleteComment(Long memberId, Long commentId) {
         Comment comment = commentRepository.findById(commentId).stream()
                 .filter( it -> it.getSender().getId().equals(memberId)).findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("해당 댓글이 존재하지 않습니다"));
+                .orElseThrow(() -> new NotFoundException());
         commentRepository.delete(comment);
     }
 
     private void assertValid(CommentCreateReqDto dto) {
         if (dto.getParentId() != null) {
             commentRepository.findById(dto.getParentId())
-                    .orElseThrow(()-> new IllegalArgumentException("유효하지 않은 요청입니다"));
+                    .orElseThrow(()-> new NotFoundException());
         }
         memberRepository.findById(dto.getSenderId())
-                .orElseThrow(() -> new IllegalArgumentException("유효하지 않은 요청입니다"));
+                .orElseThrow(() -> new NotFoundException());
         memberRepository.findById(dto.getReceiverId())
-                .orElseThrow(() -> new IllegalArgumentException("유효하지 않은 요청입니다"));
+                .orElseThrow(() -> new NotFoundException());
     }
 
 }

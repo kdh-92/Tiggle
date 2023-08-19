@@ -2,7 +2,6 @@ package com.side.tiggle.domain.reaction.service;
 
 import com.side.tiggle.domain.reaction.dto.req.ReactionCreateDto;
 import com.side.tiggle.domain.reaction.model.Reaction;
-import com.side.tiggle.domain.reaction.dto.resp.ReactionSummaryDto;
 import com.side.tiggle.domain.reaction.model.ReactionType;
 import com.side.tiggle.domain.reaction.repository.ReactionRepository;
 import com.side.tiggle.domain.transaction.model.Transaction;

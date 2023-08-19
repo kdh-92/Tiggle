@@ -1,6 +1,5 @@
 package com.side.tiggle.domain.comment.dto;
 
-import com.side.tiggle.domain.comment.dto.req.CommentCreateReqDto;
 import com.side.tiggle.domain.comment.model.Comment;
 import com.side.tiggle.domain.member.model.Member;
 import com.side.tiggle.domain.transaction.model.Transaction;

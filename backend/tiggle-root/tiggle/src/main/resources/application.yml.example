@@ -3,10 +3,21 @@ spring:
     hibernate:
       ddl-auto: none
   datasource:
-    url: jdbc:mysql://localhost:3306/tiggle
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
   sql:
     init:
       mode: always
       schema-locations: classpath*:db/schema.sql
       data-locations: classpath*:db/data.sql
+  servlet:
+    multipart:
+      enabled: true
+      location: upload/image/
+      max-request-size: 20MB
+      max-file-size: 10MB
+part:
+  upload:
+    path: upload/image/
