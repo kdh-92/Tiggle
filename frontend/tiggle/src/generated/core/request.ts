@@ -31,7 +31,7 @@ export const request = <T>(
   });
 
 export const getQueryString = (params?: Record<string, any>): string => {
-  if (params) {
+  if (!params) {
     return "";
   }
 
