@@ -11,7 +11,7 @@
     "build-storybook": "storybook build",
     "transform-token": "node transform-token.js",
     "chromatic": "npx chromatic --project-token=chpt_bf3f5c4ddba9975",
-    "generate": "openapi --input swagger.json --output ./src/generated --useUnionTypes"
+    "generate": "openapi --input swagger.json --output ./src/generated --useUnionTypes --client axios --request ./src/query/openapi-request.ts"
   },
   "author": "",
   "license": "ISC",
@@ -48,6 +48,7 @@
     "@types/react-dom": "^18.2.5",
     "@typescript-eslint/eslint-plugin": "^6.2.0",
     "@typescript-eslint/parser": "^6.2.0",
+    "axios": "^1.4.0",
     "babel-loader": "^9.1.2",
     "chromatic": "^6.20.0",
     "css-loader": "^6.8.1",
