@@ -1,6 +1,5 @@
-package com.side.tiggle.domain.tag.model;
+package com.side.tiggle.domain.category.model;
 
-import com.side.tiggle.global.common.model.BaseEntity;
 import lombok.*;
 
 import javax.persistence.*;
@@ -10,8 +9,8 @@ import javax.persistence.*;
 @EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-@Table(name = "tags")
-public class Tag {
+@Table(name = "categories")
+public class Category {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,9 +23,8 @@ public class Tag {
     private boolean defaults;
 
     @Builder
-    public Tag(String name, boolean defaults) {
+    public Category(String name, boolean defaults) {
         this.name = name;
         this.defaults = defaults;
-
     }
 }

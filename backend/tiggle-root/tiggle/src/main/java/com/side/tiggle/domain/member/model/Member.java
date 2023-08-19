@@ -1,5 +1,6 @@
 package com.side.tiggle.domain.member.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.side.tiggle.global.common.model.BaseEntity;
 import lombok.*;
 
@@ -13,6 +14,7 @@ import java.time.LocalDate;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Table(name = "members")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Member extends BaseEntity {
 
     @Id

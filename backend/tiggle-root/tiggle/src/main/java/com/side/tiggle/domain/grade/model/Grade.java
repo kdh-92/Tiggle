@@ -1,6 +1,5 @@
 package com.side.tiggle.domain.grade.model;
 
-import com.side.tiggle.domain.reaction.model.ReactionType;
 import com.side.tiggle.global.common.model.BaseEntity;
 import lombok.*;
 

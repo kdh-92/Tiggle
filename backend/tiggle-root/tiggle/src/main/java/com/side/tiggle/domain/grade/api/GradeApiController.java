@@ -1,7 +1,7 @@
 package com.side.tiggle.domain.grade.api;
 
-import com.side.tiggle.domain.grade.GradeDto;
 import com.side.tiggle.domain.grade.service.GradeService;
+import com.side.tiggle.domain.grade.GradeDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
