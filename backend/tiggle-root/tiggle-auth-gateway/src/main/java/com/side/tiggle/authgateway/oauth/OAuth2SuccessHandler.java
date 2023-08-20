@@ -41,7 +41,7 @@ public class OAuth2SuccessHandler implements ServerAuthenticationSuccessHandler 
                 oAuth2User.getAttribute("email"),
                 oAuth2User.getAttribute("picture"),
                 oAuth2User.getAttribute("name"),
-                LocalDate.of(1990, 1, 1)
+                LocalDate.of(1990, 1, 1) // birthday가 필수 값이나 가져올 수 없기 때문에 일단 기본값으로 저장한다
             );
             this.memberRepository.save(authMember);
             logger.info("Added new user : {}", authMember.getEmail());
