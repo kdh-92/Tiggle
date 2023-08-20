@@ -4,6 +4,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.stereotype.Component;
 
@@ -16,6 +17,8 @@ import java.util.Date;
 
 @Component
 public class JwtTokenProvider {
+    
+    // TODO: application.yml에서 환경에 따라 가져오도록 설정해야 함
     private String secret = "secrettigglesecrettigglesecrettiggle";
     private SecretKey secretKey;
 
@@ -51,7 +54,7 @@ public class JwtTokenProvider {
     }
 
     public String resolveAccessToken(ServerHttpRequest request) {
-        return request.getHeaders().get("Authorization").get(0).substring("Bearer ".length());
+        return request.getHeaders().get(HttpHeaders.AUTHORIZATION).get(0).substring("Bearer ".length());
     }
 
     public String resolveRefreshToken(ServerHttpRequest request){

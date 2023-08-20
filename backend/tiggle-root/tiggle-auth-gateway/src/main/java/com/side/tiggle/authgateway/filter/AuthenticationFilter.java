@@ -11,6 +11,11 @@ import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.stereotype.Component;
 
+/**
+ * Authorization 으로 들어온 Access Token을 처리하는 필터
+ * Access Token에서 memberId를 추출하여 x-member-id 에 담은 뒤 요청을 gateway 뒤 쪽 서비스로 보낸다.
+ * Access Token이 없을 경우 x-member-id를 지우고 relay 한다.
+ */
 @Component
 public class AuthenticationFilter extends AbstractGatewayFilterFactory<AuthenticationFilter.Config> {
 

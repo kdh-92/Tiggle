@@ -8,6 +8,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
+/**
+ * 모든 Gateway 요청을 로깅하는 필터
+ */
 @Component
 public class LogFilter implements GlobalFilter {
 
