@@ -1,39 +1,55 @@
 import { useState } from "react";
 
-import ReactionButton, {
-  Reaction,
-  ReactionType,
-} from "@/components/atoms/ReactionButton/ReactionButton";
-import { ReactionSummaryDto } from "@/generated";
+import { useMutation } from "@tanstack/react-query";
+
+import ReactionButton from "@/components/atoms/ReactionButton/ReactionButton";
+import { ReactionApiService, ReactionSummaryDto } from "@/generated";
+import queryClient from "@/query/queryClient";
 import { ReactionSectionStyle } from "@/styles/components/ReactionSectionStyle";
-import { TxType } from "@/types";
+import { Reaction, ReactionType, TxType } from "@/types";
 
 interface ReactionSectionProps
   extends Omit<ReactionSummaryDto, "commentCount"> {
   type: TxType;
-  onAddReaction: (reactionType: ReactionType) => void;
-  onCancelReaction: () => void;
+  txId: number;
   className?: string;
 }
 
 export default function ReactionSection({
   type,
+  txId,
   upCount,
   downCount,
-  onAddReaction,
-  onCancelReaction,
   className,
 }: ReactionSectionProps) {
   const [selectedReaction, setSelectedReaction] =
     useState<ReactionType>(undefined);
 
+  const { mutate: upsertReaction } = useMutation(
+    async (type: ReactionType) =>
+      ReactionApiService.upsertReaction(1, txId, { type }),
+    {
+      onSuccess: () =>
+        queryClient.invalidateQueries(["reaction", "detail", txId]),
+    },
+  );
+  const { mutate: deleteReaction } = useMutation(
+    async () => ReactionApiService.deleteReaction(1, txId),
+    {
+      onSuccess: () =>
+        queryClient.invalidateQueries(["reaction", "detail", txId]),
+    },
+  );
+
   const handleReactionButtonClick = (inputReaction: ReactionType) => {
     if (selectedReaction === inputReaction) {
-      setSelectedReaction(undefined);
-      onCancelReaction();
+      deleteReaction(undefined, {
+        onSuccess: () => setSelectedReaction(undefined),
+      });
     } else {
-      setSelectedReaction(inputReaction);
-      onAddReaction(inputReaction);
+      upsertReaction(inputReaction, {
+        onSuccess: () => setSelectedReaction(inputReaction),
+      });
     }
   };
 

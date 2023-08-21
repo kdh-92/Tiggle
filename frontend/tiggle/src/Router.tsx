@@ -4,9 +4,9 @@ import {
   createRoutesFromElements,
 } from "react-router-dom";
 
-import queryClient from "@/client";
 import DetailPage, { loader as detailPageLoader } from "@/pages/DetailPage";
 import Main from "@/pages/Main";
+import queryClient from "@/query/queryClient";
 import GeneralTemplate from "@/templates/GeneralTemplate";
 
 export default createBrowserRouter(

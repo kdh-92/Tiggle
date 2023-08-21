@@ -1,5 +1,6 @@
 import { useState } from "react";
 
+import { useQuery } from "@tanstack/react-query";
 import CTAButton from "@/components/atoms/CTAButton/CTAButton";
 import ReplyToggleButton from "@/components/atoms/ReplyToggleButton/ReplyToggleButton";
 import TextArea from "@/components/atoms/TextArea/TextArea";
@@ -8,9 +9,10 @@ import {
   CommentCellStyle,
   CommentStyle,
   RepliesSectionStyle,
+  ReplyCellStyle,
 } from "@/styles/components/CommentCellStyle";
 import { TxType } from "@/types";
-import { useQuery } from "@tanstack/react-query";
+import { calculateDateTimeDiff } from "@/utils/date";
 
 interface CommentCellProps
   extends Pick<
@@ -56,7 +58,7 @@ export default function CommentCell({
         <CommentStyle className={type}>
           <div>
             <p className="name">{sender.nickname}</p>
-            <p className="date">{createdAt}</p>
+            <p className="date">{calculateDateTimeDiff(createdAt)}</p>
           </div>
           <p className="content">{content}</p>
           <ReplyToggleButton
@@ -72,25 +74,7 @@ export default function CommentCell({
             {childCount > 0 && <div className="reply-cell-divider" />}
 
             {repliesData?.content?.map(reply => (
-              <div
-                key={`comment -${id}-reply-${reply.id}`}
-                className="reply-cell"
-              >
-                <img
-                  className="profile"
-                  src={
-                    reply.sender.profileUrl ?? "/assets/user-placeholder.png"
-                  }
-                  alt={`${reply.sender.nickname} profile`}
-                />
-                <div className="wrapper">
-                  <div>
-                    <p className="name">{reply.sender.nickname}</p>
-                    <p className="date">{reply.createdAt}</p>
-                  </div>
-                  <p className="content">{reply.content}</p>
-                </div>
-              </div>
+              <ReplyCell key={`comment-reply-${reply.id}`} {...reply} />
             ))}
 
             <div className="input">
@@ -101,5 +85,27 @@ export default function CommentCell({
         )}
       </div>
     </CommentCellStyle>
+  );
+}
+
+interface ReplyCellProps
+  extends Pick<CommentRespDto, "id" | "content" | "createdAt" | "sender"> {}
+
+function ReplyCell({ id, content, createdAt, sender }: ReplyCellProps) {
+  return (
+    <ReplyCellStyle id={`comment-reply-${id}`}>
+      <img
+        className="reply-profile"
+        src={sender.profileUrl ?? "/assets/user-placeholder.png"}
+        alt={`${sender.nickname} profile`}
+      />
+      <div className="reply-info">
+        <div>
+          <p className="name">{sender.nickname}</p>
+          <p className="date">{calculateDateTimeDiff(createdAt)}</p>
+        </div>
+        <p className="reply-content">{content}</p>
+      </div>
+    </ReplyCellStyle>
   );
 }

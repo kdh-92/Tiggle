@@ -50,6 +50,7 @@ const DetailPage = () => {
     queryFn: async () => TransactionApiControllerService.getAllCommentsByTx(id),
   });
 
+  // TODO: Redux Store를 이용하여 페이지 단위 변수로 관리
   const txType = useMemo(() => transactionData.type, [transactionData]);
 
   return (
@@ -86,8 +87,7 @@ const DetailPage = () => {
           <ReactionSection
             {...reactionData}
             type={txType}
-            onAddReaction={reaction => console.log(reaction)}
-            onCancelReaction={() => console.log("reaction cancelled")}
+            txId={id}
             className="reaction"
           />
         )}
