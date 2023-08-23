@@ -3,10 +3,9 @@ import { LoaderFunctionArgs, useLoaderData, useParams } from "react-router-dom";
 
 import { QueryClient, useQuery } from "@tanstack/react-query";
 
-import CTAButton from "@/components/atoms/CTAButton/CTAButton";
 import HashTag from "@/components/atoms/HashTag/HashTag";
-import TextArea from "@/components/atoms/TextArea/TextArea";
 import CommentCell from "@/components/molecules/CommentCell/CommentCell";
+import CommentForm from "@/components/molecules/CommentForm/CommentForm";
 import PostHeader from "@/components/molecules/PostHeader/PostHeader";
 import ReactionSection from "@/components/molecules/ReactionSection/ReactionSection";
 import {
@@ -77,9 +76,9 @@ const DetailPage = () => {
           <p className="content-text">{transactionData.reason}</p>
 
           <ul className="content-tags">
-            {temporaryTags.map(tag => (
-              <HashTag key={`tag-${tag}`} label={tag} />
-            ))}
+            {transactionData.txTagNames
+              ?.split(",")
+              .map(tag => <HashTag key={`tag-${tag}`} label={tag} />)}
           </ul>
         </div>
 
@@ -96,19 +95,15 @@ const DetailPage = () => {
       <DetailPageReplySectionStyle>
         <div className="page-container">
           <p className="title">댓글 {reactionData?.commentCount}개</p>
-          <div className="input">
-            <TextArea placeholder="댓글 남기기" />
-            <CTAButton size="md">댓글 등록</CTAButton>
-          </div>
-
+          <CommentForm txId={id} receiverId={transactionData.member?.id} />
           <div className="divider" />
-
           <div className="comments">
             {commentsData?.content?.map(comment => (
               <CommentCell
                 {...comment}
                 key={`comment-cell-${comment.id}`}
                 type={txType}
+                receiverId={transactionData.member?.id}
               />
             ))}
           </div>
@@ -119,5 +114,3 @@ const DetailPage = () => {
 };
 
 export default DetailPage;
-
-const temporaryTags = ["tag1", "tag2"];

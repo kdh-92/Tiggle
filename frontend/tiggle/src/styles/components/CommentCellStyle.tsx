@@ -78,7 +78,7 @@ export const RepliesSectionStyle = styled.div`
     background-color: ${({ theme }) => theme.color.bluishGray[200].value};
   }
 
-  .input {
+  .reply-cell-input {
     display: flex;
     flex-direction: column;
     align-items: end;
@@ -89,7 +89,7 @@ export const RepliesSectionStyle = styled.div`
     margin-top: 32px;
     gap: 32px;
 
-    .input {
+    .reply-cell-input {
       gap: 12px;
     }
   }
