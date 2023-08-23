@@ -20,7 +20,7 @@ export class CommentApiService {
      * @returns CommentRespDto OK
      * @throws ApiError
      */
-    public static updateComment1(
+    public static updateComment(
         xMemberId: number,
         id: number,
         requestBody: CommentUpdateReqDto,

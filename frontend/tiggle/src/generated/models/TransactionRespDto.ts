@@ -3,19 +3,25 @@
 /* tslint:disable */
 /* eslint-disable */
 
+import type { AssetDto } from './AssetDto';
+import type { CategoryDto } from './CategoryDto';
+import type { MemberDto } from './MemberDto';
 import type { TransactionDto } from './TransactionDto';
 
 export type TransactionRespDto = {
-    memberId: number;
     parentId?: number;
     type?: 'INCOME' | 'OUTCOME' | 'REFUND';
-    imageUrl: string;
+    imageUrl?: string;
     amount?: number;
     date?: string;
     content?: string;
     reason?: string;
     id?: number;
+    member?: MemberDto;
     parentTx?: TransactionDto;
+    asset?: AssetDto;
+    category?: CategoryDto;
+    txTagNames?: string;
     createdAt?: string;
 };
 

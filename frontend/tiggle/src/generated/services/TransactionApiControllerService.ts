@@ -127,41 +127,21 @@ export class TransactionApiControllerService {
     }
 
     /**
-     * @param requestBody
+     * @param formData
      * @returns TransactionRespDto OK
      * @throws ApiError
      */
     public static createTransaction(
-        requestBody: TransactionDto,
+        formData?: {
+            dto: TransactionDto;
+            multipartFile: Blob;
+        },
     ): CancelablePromise<TransactionRespDto> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/api/v1/transaction',
-            body: requestBody,
-            mediaType: 'application/json',
-            errors: {
-                400: `Bad Request`,
-                401: `Unauthorized`,
-                404: `Not Found`,
-                500: `Internal Server Error`,
-            },
-        });
-    }
-
-    /**
-     * @param id tx의 id
-     * @returns TransactionRespDto OK
-     * @throws ApiError
-     */
-    public static getRefundTransaction(
-        id: number,
-    ): CancelablePromise<TransactionRespDto> {
-        return __request(OpenAPI, {
-            method: 'GET',
-            url: '/api/v1/transaction/{id}/refund',
-            path: {
-                'id': id,
-            },
+            formData: formData,
+            mediaType: 'multipart/form-data',
             errors: {
                 400: `Bad Request`,
                 401: `Unauthorized`,

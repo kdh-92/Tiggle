@@ -1,1 +1,1841 @@
-{"openapi":"3.0.1","info":{"title":"Tiggle","version":"1.0.0"},"servers":[{"url":"http://localhost:8080","description":"Generated server url"}],"paths":{"/api/v1/txtag/{id}":{"get":{"tags":["tx-tag-api-controller"],"operationId":"getTxTag","parameters":[{"name":"id","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}],"responses":{"404":{"description":"Not Found","content":{"*/*":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}},"401":{"description":"Unauthorized","content":{"*/*":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}},"400":{"description":"Bad Request","content":{"*/*":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}},"500":{"description":"Internal Server Error","content":{"*/*":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}},"200":{"description":"OK","content":{"*/*":{"schema":{"$ref":"#/components/schemas/TxTagDto"}}}}}},"put":{"tags":["tx-tag-api-controller"],"operationId":"updateComment","parameters":[{"name":"id","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}],"requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/TxTagDto"}}},"required":true},"responses":{"404":{"description":"Not Found","content":{"*/*":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}},"401":{"description":"Unauthorized","content":{"*/*":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}},"400":{"description":"Bad Request","content":{"*/*":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}},"500":{"description":"Internal Server Error","content":{"*/*":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}},"200":{"description":"OK","content":{"*/*":{"schema":{"$ref":"#/components/schemas/TxTagDto"}}}}}}},"/api/v1/transaction/{id}":{"get":{"tags":["transaction-api-controller"],"summary":"tx 상세 조회","description":"tx의 id에 대한 상세 정보를 반환합니다.","operationId":"getTransaction","parameters":[{"name":"id","in":"path","description":"tx의 id","required":true,"schema":{"type":"integer","format":"int64"}}],"responses":{"404":{"description":"Not Found","content":{"*/*":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}},"401":{"description":"Unauthorized","content":{"*/*":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}},"400":{"description":"존재하지 않는 리소스 접근"},"500":{"description":"Internal Server Error","content":{"*/*":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}},"200":{"description":"tx 상세 조회 성공","content":{"*/*":{"schema":{"$ref":"#/components/schemas/TransactionRespDto"}}}}}},"put":{"tags":["transaction-api-controller"],"operationId":"updateTransaction","parameters":[{"name":"x-member-id","in":"header","required":true,"schema":{"type":"integer","format":"int64"}},{"name":"id","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}],"requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/TransactionUpdateReqDto"}}},"required":true},"responses":{"404":{"description":"Not Found","content":{"*/*":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}},"401":{"description":"Unauthorized","content":{"*/*":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}},"400":{"description":"Bad Request","content":{"*/*":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}},"500":{"description":"Internal Server Error","content":{"*/*":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}},"200":{"description":"OK","content":{"*/*":{"schema":{"$ref":"#/components/schemas/TransactionRespDto"}}}}}},"delete":{"tags":["transaction-api-controller"],"operationId":"deleteTransaction","parameters":[{"name":"x-member-id","in":"header","required":true,"schema":{"type":"integer","format":"int64"}},{"name":"id","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}],"responses":{"404":{"description":"Not Found","content":{"*/*":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}},"401":{"description":"Unauthorized","content":{"*/*":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}},"400":{"description":"Bad Request","content":{"*/*":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}},"500":{"description":"Internal Server Error","content":{"*/*":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}},"200":{"description":"OK"}}}},"/api/v1/tag/{id}":{"get":{"tags":["tag-api-controller"],"operationId":"getTag","parameters":[{"name":"id","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}],"responses":{"404":{"description":"Not Found","content":{"*/*":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}},"401":{"description":"Unauthorized","content":{"*/*":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}},"400":{"description":"Bad Request","content":{"*/*":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}},"500":{"description":"Internal Server Error","content":{"*/*":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}},"200":{"description":"OK","content":{"*/*":{"schema":{"$ref":"#/components/schemas/TagDto"}}}}}},"put":{"tags":["tag-api-controller"],"operationId":"updateTag","parameters":[{"name":"id","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}],"requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/TagDto"}}},"required":true},"responses":{"404":{"description":"Not Found","content":{"*/*":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}},"401":{"description":"Unauthorized","content":{"*/*":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}},"400":{"description":"Bad Request","content":{"*/*":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}},"500":{"description":"Internal Server Error","content":{"*/*":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}},"200":{"description":"OK","content":{"*/*":{"schema":{"$ref":"#/components/schemas/TagDto"}}}}}}},"/api/v1/member/{id}":{"get":{"tags":["member-api-controller"],"operationId":"getMember","parameters":[{"name":"id","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}],"responses":{"404":{"description":"Not Found","content":{"*/*":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}},"401":{"description":"Unauthorized","content":{"*/*":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}},"400":{"description":"Bad Request","content":{"*/*":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}},"500":{"description":"Internal Server Error","content":{"*/*":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}},"200":{"description":"OK","content":{"*/*":{"schema":{"$ref":"#/components/schemas/MemberDto"}}}}}},"put":{"tags":["member-api-controller"],"operationId":"updateMember","parameters":[{"name":"id","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}],"requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/MemberDto"}}},"required":true},"responses":{"404":{"description":"Not Found","content":{"*/*":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}},"401":{"description":"Unauthorized","content":{"*/*":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}},"400":{"description":"Bad Request","content":{"*/*":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}},"500":{"description":"Internal Server Error","content":{"*/*":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}},"200":{"description":"OK","content":{"*/*":{"schema":{"$ref":"#/components/schemas/MemberDto"}}}}}}},"/api/v1/grade/{id}":{"get":{"tags":["grade-api-controller"],"operationId":"getGrade","parameters":[{"name":"id","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}],"responses":{"404":{"description":"Not Found","content":{"*/*":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}},"401":{"description":"Unauthorized","content":{"*/*":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}},"400":{"description":"Bad Request","content":{"*/*":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}},"500":{"description":"Internal Server Error","content":{"*/*":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}},"200":{"description":"OK","content":{"*/*":{"schema":{"$ref":"#/components/schemas/GradeDto"}}}}}},"put":{"tags":["grade-api-controller"],"operationId":"updateGrade","parameters":[{"name":"id","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}],"requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/GradeDto"}}},"required":true},"responses":{"404":{"description":"Not Found","content":{"*/*":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}},"401":{"description":"Unauthorized","content":{"*/*":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}},"400":{"description":"Bad Request","content":{"*/*":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}},"500":{"description":"Internal Server Error","content":{"*/*":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}},"200":{"description":"OK","content":{"*/*":{"schema":{"$ref":"#/components/schemas/GradeDto"}}}}}}},"/api/v1/comments/{id}":{"put":{"tags":["Comment API"],"operationId":"updateComment_1","parameters":[{"name":"x-member-id","in":"header","required":true,"schema":{"type":"integer","format":"int64"}},{"name":"id","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}],"requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/CommentUpdateReqDto"}}},"required":true},"responses":{"404":{"description":"Not Found","content":{"*/*":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}},"401":{"description":"Unauthorized","content":{"*/*":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}},"400":{"description":"Bad Request","content":{"*/*":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}},"500":{"description":"Internal Server Error","content":{"*/*":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}},"200":{"description":"OK","content":{"*/*":{"schema":{"$ref":"#/components/schemas/CommentRespDto"}}}}}},"delete":{"tags":["Comment API"],"operationId":"deleteComment","parameters":[{"name":"x-member-id","in":"header","required":true,"schema":{"type":"integer","format":"int64"}},{"name":"id","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}],"responses":{"404":{"description":"Not Found","content":{"*/*":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}},"401":{"description":"Unauthorized","content":{"*/*":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}},"400":{"description":"Bad Request","content":{"*/*":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}},"500":{"description":"Internal Server Error","content":{"*/*":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}},"200":{"description":"OK"}}}},"/api/v1/txtag":{"post":{"tags":["tx-tag-api-controller"],"operationId":"createTxTag","requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/TxTagDto"}}},"required":true},"responses":{"404":{"description":"Not Found","content":{"*/*":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}},"401":{"description":"Unauthorized","content":{"*/*":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}},"400":{"description":"Bad Request","content":{"*/*":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}},"500":{"description":"Internal Server Error","content":{"*/*":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}},"200":{"description":"OK","content":{"*/*":{"schema":{"$ref":"#/components/schemas/TxTagDto"}}}}}}},"/api/v1/transaction":{"get":{"tags":["transaction-api-controller"],"summary":"tx 페이지 조회 API","description":"페이지(index)에 해당하는 tx 개수(pageSize)의 정보를 반환합니다.","operationId":"getCountOffsetTransaction","parameters":[{"name":"index","in":"query","description":"tx 페이지 번호","required":true,"schema":{"type":"integer","format":"int32","default":0}},{"name":"pageSize","in":"query","description":"페이지 내부 tx 개수","required":false,"schema":{"type":"integer","format":"int32","default":5}}],"responses":{"404":{"description":"Not Found","content":{"*/*":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}},"401":{"description":"Unauthorized","content":{"*/*":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}},"400":{"description":"존재하지 않는 리소스 접근"},"500":{"description":"Internal Server Error","content":{"*/*":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}},"200":{"description":"tx 페이지 조회 성공","content":{"*/*":{"schema":{"$ref":"#/components/schemas/TransactionRespDto"}}}}}},"post":{"tags":["transaction-api-controller"],"operationId":"createTransaction","requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/TransactionDto"}}},"required":true},"responses":{"404":{"description":"Not Found","content":{"*/*":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}},"401":{"description":"Unauthorized","content":{"*/*":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}},"400":{"description":"Bad Request","content":{"*/*":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}},"500":{"description":"Internal Server Error","content":{"*/*":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}},"200":{"description":"OK","content":{"*/*":{"schema":{"$ref":"#/components/schemas/TransactionRespDto"}}}}}}},"/api/v1/transaction/{id}/reaction":{"get":{"tags":["Reaction API"],"description":"해당 tx에 대한 나의 reaction을 조회","operationId":"getReaction","parameters":[{"name":"x-member-id","in":"header","required":true,"schema":{"type":"integer","format":"int64"}},{"name":"id","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}],"responses":{"404":{"description":"Not Found","content":{"*/*":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}},"401":{"description":"Unauthorized","content":{"*/*":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}},"400":{"description":"Bad Request","content":{"*/*":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}},"500":{"description":"Internal Server Error","content":{"*/*":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}},"200":{"description":"OK","content":{"*/*":{"schema":{"$ref":"#/components/schemas/ReactionDto"}}}}}},"post":{"tags":["Reaction API"],"description":"리액션을 추가하거나 수정함","operationId":"upsertReaction","parameters":[{"name":"x-member-id","in":"header","required":true,"schema":{"type":"integer","format":"int64"}},{"name":"id","in":"path","required":true,"schema":{"type":"integer","format":"int64"}},{"name":"reactionDto","in":"query","required":true,"schema":{"$ref":"#/components/schemas/ReactionCreateDto"}}],"responses":{"404":{"description":"Not Found","content":{"*/*":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}},"401":{"description":"Unauthorized","content":{"*/*":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}},"400":{"description":"Bad Request","content":{"*/*":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}},"500":{"description":"Internal Server Error","content":{"*/*":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}},"200":{"description":"OK","content":{"*/*":{"schema":{"$ref":"#/components/schemas/ReactionDto"}}}}}},"delete":{"tags":["Reaction API"],"description":"Reaction을 제거","operationId":"deleteReaction","parameters":[{"name":"x-member-id","in":"header","required":true,"schema":{"type":"integer","format":"int64"}},{"name":"id","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}],"responses":{"404":{"description":"Not Found","content":{"*/*":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}},"401":{"description":"Unauthorized","content":{"*/*":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}},"400":{"description":"Bad Request","content":{"*/*":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}},"500":{"description":"Internal Server Error","content":{"*/*":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}},"200":{"description":"OK","content":{"*/*":{"schema":{"type":"integer","format":"int64"}}}}}}},"/api/v1/tag":{"post":{"tags":["tag-api-controller"],"operationId":"createTag","requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/TagDto"}}},"required":true},"responses":{"404":{"description":"Not Found","content":{"*/*":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}},"401":{"description":"Unauthorized","content":{"*/*":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}},"400":{"description":"Bad Request","content":{"*/*":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}},"500":{"description":"Internal Server Error","content":{"*/*":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}},"200":{"description":"OK","content":{"*/*":{"schema":{"$ref":"#/components/schemas/TagDto"}}}}}}},"/api/v1/member":{"post":{"tags":["member-api-controller"],"operationId":"createMember","requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/MemberDto"}}},"required":true},"responses":{"404":{"description":"Not Found","content":{"*/*":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}},"401":{"description":"Unauthorized","content":{"*/*":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}},"400":{"description":"Bad Request","content":{"*/*":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}},"500":{"description":"Internal Server Error","content":{"*/*":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}},"200":{"description":"OK","content":{"*/*":{"schema":{"$ref":"#/components/schemas/MemberDto"}}}}}}},"/api/v1/grade":{"post":{"tags":["grade-api-controller"],"operationId":"createGrade","requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/GradeDto"}}},"required":true},"responses":{"404":{"description":"Not Found","content":{"*/*":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}},"401":{"description":"Unauthorized","content":{"*/*":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}},"400":{"description":"Bad Request","content":{"*/*":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}},"500":{"description":"Internal Server Error","content":{"*/*":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}},"200":{"description":"OK","content":{"*/*":{"schema":{"$ref":"#/components/schemas/GradeDto"}}}}}}},"/api/v1/comments":{"post":{"tags":["Comment API"],"operationId":"createComment","parameters":[{"name":"x-member-id","in":"header","required":true,"schema":{"type":"integer","format":"int64"}}],"requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/CommentCreateReqDto"}}},"required":true},"responses":{"404":{"description":"Not Found","content":{"*/*":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}},"401":{"description":"Unauthorized","content":{"*/*":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}},"400":{"description":"Bad Request","content":{"*/*":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}},"500":{"description":"Internal Server Error","content":{"*/*":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}},"200":{"description":"OK","content":{"*/*":{"schema":{"$ref":"#/components/schemas/CommentRespDto"}}}}}}},"/api/v1/txtag/all":{"get":{"tags":["tx-tag-api-controller"],"operationId":"getAllTxTag","responses":{"404":{"description":"Not Found","content":{"*/*":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}},"401":{"description":"Unauthorized","content":{"*/*":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}},"400":{"description":"Bad Request","content":{"*/*":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}},"500":{"description":"Internal Server Error","content":{"*/*":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}},"200":{"description":"OK","content":{"*/*":{"schema":{"type":"array","items":{"$ref":"#/components/schemas/TxTagDto"}}}}}}}},"/api/v1/transaction/{id}/refund":{"get":{"tags":["transaction-api-controller"],"operationId":"getRefundTransaction","parameters":[{"name":"id","in":"path","description":"tx의 id","required":true,"schema":{"type":"integer","format":"int64"}}],"responses":{"404":{"description":"Not Found","content":{"*/*":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}},"401":{"description":"Unauthorized","content":{"*/*":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}},"400":{"description":"Bad Request","content":{"*/*":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}},"500":{"description":"Internal Server Error","content":{"*/*":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}},"200":{"description":"OK","content":{"*/*":{"schema":{"$ref":"#/components/schemas/TransactionRespDto"}}}}}}},"/api/v1/transaction/{id}/reaction/summary":{"get":{"tags":["Reaction API"],"description":"해당 tx의 전체 reaction과 comment의 수를 조회","operationId":"getReactionSummary","parameters":[{"name":"id","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}],"responses":{"404":{"description":"Not Found","content":{"*/*":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}},"401":{"description":"Unauthorized","content":{"*/*":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}},"400":{"description":"Bad Request","content":{"*/*":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}},"500":{"description":"Internal Server Error","content":{"*/*":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}},"200":{"description":"OK","content":{"*/*":{"schema":{"$ref":"#/components/schemas/ReactionSummaryDto"}}}}}}},"/api/v1/transaction/{id}/comments":{"get":{"tags":["transaction-api-controller"],"operationId":"getAllCommentsByTx","parameters":[{"name":"id","in":"path","required":true,"schema":{"type":"integer","format":"int64"}},{"name":"pageSize","in":"query","required":false,"schema":{"type":"integer","format":"int32","default":5}},{"name":"index","in":"query","required":false,"schema":{"type":"integer","format":"int32","default":0}}],"responses":{"404":{"description":"Not Found","content":{"*/*":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}},"401":{"description":"Unauthorized","content":{"*/*":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}},"400":{"description":"Bad Request","content":{"*/*":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}},"500":{"description":"Internal Server Error","content":{"*/*":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}},"200":{"description":"OK","content":{"*/*":{"schema":{"$ref":"#/components/schemas/PageCommentRespDto"}}}}}}},"/api/v1/transaction/member":{"get":{"tags":["transaction-api-controller"],"summary":"특정 유저 tx 페이지 조회 API","description":"memberId 유저의 페이지(index)에 해당하는 tx 개수(pageSize)의 정보를 반환합니다.","operationId":"getMemberCountOffsetTransaction","parameters":[{"name":"memberId","in":"query","description":"유저 id","required":true,"schema":{"type":"integer","format":"int64"}},{"name":"index","in":"query","description":"tx 페이지 번호","required":true,"schema":{"type":"integer","format":"int32","default":0}},{"name":"pageSize","in":"query","description":"페이지 내부 tx 개수","required":false,"schema":{"type":"integer","format":"int32","default":5}}],"responses":{"404":{"description":"Not Found","content":{"*/*":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}},"401":{"description":"Unauthorized","content":{"*/*":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}},"400":{"description":"존재하지 않는 리소스 접근"},"500":{"description":"Internal Server Error","content":{"*/*":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}},"200":{"description":"tx 페이지 조회 성공","content":{"*/*":{"schema":{"$ref":"#/components/schemas/TransactionRespDto"}}}}}}},"/api/v1/transaction/all":{"get":{"tags":["transaction-api-controller"],"operationId":"getAllTransaction","responses":{"404":{"description":"Not Found","content":{"*/*":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}},"401":{"description":"Unauthorized","content":{"*/*":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}},"400":{"description":"Bad Request","content":{"*/*":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}},"500":{"description":"Internal Server Error","content":{"*/*":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}},"200":{"description":"OK","content":{"*/*":{"schema":{"type":"array","items":{"$ref":"#/components/schemas/TransactionRespDto"}}}}}}}},"/api/v1/tag/all":{"get":{"tags":["tag-api-controller"],"operationId":"getAllTag","responses":{"404":{"description":"Not Found","content":{"*/*":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}},"401":{"description":"Unauthorized","content":{"*/*":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}},"400":{"description":"Bad Request","content":{"*/*":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}},"500":{"description":"Internal Server Error","content":{"*/*":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}},"200":{"description":"OK","content":{"*/*":{"schema":{"type":"array","items":{"$ref":"#/components/schemas/TagDto"}}}}}}}},"/api/v1/member/all":{"get":{"tags":["member-api-controller"],"operationId":"getAllMember","responses":{"404":{"description":"Not Found","content":{"*/*":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}},"401":{"description":"Unauthorized","content":{"*/*":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}},"400":{"description":"Bad Request","content":{"*/*":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}},"500":{"description":"Internal Server Error","content":{"*/*":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}},"200":{"description":"OK","content":{"*/*":{"schema":{"type":"array","items":{"$ref":"#/components/schemas/MemberDto"}}}}}}}},"/api/v1/grade/all":{"get":{"tags":["grade-api-controller"],"operationId":"getAllGrade","responses":{"404":{"description":"Not Found","content":{"*/*":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}},"401":{"description":"Unauthorized","content":{"*/*":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}},"400":{"description":"Bad Request","content":{"*/*":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}},"500":{"description":"Internal Server Error","content":{"*/*":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}},"200":{"description":"OK","content":{"*/*":{"schema":{"type":"array","items":{"$ref":"#/components/schemas/GradeDto"}}}}}}}},"/api/v1/comments/{id}/replies":{"get":{"tags":["Comment API"],"summary":"대댓글 조회 API","description":"댓글의 id를 가지고 대댓글을 조회한다","operationId":"getAllCommentsByCommentId","parameters":[{"name":"id","in":"path","required":true,"schema":{"type":"integer","format":"int64"}},{"name":"index","in":"query","required":false,"schema":{"type":"integer","format":"int32","default":0}},{"name":"pageSize","in":"query","required":false,"schema":{"type":"integer","format":"int32","default":5}}],"responses":{"404":{"description":"Not Found","content":{"*/*":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}},"401":{"description":"Unauthorized","content":{"*/*":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}},"400":{"description":"Bad Request","content":{"*/*":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}},"500":{"description":"Internal Server Error","content":{"*/*":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}},"200":{"description":"OK","content":{"*/*":{"schema":{"$ref":"#/components/schemas/PageCommentRespDto"}}}}}}}},"components":{"schemas":{"ErrorResponse":{"type":"object","properties":{"timestamp":{"type":"string","format":"date-time"},"status":{"type":"integer","format":"int32"},"error":{"type":"string"},"message":{"type":"string"},"trace":{"type":"string"},"path":{"type":"string"}}},"TxTagDto":{"type":"object","properties":{"id":{"type":"integer","format":"int64"},"txId":{"type":"integer","format":"int64"},"memberId":{"type":"integer","format":"int64"},"tagName":{"type":"string"}}},"TransactionUpdateReqDto":{"type":"object","properties":{"type":{"type":"string","enum":["INCOME","OUTCOME","REFUND"]},"amount":{"type":"integer","format":"int32"},"date":{"type":"string","format":"date"},"content":{"type":"string"},"reason":{"type":"string"}}},"TransactionDto":{"required":["imageUrl","memberId"],"type":"object","properties":{"memberId":{"type":"integer","format":"int64"},"parentId":{"type":"integer","format":"int64"},"type":{"type":"string","enum":["INCOME","OUTCOME","REFUND"]},"imageUrl":{"type":"string"},"amount":{"type":"integer","format":"int32"},"date":{"type":"string","format":"date"},"content":{"type":"string"},"reason":{"type":"string"}}},"TransactionRespDto":{"required":["imageUrl","memberId"],"type":"object","properties":{"memberId":{"type":"integer","format":"int64"},"parentId":{"type":"integer","format":"int64"},"type":{"type":"string","enum":["INCOME","OUTCOME","REFUND"]},"imageUrl":{"type":"string"},"amount":{"type":"integer","format":"int32"},"date":{"type":"string","format":"date"},"content":{"type":"string"},"reason":{"type":"string"},"id":{"type":"integer","format":"int64"},"parentTx":{"$ref":"#/components/schemas/TransactionDto"},"createdAt":{"type":"string","format":"date-time"}}},"TagDto":{"type":"object","properties":{"id":{"type":"integer","format":"int64"},"name":{"type":"string"}}},"MemberDto":{"type":"object","properties":{"id":{"type":"integer","format":"int64"},"email":{"type":"string"},"profileUrl":{"type":"string"},"nickname":{"type":"string"},"birth":{"type":"string","format":"date"}}},"GradeDto":{"type":"object","properties":{"id":{"type":"integer","format":"int64"},"name":{"type":"string"},"imageUrl":{"type":"string"},"description":{"type":"string"}}},"CommentUpdateReqDto":{"type":"object","properties":{"content":{"type":"string"}}},"CommentRespDto":{"required":["content","receiverId","senderId","txId"],"type":"object","properties":{"txId":{"type":"integer","format":"int64"},"parentId":{"type":"integer","format":"int64"},"senderId":{"type":"integer","format":"int64"},"receiverId":{"type":"integer","format":"int64"},"content":{"maxLength":255,"minLength":0,"type":"string"},"id":{"type":"integer","format":"int64"},"createdAt":{"type":"string","format":"date-time"},"childCount":{"type":"integer","format":"int32"},"sender":{"$ref":"#/components/schemas/MemberDto"}}},"ReactionCreateDto":{"type":"object","properties":{"type":{"type":"string","enum":["UP","DOWN"]}}},"ReactionDto":{"type":"object","properties":{"txId":{"type":"integer","format":"int64"},"senderId":{"type":"integer","format":"int64"},"receiverId":{"type":"integer","format":"int64"},"type":{"type":"string","enum":["UP","DOWN"]}}},"CommentCreateReqDto":{"required":["content","receiverId","senderId","txId"],"type":"object","properties":{"txId":{"type":"integer","format":"int64"},"parentId":{"type":"integer","format":"int64"},"senderId":{"type":"integer","format":"int64"},"receiverId":{"type":"integer","format":"int64"},"content":{"maxLength":255,"minLength":0,"type":"string"}}},"ReactionSummaryDto":{"type":"object","properties":{"upCount":{"type":"integer","format":"int64"},"downCount":{"type":"integer","format":"int64"},"commentCount":{"type":"integer","format":"int64"}}},"PageCommentRespDto":{"type":"object","properties":{"totalPages":{"type":"integer","format":"int32"},"totalElements":{"type":"integer","format":"int64"},"size":{"type":"integer","format":"int32"},"content":{"type":"array","items":{"$ref":"#/components/schemas/CommentRespDto"}},"number":{"type":"integer","format":"int32"},"sort":{"$ref":"#/components/schemas/SortObject"},"pageable":{"$ref":"#/components/schemas/PageableObject"},"numberOfElements":{"type":"integer","format":"int32"},"first":{"type":"boolean"},"last":{"type":"boolean"},"empty":{"type":"boolean"}}},"PageableObject":{"type":"object","properties":{"offset":{"type":"integer","format":"int64"},"sort":{"$ref":"#/components/schemas/SortObject"},"pageNumber":{"type":"integer","format":"int32"},"pageSize":{"type":"integer","format":"int32"},"paged":{"type":"boolean"},"unpaged":{"type":"boolean"}}},"SortObject":{"type":"object","properties":{"empty":{"type":"boolean"},"sorted":{"type":"boolean"},"unsorted":{"type":"boolean"}}}}}}
+{
+  "openapi": "3.0.1",
+  "info": { "title": "Tiggle", "version": "1.0.0" },
+  "servers": [
+    { "url": "http://localhost:8080", "description": "Generated server url" }
+  ],
+  "paths": {
+    "/api/v1/transaction/{id}": {
+      "get": {
+        "tags": ["transaction-api-controller"],
+        "summary": "tx 상세 조회",
+        "description": "tx의 id에 대한 상세 정보를 반환합니다.",
+        "operationId": "getTransaction",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "tx의 id",
+            "required": true,
+            "schema": { "type": "integer", "format": "int64" }
+          }
+        ],
+        "responses": {
+          "400": { "description": "존재하지 않는 리소스 접근" },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          },
+          "200": {
+            "description": "tx 상세 조회 성공",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/TransactionRespDto" }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": ["transaction-api-controller"],
+        "operationId": "updateTransaction",
+        "parameters": [
+          {
+            "name": "x-member-id",
+            "in": "header",
+            "required": true,
+            "schema": { "type": "integer", "format": "int64" }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "format": "int64" }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TransactionUpdateReqDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/TransactionRespDto" }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["transaction-api-controller"],
+        "operationId": "deleteTransaction",
+        "parameters": [
+          {
+            "name": "x-member-id",
+            "in": "header",
+            "required": true,
+            "schema": { "type": "integer", "format": "int64" }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "format": "int64" }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          },
+          "200": { "description": "OK" }
+        }
+      }
+    },
+    "/api/v1/tag/{id}": {
+      "get": {
+        "tags": ["tag-api-controller"],
+        "operationId": "getTag",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "format": "int64" }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": { "schema": { "$ref": "#/components/schemas/TagDto" } }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": ["tag-api-controller"],
+        "operationId": "updateTag",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "format": "int64" }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/TagDto" }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": { "schema": { "$ref": "#/components/schemas/TagDto" } }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/member/{id}": {
+      "get": {
+        "tags": ["member-api-controller"],
+        "operationId": "getMember",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "format": "int64" }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": { "schema": { "$ref": "#/components/schemas/MemberDto" } }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": ["member-api-controller"],
+        "operationId": "updateMember",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "format": "int64" }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/MemberDto" }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": { "schema": { "$ref": "#/components/schemas/MemberDto" } }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/grade/{id}": {
+      "get": {
+        "tags": ["grade-api-controller"],
+        "operationId": "getGrade",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "format": "int64" }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": { "schema": { "$ref": "#/components/schemas/GradeDto" } }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": ["grade-api-controller"],
+        "operationId": "updateGrade",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "format": "int64" }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/GradeDto" }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": { "schema": { "$ref": "#/components/schemas/GradeDto" } }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/comments/{id}": {
+      "put": {
+        "tags": ["Comment API"],
+        "operationId": "updateComment",
+        "parameters": [
+          {
+            "name": "x-member-id",
+            "in": "header",
+            "required": true,
+            "schema": { "type": "integer", "format": "int64" }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "format": "int64" }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/CommentUpdateReqDto" }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/CommentRespDto" }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Comment API"],
+        "operationId": "deleteComment",
+        "parameters": [
+          {
+            "name": "x-member-id",
+            "in": "header",
+            "required": true,
+            "schema": { "type": "integer", "format": "int64" }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "format": "int64" }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          },
+          "200": { "description": "OK" }
+        }
+      }
+    },
+    "/api/v1/transaction": {
+      "get": {
+        "tags": ["transaction-api-controller"],
+        "summary": "tx 페이지 조회 API",
+        "description": "페이지(index)에 해당하는 tx 개수(pageSize)의 정보를 반환합니다.",
+        "operationId": "getCountOffsetTransaction",
+        "parameters": [
+          {
+            "name": "index",
+            "in": "query",
+            "description": "tx 페이지 번호",
+            "required": true,
+            "schema": { "type": "integer", "format": "int32", "default": 0 }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "description": "페이지 내부 tx 개수",
+            "required": false,
+            "schema": { "type": "integer", "format": "int32", "default": 5 }
+          }
+        ],
+        "responses": {
+          "400": { "description": "존재하지 않는 리소스 접근" },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          },
+          "200": {
+            "description": "tx 페이지 조회 성공",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/TransactionRespDto" }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["transaction-api-controller"],
+        "operationId": "createTransaction",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "required": ["dto", "multipartFile"],
+                "type": "object",
+                "properties": {
+                  "dto": { "$ref": "#/components/schemas/TransactionDto" },
+                  "multipartFile": { "type": "string", "format": "binary" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/TransactionRespDto" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/transaction/{id}/reaction": {
+      "get": {
+        "tags": ["Reaction API"],
+        "description": "해당 tx에 대한 나의 reaction을 조회",
+        "operationId": "getReaction",
+        "parameters": [
+          {
+            "name": "x-member-id",
+            "in": "header",
+            "required": true,
+            "schema": { "type": "integer", "format": "int64" }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "format": "int64" }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/ReactionDto" }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Reaction API"],
+        "description": "리액션을 추가하거나 수정함",
+        "operationId": "upsertReaction",
+        "parameters": [
+          {
+            "name": "x-member-id",
+            "in": "header",
+            "required": true,
+            "schema": { "type": "integer", "format": "int64" }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "format": "int64" }
+          },
+          {
+            "name": "reactionDto",
+            "in": "query",
+            "required": true,
+            "schema": { "$ref": "#/components/schemas/ReactionCreateDto" }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/ReactionDto" }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Reaction API"],
+        "description": "Reaction을 제거",
+        "operationId": "deleteReaction",
+        "parameters": [
+          {
+            "name": "x-member-id",
+            "in": "header",
+            "required": true,
+            "schema": { "type": "integer", "format": "int64" }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "format": "int64" }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": { "schema": { "type": "integer", "format": "int64" } }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/tag": {
+      "post": {
+        "tags": ["tag-api-controller"],
+        "operationId": "createTag",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/TagDto" }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": { "schema": { "$ref": "#/components/schemas/TagDto" } }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/member": {
+      "post": {
+        "tags": ["member-api-controller"],
+        "operationId": "createMember",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/MemberDto" }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": { "schema": { "$ref": "#/components/schemas/MemberDto" } }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/grade": {
+      "post": {
+        "tags": ["grade-api-controller"],
+        "operationId": "createGrade",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/GradeDto" }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": { "schema": { "$ref": "#/components/schemas/GradeDto" } }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/comments": {
+      "post": {
+        "tags": ["Comment API"],
+        "operationId": "createComment",
+        "parameters": [
+          {
+            "name": "x-member-id",
+            "in": "header",
+            "required": true,
+            "schema": { "type": "integer", "format": "int64" }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/CommentCreateReqDto" }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/CommentRespDto" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/transaction/{id}/reaction/summary": {
+      "get": {
+        "tags": ["Reaction API"],
+        "description": "해당 tx의 전체 reaction과 comment의 수를 조회",
+        "operationId": "getReactionSummary",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "format": "int64" }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/ReactionSummaryDto" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/transaction/{id}/comments": {
+      "get": {
+        "tags": ["transaction-api-controller"],
+        "operationId": "getAllCommentsByTx",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "format": "int64" }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "integer", "format": "int32", "default": 5 }
+          },
+          {
+            "name": "index",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "integer", "format": "int32", "default": 0 }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/PageCommentRespDto" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/transaction/member": {
+      "get": {
+        "tags": ["transaction-api-controller"],
+        "summary": "특정 유저 tx 페이지 조회 API",
+        "description": "memberId 유저의 페이지(index)에 해당하는 tx 개수(pageSize)의 정보를 반환합니다.",
+        "operationId": "getMemberCountOffsetTransaction",
+        "parameters": [
+          {
+            "name": "memberId",
+            "in": "query",
+            "description": "유저 id",
+            "required": true,
+            "schema": { "type": "integer", "format": "int64" }
+          },
+          {
+            "name": "index",
+            "in": "query",
+            "description": "tx 페이지 번호",
+            "required": true,
+            "schema": { "type": "integer", "format": "int32", "default": 0 }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "description": "페이지 내부 tx 개수",
+            "required": false,
+            "schema": { "type": "integer", "format": "int32", "default": 5 }
+          }
+        ],
+        "responses": {
+          "400": { "description": "존재하지 않는 리소스 접근" },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          },
+          "200": {
+            "description": "tx 페이지 조회 성공",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/TransactionRespDto" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/transaction/all": {
+      "get": {
+        "tags": ["transaction-api-controller"],
+        "operationId": "getAllTransaction",
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/TransactionRespDto" }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/tag/all": {
+      "get": {
+        "tags": ["tag-api-controller"],
+        "operationId": "getAllDefaultTag",
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/TagDto" }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/member/all": {
+      "get": {
+        "tags": ["member-api-controller"],
+        "operationId": "getAllMember",
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/MemberDto" }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/grade/all": {
+      "get": {
+        "tags": ["grade-api-controller"],
+        "operationId": "getAllGrade",
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/GradeDto" }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/comments/{id}/replies": {
+      "get": {
+        "tags": ["Comment API"],
+        "summary": "대댓글 조회 API",
+        "description": "댓글의 id를 가지고 대댓글을 조회한다",
+        "operationId": "getAllCommentsByCommentId",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "format": "int64" }
+          },
+          {
+            "name": "index",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "integer", "format": "int32", "default": 0 }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "integer", "format": "int32", "default": 5 }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/PageCommentRespDto" }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "timestamp": { "type": "string", "format": "date-time" },
+          "status": { "type": "integer", "format": "int32" },
+          "error": { "type": "string" },
+          "message": { "type": "string" },
+          "trace": { "type": "string" },
+          "path": { "type": "string" }
+        }
+      },
+      "TransactionUpdateReqDto": {
+        "type": "object",
+        "properties": {
+          "type": { "type": "string", "enum": ["INCOME", "OUTCOME", "REFUND"] },
+          "amount": { "type": "integer", "format": "int32" },
+          "date": { "type": "string", "format": "date" },
+          "content": { "type": "string" },
+          "reason": { "type": "string" },
+          "assetId": { "type": "integer", "format": "int64" },
+          "categoryId": { "type": "integer", "format": "int64" },
+          "tagNames": { "type": "string" }
+        }
+      },
+      "AssetDto": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer", "format": "int64" },
+          "name": { "type": "string" }
+        }
+      },
+      "CategoryDto": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer", "format": "int64" },
+          "name": { "type": "string" }
+        }
+      },
+      "MemberDto": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer", "format": "int64" },
+          "email": { "type": "string" },
+          "profileUrl": { "type": "string" },
+          "nickname": { "type": "string" },
+          "birth": { "type": "string", "format": "date" }
+        }
+      },
+      "TransactionDto": {
+        "required": ["memberId"],
+        "type": "object",
+        "properties": {
+          "memberId": { "type": "integer", "format": "int64" },
+          "parentId": { "type": "integer", "format": "int64" },
+          "type": { "type": "string", "enum": ["INCOME", "OUTCOME", "REFUND"] },
+          "imageUrl": { "type": "string" },
+          "amount": { "type": "integer", "format": "int32" },
+          "date": { "type": "string", "format": "date" },
+          "content": { "type": "string" },
+          "reason": { "type": "string" },
+          "assetId": { "type": "integer", "format": "int64" },
+          "categoryId": { "type": "integer", "format": "int64" },
+          "tagNames": { "type": "string" }
+        }
+      },
+      "TransactionRespDto": {
+        "type": "object",
+        "properties": {
+          "parentId": { "type": "integer", "format": "int64" },
+          "type": { "type": "string", "enum": ["INCOME", "OUTCOME", "REFUND"] },
+          "imageUrl": { "type": "string" },
+          "amount": { "type": "integer", "format": "int32" },
+          "date": { "type": "string", "format": "date" },
+          "content": { "type": "string" },
+          "reason": { "type": "string" },
+          "id": { "type": "integer", "format": "int64" },
+          "member": { "$ref": "#/components/schemas/MemberDto" },
+          "parentTx": { "$ref": "#/components/schemas/TransactionDto" },
+          "asset": { "$ref": "#/components/schemas/AssetDto" },
+          "category": { "$ref": "#/components/schemas/CategoryDto" },
+          "txTagNames": { "type": "string" },
+          "createdAt": { "type": "string", "format": "date-time" }
+        }
+      },
+      "TagDto": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer", "format": "int64" },
+          "name": { "type": "string" }
+        }
+      },
+      "GradeDto": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer", "format": "int64" },
+          "name": { "type": "string" },
+          "imageUrl": { "type": "string" },
+          "description": { "type": "string" }
+        }
+      },
+      "CommentUpdateReqDto": {
+        "type": "object",
+        "properties": { "content": { "type": "string" } }
+      },
+      "CommentRespDto": {
+        "required": ["content", "receiverId", "senderId", "txId"],
+        "type": "object",
+        "properties": {
+          "txId": { "type": "integer", "format": "int64" },
+          "parentId": { "type": "integer", "format": "int64" },
+          "senderId": { "type": "integer", "format": "int64" },
+          "receiverId": { "type": "integer", "format": "int64" },
+          "content": { "maxLength": 255, "minLength": 0, "type": "string" },
+          "id": { "type": "integer", "format": "int64" },
+          "createdAt": { "type": "string", "format": "date-time" },
+          "childCount": { "type": "integer", "format": "int32" },
+          "sender": { "$ref": "#/components/schemas/MemberDto" }
+        }
+      },
+      "ReactionCreateDto": {
+        "type": "object",
+        "properties": { "type": { "type": "string", "enum": ["UP", "DOWN"] } }
+      },
+      "ReactionDto": {
+        "type": "object",
+        "properties": {
+          "txId": { "type": "integer", "format": "int64" },
+          "senderId": { "type": "integer", "format": "int64" },
+          "receiverId": { "type": "integer", "format": "int64" },
+          "type": { "type": "string", "enum": ["UP", "DOWN"] }
+        }
+      },
+      "CommentCreateReqDto": {
+        "required": ["content", "receiverId", "senderId", "txId"],
+        "type": "object",
+        "properties": {
+          "txId": { "type": "integer", "format": "int64" },
+          "parentId": { "type": "integer", "format": "int64" },
+          "senderId": { "type": "integer", "format": "int64" },
+          "receiverId": { "type": "integer", "format": "int64" },
+          "content": { "maxLength": 255, "minLength": 0, "type": "string" }
+        }
+      },
+      "ReactionSummaryDto": {
+        "type": "object",
+        "properties": {
+          "upCount": { "type": "integer", "format": "int64" },
+          "downCount": { "type": "integer", "format": "int64" },
+          "commentCount": { "type": "integer", "format": "int64" }
+        }
+      },
+      "PageCommentRespDto": {
+        "type": "object",
+        "properties": {
+          "totalPages": { "type": "integer", "format": "int32" },
+          "totalElements": { "type": "integer", "format": "int64" },
+          "size": { "type": "integer", "format": "int32" },
+          "content": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/CommentRespDto" }
+          },
+          "number": { "type": "integer", "format": "int32" },
+          "sort": { "$ref": "#/components/schemas/SortObject" },
+          "pageable": { "$ref": "#/components/schemas/PageableObject" },
+          "numberOfElements": { "type": "integer", "format": "int32" },
+          "first": { "type": "boolean" },
+          "last": { "type": "boolean" },
+          "empty": { "type": "boolean" }
+        }
+      },
+      "PageableObject": {
+        "type": "object",
+        "properties": {
+          "offset": { "type": "integer", "format": "int64" },
+          "sort": { "$ref": "#/components/schemas/SortObject" },
+          "pageNumber": { "type": "integer", "format": "int32" },
+          "pageSize": { "type": "integer", "format": "int32" },
+          "unpaged": { "type": "boolean" },
+          "paged": { "type": "boolean" }
+        }
+      },
+      "SortObject": {
+        "type": "object",
+        "properties": {
+          "empty": { "type": "boolean" },
+          "sorted": { "type": "boolean" },
+          "unsorted": { "type": "boolean" }
+        }
+      }
+    }
+  }
+}
