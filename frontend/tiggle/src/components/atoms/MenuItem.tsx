@@ -3,6 +3,7 @@ import { ReactNode } from "react";
 type MenuItem = {
   label: ReactNode;
   key: string;
+  classname?: string;
 };
 
 type MenuProps = {

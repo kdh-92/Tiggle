@@ -1,5 +1,5 @@
-import styled from "styled-components";
 import { Footer } from "antd/es/layout/layout";
+import styled from "styled-components";
 
 export const TabStyle = styled(Footer)`
   position: sticky;
@@ -8,33 +8,29 @@ export const TabStyle = styled(Footer)`
   text-align: center;
   height: 58px;
   padding: 0;
+  display: grid;
+  grid-auto-flow: column;
+  background: ${({ theme: { color } }) => color.white.value};
+  border-top: 1px solid ${({ theme: { color } }) => color.bluishGray[200].value};
 
-  // TODO: tab 역할 지정
-  @media (min-width: 768px) {
-    display: none;
+  .tab-button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: none;
+    padding: 0 0 4px 0;
+    font-size: 9px;
+    gap: 4px;
+    background: ${({ theme: { color } }) => color.white.value};
+    justify-content: center;
+    color: ${({ theme: { color } }) => color.bluishGray[400].value};
   }
 
-  @media (max-width: 768px) {
-    display: grid;
-    grid-auto-flow: column;
-    background: #fff;
-    border-top: 1px solid #dfe4ec;
+  .focus {
+    color: ${({ theme: { color } }) => color.black.value};
+  }
 
-    .tab-button {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      border: none;
-      padding: 0 0 4px 0;
-      font-size: 9px;
-      gap: 4px;
-      background: #fff;
-      justify-content: center;
-      color: #afbbcf;
-    }
-
-    .focus {
-      color: #000;
-    }
+  ${({ theme }) => theme.mq.desktop} {
+    display: none;
   }
 `;
