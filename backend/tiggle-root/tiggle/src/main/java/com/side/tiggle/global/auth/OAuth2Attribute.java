@@ -1,12 +1,13 @@
-package com.side.tiggle.authgateway.oauth;
+package com.side.tiggle.global.auth;
 
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 
 import java.util.HashMap;
 import java.util.Map;
 
-@Builder
+@Builder(access = AccessLevel.PRIVATE)
 @Getter
 public class OAuth2Attribute {
     private Map<String, Object> attributes;

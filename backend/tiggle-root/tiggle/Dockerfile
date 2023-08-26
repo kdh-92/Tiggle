@@ -6,7 +6,6 @@ ARG FILE_NAME='tiggle-0.0.1-SNAPSHOT.jar'
 
 WORKDIR $HOME_DIR
 COPY . ./
-COPY ./src/main/resources/application.yml.example ./src/main/resources/application.yml
 RUN ./gradlew bootJar
 RUN ls ./build/libs/
 
