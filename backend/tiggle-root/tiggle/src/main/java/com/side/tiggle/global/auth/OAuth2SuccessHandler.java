@@ -41,7 +41,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
             authMember = new Member(
                     oAuth2User.getAttribute("email"),
                     oAuth2User.getAttribute("profile_url"),
-                    oAuth2User.getAttribute("nickname"),
+                    oAuth2User.getAttribute("name"),
                     oAuth2User.getAttribute("birth")
             );
             this.memberRepository.save(authMember);
@@ -56,6 +56,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
         // 토큰을 cookie에 담아서 보낸다
         Cookie cookie = new Cookie("Authorization", token);
+        cookie.setMaxAge(60000);
         cookie.setPath("/"); // FIXME: 특정 경로에서만 사용 가능하도록 수정한다
         response.addCookie(cookie);
         response.sendRedirect(targetUrl);
