@@ -26,7 +26,7 @@ INSERT INTO reactions (tx_id, type, sender_id, receiver_id)
 VALUES (1, 'UP', 3, 1),
        (1, 'DOWN', 2, 1);
 
-INSERT INTO tags (name, `default`)
+INSERT INTO tags (name, `defaults`)
 VALUES ('태그 이름 1', 1),
        ('태그 이름 2', 0),
        ('태그 이름 3', 1),
@@ -43,13 +43,13 @@ INSERT INTO comments (tx_id, parent_id, content, sender_id, receiver_id, deleted
                       deleted_at)
 VALUES (1, 1, '대댓글 3', 4, 3, DEFAULT, DEFAULT, null, null);
 
-INSERT INTO assets (name, `default`)
+INSERT INTO assets (name, `defaults`)
 VALUES ('은행', 1),
        ('카드', 1),
        ('현금', 1),
        ('기타', 1);
 
-INSERT INTO categories (name, `default`)
+INSERT INTO categories (name, `defaults`)
 VALUES ('생활비', 1),
        ('비상금', 1),
        ('유흥비', 1),

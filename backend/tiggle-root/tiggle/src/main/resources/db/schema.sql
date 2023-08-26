@@ -65,7 +65,7 @@ CREATE TABLE `tags`
 (
     `id`      bigint NOT NULL AUTO_INCREMENT,
     `name`    varchar(30) NOT NULL ,
-    `default` tinyint NOT NULL ,
+    `defaults` tinyint NOT NULL ,
 
     PRIMARY KEY (`id`)
 );
@@ -97,7 +97,7 @@ CREATE TABLE `assets`
 (
     `id`       bigint NOT NULL AUTO_INCREMENT,
     `name`     varchar(100) NOT NULL ,
-    `default`  tinyint DEFAULT 0 ,
+    `defaults`  tinyint DEFAULT 0 ,
     `deleted`              tinyint DEFAULT 0 ,
     `created_at`           timestamp DEFAULT CURRENT_TIMESTAMP ,
     `updated_at`           timestamp DEFAULT NULL ,
@@ -110,7 +110,7 @@ CREATE TABLE `categories`
 (
     `id`       bigint NOT NULL AUTO_INCREMENT,
     `name`     varchar(100) NOT NULL ,
-    `default`  tinyint DEFAULT 0 ,
+    `defaults`  tinyint DEFAULT 0 ,
     `deleted`              tinyint DEFAULT 0 ,
     `created_at`           timestamp DEFAULT CURRENT_TIMESTAMP ,
     `updated_at`           timestamp DEFAULT NULL ,
