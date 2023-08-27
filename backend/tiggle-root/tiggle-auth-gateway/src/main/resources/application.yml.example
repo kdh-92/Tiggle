@@ -1,20 +1,9 @@
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3307/tiggle
+    url: ${SPRING_DATASOURCE_URL}
     driver-class-name: com.mysql.cj.jdbc.Driver
-    username: ####
-    password: ####
-  security:
-    oauth2:
-      client:
-        registration:
-          google:
-            client-id: ####
-            client-secret: ####
-            authorization-grant-type: authorization_code
-            scope:
-              - profile
-              - email
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
   cloud:
     gateway:
       routes:
@@ -25,12 +14,16 @@ spring:
           filters:
             - RewritePath=/v3/api-docs/(?<path>.*), /$\{path}/v3/api-docs
         - id: tiggle-core
-          uri: http://localhost:8080
+          uri: ${TIGGLE_CORE_URI}
           predicates:
             - Path=/api/**, /tiggle-core/**
           filters:
             - AuthenticationFilter
             - RewritePath=/tiggle-core/(?<path>.*), /$\{path}
+        - id: tiggle-core-auth
+          uri: ${TIGGLE_CORE_URI}
+          predicates:
+            - Path=/login/**, /oauth2/**
 
 server:
   port: 8081
@@ -40,3 +33,8 @@ springdoc:
       - name: tiggle-core
         url: /tiggle-core/v3/api-docs
         display-name: Tiggle
+logging:
+  level:
+    com.side.tiggle: debug
+    org.springframework.security: debug
+    org.springframework.security.web: debug

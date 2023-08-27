@@ -1,8 +1,5 @@
 #!/bin/bash
 
-# backend/tiggle-root 디렉토리로 이동
-cd backend/tiggle-root
-
 # 실행 중인 tiggle & mysql 컨테이너 제거
 docker-compose down
 

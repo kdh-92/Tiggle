@@ -23,8 +23,8 @@ spring:
       client:
         registration:
           google:
-            client-id: ###
-            client-secret: ###
+            client-id: ${OAUTH2_GOOGLE_CLIENT_ID}
+            client-secret: ${OAUTH2_GOOGLE_CLIENT_SECRET}
             authorization-grant-type: authorization_code
             scope:
               - profile
