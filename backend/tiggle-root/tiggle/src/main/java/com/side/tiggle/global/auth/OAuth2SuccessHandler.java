@@ -52,13 +52,12 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
         // 토큰 발급
         String token = jwtTokenProvider.getAccessToken(authMember.getId(), "ROLE_USER");
-        String targetUrl = redirectUri;
 
         // 토큰을 cookie에 담아서 보낸다
         Cookie cookie = new Cookie("Authorization", token);
         cookie.setMaxAge(60000);
         cookie.setPath("/"); // FIXME: 특정 경로에서만 사용 가능하도록 수정한다
         response.addCookie(cookie);
-        response.sendRedirect(targetUrl);
+        response.sendRedirect(redirectUri);
     }
 }
