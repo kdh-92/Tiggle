@@ -1,24 +1,38 @@
-package com.side.tiggle.authgateway.oauth;
+package com.side.tiggle.global.auth;
 
+
+import com.side.tiggle.domain.member.dto.MemberDto;
+import com.side.tiggle.domain.member.model.Member;
+import com.side.tiggle.domain.member.repository.MemberRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.server.reactive.ServerHttpRequest;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import javax.crypto.SecretKey;
+import javax.servlet.http.HttpServletRequest;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.List;
+import java.util.Optional;
 
 @Component
 public class JwtTokenProvider {
-    
-    // TODO: application.yml에서 환경에 따라 가져오도록 설정해야 함
+
+    private final MemberRepository memberRepository;
+
+    JwtTokenProvider(MemberRepository memberRepository){
+        this.memberRepository = memberRepository;
+    }
+
+    // gateway와 항상 일치시켜야 한다.
     private String secret = "secrettigglesecrettigglesecrettiggle";
     private SecretKey secretKey;
 
@@ -53,15 +67,26 @@ public class JwtTokenProvider {
                 .compact();
     }
 
-    public String resolveAccessToken(ServerHttpRequest request) {
-        return request.getHeaders().get(HttpHeaders.AUTHORIZATION).get(0).substring("Bearer ".length());
+    public Authentication getAuthentication(String token) {
+        long memberId = this.getUserId(token);
+
+        Optional<Member> member = this.memberRepository.findById(memberId);
+        if (member.isEmpty()) {
+            return null;
+        }
+        SimpleGrantedAuthority authority = new SimpleGrantedAuthority("ROLE_USER");
+        return new UsernamePasswordAuthenticationToken(MemberDto.fromEntity(member.get()), null, List.of(authority));
     }
 
-    public String resolveRefreshToken(ServerHttpRequest request){
-        return request.getHeaders().get("Refresh").get(0);
+    public String resolveAccessToken(HttpServletRequest request) {
+        return request.getHeader("Authorization").substring("Bearer ".length());
     }
 
-    public long getMemberId(String jwtToken){
+    public String resolveRefreshToken(HttpServletRequest request){
+        return request.getHeader("Refresh");
+    }
+
+    public long getUserId(String jwtToken){
         return Long.parseLong(extractClaims(jwtToken).getSubject());
     }
 

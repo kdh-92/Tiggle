@@ -1,4 +1,4 @@
-package com.side.tiggle.authgateway.oauth;
+package com.side.tiggle.global.auth;
 
 import lombok.AccessLevel;
 import lombok.Builder;

@@ -25,3 +25,5 @@ replay_pid*
 application.yml
 
 .idea
+
+./docker-compose.yml

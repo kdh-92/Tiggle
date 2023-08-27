@@ -18,6 +18,21 @@ spring:
       location: upload/image/
       max-request-size: 20MB
       max-file-size: 10MB
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: ${OAUTH2_GOOGLE_CLIENT_ID}
+            client-secret: ${OAUTH2_GOOGLE_CLIENT_SECRET}
+            authorization-grant-type: authorization_code
+            scope:
+              - profile
+              - email
 part:
   upload:
     path: upload/image/
+
+app:
+  gateway-path: http://localhost:8081
+  client-redirect-uri: http://localhost:3000/login/success

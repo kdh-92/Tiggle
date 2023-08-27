@@ -2,7 +2,7 @@ FROM openjdk:11
 EXPOSE 8080
 
 ARG HOME_DIR=/usr/app
-ARG FILE_NAME='tiggle-0.0.1-SNAPSHOT.jar'
+ARG FILE_NAME='tiggle-auth-gateway-0.0.1-SNAPSHOT.jar'
 
 WORKDIR $HOME_DIR
 COPY . ./
