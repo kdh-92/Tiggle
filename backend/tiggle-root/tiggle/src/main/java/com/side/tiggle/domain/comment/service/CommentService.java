@@ -38,6 +38,11 @@ public class CommentService {
         return commentRepository.countAllByTxAndParentId(transaction, parentId);
     }
 
+    public int getCommentCount(long txId) {
+        Transaction transaction = this.transactionService.getTransaction(txId);
+        return commentRepository.countAllByTx(transaction);
+    }
+
     public Page<Comment> getParentsByTxId(Long txId, int page, int size){
         Transaction tx = transactionService.getTransaction(txId);
         Pageable pageable = PageRequest.of(page, size, Sort.Direction.DESC, "id");
