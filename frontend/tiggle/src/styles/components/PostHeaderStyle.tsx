@@ -47,6 +47,9 @@ export const StyledPostHeaderTitle = styled.div`
     &.REFUND {
       color: ${({ theme }) => theme.color.blue[600].value};
     }
+    &.INCOME {
+      color: ${({ theme }) => theme.color.green[600].value};
+    }
   }
 
   .title {

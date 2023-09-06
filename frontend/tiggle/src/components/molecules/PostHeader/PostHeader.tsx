@@ -55,7 +55,9 @@ export default function PostHeader({
         </div>
         <div className="item-wrapper">
           <div className="item date">
-            <p className="item-title">지출일자</p>
+            <p className="item-title">
+              {txType === "OUTCOME" ? "지출일자" : "수익일자"}
+            </p>
             <p className="item-data">{date}</p>
           </div>
           <div className="item">
