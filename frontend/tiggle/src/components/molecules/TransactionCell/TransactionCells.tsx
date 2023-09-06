@@ -18,8 +18,8 @@ export default function Feeds({
     <TransactionCellsStyle>
       <Masonry
         breakpointCols={breakpointColumnsObj}
-        className="feed-box-masonry"
-        columnClassName="feeds"
+        className="transaction-cell-box-masonry"
+        columnClassName="transaction-cells"
       >
         {dataList?.map(el => {
           return <TransactionCell key={el.id} {...el} />;

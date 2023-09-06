@@ -37,11 +37,11 @@ export default function TransactionCell({
       <div className={cn("amount", type)}>
         <span className="amount-unit">₩ {amount}</span>
       </div>
-      <div className="feed-section">
+      <div className="transaction-cell-section">
         <p className="content">{content}</p>
         <p className="reason">{reason}</p>
       </div>
-      <div className="feed-footer">
+      <div className="transaction-cell-footer">
         <div className="user">
           {user.imageUrl ? (
             <img

@@ -64,6 +64,20 @@ const feedData = [
     createdAt: "2023-08-15T08:47:19",
     number: 89,
   },
+  {
+    id: 5,
+    type: Tx.INCOME,
+    amount: 50000,
+    content: "수익 제목 텍스트 텍스트",
+    reason:
+      "수익 설명 텍스트 텍스트 텍스트 텍스트 텍스트 텍스트 텍스트 텍스트 텍스트 텍스트 텍스트 텍스트 ",
+    user: {
+      name: "사용자 이름",
+      imageUrl: "",
+    },
+    createdAt: "2023-08-15T08:47:19",
+    number: 89,
+  },
 ];
 
 export default function ContentSection() {

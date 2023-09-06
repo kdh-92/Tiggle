@@ -16,14 +16,19 @@ export const TransactionCellStyle = styled.div`
     width: calc(340px - 48px);
   }
 
-  &.outcome:hover {
+  &.OUTCOME:hover {
     background-color: ${({ theme }) => theme.color.peach[50].value};
     border: 1px solid ${({ theme: { color } }) => color.peach[200].value};
   }
 
-  &.refund:hover {
+  &.REFUND:hover {
     background-color: ${({ theme }) => theme.color.blue[50].value};
     border: 1px solid ${({ theme: { color } }) => color.blue[200].value};
+  }
+
+  &.INCOME:hover {
+    background-color: ${({ theme }) => theme.color.green[50].value};
+    border: 1px solid ${({ theme: { color } }) => color.green[200].value};
   }
 
   .tag {
@@ -39,12 +44,16 @@ export const TransactionCellStyle = styled.div`
       ${({ theme }) => expandTypography(theme.typography.title.small.bold)};
     }
 
-    &.outcome {
+    &.OUTCOME {
       color: ${({ theme }) => theme.color.peach[600].value};
     }
 
-    &.refund {
+    &.REFUND {
       color: ${({ theme }) => theme.color.blue[600].value};
+    }
+
+    &.INCOME {
+      color: ${({ theme }) => theme.color.green[600].value};
     }
 
     ${({ theme }) => theme.mq.desktop} {
@@ -52,7 +61,7 @@ export const TransactionCellStyle = styled.div`
     }
   }
 
-  .feed-section {
+  .transaction-cell-section {
     padding: 32px 0;
 
     > .content {
@@ -74,7 +83,7 @@ export const TransactionCellStyle = styled.div`
     }
   }
 
-  .feed-footer {
+  .transaction-cell-footer {
     display: flex;
     justify-content: space-between;
     align-items: flex-end;

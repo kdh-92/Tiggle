@@ -15,8 +15,8 @@ export const Default: Story = {
     id: 1,
     type: Tx.OUTCOME,
     amount: 50000,
-    content: "거래 제목",
-    reason: "거래 설명",
+    content: "컨텐츠 제목",
+    reason: "컨텐츠 설명 컨텐츠 설명 컨텐츠 설명",
     user: {
       name: "사용자 이름",
       imageUrl: "image.jpg",
