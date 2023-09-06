@@ -39,6 +39,16 @@ export const ReplyToggleButtonStyle = styled.button`
     }
   }
 
+  &.INCOME {
+    .icon,
+    .count {
+      color: ${({ theme }) => theme.color.green[400].value};
+    }
+    .text {
+      color: ${({ theme }) => theme.color.green[500].value};
+    }
+  }
+
   ${({ theme }) => theme.mq.desktop} {
     .icon {
       width: 18px;
