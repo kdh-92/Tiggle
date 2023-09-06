@@ -1,14 +1,14 @@
 import { Meta, StoryObj } from "@storybook/react";
 
-import Feed from "@/components/molecules/Feed/Feed";
+import TransactionCell from "@/components/molecules/TransactionCell/TransactionCell";
 import { Tx } from "@/types";
 
 export default {
-  title: "molecules/Feed",
-  component: Feed,
-} as Meta<typeof Feed>;
+  title: "molecules/TransactionCell",
+  component: TransactionCell,
+} as Meta<typeof TransactionCell>;
 
-type Story = StoryObj<typeof Feed>;
+type Story = StoryObj<typeof TransactionCell>;
 
 export const Default: Story = {
   args: {

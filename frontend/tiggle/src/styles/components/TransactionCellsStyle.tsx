@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const FeedsStyle = styled.div`
+export const TransactionCellsStyle = styled.div`
   padding: 0 24px;
   margin-top: 16px;
 

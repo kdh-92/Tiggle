@@ -2,8 +2,8 @@ import { useState } from "react";
 import { Edit3 } from "react-feather";
 
 import CTAButton from "@/components/atoms/CTAButton/CTAButton";
-import Feeds from "@/components/molecules/Feed/Feeds";
 import Navigation from "@/components/molecules/Navigation";
+import TransactionCells from "@/components/molecules/TransactionCell/TransactionCells";
 import { ContentStyle } from "@/styles/components/ContentStyle";
 import { Tx } from "@/types";
 
@@ -83,7 +83,7 @@ export default function ContentSection() {
         </div>
       </div>
       <Navigation />
-      <Feeds dataList={dataList} />
+      <TransactionCells dataList={dataList} />
     </ContentStyle>
   );
 }

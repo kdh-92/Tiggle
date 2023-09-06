@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 import { expandTypography } from "@/styles/util";
 
-export const FeedStyle = styled.div`
+export const TransactionCellStyle = styled.div`
   margin-bottom: 24px;
   border-radius: 24px;
   border: 1px solid ${({ theme: { color } }) => color.gray[200].value};

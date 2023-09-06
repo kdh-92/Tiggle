@@ -4,10 +4,10 @@ import { Avatar } from "antd";
 import cn from "classnames";
 
 import TypeTag from "@/components/atoms/typeTag/TypeTag";
-import { FeedStyle } from "@/styles/components/FeedStyle";
+import { TransactionCellStyle } from "@/styles/components/TransactionCellStyle";
 import { TxType } from "@/types";
 
-export type FeedProps = {
+export type TransactionCellProps = {
   id: number;
   content: string;
   reason: string;
@@ -21,7 +21,7 @@ export type FeedProps = {
   number: number;
 };
 
-export default function Feed({
+export default function TransactionCell({
   id,
   type,
   amount,
@@ -30,9 +30,9 @@ export default function Feed({
   user,
   createdAt,
   number,
-}: FeedProps) {
+}: TransactionCellProps) {
   return (
-    <FeedStyle className={cn(type, id)}>
+    <TransactionCellStyle className={cn(type, id)}>
       <TypeTag className="tag" txType={type} />
       <div className={cn("amount", type)}>
         <span className="amount-unit">₩ {amount}</span>
@@ -74,6 +74,6 @@ export default function Feed({
           </div>
         </div>
       </div>
-    </FeedStyle>
+    </TransactionCellStyle>
   );
 }
