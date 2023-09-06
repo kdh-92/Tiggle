@@ -12,7 +12,7 @@ type Story = StoryObj<typeof ReplyToggleButton>;
 
 export const Default: Story = {
   args: {
-    txType: Tx.Outcome,
+    txType: Tx.OUTCOME,
     repliesCount: 2,
     open: true,
   },

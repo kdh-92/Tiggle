@@ -13,7 +13,7 @@ type Story = StoryObj<typeof Feed>;
 export const Default: Story = {
   args: {
     id: 1,
-    type: Tx.Outcome,
+    type: Tx.OUTCOME,
     amount: 50000,
     content: "거래 제목",
     reason: "거래 설명",

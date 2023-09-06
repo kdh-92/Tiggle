@@ -19,6 +19,6 @@ type Story = StoryObj<typeof TypeTag>;
 
 export const Default: Story = {
   args: {
-    txType: Tx.Outcome,
+    txType: Tx.OUTCOME,
   },
 };

@@ -15,7 +15,7 @@ type Story = StoryObj<typeof ReactionButton>;
 
 export const Default: Story = {
   args: {
-    tx: Tx.Outcome,
+    tx: Tx.OUTCOME,
     reaction: "Up",
     number: 964,
   },
@@ -23,7 +23,7 @@ export const Default: Story = {
 
 export const WithToggle: Story = {
   args: {
-    tx: Tx.Outcome,
+    tx: Tx.OUTCOME,
     reaction: "Up",
     number: 144,
   },

@@ -10,7 +10,7 @@ import { Tx } from "@/types";
 const feedData = [
   {
     id: 1,
-    type: Tx.Outcome,
+    type: Tx.OUTCOME,
     amount: 50000,
     content: "거래 제목 텍스트 텍스트",
     reason:
@@ -25,7 +25,7 @@ const feedData = [
   },
   {
     id: 2,
-    type: Tx.Refund,
+    type: Tx.REFUND,
     amount: 50000,
     content: "거래 제목 텍스트 텍스트",
     reason:
@@ -39,7 +39,7 @@ const feedData = [
   },
   {
     id: 3,
-    type: Tx.Outcome,
+    type: Tx.OUTCOME,
     amount: 50000,
     content: "거래 제목 텍스트 텍스트",
     reason: "거래 설명 텍스트 텍스트 텍스트",
@@ -52,7 +52,7 @@ const feedData = [
   },
   {
     id: 4,
-    type: Tx.Refund,
+    type: Tx.REFUND,
     amount: 50000,
     content: "거래 제목 텍스트 텍스트",
     reason:
