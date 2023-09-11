@@ -17,7 +17,6 @@ import { Tx } from "@/types";
 const DetailPage = () => {
   const id = Number(useParams().id);
 
-  console.log(id);
   return (
     <>
       <DetailPageContentStyle className="page-container">
