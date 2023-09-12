@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { expandTypography } from "@/styles/util";
 
 export const CommentCellStyle = styled.div`
-  width: 327px;
+  width: 100%;
   padding: 20px;
   background-color: ${({ theme }) => theme.color.white.value};
   border-radius: 8px;
@@ -72,43 +72,13 @@ export const RepliesSectionStyle = styled.div`
   flex-direction: column;
   gap: 24px;
 
-  .divider {
+  .reply-cell-divider {
     width: 100%;
     min-height: 1px;
     background-color: ${({ theme }) => theme.color.bluishGray[200].value};
   }
 
-  .reply-cell {
-    display: grid;
-    grid-template-columns: auto minmax(auto, 100%);
-    column-gap: 8px;
-
-    .profile {
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      background-color: ${({ theme }) => theme.color.bluishGray[300].value};
-    }
-    .wrapper {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-    .name {
-      ${({ theme }) => expandTypography(theme.typography.body.medium.bold)}
-      color: ${({ theme }) => theme.color.bluishGray[700].value};
-    }
-    .date {
-      ${({ theme }) => expandTypography(theme.typography.body.small.regular)}
-      color: ${({ theme }) => theme.color.bluishGray[400].value}
-    }
-    .content {
-      ${({ theme }) => expandTypography(theme.typography.body.medium.medium)}
-      color: ${({ theme }) => theme.color.bluishGray[900].value};
-    }
-  }
-
-  .input {
+  .reply-cell-input {
     display: flex;
     flex-direction: column;
     align-items: end;
@@ -118,22 +88,55 @@ export const RepliesSectionStyle = styled.div`
   ${({ theme }) => theme.mq.desktop} {
     margin-top: 32px;
     gap: 32px;
-    .reply-cell {
-      .wrapper {
-        gap: 12px;
-      }
+
+    .reply-cell-input {
+      gap: 12px;
+    }
+  }
+`;
+
+export const ReplyCellStyle = styled.div`
+  display: grid;
+  grid-template-columns: auto minmax(auto, 100%);
+  column-gap: 8px;
+
+  .reply-profile {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background-color: ${({ theme }) => theme.color.bluishGray[300].value};
+  }
+  .reply-info {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    .name {
+      ${({ theme }) => expandTypography(theme.typography.body.medium.bold)}
+      color: ${({ theme }) => theme.color.bluishGray[700].value};
+    }
+    .date {
+      ${({ theme }) => expandTypography(theme.typography.body.small.regular)}
+      color: ${({ theme }) => theme.color.bluishGray[400].value}
+    }
+  }
+
+  .reply-content {
+    ${({ theme }) => expandTypography(theme.typography.body.medium.medium)}
+    color: ${({ theme }) => theme.color.bluishGray[900].value};
+  }
+
+  ${({ theme }) => theme.mq.desktop} {
+    .reply-info {
+      gap: 12px;
       .name {
         ${({ theme }) => expandTypography(theme.typography.body.large.bold)}
       }
       .date {
         ${({ theme }) => expandTypography(theme.typography.body.medium.regular)}
       }
-      .content {
-        ${({ theme }) => expandTypography(theme.typography.body.large.medium)}
-      }
     }
-    .input {
-      gap: 12px;
+    .reply-content {
+      ${({ theme }) => expandTypography(theme.typography.body.large.medium)}
     }
   }
 `;

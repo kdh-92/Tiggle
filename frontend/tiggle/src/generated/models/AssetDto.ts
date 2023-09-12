@@ -3,10 +3,8 @@
 /* tslint:disable */
 /* eslint-disable */
 
-export type TxTagDto = {
+export type AssetDto = {
     id?: number;
-    txId?: number;
-    memberId?: number;
-    tagName?: string;
+    name?: string;
 };
 

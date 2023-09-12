@@ -7,6 +7,8 @@ export { CancelablePromise, CancelError } from './core/CancelablePromise';
 export { OpenAPI } from './core/OpenAPI';
 export type { OpenAPIConfig } from './core/OpenAPI';
 
+export type { AssetDto } from './models/AssetDto';
+export type { CategoryDto } from './models/CategoryDto';
 export type { CommentCreateReqDto } from './models/CommentCreateReqDto';
 export type { CommentRespDto } from './models/CommentRespDto';
 export type { CommentUpdateReqDto } from './models/CommentUpdateReqDto';
@@ -23,7 +25,6 @@ export type { TagDto } from './models/TagDto';
 export type { TransactionDto } from './models/TransactionDto';
 export type { TransactionRespDto } from './models/TransactionRespDto';
 export type { TransactionUpdateReqDto } from './models/TransactionUpdateReqDto';
-export type { TxTagDto } from './models/TxTagDto';
 
 export { CommentApiService } from './services/CommentApiService';
 export { GradeApiControllerService } from './services/GradeApiControllerService';
@@ -31,4 +32,3 @@ export { MemberApiControllerService } from './services/MemberApiControllerServic
 export { ReactionApiService } from './services/ReactionApiService';
 export { TagApiControllerService } from './services/TagApiControllerService';
 export { TransactionApiControllerService } from './services/TransactionApiControllerService';
-export { TxTagApiControllerService } from './services/TxTagApiControllerService';
