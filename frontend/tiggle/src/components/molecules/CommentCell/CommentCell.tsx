@@ -69,9 +69,8 @@ export default function CommentCell({
   );
 
   const onSubmitReply: SubmitHandler<ReplyInputs> = ({ reply }) => {
-    if (reply === "") {
-      return;
-    }
+    if (reply === "") return;
+
     createReply(reply, {
       onSuccess: () => {
         messageApi.open({

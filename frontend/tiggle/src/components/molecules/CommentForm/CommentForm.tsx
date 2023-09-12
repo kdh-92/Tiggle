@@ -39,9 +39,7 @@ export default function CommentForm({
   );
 
   const onSubmit: SubmitHandler<CommentFormInputs> = ({ comment }) => {
-    if (comment === "") {
-      return;
-    }
+    if (comment === "") return;
 
     createComment(comment, {
       onSuccess: () => {
