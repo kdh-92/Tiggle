@@ -1,6 +1,6 @@
 import { createRoot } from "react-dom/client";
 import { Provider } from "react-redux";
-import { BrowserRouter } from "react-router-dom";
+import { RouterProvider } from "react-router-dom";
 
 import { QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
@@ -12,7 +12,7 @@ import { GlobalStyle } from "@/styles/config/GlobalStyle";
 import { mq } from "@/styles/config/mediaQueries";
 import { theme } from "@/styles/config/theme";
 
-import Router from "./Router";
+import router from "./Router";
 
 const container = document.getElementById("root");
 const root = createRoot(container);
@@ -23,9 +23,7 @@ root.render(
       <ThemeProvider theme={{ ...theme, mq }}>
         {process.env.NODE_ENV === "development" && <ReactQueryDevtools />}
         <GlobalStyle />
-        <BrowserRouter>
-          <Router />
-        </BrowserRouter>
+        <RouterProvider router={router} />
       </ThemeProvider>
     </QueryClientProvider>
   </Provider>,

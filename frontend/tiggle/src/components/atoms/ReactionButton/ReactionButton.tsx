@@ -4,13 +4,7 @@ import { Frown, Smile } from "react-feather";
 import cn from "classnames";
 
 import { ReactionButtonStyle } from "@/styles/components/ReactionButtonStyle";
-import { TxType } from "@/types";
-
-const Reaction = {
-  Up: "Up",
-  Down: "Down",
-} as const;
-type ReactionType = (typeof Reaction)[keyof typeof Reaction];
+import { Reaction, ReactionType, TxType } from "@/types";
 
 interface ReactionButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   tx: TxType;

@@ -1,11 +1,26 @@
-import { Routes, Route } from "react-router-dom";
+import {
+  Route,
+  createBrowserRouter,
+  createRoutesFromElements,
+} from "react-router-dom";
 
-import Main from "./pages/Main";
+import DetailPage, { loader as detailPageLoader } from "@/pages/DetailPage";
+import Main from "@/pages/Main";
+import queryClient from "@/query/queryClient";
+import GeneralTemplate from "@/templates/GeneralTemplate";
 
-export default function Router() {
-  return (
-    <Routes>
+export default createBrowserRouter(
+  createRoutesFromElements(
+    <>
+      <Route element={<GeneralTemplate />}>
+        <Route
+          path="/detail/:id"
+          element={<DetailPage />}
+          loader={detailPageLoader(queryClient)}
+          errorElement={<div>error</div>}
+        />
+      </Route>
       <Route path="/" element={<Main />} />
-    </Routes>
-  );
-}
+    </>,
+  ),
+);
