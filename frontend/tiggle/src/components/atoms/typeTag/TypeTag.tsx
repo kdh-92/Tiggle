@@ -12,7 +12,13 @@ interface TypeTagProps extends HTMLAttributes<HTMLDivElement> {
 export default function TypeTag({ txType, className, ...props }: TypeTagProps) {
   return (
     <TypeTagStyle className={cn("type-tag", txType, className)} {...props}>
-      <p className="label">{txType === Tx.Outcome ? "지출" : "환불"}</p>
+      <p className="label">
+        {txType === Tx.OUTCOME
+          ? "지출"
+          : txType === Tx.REFUND
+          ? "환불"
+          : "수익"}
+      </p>
     </TypeTagStyle>
   );
 }

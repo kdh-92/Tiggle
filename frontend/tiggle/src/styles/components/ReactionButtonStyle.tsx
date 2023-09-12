@@ -40,6 +40,7 @@ export const ReactionButtonStyle = styled.button`
   &:hover {
     background-color: ${({ theme: { color } }) => color.bluishGray[50].value};
   }
+
   &:active {
     background-color: ${({ theme: { color } }) => color.bluishGray[100].value};
     color: ${({ theme: { color } }) => color.bluishGray[600].value};
@@ -57,6 +58,7 @@ export const ReactionButtonStyle = styled.button`
         background-color: ${({ theme: { color } }) => color.peach[200].value};
       }
     }
+
     &.REFUND {
       background-color: ${({ theme: { color } }) => color.blue[50].value};
       color: ${({ theme: { color } }) => color.blue[600].value};
@@ -68,6 +70,18 @@ export const ReactionButtonStyle = styled.button`
         background-color: ${({ theme: { color } }) => color.blue[200].value};
       }
     }
+
+    &.INCOME {
+      background-color: ${({ theme: { color } }) => color.green[50].value};
+      color: ${({ theme: { color } }) => color.green[600].value};
+      border-color: ${({ theme: { color } }) => color.green[300].value};
+      &:hover {
+        background-color: ${({ theme: { color } }) => color.green[100].value};
+      }
+      &:active {
+        background-color: ${({ theme: { color } }) => color.green[200].value};
+      }
+    }
   }
 
   ${({ theme }) => theme.mq.desktop} {
@@ -77,10 +91,12 @@ export const ReactionButtonStyle = styled.button`
     .label-text {
       ${({ theme }) => expandTypography(theme.typography.body.large.medium)}
     }
+
     .label-icon {
       width: 22px;
       height: 22px;
     }
+
     .number {
       ${({ theme }) => expandTypography(theme.typography.title.small2x.bold)}
     }

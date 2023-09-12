@@ -22,6 +22,11 @@ export const TypeTagStyle = styled.div`
     color: ${({ theme: { color } }) => color.blue[500].value};
   }
 
+  &.INCOME {
+    border-color: ${({ theme: { color } }) => color.green[300].value};
+    color: ${({ theme: { color } }) => color.green[500].value};
+  }
+
   ${({ theme }) => theme.mq.desktop} {
     .label {
       ${({ theme }) => expandTypography(theme.typography.body.small.bold)}

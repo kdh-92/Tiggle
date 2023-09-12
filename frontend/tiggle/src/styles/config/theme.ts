@@ -172,7 +172,49 @@ export const theme = {
         type: "color",
       },
       "900": {
-        value: "#0b2f65",
+        value: "#08306d",
+        type: "color",
+      },
+    },
+    green: {
+      "50": {
+        value: "#e8fcf6",
+        type: "color",
+      },
+      "100": {
+        value: "#c6fbe9",
+        type: "color",
+      },
+      "200": {
+        value: "#aaf2db",
+        type: "color",
+      },
+      "300": {
+        value: "#83e5c8",
+        type: "color",
+      },
+      "400": {
+        value: "#41d9b0",
+        type: "color",
+      },
+      "500": {
+        value: "#28c79c",
+        type: "color",
+      },
+      "600": {
+        value: "#1aad89",
+        type: "color",
+      },
+      "700": {
+        value: "#128a6e",
+        type: "color",
+      },
+      "800": {
+        value: "#106b56",
+        type: "color",
+      },
+      "900": {
+        value: "#0b4d3d",
         type: "color",
       },
     },

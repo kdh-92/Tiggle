@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const FeedsStyle = styled.div`
+export const TransactionCellsStyle = styled.div`
   padding: 0 24px;
   margin-top: 16px;
 
@@ -10,7 +10,7 @@ export const FeedsStyle = styled.div`
     padding: 0 32px;
   }
 
-  .feed-box-masonry {
+  .transaction-cell-box-masonry {
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
@@ -24,7 +24,7 @@ export const FeedsStyle = styled.div`
     }
   }
 
-  .feeds {
+  .transaction-cells {
     background-clip: padding-box;
   }
 `;

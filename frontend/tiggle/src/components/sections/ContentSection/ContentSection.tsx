@@ -2,15 +2,15 @@ import { useState } from "react";
 import { Edit3 } from "react-feather";
 
 import CTAButton from "@/components/atoms/CTAButton/CTAButton";
-import Feeds from "@/components/molecules/Feed/Feeds";
 import Navigation from "@/components/molecules/Navigation";
+import TransactionCells from "@/components/molecules/TransactionCell/TransactionCells";
 import { ContentStyle } from "@/styles/components/ContentStyle";
 import { Tx } from "@/types";
 
 const feedData = [
   {
     id: 1,
-    type: Tx.Outcome,
+    type: Tx.OUTCOME,
     amount: 50000,
     content: "거래 제목 텍스트 텍스트",
     reason:
@@ -25,7 +25,7 @@ const feedData = [
   },
   {
     id: 2,
-    type: Tx.Refund,
+    type: Tx.REFUND,
     amount: 50000,
     content: "거래 제목 텍스트 텍스트",
     reason:
@@ -39,7 +39,7 @@ const feedData = [
   },
   {
     id: 3,
-    type: Tx.Outcome,
+    type: Tx.OUTCOME,
     amount: 50000,
     content: "거래 제목 텍스트 텍스트",
     reason: "거래 설명 텍스트 텍스트 텍스트",
@@ -52,11 +52,25 @@ const feedData = [
   },
   {
     id: 4,
-    type: Tx.Refund,
+    type: Tx.REFUND,
     amount: 50000,
     content: "거래 제목 텍스트 텍스트",
     reason:
       "거래 설명 텍스트 텍스트 텍스트 텍스트 텍스트 텍스트 텍스트 텍스트 텍스트 텍스트 텍스트 텍스트 ",
+    user: {
+      name: "사용자 이름",
+      imageUrl: "",
+    },
+    createdAt: "2023-08-15T08:47:19",
+    number: 89,
+  },
+  {
+    id: 5,
+    type: Tx.INCOME,
+    amount: 50000,
+    content: "수익 제목 텍스트 텍스트",
+    reason:
+      "수익 설명 텍스트 텍스트 텍스트 텍스트 텍스트 텍스트 텍스트 텍스트 텍스트 텍스트 텍스트 텍스트 ",
     user: {
       name: "사용자 이름",
       imageUrl: "",
@@ -83,7 +97,7 @@ export default function ContentSection() {
         </div>
       </div>
       <Navigation />
-      <Feeds dataList={dataList} />
+      <TransactionCells dataList={dataList} />
     </ContentStyle>
   );
 }

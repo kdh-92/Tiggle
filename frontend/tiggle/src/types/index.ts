@@ -1,7 +1,7 @@
 export const Tx = {
-  Outcome: "OUTCOME",
-  Refund: "REFUND",
-  Income: "INCOME",
+  OUTCOME: "OUTCOME",
+  REFUND: "REFUND",
+  INCOME: "INCOME",
 } as const;
 export type TxType = (typeof Tx)[keyof typeof Tx];
 
