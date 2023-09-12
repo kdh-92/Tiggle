@@ -7,10 +7,13 @@ export type TransactionDto = {
     memberId: number;
     parentId?: number;
     type?: 'INCOME' | 'OUTCOME' | 'REFUND';
-    imageUrl: string;
+    imageUrl?: string;
     amount?: number;
     date?: string;
     content?: string;
     reason?: string;
+    assetId?: number;
+    categoryId?: number;
+    tagNames?: string;
 };
 

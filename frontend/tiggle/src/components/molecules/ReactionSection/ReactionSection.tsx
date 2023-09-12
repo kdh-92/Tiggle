@@ -1,37 +1,55 @@
 import { useState } from "react";
 
-import ReactionButton, {
-  Reaction,
-  ReactionType,
-} from "@/components/atoms/ReactionButton/ReactionButton";
-import { ReactionSectionStyle } from "@/styles/components/ReactionSectionStyle";
-import { TxType } from "@/types";
+import { useMutation } from "@tanstack/react-query";
 
-interface ReactionSectionProps {
-  txType: TxType;
-  reactions: Record<ReactionType, number>;
-  onAddReaction: (reactionType: ReactionType) => void;
-  onCancelReaction: () => void;
+import ReactionButton from "@/components/atoms/ReactionButton/ReactionButton";
+import { ReactionApiService, ReactionSummaryDto } from "@/generated";
+import queryClient from "@/query/queryClient";
+import { ReactionSectionStyle } from "@/styles/components/ReactionSectionStyle";
+import { Reaction, ReactionType, TxType } from "@/types";
+
+interface ReactionSectionProps
+  extends Omit<ReactionSummaryDto, "commentCount"> {
+  type: TxType;
+  txId: number;
   className?: string;
 }
 
 export default function ReactionSection({
-  txType,
-  reactions,
-  onAddReaction,
-  onCancelReaction,
+  type,
+  txId,
+  upCount,
+  downCount,
   className,
 }: ReactionSectionProps) {
   const [selectedReaction, setSelectedReaction] =
     useState<ReactionType>(undefined);
 
+  const { mutate: upsertReaction } = useMutation(
+    async (type: ReactionType) =>
+      ReactionApiService.upsertReaction(1, txId, { type }),
+    {
+      onSuccess: () =>
+        queryClient.invalidateQueries(["reaction", "detail", txId]),
+    },
+  );
+  const { mutate: deleteReaction } = useMutation(
+    async () => ReactionApiService.deleteReaction(1, txId),
+    {
+      onSuccess: () =>
+        queryClient.invalidateQueries(["reaction", "detail", txId]),
+    },
+  );
+
   const handleReactionButtonClick = (inputReaction: ReactionType) => {
     if (selectedReaction === inputReaction) {
-      setSelectedReaction(undefined);
-      onCancelReaction();
+      deleteReaction(undefined, {
+        onSuccess: () => setSelectedReaction(undefined),
+      });
     } else {
-      setSelectedReaction(inputReaction);
-      onAddReaction(inputReaction);
+      upsertReaction(inputReaction, {
+        onSuccess: () => setSelectedReaction(inputReaction),
+      });
     }
   };
 
@@ -43,16 +61,16 @@ export default function ReactionSection({
       </p>
       <div className="button-wrapper">
         <ReactionButton
-          tx={txType}
+          tx={type}
           reaction={Reaction.Up}
-          number={reactions.Up}
+          number={upCount}
           onClick={() => handleReactionButtonClick(Reaction.Up)}
           checked={selectedReaction === Reaction.Up}
         />
         <ReactionButton
-          tx={txType}
+          tx={type}
           reaction={Reaction.Down}
-          number={reactions.Down}
+          number={downCount}
           onClick={() => handleReactionButtonClick(Reaction.Down)}
           checked={selectedReaction === Reaction.Down}
         />

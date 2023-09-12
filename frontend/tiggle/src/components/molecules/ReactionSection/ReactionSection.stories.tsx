@@ -11,16 +11,9 @@ type Story = StoryObj<typeof ReactionSection>;
 
 export const Default: Story = {
   args: {
-    txType: "outcome",
-    reactions: {
-      Up: 100,
-      Down: 200,
-    },
-    onAddReaction: reaction => {
-      console.log("reaction added!", reaction);
-    },
-    onCancelReaction: () => {
-      console.log("reaction canceled!");
-    },
+    type: "OUTCOME",
+    txId: 1,
+    upCount: 100,
+    downCount: 200,
   },
 };

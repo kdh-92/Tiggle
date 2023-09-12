@@ -9,5 +9,8 @@ export type TransactionUpdateReqDto = {
     date?: string;
     content?: string;
     reason?: string;
+    assetId?: number;
+    categoryId?: number;
+    tagNames?: string;
 };
 

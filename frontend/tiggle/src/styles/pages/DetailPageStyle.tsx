@@ -90,13 +90,6 @@ export const DetailPageReplySectionStyle = styled.div`
     color: ${({ theme }) => theme.color.bluishGray[900].value};
   }
 
-  .input {
-    display: flex;
-    flex-direction: column;
-    align-items: end;
-    gap: 16px;
-  }
-
   .divider {
     width: 100%;
     height: 1px;
