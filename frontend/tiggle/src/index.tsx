@@ -17,13 +17,13 @@ const container = document.getElementById("root");
 const root = createRoot(container);
 
 root.render(
-  <Provider store={store}>
-    <QueryClientProvider client={queryClient}>
+  <QueryClientProvider client={queryClient}>
+    <Provider store={store}>
       <ThemeProvider theme={{ ...theme, mq }}>
         {process.env.NODE_ENV === "development" && <ReactQueryDevtools />}
         <GlobalStyle />
         <RouterProvider router={router} />
       </ThemeProvider>
-    </QueryClientProvider>
-  </Provider>,
+    </Provider>
+  </QueryClientProvider>,
 );

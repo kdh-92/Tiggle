@@ -3,6 +3,11 @@ import { ThemeProvider } from "styled-components";
 import { theme } from "@/styles/config/theme";
 import { GlobalStyle } from "@/styles/config/GlobalStyle";
 import { mq } from "@/styles/config/mediaQueries";
+import { QueryClientProvider } from "@tanstack/react-query";
+import queryClient from "@/query/queryClient";
+import { Provider } from "react-redux";
+import { store } from "@/store";
+
 
 const preview: Preview = {
   parameters: {
@@ -16,10 +21,14 @@ const preview: Preview = {
   },
   decorators: [
     Story => (
-      <ThemeProvider theme={{ ...theme, mq }}>
-        <GlobalStyle />
-        <Story />
-      </ThemeProvider>
+      <QueryClientProvider client={queryClient}>
+          <Provider store={store}>
+            <ThemeProvider theme={{ ...theme, mq }}>
+              <GlobalStyle />
+              <Story />
+            </ThemeProvider>
+          </Provider>
+        </QueryClientProvider>
     ),
   ],
 };
