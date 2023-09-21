@@ -15,9 +15,9 @@ export const Default: Story = {
     id: 0,
     content: "제목 텍스트",
     amount: 50000,
-    txType: Tx.OUTCOME,
-    user: {
-      name: "사용자 이름",
+    type: Tx.OUTCOME,
+    sender: {
+      nickname: "사용자 이름",
       profileUrl: "image.jpg",
     },
     date: "2023-08-06T06:00:00.000Z",

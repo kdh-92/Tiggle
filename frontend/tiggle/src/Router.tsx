@@ -19,8 +19,8 @@ export default createBrowserRouter(
           loader={detailPageLoader(queryClient)}
           errorElement={<div>error</div>}
         />
+        <Route path="/" element={<Main />} />
       </Route>
-      <Route path="/" element={<Main />} />
     </>,
   ),
 );

@@ -54,9 +54,9 @@ export default function PostHeader({
         <div className="item-wrapper">
           <div className="item date">
             <p className="item-title">
-              {txType === "OUTCOME" ? "지출일자" : "수익일자"}
+              {type === "OUTCOME" ? "지출일자" : "수익일자"}
             </p>
-            <p className="item-data">{date}</p>
+            <p className="item-data">{dayjs(date).format("YYYY.MM.DD")}</p>
           </div>
           <div className="item">
             <p className="item-title">자산</p>
