@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 import { expandTypography } from "@/styles/util";
 
-export const ContentStyle = styled(Content)`
+export const MainPageContentStyle = styled(Content)`
   min-height: 100vh;
   position: relative;
 
