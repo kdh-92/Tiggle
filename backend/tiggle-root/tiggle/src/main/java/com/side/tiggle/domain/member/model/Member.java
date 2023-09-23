@@ -51,6 +51,8 @@ public class Member extends BaseEntity {
         this.email = email;
         this.profileUrl = profileUrl;
         this.nickname = nickname;
+        this.provider = provider;
+        this.providerId = providerId;
     }
 }
 
