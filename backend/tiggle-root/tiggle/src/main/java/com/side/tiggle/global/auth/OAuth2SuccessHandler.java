@@ -6,6 +6,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
+import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
@@ -14,6 +17,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.Optional;
 
 
@@ -32,23 +36,8 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication)
             throws IOException {
 
-        OAuth2User oAuth2User = (OAuth2User)authentication.getPrincipal();
-        Optional<Member> member = this.memberRepository.findByEmail(oAuth2User.getAttribute("email"));
-        Member authMember;
-        log.info("oAuth2User : {}", oAuth2User);
-        // 최초 로그인이라면 회원가입 처리를 한다.
-        if (member.isEmpty()) {
-            authMember = new Member(
-                    oAuth2User.getAttribute("email"),
-                    oAuth2User.getAttribute("profile_url"),
-                    oAuth2User.getAttribute("name"),
-                    oAuth2User.getAttribute("birth")
-            );
-            this.memberRepository.save(authMember);
-        }
-        else {
-            authMember = member.get();
-        }
+        OAuth2AuthenticationToken authenticationToken = (OAuth2AuthenticationToken) authentication;
+        Member authMember = getAndUpsert(authenticationToken);
 
         // 토큰 발급
         String token = jwtTokenProvider.getAccessToken(authMember.getId(), "ROLE_USER");
@@ -60,4 +49,33 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         response.addCookie(cookie);
         response.sendRedirect(redirectUri);
     }
+
+    private Member getAndUpsert(OAuth2AuthenticationToken authenticationToken) {
+        DefaultOAuth2User userPrincipal = (DefaultOAuth2User) authenticationToken.getPrincipal();
+        log.info("oAuth2User : {}", userPrincipal);
+
+        OAuth2Attribute attributes = OAuth2Attribute.of(authenticationToken.getAuthorizedClientRegistrationId(), userPrincipal.getName(), userPrincipal.getAttributes());
+        Optional<Member> member = this.memberRepository.findByEmail(attributes.getEmail());
+        Member authMember;
+        // 최초 로그인이라면 회원가입 처리를 한다.
+        if (member.isEmpty()) {
+            authMember = new Member(
+                    attributes.getEmail(),
+                    attributes.getProfileUrl(),
+                    attributes.getNickname(),
+                    authenticationToken.getAuthorizedClientRegistrationId(),
+                    authenticationToken.getAuthorizedClientRegistrationId()
+            );
+        }
+        else {
+            // 이미 가입 되어있다면 수정한다
+            authMember = member.get();
+            authMember.setProfileUrl(attributes.getProfileUrl());
+            authMember.setProvider(authenticationToken.getAuthorizedClientRegistrationId());
+        }
+        this.memberRepository.save(authMember);
+
+        return authMember;
+    }
+
 }

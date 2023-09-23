@@ -45,6 +45,13 @@ public class Member extends BaseEntity {
         this.nickname = nickname;
         this.birth = birth;
     }
+
+    @Builder
+    public Member(String email, String profileUrl, String nickname, String provider, String providerId) {
+        this.email = email;
+        this.profileUrl = profileUrl;
+        this.nickname = nickname;
+    }
 }
 
 
