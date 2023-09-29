@@ -1,5 +1,7 @@
 import styled from "styled-components";
 
+import { expandTypography } from "@/styles/util";
+
 export const SocialLoginButtonStyle = styled.button`
   width: 300px;
   height: 45px;
@@ -8,6 +10,9 @@ export const SocialLoginButtonStyle = styled.button`
   display: flex;
   align-items: center;
   margin-bottom: 16px;
+
+  /* TODO: figma 상에서는 semibold로 되어 있어서 가장 비슷한 것으로 폰트 지정 */
+  ${({ theme }) => expandTypography(theme.typography.body.medium.medium)}
 
   > span {
     display: inline;
