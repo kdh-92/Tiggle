@@ -1,23 +1,24 @@
 import { Bell } from "react-feather";
 
-import { Avatar, Menu } from "antd";
+import { Avatar } from "antd";
 
-import Logo from "@/assets/logo.svg";
-import { MenuItems } from "@/components/atoms/MenuItem";
+import Logo from "@/assets/logo_medium.svg";
 import {
   StyledHeaderLeft,
   StyledHeaderRight,
 } from "@/styles/components/HeaderStyle";
 
 export default function HeaderSection() {
-  const items = MenuItems(["통계", "all"], ["랭킹", "expenses"]);
-
   return (
     <div className="header-wrap">
       <div className="gnb">
         <StyledHeaderLeft>
+          {/* TODO: Link 컴포넌트로 Main 페이지 이동 */}
           <Logo />
-          <Menu mode="horizontal" items={items} />
+          <div className="left-bar-button">
+            <button>통계</button>
+            <button>랭킹</button>
+          </div>
         </StyledHeaderLeft>
         <StyledHeaderRight>
           <button className="right-bar-btn">

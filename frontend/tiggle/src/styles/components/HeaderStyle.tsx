@@ -29,6 +29,11 @@ export const HeaderStyle = styled(Header)`
     justify-content: space-between;
     padding: 0 24px;
 
+    a {
+      display: flex;
+      align-items: center;
+    }
+
     ${({ theme }) => theme.mq.desktop} {
       padding: 0 32px;
     }
@@ -41,12 +46,14 @@ export const StyledHeaderLeft = styled.div`
   grid-gap: 40px;
   grid-auto-flow: column;
 
-  .ant-menu {
+  .left-bar-button {
     display: none;
-    width: 120px;
-    border-bottom: 1px solid
-      ${({ theme: { color } }) => color.bluishGray[200].value};
-    color: ${({ theme: { color } }) => color.bluishGray[600].value};
+
+    > button {
+      width: 45px;
+      height: 64px;
+      color: ${({ theme: { color } }) => color.bluishGray[600].value};
+    }
 
     ${({ theme }) => theme.mq.desktop} {
       display: block;

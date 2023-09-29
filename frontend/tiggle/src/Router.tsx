@@ -5,6 +5,7 @@ import {
 } from "react-router-dom";
 
 import DetailPage, { loader as detailPageLoader } from "@/pages/DetailPage";
+import LoginPage from "@/pages/LoginPage";
 import Main from "@/pages/Main";
 import queryClient from "@/query/queryClient";
 import GeneralTemplate from "@/templates/GeneralTemplate";
@@ -21,6 +22,7 @@ export default createBrowserRouter(
         />
         <Route path="/" element={<Main />} />
       </Route>
+      <Route path="/login" element={<LoginPage />} />
     </>,
   ),
 );
