@@ -12,9 +12,10 @@ interface SocialLoginButtonProps
 
 export default function SocialLoginButton({
   social_logo,
+  ...props
 }: SocialLoginButtonProps) {
   return (
-    <SocialLoginButtonStyle className={social_logo}>
+    <SocialLoginButtonStyle className={social_logo} {...props}>
       {social_logo === "kakao" ? (
         <Kakao />
       ) : social_logo === "naver" ? (
