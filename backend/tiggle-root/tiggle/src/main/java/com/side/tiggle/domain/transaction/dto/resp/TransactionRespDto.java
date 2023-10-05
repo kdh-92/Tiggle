@@ -63,6 +63,8 @@ public class TransactionRespDto extends TransactionDto {
                 .id(tx.getId())
                 .parentId(tx.getParentId())
                 .member(MemberDto.fromEntity(tx.getMember()))
+                .asset(AssetDto.fromEntity(tx.getAsset()))
+                .category(CategoryDto.fromEntity(tx.getCategory()))
                 .type(tx.getType())
                 .imageUrl(tx.getImageUrl())
                 .amount(tx.getAmount())
@@ -73,18 +75,18 @@ public class TransactionRespDto extends TransactionDto {
                 .build();
     }
 
-    public static TransactionRespDto fromEntityDetailTx(Transaction tx, Transaction parentTx, Asset asset, Category category) {
+    public static TransactionRespDto fromEntityDetailTx(Transaction tx, Transaction parentTx) {
         TransactionRespDtoBuilder builder = TransactionRespDto.builder()
                 .id(tx.getId())
                 .member(MemberDto.fromEntity(tx.getMember()))
+                .asset(AssetDto.fromEntity(tx.getAsset()))
+                .category(CategoryDto.fromEntity(tx.getCategory()))
                 .type(tx.getType())
                 .imageUrl(tx.getImageUrl())
                 .amount(tx.getAmount())
                 .date(tx.getDate())
                 .content(tx.getContent())
                 .reason(tx.getReason())
-                .asset(AssetDto.fromEntity(asset))
-                .category(CategoryDto.fromEntity(category))
                 .txTagNames(tx.getTagNames())
                 .createdAt(tx.getCreatedAt());
 
@@ -98,6 +100,8 @@ public class TransactionRespDto extends TransactionDto {
                 .id(tx.getId())
                 .parentId(tx.getParentId())
                 .member(MemberDto.fromEntity(tx.getMember()))
+                .asset(AssetDto.fromEntity(tx.getAsset()))
+                .category(CategoryDto.fromEntity(tx.getCategory()))
                 .type(tx.getType())
                 .imageUrl(tx.getImageUrl())
                 .amount(tx.getAmount())

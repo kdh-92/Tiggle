@@ -34,18 +34,18 @@ CREATE TABLE `grades`
 );
 
 CREATE TABLE `members` (
-                           `id` bigint NOT NULL AUTO_INCREMENT,
-                           `email` varchar(100) NOT NULL,
-                           `profile_url` varchar(255) DEFAULT NULL,
-                           `birth` date NULL,
-                           `nickname` varchar(30) NOT NULL,
-                           `provider` VARCHAR(255) DEFAULT NULL,
-                           `provider_id` VARCHAR(255) DEFAULT NULL,
-                           `deleted` TinyInt(1) DEFAULT 0,
-                           `created_at` timestamp DEFAULT CURRENT_TIMESTAMP,
-                           `updated_at` timestamp DEFAULT NULL,
-                           `deleted_at` timestamp DEFAULT NULL,
-                           PRIMARY KEY (`id`)
+   `id` bigint NOT NULL AUTO_INCREMENT,
+   `email` varchar(100) NOT NULL,
+   `profile_url` varchar(255) DEFAULT NULL,
+   `birth` date NULL,
+   `nickname` varchar(30) NOT NULL,
+   `provider` VARCHAR(255) DEFAULT NULL,
+   `provider_id` VARCHAR(255) DEFAULT NULL,
+   `deleted` TinyInt(1) DEFAULT 0,
+   `created_at` timestamp DEFAULT CURRENT_TIMESTAMP,
+   `updated_at` timestamp DEFAULT NULL,
+   `deleted_at` timestamp DEFAULT NULL,
+   PRIMARY KEY (`id`)
 );
 
 CREATE TABLE `reactions`
@@ -73,17 +73,17 @@ CREATE TABLE `tags`
 
 CREATE TABLE `transactions`
 (
-    `id`                bigint NOT NULL AUTO_INCREMENT,
+    `id`                   bigint NOT NULL AUTO_INCREMENT,
     `member_id`            bigint NOT NULL ,
     `parent_id`            bigint NULL ,
+    `asset_id`             bigint NOT NULL ,
+    `category_id`          bigint NOT NULL ,
     `type`                 ENUM('INCOME', 'OUTCOME', 'REFUND') NOT NULL ,
     `image_url`            varchar(255) NULL ,
     `amount`               int NOT NULL ,
     `date`                 date NOT NULL ,
     `content`              varchar(255) NOT NULL ,
     `reason`               varchar(255) NOT NULL ,
-    `asset_id`             bigint NOT NULL ,
-    `category_id`          bigint NOT NULL ,
     `tag_names`            varchar(100) NULL ,
     `deleted`              tinyint DEFAULT 0 ,
     `created_at`           timestamp DEFAULT CURRENT_TIMESTAMP ,

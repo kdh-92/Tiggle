@@ -56,9 +56,7 @@ public class TransactionApiController {
         return new ResponseEntity<>(
                 TransactionRespDto.fromEntityDetailTx(
                         tx,
-                        parentTx,
-                        assetService.getAsset(dto.getAssetId()),
-                        categoryService.getCategory(dto.getCategoryId())
+                        parentTx
                 ), HttpStatus.CREATED
         );
     }
@@ -74,9 +72,7 @@ public class TransactionApiController {
         return new ResponseEntity<>(
                 TransactionRespDto.fromEntityDetailTx(
                         tx,
-                        parentTx,
-                        assetService.getAsset(tx.getAssetId()),
-                        categoryService.getCategory(tx.getCategoryId())
+                        parentTx
                 ), HttpStatus.OK
         );
     }
@@ -165,9 +161,7 @@ public class TransactionApiController {
         Transaction tx = transactionService.updateTransaction(memberId, transactionId, dto);
         return new ResponseEntity<>(
                 TransactionUpdateRespDto.fromEntity(
-                        tx,
-                        assetService.getAsset(tx.getAssetId()),
-                        categoryService.getCategory(tx.getCategoryId())
+                        tx
                 ), HttpStatus.OK
         );
     }
