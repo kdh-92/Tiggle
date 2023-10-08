@@ -56,6 +56,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
         OAuth2Attribute attributes = OAuth2Attribute.of(authenticationToken.getAuthorizedClientRegistrationId(), userPrincipal.getName(), userPrincipal.getAttributes());
         Optional<Member> member = this.memberRepository.findByEmail(attributes.getEmail());
+        attributes.getAttributes().get("id");
         Member authMember;
         // 최초 로그인이라면 회원가입 처리를 한다.
         if (member.isEmpty()) {
@@ -64,7 +65,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
                     attributes.getProfileUrl(),
                     attributes.getNickname(),
                     authenticationToken.getAuthorizedClientRegistrationId(),
-                    authenticationToken.getAuthorizedClientRegistrationId()
+                    attributes.getProviderId()
             );
         }
         else {

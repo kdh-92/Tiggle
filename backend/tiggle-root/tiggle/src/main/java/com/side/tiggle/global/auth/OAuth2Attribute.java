@@ -17,6 +17,7 @@ public class OAuth2Attribute {
     private String profileUrl;
     private String birthString;
     private String nickname;
+    private String providerId;
 
     static OAuth2Attribute of(String provider, String attributeKey,
                               Map<String, Object> attributes) {
@@ -38,6 +39,7 @@ public class OAuth2Attribute {
                 .email((String) attributes.get("email"))
                 .profileUrl((String)attributes.get("picture"))
                 .nickname((String)attributes.get("name"))
+                .providerId((String)attributes.get("sub"))
                 .attributes(attributes)
                 .attributeKey((String)attributes.get(attributeKey))
                 .build();
@@ -50,6 +52,7 @@ public class OAuth2Attribute {
                 .nickname((String) response.get("name"))
                 .email((String) response.get("email"))
                 .profileUrl((String) response.get("profile_image"))
+                .providerId((String) response.get("id"))
                 .attributes(attributes)
                 .attributeKey(userNameAttributeName)
                 .build();
@@ -63,6 +66,7 @@ public class OAuth2Attribute {
                 .nickname((String) kakaoProfile.get("nickname"))
                 .email((String) kakaoAccount.get("email"))
                 .profileUrl((String) kakaoProfile.get("profile_image_url"))
+                .providerId(attributes.get("id").toString())
                 .attributes(attributes)
                 .attributeKey(userNameAttributeName)
                 .build();
