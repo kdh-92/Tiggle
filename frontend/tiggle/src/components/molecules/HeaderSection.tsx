@@ -1,4 +1,5 @@
 import { Bell } from "react-feather";
+import { Link } from "react-router-dom";
 
 import { Avatar } from "antd";
 
@@ -13,8 +14,9 @@ export default function HeaderSection() {
     <div className="header-wrap">
       <div className="gnb">
         <StyledHeaderLeft>
-          {/* TODO: Link 컴포넌트로 Main 페이지 이동 */}
-          <Logo />
+          <Link to={"/"}>
+            <Logo />
+          </Link>
           <div className="left-bar-button">
             <button>통계</button>
             <button>랭킹</button>
