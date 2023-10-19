@@ -2,7 +2,6 @@ package com.side.tiggle.global.config;
 
 import com.side.tiggle.global.auth.OAuth2SuccessHandler;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -20,7 +19,6 @@ import java.util.List;
 @Configuration
 public class SecurityConfig {
 
-    OAuth2SuccessHandler successHandler;
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http, OAuth2SuccessHandler successHandler) throws Exception {
         http.httpBasic().disable()

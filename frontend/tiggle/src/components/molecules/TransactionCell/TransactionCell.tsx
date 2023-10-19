@@ -1,25 +1,13 @@
-import { Frown, MessageSquare, Smile } from "react-feather";
+// import { Frown, MessageSquare, Smile } from "react-feather";
+import { useNavigate } from "react-router-dom";
 
 import { Avatar } from "antd";
 import cn from "classnames";
 
 import TypeTag from "@/components/atoms/typeTag/TypeTag";
+import { TransactionRespDto } from "@/generated/models/TransactionRespDto";
 import { TransactionCellStyle } from "@/styles/components/TransactionCellStyle";
-import { TxType } from "@/types";
-
-export type TransactionCellProps = {
-  id: number;
-  content: string;
-  reason: string;
-  amount: number;
-  type: TxType;
-  user: {
-    name: string;
-    imageUrl: string;
-  };
-  createdAt: string;
-  number: number;
-};
+import timeDiff from "@/utils/timeDIff";
 
 export default function TransactionCell({
   id,
@@ -27,37 +15,43 @@ export default function TransactionCell({
   amount,
   content,
   reason,
-  user,
+  member,
   createdAt,
-  number,
-}: TransactionCellProps) {
+}: TransactionRespDto) {
+  const navigate = useNavigate();
+  const handleGoDetail: React.MouseEventHandler<HTMLDivElement> = () => {
+    navigate(`/detail/${id}`);
+  };
+
   return (
-    <TransactionCellStyle className={cn(type, id)}>
-      <TypeTag className="tag" txType={type} />
-      <div className={cn("amount", type)}>
-        <span className="amount-unit">₩ {amount}</span>
-      </div>
-      <div className="transaction-cell-section">
-        <p className="content">{content}</p>
-        <p className="reason">{reason}</p>
-      </div>
-      <div className="transaction-cell-footer">
-        <div className="user">
-          {user.imageUrl ? (
-            <img
-              className="user-profile"
-              alt="user profile"
-              src={user.imageUrl}
-            />
-          ) : (
-            <Avatar />
-          )}
-          <div>
-            <p className="user-name">{user.name}</p>
-            <p className="user-createdAt">{createdAt}</p>
-          </div>
+    <div onClick={handleGoDetail}>
+      <TransactionCellStyle className={cn(type, id)}>
+        <TypeTag className="tag" txType={type} />
+        <div className={cn("amount", type)}>
+          <span className="amount-unit">₩ {amount}</span>
         </div>
-        <div className="icon-unit">
+        <div className="transaction-cell-section">
+          <p className="content">{content}</p>
+          <p className="reason">{reason}</p>
+        </div>
+        <div className="transaction-cell-footer">
+          <div className="user">
+            {member.profileUrl ? (
+              <img
+                className="user-profile"
+                alt="member profile"
+                src={member.profileUrl}
+              />
+            ) : (
+              <Avatar />
+            )}
+            <div>
+              <p className="user-name">{member.nickname}</p>
+              <p className="user-createdAt">{timeDiff(createdAt)}</p>
+            </div>
+          </div>
+          {/* TODO : reaction 관련 내용 백엔드에서 들어오면 추가 */}
+          {/* <div className="icon-unit">
           <div className="reaction">
             <div className="reaction-smile">
               <Smile className="label-icon" />
@@ -72,8 +66,9 @@ export default function TransactionCell({
             <MessageSquare className="label-icon" />
             <span>{number}</span>
           </div>
+        </div> */}
         </div>
-      </div>
-    </TransactionCellStyle>
+      </TransactionCellStyle>
+    </div>
   );
 }

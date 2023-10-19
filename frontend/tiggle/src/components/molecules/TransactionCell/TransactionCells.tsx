@@ -1,30 +1,42 @@
 import Masonry from "react-masonry-css";
+import { useSelector } from "react-redux";
 
+import Loading from "@/components/atoms/Loading/Loading";
+import { TransactionRespDto } from "@/generated/models/TransactionRespDto";
+import { RootState } from "@/store";
 import { TransactionCellsStyle } from "@/styles/components/TransactionCellsStyle";
 
-import TransactionCell, { TransactionCellProps } from "./TransactionCell";
+import TransactionCell from "./TransactionCell";
 
-export default function Feeds({
-  dataList,
-}: {
-  dataList: TransactionCellProps[];
-}) {
+interface TransactionCellsProps {
+  data: TransactionRespDto[];
+}
+
+export default function TransactionCells({ data }: TransactionCellsProps) {
   const breakpointColumnsObj = {
     default: 2,
     767: 1,
   };
 
+  const { isError, isLoading } = useSelector((state: RootState) => state.data);
+
   return (
-    <TransactionCellsStyle>
-      <Masonry
-        breakpointCols={breakpointColumnsObj}
-        className="transaction-cell-box-masonry"
-        columnClassName="transaction-cells"
-      >
-        {dataList?.map(el => {
-          return <TransactionCell key={el.id} {...el} />;
-        })}
-      </Masonry>
-    </TransactionCellsStyle>
+    <>
+      {isLoading && <Loading />}
+      {isError && <p>An error occurred.</p>}
+      <TransactionCellsStyle>
+        <Masonry
+          breakpointCols={breakpointColumnsObj}
+          className="transaction-cell-box-masonry"
+          columnClassName="transaction-cells"
+        >
+          {!isLoading &&
+            !isError &&
+            data?.map(el => {
+              return <TransactionCell key={el.id} {...el} />;
+            })}
+        </Masonry>
+      </TransactionCellsStyle>
+    </>
   );
 }

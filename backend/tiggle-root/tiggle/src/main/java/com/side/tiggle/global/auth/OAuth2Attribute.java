@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,6 +17,7 @@ public class OAuth2Attribute {
     private String profileUrl;
     private String birthString;
     private String nickname;
+    private String providerId;
 
     static OAuth2Attribute of(String provider, String attributeKey,
                               Map<String, Object> attributes) {
@@ -23,9 +25,9 @@ public class OAuth2Attribute {
             case "google":
                 return ofGoogle(attributeKey, attributes);
             case "kakao":
-                throw new IllegalStateException();
+                return ofKakao(attributeKey, attributes);
             case "naver":
-                throw new IllegalStateException();
+                return ofNaver(attributeKey, attributes);
             default:
                 throw new IllegalStateException();
         }
@@ -33,13 +35,40 @@ public class OAuth2Attribute {
 
     private static OAuth2Attribute ofGoogle(String attributeKey,
                                             Map<String, Object> attributes) {
-
         return OAuth2Attribute.builder()
                 .email((String) attributes.get("email"))
                 .profileUrl((String)attributes.get("picture"))
                 .nickname((String)attributes.get("name"))
+                .providerId((String)attributes.get("sub"))
                 .attributes(attributes)
                 .attributeKey((String)attributes.get(attributeKey))
+                .build();
+    }
+
+    private static OAuth2Attribute ofNaver(String userNameAttributeName, Map<String, Object> attributes) {
+        Map<String, Object> response = (Map<String, Object>)attributes.get("response");
+
+        return OAuth2Attribute.builder()
+                .nickname((String) response.get("name"))
+                .email((String) response.get("email"))
+                .profileUrl((String) response.get("profile_image"))
+                .providerId((String) response.get("id"))
+                .attributes(attributes)
+                .attributeKey(userNameAttributeName)
+                .build();
+    }
+
+    private static OAuth2Attribute ofKakao(String userNameAttributeName, Map<String, Object> attributes) {
+        Map<String, Object> kakaoAccount = (Map<String, Object>)attributes.get("kakao_account");
+        Map<String, Object> kakaoProfile = (Map<String, Object>)kakaoAccount.get("profile");
+
+        return OAuth2Attribute.builder()
+                .nickname((String) kakaoProfile.get("nickname"))
+                .email((String) kakaoAccount.get("email"))
+                .profileUrl((String) kakaoProfile.get("profile_image_url"))
+                .providerId(attributes.get("id").toString())
+                .attributes(attributes)
+                .attributeKey(userNameAttributeName)
                 .build();
     }
 

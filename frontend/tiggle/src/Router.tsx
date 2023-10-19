@@ -6,7 +6,7 @@ import {
 
 import DetailPage, { loader as detailPageLoader } from "@/pages/DetailPage";
 import LoginPage from "@/pages/LoginPage";
-import Main from "@/pages/Main";
+import MainPage from "@/pages/MainPage";
 import queryClient from "@/query/queryClient";
 import GeneralTemplate from "@/templates/GeneralTemplate";
 
@@ -20,7 +20,7 @@ export default createBrowserRouter(
           loader={detailPageLoader(queryClient)}
           errorElement={<div>error</div>}
         />
-        <Route path="/" element={<Main />} />
+        <Route path="/" element={<MainPage />} />
       </Route>
       <Route path="/login" element={<LoginPage />} />
     </>,

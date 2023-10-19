@@ -7,6 +7,7 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import queryClient from "@/query/queryClient";
 import { Provider } from "react-redux";
 import { store } from "@/store";
+import { BrowserRouter } from 'react-router-dom';
 
 
 const preview: Preview = {
@@ -25,7 +26,9 @@ const preview: Preview = {
           <Provider store={store}>
             <ThemeProvider theme={{ ...theme, mq }}>
               <GlobalStyle />
-              <Story />
+              <BrowserRouter>
+                <Story />
+              </BrowserRouter>
             </ThemeProvider>
           </Provider>
         </QueryClientProvider>
