@@ -8,11 +8,6 @@ export const LoginPageStyle = styled.div`
   align-items: center;
   background-color: ${({ theme: { color } }) => color.bluishGray[50].value};
 
-  a {
-    margin-top: 160px;
-    margin-bottom: 12px;
-  }
-
   .slogan {
     margin-bottom: 58px;
     color: ${({ theme: { color } }) => color.bluishGray[700].value};
