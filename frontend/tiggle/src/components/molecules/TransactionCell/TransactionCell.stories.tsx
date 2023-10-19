@@ -17,11 +17,11 @@ export const Default: Story = {
     amount: 50000,
     content: "컨텐츠 제목",
     reason: "컨텐츠 설명 컨텐츠 설명 컨텐츠 설명",
-    user: {
-      name: "사용자 이름",
-      imageUrl: "image.jpg",
+    member: {
+      nickname: "사용자 이름",
+      profileUrl: "image.jpg",
     },
     createdAt: "2023-08-15T08:47:19",
-    number: 89,
+    // number: 89,
   },
 };

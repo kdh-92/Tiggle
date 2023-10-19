@@ -5,7 +5,7 @@ import {
 } from "react-router-dom";
 
 import DetailPage, { loader as detailPageLoader } from "@/pages/DetailPage";
-import Main from "@/pages/Main";
+import MainPage from "@/pages/MainPage";
 import queryClient from "@/query/queryClient";
 import GeneralTemplate from "@/templates/GeneralTemplate";
 
@@ -19,7 +19,7 @@ export default createBrowserRouter(
           loader={detailPageLoader(queryClient)}
           errorElement={<div>error</div>}
         />
-        <Route path="/" element={<Main />} />
+        <Route path="/" element={<MainPage />} />
       </Route>
     </>,
   ),
