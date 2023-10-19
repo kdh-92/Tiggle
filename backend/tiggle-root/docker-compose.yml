@@ -1,0 +1,52 @@
+version: "3"
+services:
+  database:
+    image: mysql:latest
+    restart: always
+    container_name: database_mysql
+    environment:
+      MYSQL_DATABASE: tiggle
+      MYSQL_ROOT_PASSWORD: tiggle1234
+    ports:
+      - "3307:3306"
+    command:
+      - "mysqld"
+      - "--character-set-server=utf8mb4"
+      - "--collation-server=utf8mb4_unicode_ci"
+    networks:
+      - springboot-mysql-net
+  application:
+    build:
+      context: ./tiggle
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - "8080:8080"
+    depends_on:
+      - database
+    container_name: tiggle_app
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://database:3306/tiggle?useSSL=false&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: tiggle1234
+    networks:
+      - springboot-mysql-net
+  gateway:
+    build:
+      context: ./tiggle-auth-gateway
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - "8081:8081"
+    depends_on:
+      - application
+    container_name: tiggle_gateway
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://database:3306/tiggle?useSSL=false&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: tiggle1234
+    networks:
+      - springboot-mysql-net
+networks:
+  springboot-mysql-net:
+    driver: bridge
