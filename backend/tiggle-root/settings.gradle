@@ -1,3 +1,4 @@
 rootProject.name = 'tiggle-root'
 include 'tiggle'
 include 'tiggle-auth-gateway'
+include 'tiggle-notification'
