@@ -1,12 +1,22 @@
-DROP TABLE if exists comments;
-DROP TABLE if exists grades;
-DROP TABLE if exists members;
-DROP TABLE if exists reactions;
-DROP TABLE if exists tags;
-DROP TABLE if exists transactions;
-DROP TABLE if exists assets;
-DROP TABLE if exists categories;
-DROP TABLE if exists tx_tags;
+# ALTER TABLE transactions DROP FOREIGN KEY transactions_ibfk_1;
+# ALTER TABLE transactions DROP FOREIGN KEY transactions_ibfk_2;
+# ALTER TABLE transactions DROP FOREIGN KEY transactions_ibfk_3;
+# ALTER TABLE comments DROP FOREIGN KEY comments_ibfk_1;
+# ALTER TABLE comments DROP FOREIGN KEY comments_ibfk_2;
+# ALTER TABLE comments DROP FOREIGN KEY comments_ibfk_3;
+# ALTER TABLE reactions DROP FOREIGN KEY reactions_ibfk_1;
+# ALTER TABLE reactions DROP FOREIGN KEY reactions_ibfk_2;
+# ALTER TABLE reactions DROP FOREIGN KEY reactions_ibfk_3;
+
+# DROP TABLE if exists comments;
+# DROP TABLE if exists grades;
+# DROP TABLE if exists members;
+# DROP TABLE if exists reactions;
+# DROP TABLE if exists tags;
+# DROP TABLE if exists transactions;
+# DROP TABLE if exists assets;
+# DROP TABLE if exists categories;
+# DROP TABLE if exists tx_tags;
 
 CREATE TABLE `comments`
 (
@@ -20,6 +30,7 @@ CREATE TABLE `comments`
     `created_at` timestamp DEFAULT CURRENT_TIMESTAMP,
     `updated_at` timestamp DEFAULT NULL ,
     `deleted_at` timestamp DEFAULT NULL ,
+
     PRIMARY KEY (`id`)
 );
 
@@ -45,6 +56,7 @@ CREATE TABLE `members` (
    `created_at` timestamp DEFAULT CURRENT_TIMESTAMP,
    `updated_at` timestamp DEFAULT NULL,
    `deleted_at` timestamp DEFAULT NULL,
+
    PRIMARY KEY (`id`)
 );
 
@@ -133,3 +145,13 @@ CREATE TABLE `tx_tags`
 
     PRIMARY KEY (`id`)
 );
+
+ALTER TABLE transactions ADD FOREIGN KEY (member_id) REFERENCES members(id);
+ALTER TABLE transactions ADD FOREIGN KEY (asset_id) REFERENCES assets(id);
+ALTER TABLE transactions ADD FOREIGN KEY (category_id) REFERENCES categories(id);
+ALTER TABLE comments ADD FOREIGN KEY (tx_id) REFERENCES transactions(id);
+ALTER TABLE comments ADD FOREIGN KEY (sender_id) REFERENCES members(id);
+ALTER TABLE comments ADD FOREIGN KEY (receiver_id) REFERENCES members(id);
+ALTER TABLE reactions ADD FOREIGN KEY (tx_id) REFERENCES transactions(id);
+ALTER TABLE reactions ADD FOREIGN KEY (sender_id) REFERENCES members(id);
+ALTER TABLE reactions ADD FOREIGN KEY (receiver_id) REFERENCES members(id);
