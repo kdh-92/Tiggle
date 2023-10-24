@@ -28,7 +28,7 @@ public class GradeService {
 
     public GradeDto getGrade(Long gradeId) {
         return GradeDto.fromEntity(gradeRepository.findById(gradeId)
-                .orElseThrow(() -> new RuntimeException("")));
+                .orElseThrow(NotFoundException::new));
     }
 
     public List<GradeDto> getAllGrade() {
@@ -44,7 +44,7 @@ public class GradeService {
 
     public GradeDto updateGrade(Long gradeId, GradeDto gradeDto) {
         Grade grade = gradeRepository.findById(gradeId)
-                .orElseThrow(() -> new NotFoundException());
+                .orElseThrow(NotFoundException::new);
 
         grade.setName(gradeDto.getName());
         grade.setImageUrl(gradeDto.getImageUrl());

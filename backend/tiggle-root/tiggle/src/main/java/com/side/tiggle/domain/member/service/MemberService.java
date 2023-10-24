@@ -33,7 +33,7 @@ public class MemberService {
 
     public Member getMember(Long memberId) {
         return memberRepository.findById(memberId)
-                .orElseThrow(() -> new NotFoundException());
+                .orElseThrow(NotFoundException::new);
     }
 
     public List<MemberDto> getAllMember() {
@@ -47,7 +47,7 @@ public class MemberService {
 
     public MemberDto updateMember(Long memberId, MemberDto memberDto) {
         Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new NotFoundException());
+                .orElseThrow(NotFoundException::new);
 
         member.setProfileUrl(memberDto.getProfileUrl());
         member.setNickname(memberDto.getNickname());

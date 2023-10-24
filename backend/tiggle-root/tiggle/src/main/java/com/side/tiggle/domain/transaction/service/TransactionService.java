@@ -100,7 +100,7 @@ public class TransactionService {
 
     public Transaction getTransaction(Long transactionId) {
         return transactionRepository.findById(transactionId)
-                .orElseThrow(() -> new NotFoundException());
+                .orElseThrow(NotFoundException::new);
     }
 
     public Page<Transaction> getCountOffsetTransaction(int pageSize, int index) {
@@ -131,7 +131,7 @@ public class TransactionService {
     public Transaction updateTransaction(Long memberId, Long transactionId, TransactionUpdateReqDto dto) {
         Transaction transaction = transactionRepository.findById(transactionId)
                 .stream().filter(item -> item.getMember().getId().equals(memberId)).findAny()
-                .orElseThrow(() -> new NotFoundException());
+                .orElseThrow(NotFoundException::new);
 
         transaction.setType(dto.getType());
         transaction.setAmount(dto.getAmount());
@@ -150,7 +150,7 @@ public class TransactionService {
                 .stream()
                 .filter(item -> item.getMember().getId().equals(memberId))
                 .findAny()
-                .orElseThrow(() -> new NotFoundException())
+                .orElseThrow(NotFoundException::new)
         );
     }
 }

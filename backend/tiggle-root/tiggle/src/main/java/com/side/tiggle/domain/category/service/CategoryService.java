@@ -28,7 +28,7 @@ public class CategoryService {
 
     public Category getCategory(Long categoryId) {
         return categoryRepository.findById(categoryId)
-                .orElseThrow(() -> new NotFoundException());
+                .orElseThrow(NotFoundException::new);
     }
 
     public List<Category> getAllCategory() {

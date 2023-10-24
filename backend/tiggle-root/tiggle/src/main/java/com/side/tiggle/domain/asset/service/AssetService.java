@@ -26,7 +26,7 @@ public class AssetService {
 
     public Asset getAsset(Long assetId) {
         return assetRepository.findById(assetId)
-                .orElseThrow(() -> new NotFoundException());
+                .orElseThrow(NotFoundException::new);
     }
 
     public List<Asset> getAllAsset() {

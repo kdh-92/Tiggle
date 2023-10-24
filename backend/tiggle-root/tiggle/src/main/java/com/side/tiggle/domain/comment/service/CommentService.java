@@ -25,7 +25,7 @@ public class CommentService {
 
     public Comment getById(Long id) {
         return commentRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException());
+                .orElseThrow(NotFoundException::new);
     }
 
     public int getParentCount(long txId) {
@@ -58,17 +58,19 @@ public class CommentService {
         // TODO : Service 메소드로 수정한다
         Transaction tx = transactionService.getTransaction(commentDto.getTxId());
         Member sender = memberRepository.findById(commentDto.getSenderId())
-                .orElseThrow(() -> new NotFoundException());
+                .orElseThrow(NotFoundException::new);
+        Member receiver = memberRepository.findById(commentDto.getReceiverId())
+                .orElseThrow(NotFoundException::new);
 
         assertValid(commentDto);
-        Comment comment = commentDto.toEntity(tx, sender);
+        Comment comment = commentDto.toEntity(tx, sender, receiver);
         return commentRepository.save(comment);
     }
 
     public Comment updateComment(Long memberId, Long commentId, String content) {
         Comment comment = commentRepository.findById(commentId).stream()
                 .filter( it -> it.getSender().getId().equals(memberId)).findFirst()
-                .orElseThrow(() -> new NotFoundException());
+                .orElseThrow(NotFoundException::new);
         comment.setContent(content);
         commentRepository.save(comment);
         return comment;
@@ -77,19 +79,19 @@ public class CommentService {
     public void deleteComment(Long memberId, Long commentId) {
         Comment comment = commentRepository.findById(commentId).stream()
                 .filter( it -> it.getSender().getId().equals(memberId)).findFirst()
-                .orElseThrow(() -> new NotFoundException());
+                .orElseThrow(NotFoundException::new);
         commentRepository.delete(comment);
     }
 
     private void assertValid(CommentCreateReqDto dto) {
         if (dto.getParentId() != null) {
             commentRepository.findById(dto.getParentId())
-                    .orElseThrow(()-> new NotFoundException());
+                    .orElseThrow(NotFoundException::new);
         }
         memberRepository.findById(dto.getSenderId())
-                .orElseThrow(() -> new NotFoundException());
+                .orElseThrow(NotFoundException::new);
         memberRepository.findById(dto.getReceiverId())
-                .orElseThrow(() -> new NotFoundException());
+                .orElseThrow(NotFoundException::new);
     }
 
 }

@@ -4,6 +4,7 @@ import com.side.tiggle.domain.asset.model.Asset;
 import com.side.tiggle.domain.category.model.Category;
 import com.side.tiggle.domain.comment.model.Comment;
 import com.side.tiggle.domain.member.model.Member;
+import com.side.tiggle.domain.reaction.model.Reaction;
 import com.side.tiggle.domain.tag.model.Tag;
 import com.side.tiggle.global.common.model.BaseEntity;
 import lombok.*;
@@ -74,6 +75,10 @@ public class Transaction extends BaseEntity {
     @OneToMany(mappedBy = "tx", fetch = FetchType.LAZY)
     @JsonIgnore
     private List<Comment> commentList;
+
+    @OneToMany(mappedBy = "tx", fetch = FetchType.LAZY)
+    @JsonIgnore
+    private List<Reaction> reactionList;
 
 
     @Builder

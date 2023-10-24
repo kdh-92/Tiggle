@@ -23,16 +23,17 @@ public class CommentRespDto extends CommentDto {
     LocalDateTime createdAt;
     int childCount = 0;
     MemberDto sender; // 작성자 정보
+    MemberDto receiver; // 수신자 정보
 
     public static CommentRespDto fromEntity(Comment comment) {
         CommentRespDto dto = new CommentRespDto();
         dto.setContent(comment.getContent());
         dto.setParentId(comment.getParentId());
-        dto.setReceiverId(comment.getReceiverId());
+        dto.setSender(MemberDto.fromEntity(comment.getSender()));
+        dto.setReceiver(MemberDto.fromEntity(comment.getReceiver()));
         dto.setTxId(comment.getTx().getId());
         dto.setId(comment.getId());
         dto.setCreatedAt(comment.getCreatedAt());
-        dto.setSender(MemberDto.fromEntity(comment.getSender()));
         return dto;
     }
 
