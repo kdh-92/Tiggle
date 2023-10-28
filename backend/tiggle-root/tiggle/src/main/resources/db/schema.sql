@@ -133,3 +133,18 @@ CREATE TABLE `tx_tags`
 
     PRIMARY KEY (`id`)
 );
+
+CREATE TABLE `notifications`
+(
+    `id` bigint NOT NULL AUTO_INCREMENT,
+    `sender_id` bigint NULL,
+    `receiver_id` bigint NOT NULL,
+    `content` varchar(255) NOT NULL,
+    `type` varchar(10) NOT NULL,
+    `created_at` timestamp NOT NULL,
+    `viewed_at` timestamp NULL,
+
+    PRIMARY KEY (`id`),
+    FOREIGN KEY (`sender_id`) REFERENCES `members`(`id`),
+    FOREIGN KEY (`receiver_id`) REFERENCES `members`(`id`)
+);
