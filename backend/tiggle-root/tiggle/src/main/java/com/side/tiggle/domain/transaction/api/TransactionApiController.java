@@ -4,6 +4,8 @@ import com.side.tiggle.domain.asset.service.AssetService;
 import com.side.tiggle.domain.category.service.CategoryService;
 import com.side.tiggle.domain.comment.dto.resp.CommentRespDto;
 import com.side.tiggle.domain.comment.service.CommentService;
+import com.side.tiggle.domain.reaction.model.ReactionType;
+import com.side.tiggle.domain.reaction.service.ReactionService;
 import com.side.tiggle.domain.transaction.dto.req.TransactionUpdateReqDto;
 import com.side.tiggle.domain.comment.model.Comment;
 import com.side.tiggle.domain.transaction.dto.TransactionDto;
@@ -39,6 +41,7 @@ public class TransactionApiController {
     private final AssetService assetService;
     private final CategoryService categoryService;
     private final CommentService commentService;
+    private final ReactionService reactionService;
     private final String DEFAULT_INDEX = "0";
     private final String DEFAULT_PAGE_SIZE = "5";
 
@@ -53,9 +56,7 @@ public class TransactionApiController {
         return new ResponseEntity<>(
                 TransactionRespDto.fromEntityDetailTx(
                         tx,
-                        parentTx,
-                        assetService.getAsset(dto.getAssetId()),
-                        categoryService.getCategory(dto.getCategoryId())
+                        parentTx
                 ), HttpStatus.CREATED
         );
     }
@@ -71,9 +72,7 @@ public class TransactionApiController {
         return new ResponseEntity<>(
                 TransactionRespDto.fromEntityDetailTx(
                         tx,
-                        parentTx,
-                        assetService.getAsset(tx.getAssetId()),
-                        categoryService.getCategory(tx.getCategoryId())
+                        parentTx
                 ), HttpStatus.OK
         );
     }
@@ -90,8 +89,19 @@ public class TransactionApiController {
             @Parameter(name = "index", description = "tx 페이지 번호") @NotBlank @RequestParam(defaultValue = DEFAULT_INDEX) int index,
             @Parameter(name = "pageSize", description = "페이지 내부 tx 개수") @RequestParam(defaultValue = DEFAULT_PAGE_SIZE) int pageSize
     ) {
+        Page<Transaction> txPage = transactionService.getCountOffsetTransaction(pageSize, index);
+        List<TransactionRespDto> dtoList = txPage.getContent()
+                .stream()
+                .map(tx -> {
+                    long txId = tx.getId();
+                    int txUpCount = reactionService.getReactionCount(txId, ReactionType.DOWN);
+                    int txDownCount = reactionService.getReactionCount(txId, ReactionType.UP);
+                    int txCommentCount = commentService.getParentCount(txId);
+                    return TransactionRespDto.fromEntityWithCount(tx, txUpCount, txDownCount, txCommentCount);
+                })
+                .collect(Collectors.toList());
         return new ResponseEntity<>(
-                TransactionRespDto.fromEntityPage(transactionService.getCountOffsetTransaction(pageSize, index)),
+                TransactionRespDto.fromEntityPage(txPage, dtoList),
                 HttpStatus.OK
         );
     }
@@ -109,8 +119,19 @@ public class TransactionApiController {
             @Parameter(name = "index", description = "tx 페이지 번호") @NotBlank @RequestParam(defaultValue = DEFAULT_INDEX) int index,
             @Parameter(name = "pageSize", description = "페이지 내부 tx 개수") @RequestParam(defaultValue = DEFAULT_PAGE_SIZE) int pageSize
     ) {
+        Page<Transaction> txPage = transactionService.getMemberCountOffsetTransaction(memberId, pageSize, index);
+        List<TransactionRespDto> dtoList = txPage.getContent()
+                .stream()
+                .map(tx -> {
+                    long txId = tx.getId();
+                    int txUpCount = reactionService.getReactionCount(txId, ReactionType.DOWN);
+                    int txDownCount = reactionService.getReactionCount(txId, ReactionType.UP);
+                    int txCommentCount = commentService.getParentCount(txId);
+                    return TransactionRespDto.fromEntityWithCount(tx, txUpCount, txDownCount, txCommentCount);
+                })
+                .collect(Collectors.toList());
         return new ResponseEntity<>(
-                TransactionRespDto.fromEntityPage(transactionService.getMemberCountOffsetTransaction(memberId, pageSize, index)),
+                TransactionRespDto.fromEntityPage(txPage, dtoList),
                 HttpStatus.OK
         );
     }
@@ -120,7 +141,13 @@ public class TransactionApiController {
         return new ResponseEntity<>(
                 transactionService.getAllUndeletedTransaction()
                         .stream()
-                        .map(TransactionRespDto::fromEntity)
+                        .map(tx -> {
+                            long txId = tx.getId();
+                            int txUpCount = reactionService.getReactionCount(txId, ReactionType.DOWN);
+                            int txDownCount = reactionService.getReactionCount(txId, ReactionType.UP);
+                            int txCommentCount = commentService.getParentCount(txId);
+                            return TransactionRespDto.fromEntityWithCount(tx, txUpCount, txDownCount, txCommentCount);
+                        })
                         .collect(Collectors.toList()),
                 HttpStatus.OK);
     }
@@ -134,9 +161,7 @@ public class TransactionApiController {
         Transaction tx = transactionService.updateTransaction(memberId, transactionId, dto);
         return new ResponseEntity<>(
                 TransactionUpdateRespDto.fromEntity(
-                        tx,
-                        assetService.getAsset(tx.getAssetId()),
-                        categoryService.getCategory(tx.getCategoryId())
+                        tx
                 ), HttpStatus.OK
         );
     }

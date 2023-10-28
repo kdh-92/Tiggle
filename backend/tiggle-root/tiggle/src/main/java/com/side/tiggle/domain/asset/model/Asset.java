@@ -19,7 +19,7 @@ public class Asset {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "default", nullable = false)
+    @Column(name = "defaults", nullable = false)
     private boolean defaults;
 
     @Builder

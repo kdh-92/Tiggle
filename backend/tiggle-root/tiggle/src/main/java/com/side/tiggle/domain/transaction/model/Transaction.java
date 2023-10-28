@@ -1,7 +1,11 @@
 package com.side.tiggle.domain.transaction.model;
 
+import com.side.tiggle.domain.asset.model.Asset;
+import com.side.tiggle.domain.category.model.Category;
 import com.side.tiggle.domain.comment.model.Comment;
 import com.side.tiggle.domain.member.model.Member;
+import com.side.tiggle.domain.reaction.model.Reaction;
+import com.side.tiggle.domain.tag.model.Tag;
 import com.side.tiggle.global.common.model.BaseEntity;
 import lombok.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -33,6 +37,16 @@ public class Transaction extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     private Member member;
 
+    @JsonIgnore
+    @JoinColumn(name = "asset_id", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Asset asset;
+
+    @JsonIgnore
+    @JoinColumn(name = "category_id", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Category category;
+
     @Column(name = "parent_id")
     private Long parentId;
 
@@ -55,12 +69,6 @@ public class Transaction extends BaseEntity {
     @Column(name = "reason", nullable = false)
     private String reason;
 
-    @Column(name = "asset_id", nullable = false)
-    private Long assetId;
-
-    @Column(name = "category_id", nullable = false)
-    private Long categoryId;
-
     @Column(name = "tag_names", nullable = false)
     private String tagNames;
 
@@ -68,9 +76,16 @@ public class Transaction extends BaseEntity {
     @JsonIgnore
     private List<Comment> commentList;
 
+    @OneToMany(mappedBy = "tx", fetch = FetchType.LAZY)
+    @JsonIgnore
+    private List<Reaction> reactionList;
+
+
     @Builder
-    public Transaction(Member member, Long parentId, TransactionType type, String imageUrl, Integer amount, LocalDate date, String content, String reason, Long assetId, Long categoryId, String tagNames) {
+    public Transaction(Member member, Asset asset, Category category, Long parentId, TransactionType type, String imageUrl, Integer amount, LocalDate date, String content, String reason, String tagNames) {
         this.member = member;
+        this.asset = asset;
+        this.category = category;
         this.parentId = parentId;
         this.type = type;
         this.imageUrl = imageUrl;
@@ -78,8 +93,6 @@ public class Transaction extends BaseEntity {
         this.date = date;
         this.content = content;
         this.reason = reason;
-        this.assetId = assetId;
-        this.categoryId = categoryId;
         this.tagNames = tagNames;
     }
 }

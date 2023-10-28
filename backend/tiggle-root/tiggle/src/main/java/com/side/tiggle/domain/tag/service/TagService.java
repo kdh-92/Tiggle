@@ -25,7 +25,7 @@ public class TagService {
 
     public TagDto getTag(Long tagId) {
         return TagDto.fromEntity(tagRepository.findById(tagId)
-                .orElseThrow(() -> new NotFoundException()));
+                .orElseThrow(NotFoundException::new));
     }
 
     public List<Tag> getAllTag() {
@@ -38,7 +38,7 @@ public class TagService {
 
     public TagDto updateTag(Long tagId, TagDto tagDto) {
         Tag tag = tagRepository.findById(tagId)
-                .orElseThrow(() -> new NotFoundException());
+                .orElseThrow(NotFoundException::new);
 
         tag.setName(tagDto.getName());
 

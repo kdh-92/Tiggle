@@ -1,5 +1,7 @@
 package com.side.tiggle.domain.reaction.service;
 
+import com.side.tiggle.domain.member.model.Member;
+import com.side.tiggle.domain.member.service.MemberService;
 import com.side.tiggle.domain.reaction.dto.req.ReactionCreateDto;
 import com.side.tiggle.domain.reaction.model.Reaction;
 import com.side.tiggle.domain.reaction.model.ReactionType;
@@ -16,6 +18,7 @@ public class ReactionService {
 
     private final ReactionRepository reactionRepository;
     private final TransactionService transactionService;
+    private final MemberService memberService;
 
     public Reaction getReaction(long txId, long senderId) {
         return reactionRepository.findByTxIdAndSenderId(txId, senderId);
@@ -28,9 +31,13 @@ public class ReactionService {
     public Reaction upsertReaction(long txId, long senderId, ReactionCreateDto reactionDto) {
         Transaction transaction = transactionService.getTransaction(txId); // transaction 유효성 확인을 위해 한번 조회
         Reaction reaction = reactionRepository.findByTxIdAndSenderId(txId, senderId);
+
         if (reaction == null) {
-            reaction = reactionDto.toEntity(senderId, transaction);
+            Member sender = memberService.getMember(senderId);
+            Member receiver = memberService.getMember(reactionDto.getReceiverId());
+            reaction = reactionDto.toEntity(transaction, sender, receiver);
         }
+
         reaction.setType(reactionDto.getType());
         reactionRepository.save(reaction);
         return reaction;
