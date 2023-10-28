@@ -3,7 +3,7 @@ import styled from "styled-components";
 export const MenuButtonStyle = styled.button`
   width: 36px;
   height: 36px;
-  background-color: ${({ theme: { color } }) => color.white.value};
+  background-color: ${({ theme: { color } }) => color.bluishGray[50].value};
   border: 1px solid ${({ theme: { color } }) => color.bluishGray[200].value};
   border-radius: 8px;
 

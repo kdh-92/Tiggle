@@ -3,19 +3,20 @@ import styled from "styled-components";
 import { expandTypography } from "@/styles/util";
 
 export const ReactionSectionStyle = styled.div`
-  width: fit-content;
+  width: 100%;
   padding: 24px;
-  border: 1px solid ${({ theme }) => theme.color.bluishGray[200].value};
-  border-radius: 24px;
+  background-color: ${({ theme }) => theme.color.white.value};
+  border-radius: 12px;
 
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 16px;
 
   .title {
-    ${({ theme }) => expandTypography(theme.typography.body.large.bold)}
+    ${({ theme }) => expandTypography(theme.typography.body.large.medium)}
     color: ${({ theme }) => theme.color.bluishGray[700].value};
-    text-align: left;
+    text-align: center;
   }
 
   .button-wrapper {
@@ -24,12 +25,11 @@ export const ReactionSectionStyle = styled.div`
   }
 
   ${({ theme }) => theme.mq.desktop} {
-    padding: 24px 32px;
+    padding: 28px;
     gap: 24px;
 
     .title {
-      text-align: center;
-      ${({ theme }) => expandTypography(theme.typography.title.small2x.bold)}
+      ${({ theme }) => expandTypography(theme.typography.title.small2x.medium)}
     }
 
     .button-wrapper {

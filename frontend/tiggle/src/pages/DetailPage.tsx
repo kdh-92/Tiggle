@@ -13,8 +13,9 @@ import {
   TransactionApiControllerService,
 } from "@/generated";
 import {
+  DetailPageStyle,
   DetailPageContentStyle,
-  DetailPageReplySectionStyle,
+  DetailPageCommentSectionStyle,
 } from "@/styles/pages/DetailPageStyle";
 
 const transactionQuery = (id: number) => ({
@@ -53,8 +54,8 @@ const DetailPage = () => {
   const txType = useMemo(() => transactionData.type, [transactionData]);
 
   return (
-    <>
-      <DetailPageContentStyle className="page-container">
+    <DetailPageStyle className="page-container">
+      <section className="content">
         <PostHeader
           {...transactionData}
           sender={{
@@ -64,23 +65,22 @@ const DetailPage = () => {
           category={"category"}
         />
 
-        <div className="divider" />
-
-        <div className="content">
-          <div className="content-image">
+        <DetailPageContentStyle>
+          <div className="image">
             <img
               src={transactionData.imageUrl ?? "/assets/img-placeholder.png"}
               alt={transactionData.content}
             />
           </div>
-          <p className="content-text">{transactionData.reason}</p>
-
-          <ul className="content-tags">
-            {transactionData.txTagNames
-              ?.split(",")
-              .map(tag => <HashTag key={`tag-${tag}`} label={tag} />)}
-          </ul>
-        </div>
+          <div className="content">
+            <p className="content-reason">{transactionData.reason}</p>
+            <ul className="content-tags">
+              {transactionData.txTagNames
+                ?.split(",")
+                .map(tag => <HashTag key={`tag-${tag}`} label={tag} />)}
+            </ul>
+          </div>
+        </DetailPageContentStyle>
 
         {reactionData && (
           <ReactionSection
@@ -90,26 +90,32 @@ const DetailPage = () => {
             className="reaction"
           />
         )}
-      </DetailPageContentStyle>
+      </section>
 
-      <DetailPageReplySectionStyle>
-        <div className="page-container">
-          <p className="title">댓글 {reactionData?.commentCount}개</p>
-          <CommentForm txId={id} receiverId={transactionData.member?.id} />
-          <div className="divider" />
-          <div className="comments">
-            {commentsData?.content?.map(comment => (
-              <CommentCell
-                {...comment}
-                key={`comment-cell-${comment.id}`}
-                type={txType}
-                receiverId={transactionData.member?.id}
-              />
-            ))}
-          </div>
+      <DetailPageCommentSectionStyle className="comment">
+        <div className="title">
+          <p className="main">댓글</p>
+          <p className="sub">{reactionData?.commentCount}개</p>
         </div>
-      </DetailPageReplySectionStyle>
-    </>
+
+        <div className="comment-cards">
+          {commentsData?.content?.map(comment => (
+            <CommentCell
+              {...comment}
+              key={`comment-cell-${comment.id}`}
+              type={txType}
+              receiverId={transactionData.member?.id}
+            />
+          ))}
+        </div>
+
+        <CommentForm
+          txId={id}
+          type={txType}
+          receiverId={transactionData.member?.id}
+        />
+      </DetailPageCommentSectionStyle>
+    </DetailPageStyle>
   );
 };
 
