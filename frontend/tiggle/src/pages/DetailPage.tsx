@@ -1,4 +1,5 @@
-import { useMemo } from "react";
+import { useLayoutEffect, useMemo } from "react";
+import { useDispatch } from "react-redux";
 import { LoaderFunctionArgs, useLoaderData, useParams } from "react-router-dom";
 
 import { QueryClient, useQuery } from "@tanstack/react-query";
@@ -12,6 +13,7 @@ import {
   ReactionApiService,
   TransactionApiControllerService,
 } from "@/generated";
+import store from "@/store/detailPage";
 import {
   DetailPageStyle,
   DetailPageContentStyle,
@@ -50,7 +52,11 @@ const DetailPage = () => {
     queryFn: async () => TransactionApiControllerService.getAllCommentsByTx(id),
   });
 
-  // TODO: Redux Store를 이용하여 페이지 단위 변수로 관리
+  const dispatch = useDispatch();
+  useLayoutEffect(() => {
+    dispatch(store.actions.creators.setType(transactionData.type));
+  }, [transactionData]);
+
   const txType = useMemo(() => transactionData.type, [transactionData]);
 
   return (
@@ -83,12 +89,7 @@ const DetailPage = () => {
         </DetailPageContentStyle>
 
         {reactionData && (
-          <ReactionSection
-            {...reactionData}
-            type={txType}
-            txId={id}
-            className="reaction"
-          />
+          <ReactionSection {...reactionData} txId={id} className="reaction" />
         )}
       </section>
 
@@ -103,17 +104,12 @@ const DetailPage = () => {
             <CommentCell
               {...comment}
               key={`comment-cell-${comment.id}`}
-              type={txType}
               receiverId={transactionData.member?.id}
             />
           ))}
         </div>
 
-        <CommentForm
-          txId={id}
-          type={txType}
-          receiverId={transactionData.member?.id}
-        />
+        <CommentForm txId={id} receiverId={transactionData.member?.id} />
       </DetailPageCommentSectionStyle>
     </DetailPageStyle>
   );

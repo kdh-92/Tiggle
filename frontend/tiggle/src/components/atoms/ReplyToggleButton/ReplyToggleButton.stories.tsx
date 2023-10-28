@@ -1,18 +1,41 @@
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+
 import { Meta, StoryObj } from "@storybook/react";
 
-import ReplyToggleButton from "@/components/atoms/ReplyToggleButton/ReplyToggleButton";
-import { Tx } from "@/types";
+import ReplyToggleButton, {
+  ReplyToggleButtonProps,
+} from "@/components/atoms/ReplyToggleButton/ReplyToggleButton";
+import detailPageStore from "@/store/detailPage";
+import { Tx, TxType } from "@/types";
+
+type ReplyToggleButtonPropsWithTxType = ReplyToggleButtonProps & {
+  txType: TxType;
+};
 
 export default {
   title: "atoms/ReplyToggleButton",
   component: ReplyToggleButton,
-} as Meta<typeof ReplyToggleButton>;
+  render: ({ txType, ...args }) => {
+    const dispatch = useDispatch();
+    useEffect(() => {
+      dispatch(detailPageStore.actions.creators.setType(txType));
+    }, [txType]);
+    return <ReplyToggleButton {...args} />;
+  },
+  argTypes: {
+    txType: {
+      options: Object.values(Tx),
+      control: { type: "radio" },
+    },
+  },
+} as Meta<ReplyToggleButtonPropsWithTxType>;
 
-type Story = StoryObj<typeof ReplyToggleButton>;
+type Story = StoryObj<ReplyToggleButtonPropsWithTxType>;
 
 export const Default: Story = {
   args: {
-    txType: Tx.OUTCOME,
+    txType: Tx.REFUND,
     repliesCount: 2,
     open: true,
   },

@@ -1,27 +1,30 @@
 import { ButtonHTMLAttributes } from "react";
 import { Frown, Smile } from "react-feather";
+import { useSelector } from "react-redux";
 
 import cn from "classnames";
 
+import { RootState } from "@/store";
 import { ReactionButtonStyle } from "@/styles/components/ReactionButtonStyle";
-import { Reaction, ReactionType, TxType } from "@/types";
+import { Reaction, ReactionType } from "@/types";
 
-interface ReactionButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  tx: TxType;
+export interface ReactionButtonProps
+  extends ButtonHTMLAttributes<HTMLButtonElement> {
   reaction: ReactionType;
   number: number;
   checked?: boolean;
 }
 
 export default function ReactionButton({
-  tx,
   reaction,
   number,
   checked,
   ...props
 }: ReactionButtonProps) {
+  const txType = useSelector((state: RootState) => state.detailPage.txType);
+
   return (
-    <ReactionButtonStyle className={cn({ checked }, tx)} {...props}>
+    <ReactionButtonStyle className={cn({ checked }, txType)} {...props}>
       <div className="label">
         {reaction === Reaction.Up && (
           <Smile className="label-icon" strokeWidth={1.5} />

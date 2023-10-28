@@ -11,7 +11,6 @@ type Story = StoryObj<typeof ReactionSection>;
 
 export const Default: Story = {
   args: {
-    type: "OUTCOME",
     txId: 1,
     upCount: 100,
     downCount: 200,

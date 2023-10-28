@@ -1,5 +1,6 @@
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { SubmitHandler, useForm, Controller } from "react-hook-form";
+import { useSelector } from "react-redux";
 
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { message } from "antd";
@@ -9,6 +10,7 @@ import ReplyToggleButton from "@/components/atoms/ReplyToggleButton/ReplyToggleB
 import TextArea from "@/components/atoms/TextArea/TextArea";
 import { CommentApiService, CommentRespDto } from "@/generated";
 import queryClient from "@/query/queryClient";
+import { RootState } from "@/store";
 import {
   CommentCellStyle,
   CommentRepliesStyle,
@@ -16,23 +18,21 @@ import {
   CommentSenderStyle,
   ReplyFormStyle,
 } from "@/styles/components/CommentCellStyle";
-import { TxType } from "@/types";
 import { calculateDateTimeDiff } from "@/utils/date";
+import { convertTxTypeToColor } from "@/utils/txType";
 
 const TEMP_USER_ID = 1;
 
-interface CommentCellProps
+export interface CommentCellProps
   extends Pick<
     CommentRespDto,
     "id" | "txId" | "content" | "createdAt" | "childCount" | "sender"
   > {
-  type: TxType;
   receiverId: number;
 }
 
 export default function CommentCell({
   id,
-  type,
   txId,
   content,
   createdAt,
@@ -95,7 +95,6 @@ export default function CommentCell({
         <p className="content">{content}</p>
 
         <ReplyToggleButton
-          txType={type}
           open={replyOpen}
           repliesCount={childCount}
           onClick={toggleReplySection}
@@ -109,7 +108,7 @@ export default function CommentCell({
               <ReplyCell key={`comment-reply-${reply.id}`} {...reply} />
             ))}
 
-            <ReplyForm type={type} onSubmit={onSubmitReply} />
+            <ReplyForm onSubmit={onSubmitReply} />
           </CommentRepliesStyle>
         )}
       </CommentCellStyle>
@@ -140,28 +139,17 @@ function ReplyCell({ id, content, createdAt, sender }: ReplyCellProps) {
   );
 }
 
-interface ReplyFormProps {
-  type: TxType;
-  onSubmit: (reply: string) => void;
-}
-
 interface ReplyInputs {
   reply: string;
 }
 
-function ReplyForm({ type, onSubmit }: ReplyFormProps) {
-  const { control, handleSubmit, reset } = useForm<ReplyInputs>();
+interface ReplyFormProps {
+  onSubmit: (reply: string) => void;
+}
 
-  const btnColor = useMemo(() => {
-    switch (type) {
-      case "OUTCOME":
-        return "peach";
-      case "REFUND":
-        return "blue";
-      case "INCOME":
-        return "green";
-    }
-  }, [type]);
+function ReplyForm({ onSubmit }: ReplyFormProps) {
+  const txType = useSelector((state: RootState) => state.detailPage.txType);
+  const { control, handleSubmit, reset } = useForm<ReplyInputs>();
 
   const handleOnSubmit: SubmitHandler<ReplyInputs> = ({ reply }) => {
     if (reply === "") return;
@@ -178,7 +166,11 @@ function ReplyForm({ type, onSubmit }: ReplyFormProps) {
           <TextArea variant="filled" placeholder="답글 남기기" {...field} />
         )}
       />
-      <CTAButton size="md" color={btnColor} variant="secondary">
+      <CTAButton
+        size="md"
+        color={convertTxTypeToColor(txType)}
+        variant="secondary"
+      >
         답글 등록
       </CTAButton>
     </ReplyFormStyle>

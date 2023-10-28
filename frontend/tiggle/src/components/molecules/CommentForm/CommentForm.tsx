@@ -1,5 +1,6 @@
-import { FormHTMLAttributes, useMemo } from "react";
+import { FormHTMLAttributes } from "react";
 import { SubmitHandler, useForm, Controller } from "react-hook-form";
+import { useSelector } from "react-redux";
 
 import { useMutation } from "@tanstack/react-query";
 import { message } from "antd";
@@ -7,13 +8,13 @@ import { message } from "antd";
 import CTAButton from "@/components/atoms/CTAButton/CTAButton";
 import { CommentApiService } from "@/generated";
 import queryClient from "@/query/queryClient";
+import { RootState } from "@/store";
 import { CommentSenderStyle } from "@/styles/components/CommentCellStyle";
 import { CommentFormStyle } from "@/styles/components/CommentFormStyle";
-import { TxType } from "@/types";
+import { convertTxTypeToColor } from "@/utils/txType";
 
 interface CommentFormProps extends FormHTMLAttributes<HTMLFormElement> {
   txId: number;
-  type: TxType;
   receiverId: number;
 }
 
@@ -26,9 +27,10 @@ const TEMP_USER_ID = 1;
 export default function CommentForm({
   txId,
   receiverId,
-  type,
   ...props
 }: CommentFormProps) {
+  const txType = useSelector((state: RootState) => state.detailPage.txType);
+
   const [messageApi, contextHolder] = message.useMessage();
   const { control, handleSubmit, reset } = useForm<CommentFormInputs>();
 
@@ -54,21 +56,14 @@ export default function CommentForm({
     });
   };
 
-  const btnColor = useMemo(() => {
-    switch (type) {
-      case "OUTCOME":
-        return "peach";
-      case "REFUND":
-        return "blue";
-      case "INCOME":
-        return "green";
-    }
-  }, [type]);
-
   return (
     <>
       {contextHolder}
-      <CommentFormStyle {...props} onSubmit={handleSubmit(onSubmit)}>
+      <CommentFormStyle
+        {...props}
+        onSubmit={handleSubmit(onSubmit)}
+        className={txType}
+      >
         <CommentSenderStyle>
           <img className="profile" />
           <p className="name">내 이름</p>
@@ -91,7 +86,7 @@ export default function CommentForm({
           <CTAButton
             size="md"
             variant="secondary"
-            color={btnColor}
+            color={convertTxTypeToColor(txType)}
             type="submit"
           >
             댓글 등록

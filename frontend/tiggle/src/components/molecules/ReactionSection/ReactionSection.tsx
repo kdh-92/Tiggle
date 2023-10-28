@@ -6,17 +6,15 @@ import ReactionButton from "@/components/atoms/ReactionButton/ReactionButton";
 import { ReactionApiService, ReactionSummaryDto } from "@/generated";
 import queryClient from "@/query/queryClient";
 import { ReactionSectionStyle } from "@/styles/components/ReactionSectionStyle";
-import { Reaction, ReactionType, TxType } from "@/types";
+import { Reaction, ReactionType } from "@/types";
 
 interface ReactionSectionProps
   extends Omit<ReactionSummaryDto, "commentCount"> {
-  type: TxType;
   txId: number;
   className?: string;
 }
 
 export default function ReactionSection({
-  type,
   txId,
   upCount,
   downCount,
@@ -61,14 +59,12 @@ export default function ReactionSection({
       </p>
       <div className="button-wrapper">
         <ReactionButton
-          tx={type}
           reaction={Reaction.Up}
           number={upCount}
           onClick={() => handleReactionButtonClick(Reaction.Up)}
           checked={selectedReaction === Reaction.Up}
         />
         <ReactionButton
-          tx={type}
           reaction={Reaction.Down}
           number={downCount}
           onClick={() => handleReactionButtonClick(Reaction.Down)}

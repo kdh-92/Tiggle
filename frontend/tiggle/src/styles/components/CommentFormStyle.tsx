@@ -5,7 +5,6 @@ import { expandTypography } from "../util";
 export const CommentFormStyle = styled.form`
   padding: 24px;
   background-color: ${({ theme }) => theme.color.white.value};
-  border: 1px solid ${({ theme }) => theme.color.peach[200].value};
   border-radius: 12px;
 
   display: flex;
@@ -28,6 +27,16 @@ export const CommentFormStyle = styled.form`
   .button-wrapper {
     display: flex;
     justify-content: flex-end;
+  }
+
+  &.OUTCOME {
+    border: 1px solid ${({ theme }) => theme.color.peach[300].value};
+  }
+  &.INCOME {
+    border: 1px solid ${({ theme }) => theme.color.green[300].value};
+  }
+  &.REFUND {
+    border: 1px solid ${({ theme }) => theme.color.blue[300].value};
   }
 
   ${({ theme }) => theme.mq.desktop} {

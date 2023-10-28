@@ -1,10 +1,12 @@
 import { configureStore } from "@reduxjs/toolkit";
 
-import getDataReducer from "@/redux/reducer/getDataReducer";
+import getDataReducer from "@/store/data/reducer";
+import detailPageStore from "@/store/detailPage";
 
 export const store = configureStore({
   reducer: {
     data: getDataReducer,
+    detailPage: detailPageStore.reducer,
   },
   devTools: process.env.NODE_ENV !== "production",
 });
