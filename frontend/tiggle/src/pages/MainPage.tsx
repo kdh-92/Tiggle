@@ -1,7 +1,6 @@
 import { Edit3 } from "react-feather";
 
 import CTAButton from "@/components/atoms/CTAButton/CTAButton";
-import Navigation from "@/components/molecules/Navigation";
 import TransactionCells from "@/components/molecules/TransactionCell/TransactionCells";
 import Tab from "@/components/organisms/Tab";
 import useGetData from "@/hooks/useGetData";
@@ -25,7 +24,6 @@ const MainPage = () => {
             />
           </div>
         </div>
-        <Navigation />
         <TransactionCells data={data} />
       </MainPageContentStyle>
       <Tab />
