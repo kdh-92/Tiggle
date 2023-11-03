@@ -19,6 +19,7 @@ export default function TransactionCell({
   createdAt,
 }: TransactionRespDto) {
   const navigate = useNavigate();
+
   const handleGoDetail: React.MouseEventHandler<HTMLDivElement> = () => {
     navigate(`/detail/${id}`);
   };
@@ -26,7 +27,7 @@ export default function TransactionCell({
   return (
     <div onClick={handleGoDetail}>
       <TransactionCellStyle className={cn(type, id)}>
-        <TypeTag className="tag" txType={type} />
+        <TypeTag className="tag" txType={type} size={"md"} />
         <div className={cn("amount", type)}>
           <span className="amount-unit">₩ {amount}</span>
         </div>
