@@ -1,4 +1,5 @@
 import styled from "styled-components";
+
 import { expandTypography } from "@/styles/util";
 
 export const DetailPageContentStyle = styled.div`
