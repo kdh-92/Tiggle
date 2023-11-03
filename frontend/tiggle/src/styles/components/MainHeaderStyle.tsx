@@ -34,7 +34,7 @@ export const MainHeaderStyle = styled.div`
     display: flex;
     justify-content: center;
     border-bottom: 1px solid
-      ${({ theme: { color } }) => color.bluishGray[300].value};
+      ${({ theme: { color } }) => color.bluishGray[200].value};
   }
 
   .gnb {
