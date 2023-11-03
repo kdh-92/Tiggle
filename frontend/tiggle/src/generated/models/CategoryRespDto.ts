@@ -3,8 +3,9 @@
 /* tslint:disable */
 /* eslint-disable */
 
-export type AssetDto = {
+export type CategoryRespDto = {
     name?: string;
     defaults?: boolean;
+    id?: number;
 };
 

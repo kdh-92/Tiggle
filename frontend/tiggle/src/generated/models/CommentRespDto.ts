@@ -15,5 +15,6 @@ export type CommentRespDto = {
     createdAt?: string;
     childCount?: number;
     sender?: MemberDto;
+    receiver?: MemberDto;
 };
 

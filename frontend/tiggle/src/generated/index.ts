@@ -8,7 +8,9 @@ export { OpenAPI } from './core/OpenAPI';
 export type { OpenAPIConfig } from './core/OpenAPI';
 
 export type { AssetDto } from './models/AssetDto';
+export type { AssetRespDto } from './models/AssetRespDto';
 export type { CategoryDto } from './models/CategoryDto';
+export type { CategoryRespDto } from './models/CategoryRespDto';
 export type { CommentCreateReqDto } from './models/CommentCreateReqDto';
 export type { CommentRespDto } from './models/CommentRespDto';
 export type { CommentUpdateReqDto } from './models/CommentUpdateReqDto';
@@ -26,6 +28,8 @@ export type { TransactionDto } from './models/TransactionDto';
 export type { TransactionRespDto } from './models/TransactionRespDto';
 export type { TransactionUpdateReqDto } from './models/TransactionUpdateReqDto';
 
+export { AssetApiControllerService } from './services/AssetApiControllerService';
+export { CategoryApiControllerService } from './services/CategoryApiControllerService';
 export { CommentApiService } from './services/CommentApiService';
 export { GradeApiControllerService } from './services/GradeApiControllerService';
 export { MemberApiControllerService } from './services/MemberApiControllerService';
