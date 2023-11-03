@@ -18,5 +18,5 @@ export default function GeneralTemplate() {
 const GeneralTemplateStyle = styled.div`
   width: 100%;
   min-height: 100vh;
-  background-color: ${({ theme }) => theme.color.white.value};
+  background-color: ${({ theme: { color } }) => color.bluishGray[50].value};
 `;
