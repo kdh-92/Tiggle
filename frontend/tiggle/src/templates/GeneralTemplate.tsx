@@ -2,12 +2,12 @@ import { Outlet } from "react-router-dom";
 
 import styled from "styled-components";
 
-import Header from "@/components/organisms/Header";
+import MainHeader from "@/components/molecules/MainHeader/MainHeader";
 
 export default function GeneralTemplate() {
   return (
     <GeneralTemplateStyle>
-      <Header />
+      <MainHeader />
       <div className="container">
         <Outlet />
       </div>

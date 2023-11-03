@@ -1,13 +1,14 @@
 import { Header } from "antd/es/layout/layout";
 import styled from "styled-components";
 
-export const HeaderStyle = styled(Header)`
+import { expandTypography } from "../util/expandTypography";
+
+export const MainHeaderStyle = styled(Header)`
   position: sticky;
   top: 0;
   z-index: 1;
-  background: ${({ theme: { color } }) => color.white.value};
-  border-bottom: 1px solid
-    ${({ theme: { color } }) => color.bluishGray[200].value};
+  background: ${({ theme: { color } }) => color.bluishGray[50].value};
+  ${({ theme }) => expandTypography(theme.typography.body.medium.bold)};
   padding-inline: 0;
   display: flex;
   justify-content: center;
@@ -40,7 +41,7 @@ export const HeaderStyle = styled(Header)`
   }
 `;
 
-export const StyledHeaderLeft = styled.div`
+export const HeaderLeftStyle = styled.div`
   display: grid;
   align-items: center;
   grid-gap: 40px;
@@ -52,6 +53,7 @@ export const StyledHeaderLeft = styled.div`
     > button {
       width: 45px;
       height: 64px;
+      background: ${({ theme: { color } }) => color.bluishGray[50].value};
       color: ${({ theme: { color } }) => color.bluishGray[600].value};
     }
 
@@ -61,7 +63,7 @@ export const StyledHeaderLeft = styled.div`
   }
 `;
 
-export const StyledHeaderRight = styled.div`
+export const HeaderRightStyle = styled.div`
   display: flex;
   align-items: center;
   gap: 10px;
@@ -69,11 +71,11 @@ export const StyledHeaderRight = styled.div`
   .right-bar-btn {
     display: flex;
     align-items: center;
-    background: ${({ theme: { color } }) => color.white.value};
+    background: ${({ theme: { color } }) => color.bluishGray[50].value};
     border: none;
     padding: 0 4px;
     height: 40px;
-    color: ${({ theme: { color } }) => color.bluishGray[700].value};
+    color: ${({ theme: { color } }) => color.bluishGray[600].value};
   }
 
   .ant-avatar {
