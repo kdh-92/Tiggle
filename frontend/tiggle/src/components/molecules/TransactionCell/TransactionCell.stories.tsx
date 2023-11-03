@@ -19,7 +19,7 @@ export const Default: Story = {
     reason: "컨텐츠 설명 컨텐츠 설명 컨텐츠 설명",
     member: {
       nickname: "사용자 이름",
-      profileUrl: "image.jpg",
+      profileUrl: "",
     },
     createdAt: "2023-08-15T08:47:19",
     // number: 89,

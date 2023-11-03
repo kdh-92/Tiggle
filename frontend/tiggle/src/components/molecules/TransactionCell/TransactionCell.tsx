@@ -1,4 +1,5 @@
 // import { Frown, MessageSquare, Smile } from "react-feather";
+import { MessageSquare, ThumbsDown, ThumbsUp } from "react-feather";
 import { useNavigate } from "react-router-dom";
 
 import { Avatar } from "antd";
@@ -17,6 +18,9 @@ export default function TransactionCell({
   reason,
   member,
   createdAt,
+  txUpCount,
+  txDownCount,
+  txCommentCount,
 }: TransactionRespDto) {
   const navigate = useNavigate();
 
@@ -51,23 +55,22 @@ export default function TransactionCell({
               <p className="user-createdAt">{timeDiff(createdAt)}</p>
             </div>
           </div>
-          {/* TODO : reaction 관련 내용 백엔드에서 들어오면 추가 */}
-          {/* <div className="icon-unit">
-          <div className="reaction">
-            <div className="reaction-smile">
-              <Smile className="label-icon" />
-              <span>{number}</span>
+          <div className="icon-unit">
+            <div className="reaction">
+              <div className="reaction-up">
+                <ThumbsUp className="label-icon" />
+                <span>{txUpCount}</span>
+              </div>
+              <div className="reaction-down">
+                <ThumbsDown className="label-icon" />
+                <span>{txDownCount}</span>
+              </div>
             </div>
-            <div className="reaction-frown">
-              <Frown className="label-icon" />
-              <span>{number}</span>
+            <div className="comment">
+              <MessageSquare className="label-icon" />
+              <span>{txCommentCount}</span>
             </div>
           </div>
-          <div className="comment">
-            <MessageSquare className="label-icon" />
-            <span>{number}</span>
-          </div>
-        </div> */}
         </div>
       </TransactionCellStyle>
     </div>
