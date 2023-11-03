@@ -1,12 +1,12 @@
 import Masonry from "react-masonry-css";
 import { useSelector } from "react-redux";
 
-import Loading from "@/components/atoms/Loading/Loading";
 import { TransactionRespDto } from "@/generated/models/TransactionRespDto";
 import { RootState } from "@/store";
 import { TransactionCellsStyle } from "@/styles/components/TransactionCellsStyle";
 
 import TransactionCell from "./TransactionCell";
+import TransactionCellSkeleton from "./TransactionCellSkeleton";
 
 interface TransactionCellsProps {
   data: TransactionRespDto[];
@@ -22,19 +22,20 @@ export default function TransactionCells({ data }: TransactionCellsProps) {
 
   return (
     <>
-      {isLoading && <Loading />}
-      {isError && <p>An error occurred.</p>}
       <TransactionCellsStyle>
         <Masonry
           breakpointCols={breakpointColumnsObj}
           className="transaction-cell-box-masonry"
           columnClassName="transaction-cells"
         >
+          {isLoading &&
+            [...Array(8)].map((_, i) => <TransactionCellSkeleton key={i} />)}
           {!isLoading &&
             !isError &&
             data?.map(el => {
               return <TransactionCell key={el.id} {...el} />;
             })}
+          {isError && <p>An error occurred.</p>}
         </Masonry>
       </TransactionCellsStyle>
     </>
