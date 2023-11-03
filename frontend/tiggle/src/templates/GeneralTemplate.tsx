@@ -2,6 +2,7 @@ import { Outlet } from "react-router-dom";
 
 import styled from "styled-components";
 
+import BottomTab from "@/components/molecules/BottomTab/BottomTab";
 import MainHeader from "@/components/molecules/MainHeader/MainHeader";
 
 export default function GeneralTemplate() {
@@ -11,6 +12,7 @@ export default function GeneralTemplate() {
       <div className="container">
         <Outlet />
       </div>
+      <BottomTab />
     </GeneralTemplateStyle>
   );
 }
