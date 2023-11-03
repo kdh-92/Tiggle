@@ -1,9 +1,8 @@
-import { Header } from "antd/es/layout/layout";
 import styled from "styled-components";
 
 import { expandTypography } from "../util/expandTypography";
 
-export const MainHeaderStyle = styled(Header)`
+export const MainHeaderStyle = styled.div`
   position: sticky;
   top: 0;
   z-index: 1;
@@ -22,6 +21,20 @@ export const MainHeaderStyle = styled(Header)`
     ${({ theme }) => theme.mq.desktop} {
       width: 768px;
     }
+  }
+
+  .header {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+
+  .header-scroll {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    border-bottom: 1px solid
+      ${({ theme: { color } }) => color.bluishGray[300].value};
   }
 
   .gnb {
@@ -52,7 +65,7 @@ export const HeaderLeftStyle = styled.div`
 
     > button {
       width: 45px;
-      height: 64px;
+      height: 63px;
       background: ${({ theme: { color } }) => color.bluishGray[50].value};
       color: ${({ theme: { color } }) => color.bluishGray[600].value};
     }
