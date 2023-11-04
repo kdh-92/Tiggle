@@ -6,5 +6,8 @@ docker-compose down
 # tiggle & mysql 백그라운드 실행
 docker-compose up -d --build
 
+# kafka 백그라운드 실행
+docker-compose up -f docker-compose.kafka.yml -d
+
 # 이미지를 새로 생성하며 기존 unused (dangling) 이미지 삭제 처리
 docker image prune --force
