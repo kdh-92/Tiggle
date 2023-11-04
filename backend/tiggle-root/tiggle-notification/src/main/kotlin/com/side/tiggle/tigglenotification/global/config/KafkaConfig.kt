@@ -1,4 +1,4 @@
-package com.side.tiggle.tigglenotification.config
+package com.side.tiggle.tigglenotification.global.config
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.side.tiggle.tigglenotification.notification.NotificationService
@@ -27,6 +27,5 @@ class KafkaConfig(
             // TODO: 어떤 Exception인지에 따라 분기할 것
             logger.error(e.message, e)
         }
-
     }
 }

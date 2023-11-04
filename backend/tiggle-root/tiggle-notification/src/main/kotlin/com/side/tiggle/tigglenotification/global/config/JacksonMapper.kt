@@ -1,4 +1,4 @@
-package com.side.tiggle.tigglenotification.config
+package com.side.tiggle.tigglenotification.global.config
 
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
