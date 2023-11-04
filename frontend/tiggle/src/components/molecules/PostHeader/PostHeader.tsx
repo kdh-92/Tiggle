@@ -36,8 +36,8 @@ export default function PostHeader({
   return (
     <PostHeaderStyle id={`post-header-${id}`}>
       <StyledPostHeaderTitle>
-        <TypeTag className="tag" txType={type} size={"md"} />
-        <div className={cn("amount", type)}>
+        <TypeTag className="tag" txType={txType} size={"md"} />
+        <div className={cn("amount", txType)}>
           <span className="amount-unit">₩</span>
           <span className="amount-number">{amount}</span>
         </div>
