@@ -36,18 +36,20 @@ public class Comment extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     private Member sender;
 
-    @Column(name = "receiver_id", nullable = false)
-    private Long receiverId;
+    @JsonIgnore
+    @JoinColumn(name = "receiver_id", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Member receiver;
 
     @Column(name = "content", nullable = false)
     private String content;
 
     @Builder
-    public Comment(Transaction tx, Member sender, Long parentId, Long receiverId, String content) {
+    public Comment(Transaction tx, Member sender, Long parentId, Member receiver, String content) {
         this.tx = tx;
         this.sender = sender;
         this.parentId = parentId;
-        this.receiverId = receiverId;
+        this.receiver = receiver;
         this.content = content;
     }
 }

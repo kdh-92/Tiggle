@@ -1,5 +1,8 @@
 package com.side.tiggle.domain.reaction.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.side.tiggle.domain.member.model.Member;
+import com.side.tiggle.domain.transaction.model.Transaction;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 
@@ -18,14 +21,20 @@ public class Reaction {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "tx_id", nullable = false)
-    private Long txId;
+    @JsonIgnore
+    @JoinColumn(name = "tx_id", nullable = false)
+    @ManyToOne
+    private Transaction tx;
 
-    @Column(name = "sender_id", nullable = false)
-    private Long senderId;
+    @JsonIgnore
+    @JoinColumn(name = "sender_id", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Member sender;
 
-    @Column(name = "receiver_id", nullable = false)
-    private Long receiverId;
+    @JsonIgnore
+    @JoinColumn(name = "receiver_id", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Member receiver;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "type", nullable = false)
@@ -37,10 +46,10 @@ public class Reaction {
 
 
     @Builder
-    public Reaction(Long txId, Long senderId, Long receiverId, ReactionType type) {
-        this.txId = txId;
-        this.senderId = senderId;
-        this.receiverId = receiverId;
+    public Reaction(Transaction tx, Member sender, Member receiver, ReactionType type) {
+        this.tx = tx;
+        this.sender = sender;
+        this.receiver = receiver;
         this.type = type;
     }
 }

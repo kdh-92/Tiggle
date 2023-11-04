@@ -24,12 +24,12 @@ public class CommentDto {
     @NotNull @Size(max = 255)
     String content;
 
-    public Comment toEntity(Transaction tx, Member sender) {
+    public Comment toEntity(Transaction tx, Member sender, Member receiver) {
         return Comment.builder()
                 .tx(tx)
                 .parentId(parentId)
+                .receiver(receiver)
                 .sender(sender)
-                .receiverId(receiverId)
                 .content(content)
                 .build();
     }
@@ -39,7 +39,7 @@ public class CommentDto {
         dto.txId = comment.getTx().getId();
         dto.parentId = comment.getParentId();
         dto.senderId = comment.getSender().getId();
-        dto.receiverId = comment.getReceiverId();
+        dto.receiverId = comment.getReceiver().getId();
         dto.content = comment.getContent();
 
         return dto;

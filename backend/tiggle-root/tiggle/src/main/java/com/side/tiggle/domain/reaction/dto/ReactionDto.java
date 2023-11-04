@@ -1,15 +1,16 @@
 package com.side.tiggle.domain.reaction.dto;
 
+import com.side.tiggle.domain.member.model.Member;
 import com.side.tiggle.domain.reaction.model.Reaction;
 import com.side.tiggle.domain.reaction.model.ReactionType;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import com.side.tiggle.domain.transaction.model.Transaction;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 @Getter
 @Setter
-@Builder
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@SuperBuilder
 @AllArgsConstructor
 public class ReactionDto {
     private Long txId;
@@ -17,11 +18,20 @@ public class ReactionDto {
     private Long receiverId;
     private ReactionType type;
 
+    public Reaction toEntity(Transaction tx, Member sender, Member receiver) {
+        return Reaction.builder()
+                .tx(tx)
+                .sender(sender)
+                .receiver(receiver)
+                .type(type)
+                .build();
+    }
+
     public static ReactionDto fromEntity(Reaction reaction) {
         return ReactionDto.builder()
-                .txId(reaction.getTxId())
-                .receiverId(reaction.getReceiverId())
-                .senderId(reaction.getSenderId())
+                .txId(reaction.getTx().getId())
+                .senderId(reaction.getSender().getId())
+                .receiverId(reaction.getReceiver().getId())
                 .type(reaction.getType())
                 .build();
     }

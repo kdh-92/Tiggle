@@ -17,19 +17,19 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 public class TransactionUpdateRespDto extends TransactionRespDto{
 
-    public static TransactionUpdateRespDto fromEntity(Transaction tx, Asset asset, Category category) {
+    public static TransactionUpdateRespDto fromEntity(Transaction tx) {
         return TransactionUpdateRespDto.builder()
                 .id(tx.getId())
                 .parentId(tx.getParentId())
                 .member(MemberDto.fromEntity(tx.getMember()))
+                .asset(AssetDto.fromEntity(tx.getAsset()))
+                .category(CategoryDto.fromEntity(tx.getCategory()))
                 .type(tx.getType())
                 .imageUrl(tx.getImageUrl())
                 .amount(tx.getAmount())
                 .date(tx.getDate())
                 .content(tx.getContent())
                 .reason(tx.getReason())
-                .asset(AssetDto.fromEntity(asset))
-                .category(CategoryDto.fromEntity(category))
                 .txTagNames(tx.getTagNames())
                 .createdAt(tx.getCreatedAt())
                 .build();

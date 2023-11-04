@@ -15,6 +15,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Getter
@@ -28,6 +29,9 @@ public class TransactionRespDto extends TransactionDto {
     private AssetDto asset;
     private CategoryDto category;
     private String txTagNames;
+    private int txUpCount;
+    private int txDownCount;
+    private int txCommentCount;
     private LocalDateTime createdAt;
 
     @Override
@@ -59,6 +63,8 @@ public class TransactionRespDto extends TransactionDto {
                 .id(tx.getId())
                 .parentId(tx.getParentId())
                 .member(MemberDto.fromEntity(tx.getMember()))
+                .asset(AssetDto.fromEntity(tx.getAsset()))
+                .category(CategoryDto.fromEntity(tx.getCategory()))
                 .type(tx.getType())
                 .imageUrl(tx.getImageUrl())
                 .amount(tx.getAmount())
@@ -69,18 +75,18 @@ public class TransactionRespDto extends TransactionDto {
                 .build();
     }
 
-    public static TransactionRespDto fromEntityDetailTx(Transaction tx, Transaction parentTx, Asset asset, Category category) {
+    public static TransactionRespDto fromEntityDetailTx(Transaction tx, Transaction parentTx) {
         TransactionRespDtoBuilder builder = TransactionRespDto.builder()
                 .id(tx.getId())
                 .member(MemberDto.fromEntity(tx.getMember()))
+                .asset(AssetDto.fromEntity(tx.getAsset()))
+                .category(CategoryDto.fromEntity(tx.getCategory()))
                 .type(tx.getType())
                 .imageUrl(tx.getImageUrl())
                 .amount(tx.getAmount())
                 .date(tx.getDate())
                 .content(tx.getContent())
                 .reason(tx.getReason())
-                .asset(AssetDto.fromEntity(asset))
-                .category(CategoryDto.fromEntity(category))
                 .txTagNames(tx.getTagNames())
                 .createdAt(tx.getCreatedAt());
 
@@ -89,12 +95,29 @@ public class TransactionRespDto extends TransactionDto {
         return builder.build();
     }
 
-    public static Page<TransactionRespDto> fromEntityPage(Page<Transaction> txPage) {
+    public static TransactionRespDto fromEntityWithCount(Transaction tx, int txUpCount, int txDownCount, int txCommentCount) {
+        return TransactionRespDto.builder()
+                .id(tx.getId())
+                .parentId(tx.getParentId())
+                .member(MemberDto.fromEntity(tx.getMember()))
+                .asset(AssetDto.fromEntity(tx.getAsset()))
+                .category(CategoryDto.fromEntity(tx.getCategory()))
+                .type(tx.getType())
+                .imageUrl(tx.getImageUrl())
+                .amount(tx.getAmount())
+                .date(tx.getDate())
+                .content(tx.getContent())
+                .reason(tx.getReason())
+                .txUpCount(txUpCount)
+                .txDownCount(txDownCount)
+                .txCommentCount(txCommentCount)
+                .createdAt(tx.getCreatedAt())
+                .build();
+    }
+
+    public static Page<TransactionRespDto> fromEntityPage(Page<Transaction> txPage, List<TransactionRespDto> dtoList) {
         return new PageImpl<>(
-                txPage.getContent()
-                        .stream()
-                        .map(TransactionRespDto::fromEntity)
-                        .collect(Collectors.toList()),
+                dtoList,
                 txPage.getPageable(),
                 txPage.getTotalElements()
         );

@@ -1,5 +1,9 @@
 package com.side.tiggle.domain.transaction.service;
 
+import com.side.tiggle.domain.asset.model.Asset;
+import com.side.tiggle.domain.asset.service.AssetService;
+import com.side.tiggle.domain.category.model.Category;
+import com.side.tiggle.domain.category.service.CategoryService;
 import com.side.tiggle.domain.member.service.MemberService;
 import com.side.tiggle.domain.transaction.dto.req.TransactionUpdateReqDto;
 import com.side.tiggle.domain.transaction.repository.TransactionRepository;
@@ -33,6 +37,8 @@ public class TransactionService {
 
     private final TxTagService txTagService;
     private final MemberService memberService;
+    private final AssetService assetService;
+    private final CategoryService categoryService;
     private final TransactionRepository transactionRepository;
     private final String FOLDER_PATH = System.getProperty("user.dir") + "/upload/image";
 
@@ -76,7 +82,9 @@ public class TransactionService {
             savePath = Paths.get(uploadedFilePath);
             dto.setImageUrl(uploadedFilePath);
             Member member = memberService.getMember(dto.getMemberId());
-            Transaction tx = transactionRepository.save(dto.toEntity(member));
+            Asset asset = assetService.getAsset(dto.getAssetId());
+            Category category = categoryService.getCategory(dto.getCategoryId());
+            Transaction tx = transactionRepository.save(dto.toEntity(member, asset, category));
             TxTag txTag = new TxTag(tx.getId(), dto.getMemberId(), dto.getTagNames());
 
             txTagService.createTxTag(txTag);
@@ -92,7 +100,7 @@ public class TransactionService {
 
     public Transaction getTransaction(Long transactionId) {
         return transactionRepository.findById(transactionId)
-                .orElseThrow(() -> new NotFoundException());
+                .orElseThrow(NotFoundException::new);
     }
 
     public Page<Transaction> getCountOffsetTransaction(int pageSize, int index) {
@@ -123,7 +131,7 @@ public class TransactionService {
     public Transaction updateTransaction(Long memberId, Long transactionId, TransactionUpdateReqDto dto) {
         Transaction transaction = transactionRepository.findById(transactionId)
                 .stream().filter(item -> item.getMember().getId().equals(memberId)).findAny()
-                .orElseThrow(() -> new NotFoundException());
+                .orElseThrow(NotFoundException::new);
 
         transaction.setType(dto.getType());
         transaction.setAmount(dto.getAmount());
@@ -131,8 +139,6 @@ public class TransactionService {
         transaction.setContent(dto.getContent());
         transaction.setReason(dto.getReason());
         transaction.setTagNames(dto.getTagNames());
-        transaction.setAssetId(dto.getAssetId());
-        transaction.setCategoryId(dto.getCategoryId());
 
         txTagService.updateTxTag(transactionId, transaction.getMember().getId(), dto.getTagNames());
 
@@ -144,7 +150,7 @@ public class TransactionService {
                 .stream()
                 .filter(item -> item.getMember().getId().equals(memberId))
                 .findAny()
-                .orElseThrow(() -> new NotFoundException())
+                .orElseThrow(NotFoundException::new)
         );
     }
 }

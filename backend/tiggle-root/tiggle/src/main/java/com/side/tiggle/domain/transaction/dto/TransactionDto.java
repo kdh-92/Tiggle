@@ -1,5 +1,7 @@
 package com.side.tiggle.domain.transaction.dto;
 
+import com.side.tiggle.domain.asset.model.Asset;
+import com.side.tiggle.domain.category.model.Category;
 import com.side.tiggle.domain.member.model.Member;
 import com.side.tiggle.domain.transaction.model.Transaction;
 import com.side.tiggle.domain.transaction.model.TransactionType;
@@ -20,6 +22,8 @@ public class TransactionDto {
     @NotBlank(message = "member 입력이 필요합니다.")
     private Long memberId;
     private Long parentId;
+    private Long assetId;
+    private Long categoryId;
     private TransactionType type;
     private String imageUrl;
     private int amount;
@@ -27,15 +31,14 @@ public class TransactionDto {
     private String content;
     private String reason;
 
-    private Long assetId;
-
-    private Long categoryId;
 
     private String tagNames;
 
-    public Transaction toEntity(Member member) {
+    public Transaction toEntity(Member member, Asset asset, Category category) {
         return Transaction.builder()
                 .member(member)
+                .asset(asset)
+                .category(category)
                 .parentId(parentId)
                 .type(type)
                 .imageUrl(imageUrl)
@@ -43,8 +46,6 @@ public class TransactionDto {
                 .date(date)
                 .content(content)
                 .reason(reason)
-                .assetId(assetId)
-                .categoryId(categoryId)
                 .tagNames(tagNames)
                 .build();
     }
@@ -53,6 +54,8 @@ public class TransactionDto {
         return TransactionDto.builder()
                 .memberId(tx.getMember().getId())
                 .parentId(tx.getParentId())
+                .assetId(tx.getAsset().getId())
+                .categoryId(tx.getCategory().getId())
                 .type(tx.getType())
                 .imageUrl(tx.getImageUrl())
                 .amount(tx.getAmount())
