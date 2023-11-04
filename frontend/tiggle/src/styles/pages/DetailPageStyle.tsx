@@ -20,7 +20,7 @@ export const DetailPageStyle = styled.div`
 
   ${({ theme }) => theme.mq.desktop} {
     width: 480px;
-    padding: 24px 0 80px;
+    padding: 32px 0 80px;
 
     section.content {
       gap: 80px;

@@ -1,4 +1,4 @@
-import { useLayoutEffect, useMemo } from "react";
+import { useLayoutEffect } from "react";
 import { useDispatch } from "react-redux";
 import { LoaderFunctionArgs, useLoaderData, useParams } from "react-router-dom";
 
@@ -56,8 +56,6 @@ const DetailPage = () => {
   useLayoutEffect(() => {
     dispatch(store.actions.creators.setType(transactionData.type));
   }, [transactionData]);
-
-  const txType = useMemo(() => transactionData.type, [transactionData]);
 
   return (
     <DetailPageStyle className="page-container">

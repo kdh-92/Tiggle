@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import cn from "classnames";
 import dayjs from "dayjs";
 
-import MenuButton from "@/components/atoms/MenuButton/MenuButton";
+import { Menu, MenuItem } from "@/components/atoms/Menu/Menu";
 import TypeTag from "@/components/atoms/typeTag/TypeTag";
 import { MemberDto, TransactionRespDto } from "@/generated";
 import { RootState } from "@/store";
@@ -69,7 +69,11 @@ export default function PostHeader({
         </div>
       </StyledPostHeaderDetail>
 
-      <MenuButton className="post-header-menu" />
+      <Menu className="post-header-menu">
+        <MenuItem label="수정하기" />
+        <MenuItem label="환불하기" />
+        <MenuItem label="삭제하기" />
+      </Menu>
     </PostHeaderStyle>
   );
 }
