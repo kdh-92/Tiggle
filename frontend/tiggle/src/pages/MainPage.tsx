@@ -1,4 +1,5 @@
 import Banner from "@/components/molecules/Banner/Banner";
+import BottomTab from "@/components/molecules/BottomTab/BottomTab";
 import TransactionCells from "@/components/molecules/TransactionCell/TransactionCells";
 import useGetData from "@/hooks/useGetData";
 import { MainPageStyle } from "@/styles/pages/MainPageStyle";
@@ -11,6 +12,7 @@ const MainPage = () => {
       <MainPageStyle>
         <Banner />
         <TransactionCells data={data} />
+        <BottomTab />
       </MainPageStyle>
     </>
   );

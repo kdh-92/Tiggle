@@ -29,7 +29,7 @@ export default function TransactionCells({ data }: TransactionCellsProps) {
           columnClassName="transaction-cells"
         >
           {isLoading &&
-            [...Array(8)].map((_, i) => <TransactionCellSkeleton key={i} />)}
+            [...Array(4)].map((_, i) => <TransactionCellSkeleton key={i} />)}
           {!isLoading &&
             !isError &&
             data?.map(el => {

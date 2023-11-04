@@ -2,7 +2,6 @@ import { Outlet } from "react-router-dom";
 
 import styled from "styled-components";
 
-import BottomTab from "@/components/molecules/BottomTab/BottomTab";
 import MainHeader from "@/components/molecules/MainHeader/MainHeader";
 
 export default function GeneralTemplate() {
@@ -12,7 +11,6 @@ export default function GeneralTemplate() {
       <div className="container">
         <Outlet />
       </div>
-      <BottomTab />
     </GeneralTemplateStyle>
   );
 }
@@ -20,5 +18,5 @@ export default function GeneralTemplate() {
 const GeneralTemplateStyle = styled.div`
   width: 100%;
   min-height: 100vh;
-  background-color: ${({ theme: { color } }) => color.bluishGray[50].value};
+  background: ${({ theme: { color } }) => color.bluishGray[50].value};
 `;
