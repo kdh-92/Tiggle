@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { SubmitHandler, useForm, Controller } from "react-hook-form";
+import { useSelector } from "react-redux";
 
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { message } from "antd";
@@ -9,33 +10,29 @@ import ReplyToggleButton from "@/components/atoms/ReplyToggleButton/ReplyToggleB
 import TextArea from "@/components/atoms/TextArea/TextArea";
 import { CommentApiService, CommentRespDto } from "@/generated";
 import queryClient from "@/query/queryClient";
+import { RootState } from "@/store";
 import {
   CommentCellStyle,
-  CommentStyle,
-  RepliesSectionStyle,
+  CommentRepliesStyle,
   ReplyCellStyle,
+  CommentSenderStyle,
+  ReplyFormStyle,
 } from "@/styles/components/CommentCellStyle";
-import { TxType } from "@/types";
 import { calculateDateTimeDiff } from "@/utils/date";
+import { convertTxTypeToColor } from "@/utils/txType";
 
 const TEMP_USER_ID = 1;
 
-interface ReplyInputs {
-  reply: string;
-}
-
-interface CommentCellProps
+export interface CommentCellProps
   extends Pick<
     CommentRespDto,
     "id" | "txId" | "content" | "createdAt" | "childCount" | "sender"
   > {
-  type: TxType;
   receiverId: number;
 }
 
 export default function CommentCell({
   id,
-  type,
   txId,
   content,
   createdAt,
@@ -44,7 +41,6 @@ export default function CommentCell({
   receiverId,
 }: CommentCellProps) {
   const [messageApi, contextHolder] = message.useMessage();
-  const { control, handleSubmit, reset } = useForm<ReplyInputs>();
   const [replyOpen, setReplyOpen] = useState(false);
 
   const toggleReplySection = () => {
@@ -68,16 +64,13 @@ export default function CommentCell({
     }),
   );
 
-  const onSubmitReply: SubmitHandler<ReplyInputs> = ({ reply }) => {
-    if (reply === "") return;
-
+  const onSubmitReply = (reply: string) => {
     createReply(reply, {
       onSuccess: () => {
         messageApi.open({
           type: "success",
           content: "답댓글이 등록되었습니다.",
         });
-        reset();
         queryClient.invalidateQueries(["comment", "replies", id]);
       },
     });
@@ -87,55 +80,37 @@ export default function CommentCell({
     <>
       {contextHolder}
       <CommentCellStyle>
-        <img
-          className="comment-cell-profile"
-          src={sender.profileUrl ?? "/assets/user-placeholder.png"}
-          alt={`${sender.nickname} profile`}
+        <CommentSenderStyle>
+          <img
+            className="profile"
+            src={sender.profileUrl ?? "/assets/user-placeholder.png"}
+            alt={`${sender.nickname} profile`}
+          />
+          <div>
+            <p className="name">{sender.nickname}</p>
+            <p className="date">{calculateDateTimeDiff(createdAt)}</p>
+          </div>
+        </CommentSenderStyle>
+
+        <p className="content">{content}</p>
+
+        <ReplyToggleButton
+          open={replyOpen}
+          repliesCount={childCount}
+          onClick={toggleReplySection}
         />
 
-        <div>
-          <CommentStyle className={type}>
-            <div>
-              <p className="name">{sender.nickname}</p>
-              <p className="date">{calculateDateTimeDiff(createdAt)}</p>
-            </div>
-            <p className="content">{content}</p>
-            <ReplyToggleButton
-              txType={type}
-              open={replyOpen}
-              repliesCount={childCount}
-              onClick={toggleReplySection}
-            />
-          </CommentStyle>
+        {replyOpen && (
+          <CommentRepliesStyle>
+            {childCount > 0 && <div className="divider" />}
 
-          {replyOpen && (
-            <RepliesSectionStyle>
-              {childCount > 0 && <div className="reply-cell-divider" />}
+            {repliesData?.content?.map(reply => (
+              <ReplyCell key={`comment-reply-${reply.id}`} {...reply} />
+            ))}
 
-              {repliesData?.content?.map(reply => (
-                <ReplyCell key={`comment-reply-${reply.id}`} {...reply} />
-              ))}
-
-              <form
-                className="reply-cell-input"
-                onSubmit={handleSubmit(onSubmitReply)}
-              >
-                <Controller
-                  name="reply"
-                  control={control}
-                  render={({ field }) => (
-                    <TextArea
-                      variant="filled"
-                      placeholder="답글 남기기"
-                      {...field}
-                    />
-                  )}
-                />
-                <CTAButton size="md">답글 등록</CTAButton>
-              </form>
-            </RepliesSectionStyle>
-          )}
-        </div>
+            <ReplyForm onSubmit={onSubmitReply} />
+          </CommentRepliesStyle>
+        )}
       </CommentCellStyle>
     </>
   );
@@ -147,18 +122,57 @@ interface ReplyCellProps
 function ReplyCell({ id, content, createdAt, sender }: ReplyCellProps) {
   return (
     <ReplyCellStyle id={`comment-reply-${id}`}>
-      <img
-        className="reply-profile"
-        src={sender.profileUrl ?? "/assets/user-placeholder.png"}
-        alt={`${sender.nickname} profile`}
-      />
-      <div className="reply-info">
+      <CommentSenderStyle className="user">
+        <img
+          className="profile"
+          src={sender.profileUrl ?? "/assets/user-placeholder.png"}
+          alt={`${sender.nickname} profile`}
+        />
         <div>
           <p className="name">{sender.nickname}</p>
           <p className="date">{calculateDateTimeDiff(createdAt)}</p>
         </div>
-        <p className="reply-content">{content}</p>
-      </div>
+      </CommentSenderStyle>
+
+      <p className="content">{content}</p>
     </ReplyCellStyle>
+  );
+}
+
+interface ReplyInputs {
+  reply: string;
+}
+
+interface ReplyFormProps {
+  onSubmit: (reply: string) => void;
+}
+
+function ReplyForm({ onSubmit }: ReplyFormProps) {
+  const txType = useSelector((state: RootState) => state.detailPage.txType);
+  const { control, handleSubmit, reset } = useForm<ReplyInputs>();
+
+  const handleOnSubmit: SubmitHandler<ReplyInputs> = ({ reply }) => {
+    if (reply === "") return;
+    onSubmit(reply);
+    reset({ reply: "" });
+  };
+
+  return (
+    <ReplyFormStyle onSubmit={handleSubmit(handleOnSubmit)}>
+      <Controller
+        name="reply"
+        control={control}
+        render={({ field }) => (
+          <TextArea variant="filled" placeholder="답글 남기기" {...field} />
+        )}
+      />
+      <CTAButton
+        size="md"
+        color={convertTxTypeToColor(txType)}
+        variant="secondary"
+      >
+        답글 등록
+      </CTAButton>
+    </ReplyFormStyle>
   );
 }

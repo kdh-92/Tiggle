@@ -1,37 +1,43 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 
 import { Meta, StoryObj } from "@storybook/react";
 
-import { Tx } from "@/types";
+import detailPageStore from "@/store/detailPage";
+import { Tx, TxType } from "@/types";
 
-import ReactionButton from "./ReactionButton";
+import ReactionButton, { ReactionButtonProps } from "./ReactionButton";
+
+type ReactionButtonPropsWithTxType = ReactionButtonProps & { txType: TxType };
 
 export default {
   title: "atoms/ReactionButton",
   component: ReactionButton,
-} as Meta<typeof ReactionButton>;
-
-type Story = StoryObj<typeof ReactionButton>;
-
-export const Default: Story = {
-  args: {
-    tx: Tx.OUTCOME,
-    reaction: "UP",
-    number: 964,
-  },
-};
-
-export const WithToggle: Story = {
-  args: {
-    tx: Tx.OUTCOME,
-    reaction: "UP",
-    number: 144,
-  },
-  render: args => {
+  render: ({ txType, ...args }) => {
+    const dispatch = useDispatch();
     const [checked, setChecked] = useState(false);
     const toggle = () => {
       setChecked(!checked);
     };
+    useEffect(() => {
+      dispatch(detailPageStore.actions.creators.setType(txType));
+    }, [txType]);
     return <ReactionButton {...args} checked={checked} onClick={toggle} />;
+  },
+  argTypes: {
+    txType: {
+      options: Object.values(Tx),
+      control: { type: "radio" },
+    },
+  },
+} as Meta<ReactionButtonPropsWithTxType>;
+
+type Story = StoryObj<ReactionButtonPropsWithTxType>;
+
+export const Default: Story = {
+  args: {
+    reaction: "UP",
+    number: 964,
+    txType: Tx.REFUND,
   },
 };

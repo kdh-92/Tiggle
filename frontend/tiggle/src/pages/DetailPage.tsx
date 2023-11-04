@@ -1,4 +1,5 @@
-import { useMemo } from "react";
+import { useLayoutEffect } from "react";
+import { useDispatch } from "react-redux";
 import { LoaderFunctionArgs, useLoaderData, useParams } from "react-router-dom";
 
 import { QueryClient, useQuery } from "@tanstack/react-query";
@@ -12,9 +13,11 @@ import {
   ReactionApiService,
   TransactionApiControllerService,
 } from "@/generated";
+import store from "@/store/detailPage";
 import {
+  DetailPageStyle,
   DetailPageContentStyle,
-  DetailPageReplySectionStyle,
+  DetailPageCommentSectionStyle,
 } from "@/styles/pages/DetailPageStyle";
 
 const transactionQuery = (id: number) => ({
@@ -49,12 +52,14 @@ const DetailPage = () => {
     queryFn: async () => TransactionApiControllerService.getAllCommentsByTx(id),
   });
 
-  // TODO: Redux Store를 이용하여 페이지 단위 변수로 관리
-  const txType = useMemo(() => transactionData.type, [transactionData]);
+  const dispatch = useDispatch();
+  useLayoutEffect(() => {
+    dispatch(store.actions.creators.setType(transactionData.type));
+  }, [transactionData]);
 
   return (
-    <>
-      <DetailPageContentStyle className="page-container">
+    <DetailPageStyle className="page-container">
+      <section className="content">
         <PostHeader
           {...transactionData}
           sender={{
@@ -64,52 +69,47 @@ const DetailPage = () => {
           category={"category"}
         />
 
-        <div className="divider" />
-
-        <div className="content">
-          <div className="content-image">
+        <DetailPageContentStyle>
+          <div className="image">
             <img
               src={transactionData.imageUrl ?? "/assets/img-placeholder.png"}
               alt={transactionData.content}
             />
           </div>
-          <p className="content-text">{transactionData.reason}</p>
-
-          <ul className="content-tags">
-            {transactionData.txTagNames
-              ?.split(",")
-              .map(tag => <HashTag key={`tag-${tag}`} label={tag} />)}
-          </ul>
-        </div>
+          <div className="content">
+            <p className="content-reason">{transactionData.reason}</p>
+            <ul className="content-tags">
+              {transactionData.txTagNames
+                ?.split(",")
+                .map(tag => <HashTag key={`tag-${tag}`} label={tag} />)}
+            </ul>
+          </div>
+        </DetailPageContentStyle>
 
         {reactionData && (
-          <ReactionSection
-            {...reactionData}
-            type={txType}
-            txId={id}
-            className="reaction"
-          />
+          <ReactionSection {...reactionData} txId={id} className="reaction" />
         )}
-      </DetailPageContentStyle>
+      </section>
 
-      <DetailPageReplySectionStyle>
-        <div className="page-container">
-          <p className="title">댓글 {reactionData?.commentCount}개</p>
-          <CommentForm txId={id} receiverId={transactionData.member?.id} />
-          <div className="divider" />
-          <div className="comments">
-            {commentsData?.content?.map(comment => (
-              <CommentCell
-                {...comment}
-                key={`comment-cell-${comment.id}`}
-                type={txType}
-                receiverId={transactionData.member?.id}
-              />
-            ))}
-          </div>
+      <DetailPageCommentSectionStyle className="comment">
+        <div className="title">
+          <p className="main">댓글</p>
+          <p className="sub">{reactionData?.commentCount}개</p>
         </div>
-      </DetailPageReplySectionStyle>
-    </>
+
+        <div className="comment-cards">
+          {commentsData?.content?.map(comment => (
+            <CommentCell
+              {...comment}
+              key={`comment-cell-${comment.id}`}
+              receiverId={transactionData.member?.id}
+            />
+          ))}
+        </div>
+
+        <CommentForm txId={id} receiverId={transactionData.member?.id} />
+      </DetailPageCommentSectionStyle>
+    </DetailPageStyle>
   );
 };
 

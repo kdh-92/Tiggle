@@ -1,14 +1,17 @@
 import { FormHTMLAttributes } from "react";
 import { SubmitHandler, useForm, Controller } from "react-hook-form";
+import { useSelector } from "react-redux";
 
 import { useMutation } from "@tanstack/react-query";
 import { message } from "antd";
 
 import CTAButton from "@/components/atoms/CTAButton/CTAButton";
-import TextArea from "@/components/atoms/TextArea/TextArea";
 import { CommentApiService } from "@/generated";
 import queryClient from "@/query/queryClient";
+import { RootState } from "@/store";
+import { CommentSenderStyle } from "@/styles/components/CommentCellStyle";
 import { CommentFormStyle } from "@/styles/components/CommentFormStyle";
+import { convertTxTypeToColor } from "@/utils/txType";
 
 interface CommentFormProps extends FormHTMLAttributes<HTMLFormElement> {
   txId: number;
@@ -26,6 +29,8 @@ export default function CommentForm({
   receiverId,
   ...props
 }: CommentFormProps) {
+  const txType = useSelector((state: RootState) => state.detailPage.txType);
+
   const [messageApi, contextHolder] = message.useMessage();
   const { control, handleSubmit, reset } = useForm<CommentFormInputs>();
 
@@ -38,13 +43,14 @@ export default function CommentForm({
     }),
   );
 
-  const onSubmit: SubmitHandler<CommentFormInputs> = ({ comment }) => {
+  const onSubmit: SubmitHandler<CommentFormInputs> = ({ comment }, event) => {
+    event.preventDefault();
     if (comment === "") return;
 
     createComment(comment, {
       onSuccess: () => {
         messageApi.open({ type: "success", content: "댓글이 등록되었습니다." });
-        reset();
+        reset({ comment: "" });
         queryClient.invalidateQueries(["transaction", "comments", txId]);
       },
     });
@@ -53,17 +59,39 @@ export default function CommentForm({
   return (
     <>
       {contextHolder}
-      <CommentFormStyle {...props} onSubmit={handleSubmit(onSubmit)}>
+      <CommentFormStyle
+        {...props}
+        onSubmit={handleSubmit(onSubmit)}
+        className={txType}
+      >
+        <CommentSenderStyle>
+          <img className="profile" />
+          <p className="name">내 이름</p>
+        </CommentSenderStyle>
+
         <Controller
           name="comment"
           control={control}
           render={({ field }) => (
-            <TextArea placeholder="댓글 남기기" {...field} />
+            <textarea
+              className="comment"
+              placeholder="댓글 남기기"
+              rows={2}
+              {...field}
+            />
           )}
         />
-        <CTAButton size="md" type="submit">
-          댓글 등록
-        </CTAButton>
+
+        <div className="button-wrapper">
+          <CTAButton
+            size="md"
+            variant="secondary"
+            color={convertTxTypeToColor(txType)}
+            type="submit"
+          >
+            댓글 등록
+          </CTAButton>
+        </div>
       </CommentFormStyle>
     </>
   );

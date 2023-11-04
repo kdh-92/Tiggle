@@ -2,75 +2,105 @@ import styled from "styled-components";
 
 import { expandTypography } from "@/styles/util";
 
-export const DetailPageContentStyle = styled.div`
-  padding-top: 36px;
+export const DetailPageStyle = styled.div`
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 24px 24px 60px;
 
-  .divider {
+  section.content {
+    margin-bottom: 120px;
+    display: flex;
+    flex-direction: column;
+    gap: 60px;
+  }
+
+  section.comment {
+  }
+
+  ${({ theme }) => theme.mq.desktop} {
+    width: 480px;
+    padding: 32px 0 80px;
+
+    section.content {
+      gap: 80px;
+    }
+  }
+`;
+
+export const DetailPageContentStyle = styled.div`
+  width: 100%;
+
+  .image {
     width: 100%;
-    height: 1px;
-    min-height: 1px;
-    background-color: ${({ theme }) => theme.color.bluishGray[200].value};
-    margin: 24px 0 60px;
+    height: 210px;
+    background-color: ${({ theme }) => theme.color.bluishGray[100].value};
+    border-radius: 12px;
+    overflow: hidden;
+    > img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      overflow: hidden;
+      user-select: none;
+      -webkit-user-drag: none;
+    }
   }
 
   .content {
-    margin-bottom: 60px;
+    padding: 24px;
+    border-radius: 12px;
+    background-color: ${({ theme }) => theme.color.white.value};
+    color: ${({ theme }) => theme.color.bluishGray[700].value};
+
     display: flex;
     flex-direction: column;
-    gap: 36px;
+    gap: 24px;
 
-    &-image {
-      width: 240px;
-      height: 180px;
-      background-color: ${({ theme }) => theme.color.bluishGray[100].value};
-      border: 1px solid ${({ theme }) => theme.color.bluishGray[100].value};
-      border-radius: 8px;
-      overflow: hidden;
-      > img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        overflow: hidden;
-        user-select: none;
-        -webkit-user-drag: none;
-      }
-    }
-
-    &-text {
+    &-reason {
       ${({ theme }) => expandTypography(theme.typography.body.medium.regular)}
-      color: ${({ theme }) => theme.color.bluishGray[700].value};
     }
 
     &-tags {
       display: flex;
       flex-flow: row wrap;
-      gap: 10px;
+      gap: 8px;
+    }
+  }
+`;
+
+export const DetailPageCommentSectionStyle = styled.section`
+  .title {
+    margin-bottom: 24px;
+    display: flex;
+    gap: 8px;
+    align-items: baseline;
+
+    > .main {
+      ${({ theme }) => expandTypography(theme.typography.title.medium.bold)};
+      color: ${({ theme }) => theme.color.bluishGray[800].value};
+    }
+    > .sub {
+      ${({ theme }) => expandTypography(theme.typography.body.medium.medium)};
+      color: ${({ theme }) => theme.color.bluishGray[500].value};
     }
   }
 
-  .reaction {
-    margin: 0 auto 60px auto;
+  .comment-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-bottom: 36px;
   }
 
   ${({ theme }) => theme.mq.desktop} {
-    .divider {
-      margin: 36px 0 72px;
-    }
-
-    .content {
-      margin-bottom: 120px;
-      gap: 48px;
-      &-image {
-        width: 360px;
-        height: 270px;
+    .title {
+      > .main {
+        ${({ theme }) => expandTypography(theme.typography.title.large.bold)};
       }
-      &-text {
-        ${({ theme }) => expandTypography(theme.typography.body.large.regular)}
+      > .sub {
+        ${({ theme }) => expandTypography(theme.typography.body.large.medium)};
       }
-    }
-
-    .reaction {
-      margin-bottom: 80px;
     }
   }
 `;
@@ -80,23 +110,10 @@ export const DetailPageReplySectionStyle = styled.div`
   background-color: ${({ theme }) => theme.color.bluishGray[50].value};
   border-top: 1px solid ${({ theme }) => theme.color.bluishGray[200].value};
 
-  .page-container {
-    padding-top: 36px;
-    padding-bottom: 80px;
-  }
-
   .title {
     margin-bottom: 24px;
     ${({ theme }) => expandTypography(theme.typography.body.large.bold)};
     color: ${({ theme }) => theme.color.bluishGray[900].value};
-  }
-
-  .divider {
-    width: 100%;
-    height: 1px;
-    min-height: 1px;
-    background-color: ${({ theme }) => theme.color.bluishGray[200].value};
-    margin: 36px 0;
   }
 
   .comments {
@@ -106,10 +123,6 @@ export const DetailPageReplySectionStyle = styled.div`
   }
 
   ${({ theme }) => theme.mq.desktop} {
-    .page-container {
-      padding-top: 48px;
-      padding-bottom: 120px;
-    }
     .title {
       ${({ theme }) => expandTypography(theme.typography.title.small2x.bold)};
     }

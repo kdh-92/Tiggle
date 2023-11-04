@@ -1,5 +1,6 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
+import { CTAButtonColors } from "@/components/atoms/CTAButton/CTAButton";
 import { expandTypography } from "@/styles/util";
 
 export const CTAButtonStyle = styled.button`
@@ -9,6 +10,7 @@ export const CTAButtonStyle = styled.button`
   border-radius: 50px;
 
   display: flex;
+  justify-content: center;
   align-items: center;
   gap: 8px;
 
@@ -23,6 +25,31 @@ export const CTAButtonStyle = styled.button`
     height: 40px;
     ${({ theme }) => expandTypography(theme.typography.body.medium.bold)}
   }
+
+  &.fullWidth {
+    width: 100%;
+  }
+
+  ${({ theme }) => {
+    return CTAButtonColors.map(colorKey => {
+      return css`
+        &.${colorKey} {
+          &.primary {
+            background-color: ${theme.color[colorKey][600].value};
+            color: ${theme.color.white.value};
+          }
+          &.secondary {
+            background-color: ${theme.color[colorKey][500].value};
+            color: ${theme.color.white.value};
+          }
+          &.light {
+            background-color: ${theme.color[colorKey][100].value};
+            color: ${theme.color[colorKey][600].value};
+          }
+        }
+      `;
+    });
+  }}
 
   .cta-button-icon {
     width: 16px;

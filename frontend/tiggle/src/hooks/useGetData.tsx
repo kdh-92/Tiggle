@@ -4,7 +4,11 @@ import { useDispatch } from "react-redux";
 import { useQuery } from "@tanstack/react-query";
 
 import { TransactionApiControllerService } from "@/generated";
-import { setIsError, setIsLoading, setTransactionData } from "@/redux/actions";
+import {
+  setIsError,
+  setIsLoading,
+  setTransactionData,
+} from "@/store/data/actions";
 
 export default function useGetData() {
   const dispatch = useDispatch();

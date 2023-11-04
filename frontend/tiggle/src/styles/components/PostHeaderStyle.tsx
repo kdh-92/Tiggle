@@ -18,7 +18,7 @@ export const PostHeaderStyle = styled.div`
   }
 
   ${({ theme }) => theme.mq.desktop} {
-    width: 704px;
+    width: 100%;
     gap: 72px;
   }
 `;

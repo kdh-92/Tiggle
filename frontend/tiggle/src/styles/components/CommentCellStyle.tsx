@@ -4,39 +4,41 @@ import { expandTypography } from "@/styles/util";
 
 export const CommentCellStyle = styled.div`
   width: 100%;
-  padding: 20px;
+  padding: 24px;
+  border-radius: 12px;
   background-color: ${({ theme }) => theme.color.white.value};
-  border-radius: 8px;
-  border: 1px solid ${({ theme }) => theme.color.bluishGray[200].value};
 
-  display: grid;
-  grid-template-columns: auto minmax(auto, 100%);
-  column-gap: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 
-  .comment-cell-profile {
+  .content {
+    ${({ theme }) => expandTypography(theme.typography.body.medium.medium)}
+    color: ${({ theme }) => theme.color.bluishGray[900].value};
+  }
+
+  ${({ theme }) => theme.mq.desktop} {
+    padding: 28px;
+    border-radius: 16px;
+    gap: 20px;
+
+    .content {
+      ${({ theme }) => expandTypography(theme.typography.body.large.medium)}
+    }
+  }
+`;
+
+export const CommentSenderStyle = styled.div`
+  display: flex;
+  gap: 8px;
+  align-items: center;
+
+  .profile {
     width: 32px;
     height: 32px;
     border-radius: 50%;
     background-color: ${({ theme }) => theme.color.bluishGray[300].value};
   }
-
-  .flex-wrapper {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-  }
-
-  ${({ theme }) => theme.mq.desktop} {
-    width: 704px;
-    padding: 24px;
-    column-gap: 12px;
-  }
-`;
-
-export const CommentStyle = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
 
   .name {
     ${({ theme }) => expandTypography(theme.typography.body.medium.bold)}
@@ -48,95 +50,55 @@ export const CommentStyle = styled.div`
     color: ${({ theme }) => theme.color.bluishGray[400].value}
   }
 
-  .content {
-    ${({ theme }) => expandTypography(theme.typography.body.medium.medium)}
-    color: ${({ theme }) => theme.color.bluishGray[900].value};
-  }
-
   ${({ theme }) => theme.mq.desktop} {
+    gap: 12px;
     .name {
       ${({ theme }) => expandTypography(theme.typography.body.large.bold)}
     }
     .date {
       ${({ theme }) => expandTypography(theme.typography.body.medium.regular)}
     }
+  }
+`;
+
+export const CommentRepliesStyle = styled.div`
+  padding-left: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+
+  .divider {
+    width: 100%;
+    min-height: 1px;
+    background-color: ${({ theme }) => theme.color.bluishGray[100].value};
+  }
+
+  ${({ theme }) => theme.mq.desktop} {
+    padding-left: 28px;
+    gap: 28px;
+  }
+`;
+
+export const ReplyCellStyle = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  .content {
+    ${({ theme }) => expandTypography(theme.typography.body.medium.medium)}
+    color: ${({ theme }) => theme.color.bluishGray[800].value};
+  }
+
+  ${({ theme }) => theme.mq.desktop} {
     .content {
       ${({ theme }) => expandTypography(theme.typography.body.large.medium)}
     }
   }
 `;
 
-export const RepliesSectionStyle = styled.div`
-  margin-top: 24px;
+export const ReplyFormStyle = styled.form`
   display: flex;
   flex-direction: column;
-  gap: 24px;
-
-  .reply-cell-divider {
-    width: 100%;
-    min-height: 1px;
-    background-color: ${({ theme }) => theme.color.bluishGray[200].value};
-  }
-
-  .reply-cell-input {
-    display: flex;
-    flex-direction: column;
-    align-items: end;
-    gap: 8px;
-  }
-
-  ${({ theme }) => theme.mq.desktop} {
-    margin-top: 32px;
-    gap: 32px;
-
-    .reply-cell-input {
-      gap: 12px;
-    }
-  }
-`;
-
-export const ReplyCellStyle = styled.div`
-  display: grid;
-  grid-template-columns: auto minmax(auto, 100%);
-  column-gap: 8px;
-
-  .reply-profile {
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    background-color: ${({ theme }) => theme.color.bluishGray[300].value};
-  }
-  .reply-info {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    .name {
-      ${({ theme }) => expandTypography(theme.typography.body.medium.bold)}
-      color: ${({ theme }) => theme.color.bluishGray[700].value};
-    }
-    .date {
-      ${({ theme }) => expandTypography(theme.typography.body.small.regular)}
-      color: ${({ theme }) => theme.color.bluishGray[400].value}
-    }
-  }
-
-  .reply-content {
-    ${({ theme }) => expandTypography(theme.typography.body.medium.medium)}
-    color: ${({ theme }) => theme.color.bluishGray[900].value};
-  }
-
-  ${({ theme }) => theme.mq.desktop} {
-    .reply-info {
-      gap: 12px;
-      .name {
-        ${({ theme }) => expandTypography(theme.typography.body.large.bold)}
-      }
-      .date {
-        ${({ theme }) => expandTypography(theme.typography.body.medium.regular)}
-      }
-    }
-    .reply-content {
-      ${({ theme }) => expandTypography(theme.typography.body.large.medium)}
-    }
-  }
+  gap: 8px;
+  align-items: flex-end;
 `;

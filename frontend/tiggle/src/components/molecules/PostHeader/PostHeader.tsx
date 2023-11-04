@@ -1,20 +1,21 @@
+import { useSelector } from "react-redux";
+
 import cn from "classnames";
 import dayjs from "dayjs";
 
-import MenuButton from "@/components/atoms/MenuButton/MenuButton";
+import { Menu, MenuItem } from "@/components/atoms/Menu/Menu";
 import TypeTag from "@/components/atoms/typeTag/TypeTag";
 import { MemberDto, TransactionRespDto } from "@/generated";
+import { RootState } from "@/store";
 import {
   PostHeaderStyle,
   StyledPostHeaderDetail,
   StyledPostHeaderTitle,
 } from "@/styles/components/PostHeaderStyle";
+import { convertTxTypeToWord } from "@/utils/txType";
 
-interface PostHeaderProps
-  extends Pick<
-    TransactionRespDto,
-    "id" | "type" | "content" | "amount" | "date"
-  > {
+export interface PostHeaderProps
+  extends Pick<TransactionRespDto, "id" | "content" | "amount" | "date"> {
   // TODO: api response 변경된 후, TransactionDto 에서 Pick 하는 것으로 수정
   sender: MemberDto;
   category: string;
@@ -23,7 +24,6 @@ interface PostHeaderProps
 
 export default function PostHeader({
   id,
-  type,
   content,
   amount,
   date,
@@ -31,6 +31,8 @@ export default function PostHeader({
   category,
   asset,
 }: PostHeaderProps) {
+  const txType = useSelector((state: RootState) => state.detailPage.txType);
+
   return (
     <PostHeaderStyle id={`post-header-${id}`}>
       <StyledPostHeaderTitle>
@@ -53,9 +55,7 @@ export default function PostHeader({
         </div>
         <div className="item-wrapper">
           <div className="item date">
-            <p className="item-title">
-              {type === "OUTCOME" ? "지출일자" : "수익일자"}
-            </p>
+            <p className="item-title">{convertTxTypeToWord(txType)}일자</p>
             <p className="item-data">{dayjs(date).format("YYYY.MM.DD")}</p>
           </div>
           <div className="item">
@@ -69,7 +69,11 @@ export default function PostHeader({
         </div>
       </StyledPostHeaderDetail>
 
-      <MenuButton className="post-header-menu" />
+      <Menu className="post-header-menu">
+        <MenuItem label="수정하기" />
+        <MenuItem label="환불하기" />
+        <MenuItem label="삭제하기" />
+      </Menu>
     </PostHeaderStyle>
   );
 }
