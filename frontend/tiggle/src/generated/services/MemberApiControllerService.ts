@@ -11,18 +11,18 @@ import { request as __request } from '../core/request';
 export class MemberApiControllerService {
 
     /**
-     * @param id
+     * @param xMemberId
      * @returns MemberDto OK
      * @throws ApiError
      */
-    public static getMember(
-        id: number,
+    public static getMe(
+        xMemberId: number,
     ): CancelablePromise<MemberDto> {
         return __request(OpenAPI, {
             method: 'GET',
-            url: '/api/v1/member/{id}',
-            path: {
-                'id': id,
+            url: '/api/v1/member/me',
+            headers: {
+                'x-member-id': xMemberId,
             },
             errors: {
                 400: `Bad Request`,
@@ -34,23 +34,26 @@ export class MemberApiControllerService {
     }
 
     /**
-     * @param id
-     * @param requestBody
+     * @param xMemberId
+     * @param formData
      * @returns MemberDto OK
      * @throws ApiError
      */
-    public static updateMember(
-        id: number,
-        requestBody: MemberDto,
+    public static updateMe(
+        xMemberId: number,
+        formData?: {
+            memberDto: MemberDto;
+            multipartFile: Blob;
+        },
     ): CancelablePromise<MemberDto> {
         return __request(OpenAPI, {
             method: 'PUT',
-            url: '/api/v1/member/{id}',
-            path: {
-                'id': id,
+            url: '/api/v1/member/me',
+            headers: {
+                'x-member-id': xMemberId,
             },
-            body: requestBody,
-            mediaType: 'application/json',
+            formData: formData,
+            mediaType: 'multipart/form-data',
             errors: {
                 400: `Bad Request`,
                 401: `Unauthorized`,
@@ -73,6 +76,29 @@ export class MemberApiControllerService {
             url: '/api/v1/member',
             body: requestBody,
             mediaType: 'application/json',
+            errors: {
+                400: `Bad Request`,
+                401: `Unauthorized`,
+                404: `Not Found`,
+                500: `Internal Server Error`,
+            },
+        });
+    }
+
+    /**
+     * @param id
+     * @returns MemberDto OK
+     * @throws ApiError
+     */
+    public static getMember(
+        id: number,
+    ): CancelablePromise<MemberDto> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/v1/member/{id}',
+            path: {
+                'id': id,
+            },
             errors: {
                 400: `Bad Request`,
                 401: `Unauthorized`,

@@ -4,32 +4,49 @@ import { expandTypography } from "@/styles/util";
 
 export const TypeTagStyle = styled.div`
   width: fit-content;
-  padding: 2px 8px;
-  border: 1px solid;
+  display: flex;
+  align-items: center;
   border-radius: 50px;
+  color: ${({ theme: { color } }) => color.white.value};
+  gap: 10px;
 
   .label {
     ${({ theme }) => expandTypography(theme.typography.body.small2x.bold)}
+
+    ${({ theme }) => theme.mq.desktop} {
+      ${({ theme }) => expandTypography(theme.typography.body.small.bold)}
+    }
+  }
+
+  &.md {
+    padding: 2px 8px;
+    height: 18px;
+
+    ${({ theme }) => theme.mq.desktop} {
+      padding: 2px 10px;
+      height: 20px;
+    }
+  }
+
+  &.lg {
+    padding: 2px 10px;
+    height: 20px;
+
+    ${({ theme }) => theme.mq.desktop} {
+      padding: 2px 12px;
+      height: 24px;
+    }
   }
 
   &.OUTCOME {
-    border-color: ${({ theme: { color } }) => color.peach[300].value};
-    color: ${({ theme: { color } }) => color.peach[500].value};
+    background: ${({ theme: { color } }) => color.peach[500].value};
   }
 
   &.REFUND {
-    border-color: ${({ theme: { color } }) => color.blue[300].value};
-    color: ${({ theme: { color } }) => color.blue[500].value};
+    background: ${({ theme: { color } }) => color.blue[500].value};
   }
 
   &.INCOME {
-    border-color: ${({ theme: { color } }) => color.green[300].value};
-    color: ${({ theme: { color } }) => color.green[500].value};
-  }
-
-  ${({ theme }) => theme.mq.desktop} {
-    .label {
-      ${({ theme }) => expandTypography(theme.typography.body.small.bold)}
-    }
+    background: ${({ theme: { color } }) => color.green[500].value};
   }
 `;

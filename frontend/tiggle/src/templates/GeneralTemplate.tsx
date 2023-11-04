@@ -2,12 +2,12 @@ import { Outlet } from "react-router-dom";
 
 import styled from "styled-components";
 
-import Header from "@/components/organisms/Header";
+import MainHeader from "@/components/molecules/MainHeader/MainHeader";
 
 export default function GeneralTemplate() {
   return (
     <GeneralTemplateStyle>
-      <Header />
+      <MainHeader />
       <div className="container">
         <Outlet />
       </div>
@@ -18,5 +18,5 @@ export default function GeneralTemplate() {
 const GeneralTemplateStyle = styled.div`
   width: 100%;
   min-height: 100vh;
-  background-color: ${({ theme }) => theme.color.white.value};
+  background: ${({ theme: { color } }) => color.bluishGray[50].value};
 `;

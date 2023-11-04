@@ -5,8 +5,7 @@ import { expandTypography } from "@/styles/util";
 export const TransactionCellStyle = styled.div`
   margin-bottom: 24px;
   border-radius: 24px;
-  border: 1px solid ${({ theme: { color } }) => color.gray[200].value};
-  background-color: ${({ theme: { color } }) => color.gray[50].value};
+  background-color: ${({ theme: { color } }) => color.white.value};
   padding: 24px;
   color: ${({ theme }) => theme.color.gray[900].value};
 
@@ -18,17 +17,14 @@ export const TransactionCellStyle = styled.div`
 
   &.OUTCOME:hover {
     background-color: ${({ theme }) => theme.color.peach[50].value};
-    border: 1px solid ${({ theme: { color } }) => color.peach[200].value};
   }
 
   &.REFUND:hover {
     background-color: ${({ theme }) => theme.color.blue[50].value};
-    border: 1px solid ${({ theme: { color } }) => color.blue[200].value};
   }
 
   &.INCOME:hover {
     background-color: ${({ theme }) => theme.color.green[50].value};
-    border: 1px solid ${({ theme: { color } }) => color.green[200].value};
   }
 
   .tag {
@@ -126,7 +122,8 @@ export const TransactionCellStyle = styled.div`
   }
 
   .ant-avatar {
-    background-color: ${({ theme }) => theme.color.gray[500].value} !important;
+    background-color: ${({ theme }) =>
+      theme.color.bluishGray[500].value} !important;
   }
 
   .icon-unit {
@@ -146,16 +143,16 @@ export const TransactionCellStyle = styled.div`
     }
 
     > .reaction > div {
+      gap: 2px;
       display: flex;
       align-items: center;
-      gap: 2px;
     }
 
-    .reaction-smile {
+    .reaction-up {
       margin-right: 8px;
     }
 
-    .reaction-frown {
+    .reaction-down {
       margin-right: 16px;
     }
 

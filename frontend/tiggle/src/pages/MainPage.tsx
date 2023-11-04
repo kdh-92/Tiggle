@@ -1,34 +1,19 @@
-import { Edit3 } from "react-feather";
-
-import CTAButton from "@/components/atoms/CTAButton/CTAButton";
-import Navigation from "@/components/molecules/Navigation";
+import Banner from "@/components/molecules/Banner/Banner";
+import BottomTab from "@/components/molecules/BottomTab/BottomTab";
 import TransactionCells from "@/components/molecules/TransactionCell/TransactionCells";
-import Tab from "@/components/organisms/Tab";
 import useGetData from "@/hooks/useGetData";
-import { MainPageContentStyle } from "@/styles/components/MainPageContentStyle";
+import { MainPageStyle } from "@/styles/pages/MainPageStyle";
 
 const MainPage = () => {
   const { data } = useGetData();
 
   return (
     <>
-      <MainPageContentStyle>
-        <div className="content-title-wrap">
-          <div className="content-title">
-            <p>티끌 모아 태산 ⛰</p>
-            <p>지출을 기록하고, 조언을 받아보세요!</p>
-            <CTAButton
-              size={"lg"}
-              icon={<Edit3 />}
-              children={"기록하기"}
-              className="title-button"
-            />
-          </div>
-        </div>
-        <Navigation />
+      <MainPageStyle>
+        <Banner />
         <TransactionCells data={data} />
-      </MainPageContentStyle>
-      <Tab />
+        <BottomTab />
+      </MainPageStyle>
     </>
   );
 };

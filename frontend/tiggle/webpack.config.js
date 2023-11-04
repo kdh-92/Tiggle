@@ -46,6 +46,15 @@ module.exports = {
             loader: "html-loader",
             options: {
               minimize: true,
+              sources: {
+                list: [
+                  {
+                    tag: "link",
+                    attribute: "href",
+                    type: "src",
+                  },
+                ],
+              },
             },
           },
         ],

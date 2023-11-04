@@ -22,6 +22,9 @@ export type TransactionRespDto = {
     asset?: AssetDto;
     category?: CategoryDto;
     txTagNames?: string;
+    txUpCount?: number;
+    txDownCount?: number;
+    txCommentCount?: number;
     createdAt?: string;
 };
 

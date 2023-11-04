@@ -4,7 +4,7 @@ import { expandTypography } from "@/styles/util";
 
 export const CTAButtonStyle = styled.button`
   width: fit-content;
-  background-color: ${({ theme }) => theme.color.black.value};
+  background-color: ${({ theme }) => theme.color.blue[600].value};
   color: ${({ theme }) => theme.color.white.value};
   border-radius: 50px;
 
@@ -32,12 +32,14 @@ export const CTAButtonStyle = styled.button`
   ${({ theme }) => theme.mq.desktop} {
     &.md {
       padding: 0 24px;
+      width: 120px;
       height: 40px;
-      ${({ theme }) => expandTypography(theme.typography.body.medium.bold)}
+      ${({ theme }) => expandTypography(theme.typography.body.small.bold)}
     }
 
     &.lg {
       padding: 0 32px;
+      width: 148px;
       height: 48px;
       ${({ theme }) => expandTypography(theme.typography.body.large.bold)}
     }
