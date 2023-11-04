@@ -1,8 +1,19 @@
 import SocialLoginButton from "@/components/atoms/SocialLoginButton/SocialLoginButton";
 import LoginHeader from "@/components/molecules/LoginHeader/LoginHeader";
+import useCookie from "@/hooks/useCookie";
 import { LoginPageStyle } from "@/styles/components/LoginPageStyle";
 
 const LoginPage = () => {
+  const { setCookie } = useCookie();
+
+  const onSet = () => {
+    setCookie("key", "value", {
+      path: "/",
+      secure: true,
+      maxAge: 3000,
+    });
+  };
+
   return (
     <LoginPageStyle>
       <LoginHeader />
@@ -11,6 +22,7 @@ const LoginPage = () => {
       <SocialLoginButton
         social_logo={"google"}
         href={process.env.REACT_APP_GOOGLE_REDIRECT_URL}
+        onClick={onSet}
       />
     </LoginPageStyle>
   );

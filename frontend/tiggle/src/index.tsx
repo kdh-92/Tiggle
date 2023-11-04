@@ -1,3 +1,4 @@
+import { CookiesProvider } from "react-cookie";
 import { createRoot } from "react-dom/client";
 import { Provider } from "react-redux";
 import { RouterProvider } from "react-router-dom";
@@ -18,12 +19,14 @@ const root = createRoot(container);
 
 root.render(
   <QueryClientProvider client={queryClient}>
-    <Provider store={store}>
-      <ThemeProvider theme={{ ...theme, mq }}>
-        {process.env.NODE_ENV === "development" && <ReactQueryDevtools />}
-        <GlobalStyle />
-        <RouterProvider router={router} />
-      </ThemeProvider>
-    </Provider>
+    <CookiesProvider>
+      <Provider store={store}>
+        <ThemeProvider theme={{ ...theme, mq }}>
+          {process.env.NODE_ENV === "development" && <ReactQueryDevtools />}
+          <GlobalStyle />
+          <RouterProvider router={router} />
+        </ThemeProvider>
+      </Provider>
+    </CookiesProvider>
   </QueryClientProvider>,
 );
