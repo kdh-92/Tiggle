@@ -74,7 +74,6 @@ export const reset = css`
   }
   body {
     -webkit-text-size-adjust: none;
-
     background: var(--baseBackground);
   }
 
@@ -88,8 +87,6 @@ export const reset = css`
   input[type="text"] {
     -webkit-appearance: none;
     appearance: none;
-
-    border-radius: 0;
   }
   input[type="search"]::-webkit-search-cancel-button {
     -webkit-appearance: none;

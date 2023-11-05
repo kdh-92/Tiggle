@@ -21,7 +21,7 @@ const Select = ({ variant = "default", className, ...props }: SelectProps) => {
   return (
     <SelectStyle
       className={cn(className, variant)}
-      size={isDesktop ? "large" : undefined}
+      size={isDesktop ? "large" : "middle"}
       suffixIcon={
         <ChevronDown
           className="icon"
