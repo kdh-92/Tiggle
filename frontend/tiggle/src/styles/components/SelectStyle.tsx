@@ -52,5 +52,38 @@ export const SelectStyle = styled(Select)`
         color: ${({ theme }) => theme.color.bluishGray[500].value};
       }
     }
+
+    // ---- variant ----
+    &.compact {
+      width: fit-content;
+
+      .ant-select-selector {
+        display: flex;
+        align-items: center;
+        padding: 0 12px;
+        height: 36px;
+        padding-inline-end: calc(12px + 20px);
+      }
+
+      .ant-select-selection-item,
+      .ant-select-selection-placeholder {
+        padding-right: 8px;
+      }
+
+      .ant-select-arrow {
+        inset-inline-end: 12px;
+      }
+
+      ${({ theme }) => theme.mq.desktop} {
+        .ant-select-selector {
+          padding: 0 16px;
+          height: 42px;
+          padding-inline-end: calc(16px + 24px);
+        }
+        .ant-select-arrow {
+          inset-inline-end: 16px;
+        }
+      }
+    }
   }
 `;

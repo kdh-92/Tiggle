@@ -8,7 +8,7 @@ import { SelectStyle } from "@/styles/components/SelectStyle";
 const { useBreakpoint } = Grid;
 
 interface SelectProps extends AntSelectProps {
-  variant: "default" | "light";
+  variant: "default" | "compact";
 }
 
 const Select = ({ variant = "default", className, ...props }: SelectProps) => {

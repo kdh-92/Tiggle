@@ -5,7 +5,9 @@ export const InputStyle = styled(Input)`
   &&& {
     width: 100%;
     font-weight: 700;
-    &::placeholder {
+
+    &::placeholder,
+    .ant-input::placeholder {
       font-weight: 400;
     }
 
@@ -13,6 +15,10 @@ export const InputStyle = styled(Input)`
       &::placeholder {
         color: ${({ theme }) => theme.color.bluishGray[500].value};
       }
+    }
+
+    .ant-input-prefix {
+      margin-right: 8px;
     }
 
     ${({ theme }) => theme.mq.desktop} {

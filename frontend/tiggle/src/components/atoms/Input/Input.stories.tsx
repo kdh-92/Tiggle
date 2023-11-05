@@ -16,3 +16,11 @@ export const Default: Story = {
     disabled: false,
   },
 };
+
+export const Addon: Story = {
+  args: {
+    prefix: "₩",
+    placeholder: "금액을 입력하세요",
+    type: "number",
+  },
+};
