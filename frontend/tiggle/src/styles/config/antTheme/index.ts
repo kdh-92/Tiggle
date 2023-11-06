@@ -1,3 +1,4 @@
+import DatePicker from "./datePickerToken";
 import token from "./globalToken";
 import Input from "./inputToken";
 import Select from "./selectToken";
@@ -7,5 +8,6 @@ export const antTheme = {
   components: {
     Select,
     Input,
+    DatePicker,
   },
 };
