@@ -4,6 +4,7 @@ import {
   createRoutesFromElements,
 } from "react-router-dom";
 
+import CreatePage from "@/pages/CreatePage";
 import DetailPage, { loader as detailPageLoader } from "@/pages/DetailPage";
 import LoginPage from "@/pages/LoginPage";
 import MainPage from "@/pages/MainPage";
@@ -16,6 +17,11 @@ export default createBrowserRouter(
   createRoutesFromElements(
     <>
       <Route element={<GeneralTemplate />}>
+        <Route
+          path="/create"
+          element={<CreatePage />}
+          errorElement={<div>error</div>}
+        />
         <Route
           path="/detail/:id"
           element={<DetailPage />}
