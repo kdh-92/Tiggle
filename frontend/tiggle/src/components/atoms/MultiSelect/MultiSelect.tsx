@@ -1,29 +1,22 @@
 import { forwardRef } from "react";
 import { ChevronDown } from "react-feather";
 
-import { SelectProps as AntSelectProps, Select as AntSelect } from "antd";
-import cn from "classnames";
+import { Select as AntSelect, SelectProps as AntSelectProps } from "antd";
 
-import { SelectStyle } from "@/styles/components/SelectStyle";
+import { MultiSelectStyle } from "@/styles/components/MultiSelectStyle";
 import { isDesktop } from "@/styles/util/screen";
 
-interface SelectProps extends AntSelectProps {
-  variant?: "default" | "compact";
-}
-
+interface MultiSelectProps extends AntSelectProps {}
 type SelectRef = Parameters<typeof AntSelect>[0]["ref"];
 
-const Select = forwardRef(
-  (
-    { variant = "default", className, ...props }: SelectProps,
-    ref: SelectRef,
-  ) => {
+const MultiSelect = forwardRef(
+  ({ ...props }: MultiSelectProps, ref: SelectRef) => {
     const desktop = isDesktop();
 
     return (
-      <SelectStyle
+      <MultiSelectStyle
+        mode="multiple"
         ref={ref}
-        className={cn(className, variant)}
         size={desktop ? "large" : "middle"}
         suffixIcon={
           <ChevronDown
@@ -39,4 +32,4 @@ const Select = forwardRef(
   },
 );
 
-export default Select;
+export default MultiSelect;
