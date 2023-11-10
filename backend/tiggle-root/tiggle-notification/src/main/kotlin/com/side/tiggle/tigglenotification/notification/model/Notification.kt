@@ -10,6 +10,7 @@ class Notification(
     val receiverId: Long,
     @Column(name = "sender_id")
     var senderId: Long? = null,
+    @Enumerated(EnumType.STRING)
     @Column(name = "type")
     val type: Type,
     @Column(name = "title")

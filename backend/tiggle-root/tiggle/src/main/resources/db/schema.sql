@@ -163,7 +163,7 @@ CREATE TABLE `notifications`
     `receiver_id` bigint NOT NULL,
     `title` varchar(255) NOT NULL,
     `content` varchar(255) NULL,
-    `type` varchar(10) NOT NULL,
+    `type` ENUM('TX', 'COMMENT', 'ETC') NOT NULL ,
     `created_at` timestamp NOT NULL,
     `viewed_at` timestamp NULL,
     `image_url` varchar(255) NOT NULL,

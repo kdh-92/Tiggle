@@ -62,3 +62,5 @@ INSERT INTO comments (tx_id, parent_id, content, sender_id, receiver_id, deleted
                       deleted_at)
 VALUES (1, 1, '대댓글 3', 4, 3, DEFAULT, DEFAULT, null, null);
 
+INSERT INTO notifications (sender_id, receiver_id, title, content, type, created_at, viewed_at, image_url)
+VALUES (1, 3, "test", "test", "ETC", "2023-11-08 23:03:22", "2023-11-08 23:03:22", "test");
