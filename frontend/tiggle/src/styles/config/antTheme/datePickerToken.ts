@@ -1,10 +1,9 @@
 import { PickerPanelToken } from "antd/lib/date-picker/style";
-import { InputToken } from "antd/lib/input/style";
 import { FullToken } from "antd/lib/theme/util/genComponentStyleHook";
 
 import { theme } from "../theme";
 
-type DatePickerToken = InputToken<FullToken<"DatePicker">> & PickerPanelToken;
+type DatePickerToken = FullToken<"DatePicker"> & PickerPanelToken;
 
 const { fontSize, color } = theme;
 

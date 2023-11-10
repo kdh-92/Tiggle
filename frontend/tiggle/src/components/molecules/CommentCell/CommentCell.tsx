@@ -163,7 +163,12 @@ function ReplyForm({ onSubmit }: ReplyFormProps) {
         name="reply"
         control={control}
         render={({ field }) => (
-          <TextArea variant="filled" placeholder="답글 남기기" {...field} />
+          <TextArea
+            variant="compact"
+            color="toned"
+            placeholder="답글 남기기"
+            {...field}
+          />
         )}
       />
       <CTAButton

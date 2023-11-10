@@ -1,10 +1,14 @@
 import { Info } from "react-feather";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 
+import CTAButton from "@/components/atoms/CTAButton/CTAButton";
 import DatePicker from "@/components/atoms/DatePicker/DatePicker";
 import Input from "@/components/atoms/Input/Input";
+import MultiSelect from "@/components/atoms/MultiSelect/MultiSelect";
 import Select from "@/components/atoms/Select/Select";
-import { TransactionDto } from "@/generated";
+import TextArea from "@/components/atoms/TextArea/TextArea";
+import TextButton from "@/components/atoms/TextButton/TextButton";
+import Upload from "@/components/atoms/Upload/Upload";
 import {
   CreatePageStyle,
   CreateFormStyle,
@@ -12,17 +16,31 @@ import {
 
 import type { Dayjs } from "dayjs";
 
-type CreateInputs = Required<
-  Omit<TransactionDto, "memberId" | "parentId" | "type" | "date">
-> & {
+type CreateInputs = {
+  assetId: number;
+  categoryId: number;
+  amount: number;
+  content: string;
+  reason: string;
+  tags: Array<string>;
   date: Dayjs;
+  imageUrl: FileList;
 };
 
 const CreatePage = () => {
-  const { control, handleSubmit } = useForm<CreateInputs>();
+  const { register, control, handleSubmit, resetField } =
+    useForm<CreateInputs>();
 
   const handleOnSubmit: SubmitHandler<CreateInputs> = data => {
     console.log(data);
+  };
+
+  const handleOnCancel = () => {
+    console.log("cancel");
+  };
+
+  const handleResetImageUrl = () => {
+    resetField("imageUrl");
   };
 
   return (
@@ -31,6 +49,7 @@ const CreatePage = () => {
       <CreateFormStyle
         className="create-form"
         onSubmit={handleSubmit(handleOnSubmit)}
+        encType="multipart/form-data"
       >
         <div className="form-item">
           <label>자산</label>
@@ -70,7 +89,11 @@ const CreatePage = () => {
             name="content"
             control={control}
             render={({ field }) => (
-              <Input placeholder="제목을 입력하세요" {...field} />
+              <Input
+                placeholder="제목을 입력하세요"
+                count={{ show: true, max: 20 }}
+                {...field}
+              />
             )}
           />
         </div>
@@ -78,10 +101,15 @@ const CreatePage = () => {
         <div className="form-item">
           <label>금액</label>
           <Controller
-            name="reason"
+            name="amount"
             control={control}
             render={({ field }) => (
-              <Input placeholder="금액을 입력하세요" prefix="₩" {...field} />
+              <Input
+                placeholder="금액을 입력하세요"
+                prefix="₩"
+                type="number"
+                {...field}
+              />
             )}
           />
         </div>
@@ -103,9 +131,10 @@ const CreatePage = () => {
             name="reason"
             control={control}
             render={({ field }) => (
-              <Input
-                className="reason"
+              <TextArea
+                name="reason"
                 placeholder="지출 이유를 입력하세요."
+                count={{ show: true, max: 300 }}
                 {...field}
               />
             )}
@@ -116,16 +145,43 @@ const CreatePage = () => {
 
         <div className="form-item">
           <label>해시태그</label>
-          <Input />
+          <Controller
+            name="tags"
+            control={control}
+            render={({ field }) => (
+              <MultiSelect
+                placeholder="해시태그 선택"
+                options={[
+                  { label: "해시태그1", value: "hashtag-1" },
+                  { label: "해시태그2", value: "hashtag-2" },
+                  { label: "해시태그3", value: "hashtag-3" },
+                ]}
+                {...field}
+              />
+            )}
+          />
         </div>
 
         <div className="form-item">
           <label>사진</label>
-          <Input />
+          <Upload
+            name="imageUrl"
+            onReset={handleResetImageUrl}
+            {...register("imageUrl")}
+          />
           <div className="form-item-caption">
             <Info size={12} />
             <p>지출을 증빙할 수 있는 사진을 업로드 해주세요.</p>
           </div>
+        </div>
+
+        <div className="form-controller">
+          <CTAButton type="submit" size="lg" fullWidth>
+            등록하기
+          </CTAButton>
+          <TextButton color="bluishGray500" onClick={handleOnCancel}>
+            취소
+          </TextButton>
         </div>
       </CreateFormStyle>
     </CreatePageStyle>

@@ -1,5 +1,6 @@
 import type { Preview } from "@storybook/react";
 import { Provider } from "react-redux";
+import { QueryClientProvider } from "@tanstack/react-query";
 
 import { ThemeProvider } from "styled-components";
 import { ConfigProvider } from "antd";
@@ -9,8 +10,7 @@ import { antTheme } from "@/styles/config/antTheme";
 import { GlobalStyle } from "@/styles/config/GlobalStyle";
 import { mq } from "@/styles/config/mediaQueries";
 import { store } from "@/store";
-
-
+import queryClient from "@/query/queryClient";
 
 const preview: Preview = {
   parameters: {
@@ -24,14 +24,16 @@ const preview: Preview = {
   },
   decorators: [
     Story => (
-      <Provider store={store}>
-        <ThemeProvider theme={{ ...theme, mq }}>
-          <ConfigProvider theme={antTheme}>
-            <GlobalStyle />
-            <Story />
-          </ConfigProvider>
-        </ThemeProvider>
-      </Provider>
+      <QueryClientProvider client={queryClient}>
+        <Provider store={store}>
+          <ThemeProvider theme={{ ...theme, mq }}>
+            <ConfigProvider theme={antTheme}>
+              <GlobalStyle />
+              <Story />
+            </ConfigProvider>
+          </ThemeProvider>
+        </Provider>
+      </QueryClientProvider>
     ),
   ],
 };

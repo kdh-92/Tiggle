@@ -19,6 +19,7 @@ export const CreatePageStyle = styled.div`
 
     .title {
       margin-bottom: 64px;
+      text-align: center;
     }
   }
 `;
@@ -50,5 +51,25 @@ export const CreateFormStyle = styled.form`
     gap: 4px;
     ${({ theme }) => expandTypography(theme.typography.body.small.medium)}
     color: ${({ theme }) => theme.color.bluishGray[400].value}
+  }
+
+  .form-controller {
+    padding-top: 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+
+  ${({ theme }) => theme.mq.desktop} {
+    .form-item {
+      > label {
+        ${({ theme }) => expandTypography(theme.typography.body.large.medium)}
+      }
+    }
+    .form-controller {
+      padding-top: 32px;
+      gap: 16px;
+    }
   }
 `;

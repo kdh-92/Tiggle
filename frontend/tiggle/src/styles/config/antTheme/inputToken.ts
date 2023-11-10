@@ -1,6 +1,8 @@
-import { InputToken } from "antd/lib/input/style";
+import { FullToken } from "antd/lib/theme/internal";
 
 import { theme } from "../theme";
+
+type InputToken = FullToken<"Input">;
 
 const { color, fontSize } = theme;
 
