@@ -8,6 +8,8 @@ services:
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
+    networks:
+      - springboot-mysql-net
   kafka:
     image: confluentinc/cp-kafka:5.5.1
     container_name: kafka
@@ -27,6 +29,8 @@ services:
 
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - springboot-mysql-net
   init-kafka:
     image: confluentinc/cp-kafka:5.5.1
     depends_on:
@@ -53,3 +57,8 @@ services:
       - KAFKA_CLUSTERS_0_NAME=local
       - KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS=kafka:29092
       - KAFKA_CLUSTERS_0_ZOOKEEPER=zookeeper:2181
+    networks:
+      - springboot-mysql-net
+networks:
+  springboot-mysql-net:
+    driver: bridge
