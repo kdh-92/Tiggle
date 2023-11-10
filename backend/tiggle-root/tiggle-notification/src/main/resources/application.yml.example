@@ -2,17 +2,18 @@ spring:
   jpa:
     hibernate:
       ddl-auto: none
+    database: mysql
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
   datasource:
-    url: jdbc:mysql://localhost:3307/tiggle?useSSL=false&allowPublicKeyRetrieval=true
-    username: root
-    password: tiggle1234
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
   kafka:
+    bootstrap-servers: ${KAFKA_URL}
     consumer:
-      auto-offset-reset: earliest
-      group-id: tiggle-notification
-      bootstrap-servers: localhost:9092
-      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      enable-auto-commit: false
+      auto-offset-reset: latest
+      group-id: tiggle-notification-consumer
 server:
   port: 8082
