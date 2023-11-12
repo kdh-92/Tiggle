@@ -166,7 +166,7 @@ CREATE TABLE `notifications`
     `type` ENUM('TX', 'COMMENT', 'ETC') NOT NULL ,
     `created_at` timestamp NOT NULL,
     `viewed_at` timestamp NULL,
-    `image_url` varchar(255) NOT NULL,
+    `image_url` varchar(255) NULL,
 
     PRIMARY KEY (`id`),
     FOREIGN KEY (`sender_id`) REFERENCES `members`(`id`),

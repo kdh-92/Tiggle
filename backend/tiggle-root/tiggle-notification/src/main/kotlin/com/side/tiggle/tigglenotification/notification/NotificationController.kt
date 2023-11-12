@@ -4,11 +4,10 @@ import com.side.tiggle.tigglenotification.global.common.HttpHeaders
 import com.side.tiggle.tigglenotification.notification.model.NotificationDto
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.RequestHeader
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
-@RestController(value = "/api/v1/notification")
+@RestController
+@RequestMapping("/api/v1/notification")
 class NotificationController(
     private val notificationService: NotificationService
 ) {
