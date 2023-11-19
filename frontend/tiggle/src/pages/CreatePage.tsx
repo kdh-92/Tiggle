@@ -1,5 +1,9 @@
+import { useEffect } from "react";
 import { Info } from "react-feather";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
+
+import { useMutation, useQuery } from "@tanstack/react-query";
+import dayjs from "dayjs";
 
 import CTAButton from "@/components/atoms/CTAButton/CTAButton";
 import DatePicker from "@/components/atoms/DatePicker/DatePicker";
@@ -10,29 +14,81 @@ import TextArea from "@/components/atoms/TextArea/TextArea";
 import TextButton from "@/components/atoms/TextButton/TextButton";
 import Upload from "@/components/atoms/Upload/Upload";
 import {
+  AssetApiControllerService,
+  CategoryApiControllerService,
+  TagApiControllerService,
+} from "@/generated";
+import { createTransaction } from "@/query/createTransaction";
+import {
   CreatePageStyle,
   CreateFormStyle,
 } from "@/styles/pages/CreatePageStyle";
 
-import type { Dayjs } from "dayjs";
-
-type CreateInputs = {
-  assetId: number;
-  categoryId: number;
-  amount: number;
-  content: string;
-  reason: string;
-  tags: Array<string>;
-  date: Dayjs;
-  imageUrl: FileList;
-};
+import type {
+  TransactionFormData,
+  TransactionInputs,
+} from "./CreatePage/types";
 
 const CreatePage = () => {
-  const { register, control, handleSubmit, resetField } =
-    useForm<CreateInputs>();
+  const {
+    register,
+    control,
+    handleSubmit,
+    resetField,
+    formState: { errors },
+  } = useForm<TransactionInputs>();
 
-  const handleOnSubmit: SubmitHandler<CreateInputs> = data => {
-    console.log(data);
+  const { data: assets, isLoading: isAssetsLoading } = useQuery(
+    ["asset", "all"],
+    async () =>
+      AssetApiControllerService.getAllAsset().then(res =>
+        res.map(({ name, id }) => ({ value: id, label: name })),
+      ),
+  );
+  const { data: categories, isLoading: isCategoriesLoading } = useQuery(
+    ["category", "all"],
+    async () =>
+      CategoryApiControllerService.getAllCategory().then(res =>
+        res.map(({ name, id }) => ({ value: id, label: name })),
+      ),
+  );
+  const { data: tags, isLoading: isTagsLoading } = useQuery(
+    ["tag", "all"],
+    async () =>
+      TagApiControllerService.getAllDefaultTag().then(res =>
+        res.map(({ name }) => ({ value: name, label: `#${name}` })),
+      ),
+  );
+
+  const { mutate } = useMutation(createTransaction, {
+    onSuccess: ({ id }) => {
+      // show toast
+      // move to transaction page
+    },
+    onError: error => {
+      // show toast
+      console.log(error);
+    },
+  });
+
+  const handleOnSubmit: SubmitHandler<TransactionInputs> = ({
+    tags,
+    date,
+    imageUrl,
+    ...data
+  }) => {
+    const formData: TransactionFormData = {
+      dto: {
+        type: "OUTCOME",
+        memberId: 1,
+        tagNames: tags?.join(", "),
+        date: dayjs(date).toISOString(),
+        ...data,
+      },
+      multipartFile: imageUrl.item(0),
+    };
+
+    mutate(formData);
   };
 
   const handleOnCancel = () => {
@@ -42,6 +98,10 @@ const CreatePage = () => {
   const handleResetImageUrl = () => {
     resetField("imageUrl");
   };
+
+  useEffect(() => {
+    console.log(errors);
+  }, [errors]);
 
   return (
     <CreatePageStyle>
@@ -56,10 +116,13 @@ const CreatePage = () => {
           <Controller
             name="assetId"
             control={control}
+            rules={{ required: true }}
             render={({ field }) => (
               <Select
                 placeholder="자산 선택"
-                options={[{ label: "자산1", value: 1 }]}
+                options={assets}
+                // TODO: loading ui 추가
+                notFoundContent={isAssetsLoading ? <p>loading...</p> : null}
                 {...field}
               />
             )}
@@ -71,10 +134,13 @@ const CreatePage = () => {
           <Controller
             name="categoryId"
             control={control}
+            rules={{ required: true }}
             render={({ field }) => (
               <Select
                 placeholder="카테고리 선택"
-                options={[{ label: "카테고리1", value: 1 }]}
+                options={categories}
+                // TODO: loading ui 추가
+                notFoundContent={isCategoriesLoading ? <p>loading...</p> : null}
                 {...field}
               />
             )}
@@ -88,6 +154,7 @@ const CreatePage = () => {
           <Controller
             name="content"
             control={control}
+            rules={{ max: 20, required: true }}
             render={({ field }) => (
               <Input
                 placeholder="제목을 입력하세요"
@@ -103,6 +170,7 @@ const CreatePage = () => {
           <Controller
             name="amount"
             control={control}
+            rules={{ required: true }}
             render={({ field }) => (
               <Input
                 placeholder="금액을 입력하세요"
@@ -119,6 +187,7 @@ const CreatePage = () => {
           <Controller
             name="date"
             control={control}
+            rules={{ required: true }}
             render={({ field }) => (
               <DatePicker placeholder="날짜를 입력하세요" {...field} />
             )}
@@ -130,6 +199,7 @@ const CreatePage = () => {
           <Controller
             name="reason"
             control={control}
+            rules={{ required: true, max: 300 }}
             render={({ field }) => (
               <TextArea
                 name="reason"
@@ -148,14 +218,13 @@ const CreatePage = () => {
           <Controller
             name="tags"
             control={control}
+            rules={{ required: true, max: 5 }}
             render={({ field }) => (
               <MultiSelect
                 placeholder="해시태그 선택"
-                options={[
-                  { label: "해시태그1", value: "hashtag-1" },
-                  { label: "해시태그2", value: "hashtag-2" },
-                  { label: "해시태그3", value: "hashtag-3" },
-                ]}
+                options={tags}
+                // TODO: loading ui 추가
+                notFoundContent={isTagsLoading ? <p>loading...</p> : null}
                 {...field}
               />
             )}
@@ -167,7 +236,7 @@ const CreatePage = () => {
           <Upload
             name="imageUrl"
             onReset={handleResetImageUrl}
-            {...register("imageUrl")}
+            {...register("imageUrl", { required: true })}
           />
           <div className="form-item-caption">
             <Info size={12} />
