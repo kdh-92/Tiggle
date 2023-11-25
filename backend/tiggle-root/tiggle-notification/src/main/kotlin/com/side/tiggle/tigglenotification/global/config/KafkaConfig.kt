@@ -21,11 +21,13 @@ class KafkaConfig(
     fun listen(record: ConsumerRecord<String, String>) {
         try {
             logger.info(record.value())
-            val message = jacksonMapper.readValue(record.value(), NotificationDto::class.java)
-            notificationService.save(message)
+            notificationService.save(stringToDto(record))
         } catch (e: Exception) {
             // TODO: 어떤 Exception인지에 따라 분기할 것
             logger.error(e.message, e)
         }
     }
+
+    private fun stringToDto(record: ConsumerRecord<String, String>): NotificationDto =
+        jacksonMapper.readValue(record.value(), NotificationDto::class.java)
 }
