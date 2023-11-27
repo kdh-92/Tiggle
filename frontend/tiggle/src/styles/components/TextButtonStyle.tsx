@@ -4,13 +4,13 @@ import { Color } from "@/components/atoms/TextButton/TextButton";
 
 import { expandTypography } from "../util";
 
-export const TextButtonStyle = styled.button<{ _color: Color }>`
+export const TextButtonStyle = styled.button<{ $color: Color }>`
   min-height: 40px;
 
   ${({ theme }) => expandTypography(theme.typography.body.medium.bold)}
 
-  ${({ _color, theme }) => {
-    const [, key, index] = /([a-zA-Z]+)(\d+)/.exec(_color);
+  ${({ $color, theme }) => {
+    const [, key, index] = /([a-zA-Z]+)(\d+)/.exec($color);
     if (key === "black") {
       return css`
         color: ${theme.color[key].value};

@@ -15,7 +15,7 @@ interface TextButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 
 const TextButton = ({ color, children, ...props }: TextButtonProps) => {
   return (
-    <TextButtonStyle _color={color} {...props}>
+    <TextButtonStyle $color={color} {...props}>
       {children}
     </TextButtonStyle>
   );
