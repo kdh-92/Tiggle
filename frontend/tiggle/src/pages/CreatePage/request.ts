@@ -1,7 +1,13 @@
 import axios from "axios";
 
-import { TransactionRespDto } from "@/generated";
-import { TransactionFormData } from "@/pages/CreatePage/types";
+import {
+  TransactionApiControllerService,
+  TransactionRespDto,
+} from "@/generated";
+
+export type TransactionFormData = Parameters<
+  typeof TransactionApiControllerService.createTransaction
+>[0];
 
 export const createTransaction = async ({
   dto,

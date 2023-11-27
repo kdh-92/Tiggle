@@ -9,6 +9,7 @@ export const TextAreaStyle = styled(Input.TextArea)`
     font-weight: 500;
     resize: none;
     textarea {
+      background-color: transparent;
       resize: none;
     }
 

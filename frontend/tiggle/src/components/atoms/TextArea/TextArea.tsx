@@ -28,7 +28,7 @@ const TextArea = forwardRef<HTMLInputElement, TextAreaProps>(
         className={cn(className, variant, color)}
         size={desktop ? "large" : "middle"}
         rows={3}
-        count={{ show: true, max: 300 }}
+        count={variant !== "compact" && { show: true, max: 300 }}
         {...props}
       />
     );

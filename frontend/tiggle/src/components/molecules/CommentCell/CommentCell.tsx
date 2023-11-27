@@ -3,7 +3,6 @@ import { SubmitHandler, useForm, Controller } from "react-hook-form";
 import { useSelector } from "react-redux";
 
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { message } from "antd";
 
 import CTAButton from "@/components/atoms/CTAButton/CTAButton";
 import ReplyToggleButton from "@/components/atoms/ReplyToggleButton/ReplyToggleButton";
@@ -18,6 +17,7 @@ import {
   CommentSenderStyle,
   ReplyFormStyle,
 } from "@/styles/components/CommentCellStyle";
+import { useMessage } from "@/templates/GeneralTemplate";
 import { calculateDateTimeDiff } from "@/utils/date";
 import { convertTxTypeToColor } from "@/utils/txType";
 
@@ -40,7 +40,7 @@ export default function CommentCell({
   sender,
   receiverId,
 }: CommentCellProps) {
-  const [messageApi, contextHolder] = message.useMessage();
+  const { messageApi } = useMessage();
   const [replyOpen, setReplyOpen] = useState(false);
 
   const toggleReplySection = () => {
@@ -77,42 +77,39 @@ export default function CommentCell({
   };
 
   return (
-    <>
-      {contextHolder}
-      <CommentCellStyle>
-        <CommentSenderStyle>
-          <img
-            className="profile"
-            src={sender.profileUrl ?? "/assets/user-placeholder.png"}
-            alt={`${sender.nickname} profile`}
-          />
-          <div>
-            <p className="name">{sender.nickname}</p>
-            <p className="date">{calculateDateTimeDiff(createdAt)}</p>
-          </div>
-        </CommentSenderStyle>
-
-        <p className="content">{content}</p>
-
-        <ReplyToggleButton
-          open={replyOpen}
-          repliesCount={childCount}
-          onClick={toggleReplySection}
+    <CommentCellStyle>
+      <CommentSenderStyle>
+        <img
+          className="profile"
+          src={sender.profileUrl ?? "/assets/user-placeholder.png"}
+          alt={`${sender.nickname} profile`}
         />
+        <div>
+          <p className="name">{sender.nickname}</p>
+          <p className="date">{calculateDateTimeDiff(createdAt)}</p>
+        </div>
+      </CommentSenderStyle>
 
-        {replyOpen && (
-          <CommentRepliesStyle>
-            {childCount > 0 && <div className="divider" />}
+      <p className="content">{content}</p>
 
-            {repliesData?.content?.map(reply => (
-              <ReplyCell key={`comment-reply-${reply.id}`} {...reply} />
-            ))}
+      <ReplyToggleButton
+        open={replyOpen}
+        repliesCount={childCount}
+        onClick={toggleReplySection}
+      />
 
-            <ReplyForm onSubmit={onSubmitReply} />
-          </CommentRepliesStyle>
-        )}
-      </CommentCellStyle>
-    </>
+      {replyOpen && (
+        <CommentRepliesStyle>
+          {childCount > 0 && <div className="divider" />}
+
+          {repliesData?.content?.map(reply => (
+            <ReplyCell key={`comment-reply-${reply.id}`} {...reply} />
+          ))}
+
+          <ReplyForm onSubmit={onSubmitReply} />
+        </CommentRepliesStyle>
+      )}
+    </CommentCellStyle>
   );
 }
 

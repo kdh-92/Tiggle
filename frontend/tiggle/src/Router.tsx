@@ -18,8 +18,13 @@ export default createBrowserRouter(
     <>
       <Route element={<GeneralTemplate />}>
         <Route
-          path="/create"
-          element={<CreatePage />}
+          path="/create/outcome"
+          element={<CreatePage type={"OUTCOME"} />}
+          errorElement={<div>error</div>}
+        />
+        <Route
+          path="/create/income"
+          element={<CreatePage type={"INCOME"} />}
           errorElement={<div>error</div>}
         />
         <Route
