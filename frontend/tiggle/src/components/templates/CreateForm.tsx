@@ -19,7 +19,7 @@ import {
   CategoryApiControllerService,
   TagApiControllerService,
 } from "@/generated";
-import { CreateFormStyle } from "@/styles/pages/CreatePageStyle";
+import { CreateFormStyle } from "@/styles/components/CreateFormStyle";
 
 export interface FormInputs {
   assetId: number;
@@ -32,14 +32,21 @@ export interface FormInputs {
   imageUrl: FileList;
 }
 
+type FormInputsKey = keyof FormInputs;
+
 interface CreateFormProps {
-  data?: Partial<FormInputs>;
-  parentId?: number;
   onSubmit: SubmitHandler<FormInputs>;
   onCancel: () => void;
+  defaultValues?: Partial<FormInputs>;
+  disabledInputs?: Array<FormInputsKey>;
 }
 
-function CreateForm({ onSubmit, onCancel }: CreateFormProps) {
+function CreateForm({
+  onSubmit,
+  onCancel,
+  defaultValues,
+  disabledInputs,
+}: CreateFormProps) {
   const { data: assets, isLoading: isAssetsLoading } = useQuery(
     ["asset", "all"],
     async () =>
@@ -62,7 +69,9 @@ function CreateForm({ onSubmit, onCancel }: CreateFormProps) {
       ),
   );
 
-  const { register, control, handleSubmit, resetField } = useForm<FormInputs>();
+  const { register, control, handleSubmit, resetField } = useForm<FormInputs>({
+    defaultValues,
+  });
 
   const handleResetImageUrl = () => {
     resetField("imageUrl");
@@ -86,6 +95,7 @@ function CreateForm({ onSubmit, onCancel }: CreateFormProps) {
               options={assets}
               // TODO: loading ui 추가
               notFoundContent={isAssetsLoading ? <p>loading...</p> : null}
+              disabled={disabledInputs?.includes("assetId")}
               {...field}
             />
           )}
@@ -104,6 +114,7 @@ function CreateForm({ onSubmit, onCancel }: CreateFormProps) {
               options={categories}
               // TODO: loading ui 추가
               notFoundContent={isCategoriesLoading ? <p>loading...</p> : null}
+              disabled={disabledInputs?.includes("categoryId")}
               {...field}
             />
           )}
@@ -122,6 +133,7 @@ function CreateForm({ onSubmit, onCancel }: CreateFormProps) {
             <Input
               placeholder="제목을 입력하세요"
               count={{ show: true, max: 20 }}
+              disabled={disabledInputs?.includes("content")}
               {...field}
             />
           )}
@@ -139,6 +151,7 @@ function CreateForm({ onSubmit, onCancel }: CreateFormProps) {
               placeholder="금액을 입력하세요"
               prefix="₩"
               type="number"
+              disabled={disabledInputs?.includes("amount")}
               {...field}
             />
           )}
@@ -152,7 +165,11 @@ function CreateForm({ onSubmit, onCancel }: CreateFormProps) {
           control={control}
           rules={{ required: true }}
           render={({ field }) => (
-            <DatePicker placeholder="날짜를 입력하세요" {...field} />
+            <DatePicker
+              placeholder="날짜를 입력하세요"
+              disabled={disabledInputs?.includes("date")}
+              {...field}
+            />
           )}
         />
       </div>
@@ -168,6 +185,7 @@ function CreateForm({ onSubmit, onCancel }: CreateFormProps) {
               name="reason"
               placeholder="지출 이유를 입력하세요."
               count={{ show: true, max: 300 }}
+              disabled={disabledInputs?.includes("reason")}
               {...field}
             />
           )}
@@ -188,6 +206,7 @@ function CreateForm({ onSubmit, onCancel }: CreateFormProps) {
               options={tags}
               // TODO: loading ui 추가
               notFoundContent={isTagsLoading ? <p>loading...</p> : null}
+              disabled={disabledInputs?.includes("tags")}
               {...field}
             />
           )}
@@ -199,6 +218,7 @@ function CreateForm({ onSubmit, onCancel }: CreateFormProps) {
         <Upload
           name="imageUrl"
           onReset={handleResetImageUrl}
+          disabled={disabledInputs?.includes("imageUrl")}
           {...register("imageUrl", { required: true })}
         />
         <div className="form-item-caption">

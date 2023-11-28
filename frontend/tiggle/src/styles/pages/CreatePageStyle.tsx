@@ -24,52 +24,76 @@ export const CreatePageStyle = styled.div`
   }
 `;
 
-export const CreateFormStyle = styled.form`
-  .form-item {
+export const TransactionPreviewCellStyle = styled.div`
+  width: 100%;
+  margin-bottom: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  .cell-label {
+    ${({ theme }) => expandTypography(theme.typography.body.medium.medium)}
+    color: ${({ theme }) => theme.color.bluishGray[600].value}
+  }
+
+  .cell-container {
+    background-color: ${({ theme }) => theme.color.white.value};
+    padding: 24px;
+    border-radius: 12px;
+
     display: flex;
     flex-direction: column;
-    gap: 8px;
-    margin-bottom: 32px;
+    gap: 24px;
+  }
 
-    > label {
-      ${({ theme }) => expandTypography(theme.typography.body.medium.medium)}
-      color: ${({ theme }) => theme.color.bluishGray[600].value}
+  .cell-contents-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  p.amount {
+    ${({ theme }) => expandTypography(theme.typography.title.small.bold)};
+    &.OUTCOME {
+      color: ${({ theme }) => theme.color.peach[600].value};
+    }
+    &.INCOME {
+      color: ${({ theme }) => theme.color.green[600].value};
+    }
+    &.REFUND {
+      color: ${({ theme }) => theme.color.blue[600].value};
     }
   }
-
-  .form-divider {
-    width: 100%;
-    height: 1px;
-    min-height: 1px;
-    margin: 16px 0;
-    background-color: ${({ theme }) => theme.color.bluishGray[200].value};
+  p.content {
+    color: ${({ theme }) => theme.color.gray[900].value};
+    ${({ theme }) => expandTypography(theme.typography.body.large.bold)};
   }
-
-  .form-item-caption {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    ${({ theme }) => expandTypography(theme.typography.body.small.medium)}
-    color: ${({ theme }) => theme.color.bluishGray[400].value}
-  }
-
-  .form-controller {
-    padding-top: 24px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 8px;
+  p.reason {
+    color: ${({ theme }) => theme.color.gray[900].value};
+    ${({ theme }) => expandTypography(theme.typography.body.small.regular)};
+    opacity: 0.6;
   }
 
   ${({ theme }) => theme.mq.desktop} {
-    .form-item {
-      > label {
-        ${({ theme }) => expandTypography(theme.typography.body.large.medium)}
-      }
+    margin-bottom: 32px;
+
+    .cell-label {
+      ${({ theme }) => expandTypography(theme.typography.body.large.medium)}
     }
-    .form-controller {
-      padding-top: 32px;
-      gap: 16px;
+
+    .cell-container {
+      border-radius: 16px;
+      gap: 28px;
+    }
+
+    p.amount {
+      ${({ theme }) => expandTypography(theme.typography.title.medium.bold)};
+    }
+    p.content {
+      ${({ theme }) => expandTypography(theme.typography.title.small2x.bold)};
+    }
+    p.reason {
+      ${({ theme }) => expandTypography(theme.typography.body.medium.regular)};
     }
   }
 `;

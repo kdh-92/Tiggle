@@ -4,7 +4,9 @@ import {
   createRoutesFromElements,
 } from "react-router-dom";
 
-import CreatePage from "@/pages/CreatePage";
+import CreatePage, {
+  loader as createRefundPageLoader,
+} from "@/pages/CreatePage";
 import DetailPage, { loader as detailPageLoader } from "@/pages/DetailPage";
 import LoginPage from "@/pages/LoginPage";
 import MainPage from "@/pages/MainPage";
@@ -25,6 +27,12 @@ export default createBrowserRouter(
         <Route
           path="/create/income"
           element={<CreatePage type={"INCOME"} />}
+          errorElement={<div>error</div>}
+        />
+        <Route
+          path="/create/refund/:id"
+          element={<CreatePage type={"REFUND"} />}
+          loader={createRefundPageLoader(queryClient)}
           errorElement={<div>error</div>}
         />
         <Route

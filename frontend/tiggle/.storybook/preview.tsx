@@ -1,7 +1,7 @@
 import type { Preview } from "@storybook/react";
 import { Provider } from "react-redux";
+import { BrowserRouter } from 'react-router-dom';
 import { QueryClientProvider } from "@tanstack/react-query";
-
 import { ThemeProvider } from "styled-components";
 import { ConfigProvider } from "antd";
 
@@ -29,7 +29,9 @@ const preview: Preview = {
           <ThemeProvider theme={{ ...theme, mq }}>
             <ConfigProvider theme={antTheme}>
               <GlobalStyle />
-              <Story />
+              <BrowserRouter>
+                <Story />
+              </BrowserRouter>
             </ConfigProvider>
           </ThemeProvider>
         </Provider>

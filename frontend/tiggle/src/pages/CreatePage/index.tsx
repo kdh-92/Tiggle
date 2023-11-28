@@ -1,22 +1,63 @@
 import { SubmitHandler } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
+import {
+  useNavigate,
+  useParams,
+  LoaderFunctionArgs,
+  useLoaderData,
+} from "react-router-dom";
 
-import { useMutation } from "@tanstack/react-query";
+import { QueryClient, useMutation, useQuery } from "@tanstack/react-query";
+import cn from "classnames";
 import dayjs from "dayjs";
 
+import { TypeTag } from "@/components/atoms";
 import CreateForm, { FormInputs } from "@/components/templates/CreateForm";
-import { CreatePageStyle } from "@/styles/pages/CreatePageStyle";
+import {
+  TransactionApiControllerService,
+  TransactionRespDto,
+} from "@/generated";
+import {
+  CreatePageStyle,
+  TransactionPreviewCellStyle,
+} from "@/styles/pages/CreatePageStyle";
 import { useMessage } from "@/templates/GeneralTemplate";
 import { TxType } from "@/types";
+import { convertTxTypeToWord } from "@/utils/txType";
 
 import { createTransaction, TransactionFormData } from "./request";
 
+const transactionQuery = (id: number) => ({
+  queryKey: ["transaction", "detail", id],
+  queryFn: async () => TransactionApiControllerService.getTransaction(id),
+});
+
+export const loader =
+  (queryClient: QueryClient) =>
+  ({ params }: LoaderFunctionArgs) => {
+    const parentId = Number(params.id);
+    return isNaN(parentId)
+      ? undefined
+      : queryClient.ensureQueryData(transactionQuery(parentId));
+  };
+
 interface CreatePageProps {
-  type: Exclude<TxType, "REFUND">;
+  type: TxType;
 }
+
 const CreatePage = ({ type }: CreatePageProps) => {
   const navigate = useNavigate();
   const { messageApi } = useMessage();
+  const parentId = Number(useParams().id);
+
+  const initialData = useLoaderData() as Awaited<
+    ReturnType<ReturnType<typeof loader>>
+  >;
+
+  const { data: parentTxData } = useQuery({
+    ...transactionQuery(parentId),
+    initialData,
+    enabled: type === "REFUND",
+  });
 
   const { mutate } = useMutation(createTransaction);
 
@@ -54,13 +95,45 @@ const CreatePage = ({ type }: CreatePageProps) => {
 
   return (
     <CreatePageStyle>
-      <p className="title">
-        {type === "INCOME" ? "수입" : type === "OUTCOME" ? "지출" : null}{" "}
-        기록하기
-      </p>
-      <CreateForm onSubmit={handleOnSubmit} onCancel={handleOnCancel} />
+      <p className="title">{convertTxTypeToWord(type)} 기록하기</p>
+      {parentTxData && <TransactionPreviewCell {...parentTxData} />}
+      <CreateForm
+        onSubmit={handleOnSubmit}
+        onCancel={handleOnCancel}
+        disabledInputs={
+          type === "REFUND" ? ["assetId", "categoryId"] : undefined
+        }
+        // TODO: parentTxData의 assetId, categoryId 전달
+        defaultValues={parentTxData ? { assetId: 1, categoryId: 1 } : undefined}
+      />
     </CreatePageStyle>
   );
 };
 
 export default CreatePage;
+
+interface TransactionPreviewCellProps
+  extends Pick<TransactionRespDto, "type" | "content" | "reason" | "amount"> {}
+
+const TransactionPreviewCell = ({
+  type,
+  amount,
+  content,
+  reason,
+}: TransactionPreviewCellProps) => {
+  return (
+    <TransactionPreviewCellStyle>
+      <p className="cell-label">원본 {convertTxTypeToWord(type)}</p>
+      <div className="cell-container">
+        <div className="cell-contents-wrapper">
+          <TypeTag txType={type} size={"md"} />
+          <p className={cn("amount", type)}>₩ {amount}</p>
+        </div>
+        <div className="cell-contents-wrapper">
+          <p className="content">{content}</p>
+          <p className="reason">{reason}</p>
+        </div>
+      </div>
+    </TransactionPreviewCellStyle>
+  );
+};
