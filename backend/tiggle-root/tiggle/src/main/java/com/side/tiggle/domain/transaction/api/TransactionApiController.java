@@ -38,8 +38,6 @@ import java.util.stream.Collectors;
 public class TransactionApiController {
 
     private final TransactionService transactionService;
-    private final AssetService assetService;
-    private final CategoryService categoryService;
     private final CommentService commentService;
     private final ReactionService reactionService;
     private final String DEFAULT_INDEX = "0";
