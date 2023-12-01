@@ -122,6 +122,7 @@ CREATE TABLE `categories`
 (
     `id`       bigint NOT NULL AUTO_INCREMENT,
     `name`     varchar(100) NOT NULL ,
+    `type`     ENUM('INCOME', 'OUTCOME') NOT NULL ,
     `defaults`  tinyint DEFAULT 0 ,
     `deleted`              tinyint DEFAULT 0 ,
     `created_at`           timestamp DEFAULT CURRENT_TIMESTAMP ,
