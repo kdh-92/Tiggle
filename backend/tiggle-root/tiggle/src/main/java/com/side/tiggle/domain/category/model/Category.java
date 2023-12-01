@@ -19,12 +19,17 @@ public class Category {
     @Column(name = "name", nullable = false)
     private String name;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "type", nullable = false)
+    private CategoryType type;
+
     @Column(name = "defaults", nullable = false)
     private boolean defaults;
 
     @Builder
-    public Category(String name, boolean defaults) {
+    public Category(String name, CategoryType type, boolean defaults) {
         this.name = name;
+        this.type = type;
         this.defaults = defaults;
     }
 }

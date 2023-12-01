@@ -10,14 +10,16 @@ VALUES ('은행', 1),
        ('현금', 1),
        ('기타', 1);
 
-INSERT INTO categories (name, `defaults`)
-VALUES ('생활비', 1),
-       ('비상금', 1),
-       ('유흥비', 1),
-       ('고정지출', 1),
-       ('월급', 1),
-       ('부수입', 1),
-       ('기타', 1);
+INSERT INTO categories (name, type, `defaults`)
+VALUES ('생활비', 'OUTCOME', 1),
+       ('비상금', 'OUTCOME', 1),
+       ('유흥비', 'OUTCOME', 1),
+       ('고정지출', 'OUTCOME', 1),
+       ('고정지출', 'INCOME', 1),
+       ('월급', 'INCOME', 1),
+       ('부수입', 'INCOME', 1),
+       ('기타', 'OUTCOME', 1),
+       ('기타', 'INCOME', 1);
 
 INSERT INTO tx_tags (tx_id, member_id, tag_names)
 VALUES (3, 2, '태그 이름 1,태그 이름3'),
