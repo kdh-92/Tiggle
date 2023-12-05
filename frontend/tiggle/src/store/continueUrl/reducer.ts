@@ -15,6 +15,10 @@ const continueUrlReducer = (
       return {
         url: action.payload,
       };
+    case type.RESET_CONTINUE_URL:
+      return {
+        url: undefined,
+      };
     default:
       return state;
   }
