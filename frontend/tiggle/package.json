@@ -20,6 +20,7 @@
     "@tanstack/react-query": "^4.29.23",
     "@tanstack/react-query-devtools": "^4.29.23",
     "@types/antd": "^1.0.0",
+    "@types/redux-persist": "^4.3.1",
     "antd": "^5.11.1",
     "classnames": "^2.3.2",
     "dayjs": "^1.11.9",
@@ -32,6 +33,7 @@
     "react-masonry-css": "^1.0.16",
     "react-redux": "^8.1.1",
     "react-router-dom": "^6.14.2",
+    "redux-persist": "^6.0.0",
     "styled-components": "^6.0.5",
     "token-transformer": "^0.0.33"
   },
