@@ -20,6 +20,8 @@ import {
   TagApiControllerService,
 } from "@/generated";
 import { CreateFormStyle } from "@/styles/components/CreateFormStyle";
+import { TxType } from "@/types";
+import { convertTxTypeToWord } from "@/utils/txType";
 
 export interface FormInputs {
   assetId: number;
@@ -35,6 +37,7 @@ export interface FormInputs {
 type FormInputsKey = keyof FormInputs;
 
 interface CreateFormProps {
+  type: TxType;
   onSubmit: SubmitHandler<FormInputs>;
   onCancel: () => void;
   defaultValues?: Partial<FormInputs>;
@@ -42,6 +45,7 @@ interface CreateFormProps {
 }
 
 function CreateForm({
+  type,
   onSubmit,
   onCancel,
   defaultValues,
@@ -159,7 +163,7 @@ function CreateForm({
       </div>
 
       <div className="form-item">
-        <label>지출일자</label>
+        <label>{convertTxTypeToWord(type)}일자</label>
         <Controller
           name="date"
           control={control}
@@ -183,7 +187,7 @@ function CreateForm({
           render={({ field }) => (
             <TextArea
               name="reason"
-              placeholder="지출 이유를 입력하세요."
+              placeholder={`${convertTxTypeToWord(type)} 이유를 입력하세요.`}
               count={{ show: true, max: 300 }}
               disabled={disabledInputs?.includes("reason")}
               {...field}
@@ -223,7 +227,9 @@ function CreateForm({
         />
         <div className="form-item-caption">
           <Info size={12} />
-          <p>지출을 증빙할 수 있는 사진을 업로드 해주세요.</p>
+          <p>
+            {convertTxTypeToWord(type)}을 증빙할 수 있는 사진을 업로드 해주세요.
+          </p>
         </div>
       </div>
 

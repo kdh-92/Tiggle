@@ -65,8 +65,8 @@ const DetailPage = () => {
           sender={{
             nickname: "사용자1",
           }}
-          asset={"asset"}
-          category={"category"}
+          asset={transactionData.asset.name}
+          category={transactionData.category.name}
         />
 
         <DetailPageContentStyle>

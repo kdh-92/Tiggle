@@ -98,6 +98,7 @@ const CreatePage = ({ type }: CreatePageProps) => {
       <p className="title">{convertTxTypeToWord(type)} 기록하기</p>
       {parentTxData && <TransactionPreviewCell {...parentTxData} />}
       <CreateForm
+        type={type}
         onSubmit={handleOnSubmit}
         onCancel={handleOnCancel}
         disabledInputs={
