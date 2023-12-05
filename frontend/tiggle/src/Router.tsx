@@ -9,12 +9,12 @@ import CreatePage, {
 } from "@/pages/CreatePage";
 import DetailPage, { loader as detailPageLoader } from "@/pages/DetailPage";
 import LoginPage from "@/pages/LoginPage";
+import LoginRedirectPage from "@/pages/LoginRedirectPage";
 import MainPage from "@/pages/MainPage";
+import MyPage from "@/pages/MyPage";
+import NotFoundPage from "@/pages/NotFoundPage";
 import queryClient from "@/query/queryClient";
 import GeneralTemplate from "@/templates/GeneralTemplate";
-
-import MyPage from "./pages/MyPage";
-import NotFoundPage from "./pages/NotFoundPage";
 
 export default createBrowserRouter(
   createRoutesFromElements(
@@ -46,6 +46,7 @@ export default createBrowserRouter(
         <Route path="/" element={<MainPage />} />
       </Route>
       <Route path="/login" element={<LoginPage />} />
+      <Route path="/login/success" element={<LoginRedirectPage />} />
       <Route path="*" element={<NotFoundPage />} />
     </>,
   ),
