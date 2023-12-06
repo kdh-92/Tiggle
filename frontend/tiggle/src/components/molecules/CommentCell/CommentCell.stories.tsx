@@ -41,7 +41,7 @@ export const Default: Story = {
     createdAt: "2023-08-06T06:00:00.000Z",
     content:
       "모든 국민은 건강하고 쾌적한 환경에서 생활할 권리를 가지며, 국가와 국민은 환경보전을 위하여 노력하여야 한다.",
-    childCount: 1,
+    childCount: 0,
     txType: Tx.REFUND,
   },
 };

@@ -57,7 +57,7 @@ export function Menu({
   };
 
   return (
-    <MenuStyle ref={ref} align={align} {...props}>
+    <MenuStyle ref={ref} $align={align} {...props}>
       <MenuButtonStyle onClick={handleItemsToggle}>
         <MoreVertical className="menu-icon" />
       </MenuButtonStyle>

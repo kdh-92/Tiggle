@@ -16,7 +16,6 @@ type Story = StoryObj<typeof TextArea>;
 
 export const Default: Story = {
   args: {
-    value: "hello",
     placeholder: "댓글 남기기",
   },
 };

@@ -51,7 +51,7 @@ export const MenuItemStyle = styled.button`
   }
 `;
 
-export const MenuStyle = styled.div<{ align: MenuProps["align"] }>`
+export const MenuStyle = styled.div<{ $align: MenuProps["align"] }>`
   width: fit-content;
   position: relative;
 
@@ -75,8 +75,8 @@ export const MenuStyle = styled.div<{ align: MenuProps["align"] }>`
       display: flex;
     }
 
-    ${({ align }) => {
-      switch (align) {
+    ${({ $align }) => {
+      switch ($align) {
         case "left":
           return css`
             left: 0;

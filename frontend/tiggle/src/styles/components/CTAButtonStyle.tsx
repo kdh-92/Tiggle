@@ -26,10 +26,6 @@ export const CTAButtonStyle = styled.button`
     ${({ theme }) => expandTypography(theme.typography.body.medium.bold)}
   }
 
-  &.fullWidth {
-    width: 100%;
-  }
-
   ${({ theme }) => {
     return CTAButtonColors.map(colorKey => {
       return css`
@@ -61,7 +57,7 @@ export const CTAButtonStyle = styled.button`
       padding: 0 24px;
       width: 120px;
       height: 40px;
-      ${({ theme }) => expandTypography(theme.typography.body.small.bold)}
+      ${({ theme }) => expandTypography(theme.typography.body.medium.bold)}
     }
 
     &.lg {
@@ -75,5 +71,9 @@ export const CTAButtonStyle = styled.button`
       width: 20px;
       height: 20px;
     }
+  }
+
+  &.fullWidth {
+    width: 100%;
   }
 `;
