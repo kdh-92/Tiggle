@@ -11,7 +11,7 @@ export const CTAButtonColors = [
   "bluishGray",
 ] as const;
 interface CTAButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  size?: "md" | "lg";
+  size?: "sm" | "md" | "lg";
   icon?: ReactElement;
   fullWidth?: boolean;
   variant?: "primary" | "secondary" | "light";

@@ -2,14 +2,23 @@ import axios, { AxiosHeaders } from "axios";
 
 import { CancelablePromise, OpenAPIConfig } from "@/generated";
 import type { ApiRequestOptions } from "@/generated/core/ApiRequestOptions";
+import useCookie from "@/hooks/useCookie";
 
-const axiosInstance = axios.create({
-  baseURL: process.env.REACT_APP_API_URL,
-  headers: {
+const getAxiosInstance = () => {
+  const { getCookie } = useCookie();
+  const token = getCookie("Authorization");
+
+  const headers = {
     Accept: "application/json",
     "Content-Type": "application/json",
-  },
-});
+    ...(token && { Authorization: `Bearer ${token}` }),
+  };
+
+  return axios.create({
+    baseURL: process.env.REACT_APP_API_URL,
+    headers,
+  });
+};
 
 export const request = <T>(
   config: OpenAPIConfig,
@@ -20,7 +29,7 @@ export const request = <T>(
     const queryString = getQueryString(options.query);
     const url = `${urlWithPath}${queryString}`;
 
-    axiosInstance
+    getAxiosInstance()
       .request({
         url,
         data: options.body,

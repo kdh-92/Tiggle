@@ -3,6 +3,7 @@ import { SubmitHandler, useForm, Controller } from "react-hook-form";
 import { useSelector } from "react-redux";
 
 import { useMutation, useQuery } from "@tanstack/react-query";
+import { Avatar } from "antd";
 
 import CTAButton from "@/components/atoms/CTAButton/CTAButton";
 import ReplyToggleButton from "@/components/atoms/ReplyToggleButton/ReplyToggleButton";
@@ -79,9 +80,9 @@ export default function CommentCell({
   return (
     <CommentCellStyle>
       <CommentSenderStyle>
-        <img
-          className="profile"
-          src={sender.profileUrl ?? "/assets/user-placeholder.png"}
+        <Avatar
+          size={32}
+          src={sender.profileUrl}
           alt={`${sender.nickname} profile`}
         />
         <div>
