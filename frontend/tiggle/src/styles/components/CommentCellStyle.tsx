@@ -33,11 +33,10 @@ export const CommentSenderStyle = styled.div`
   gap: 8px;
   align-items: center;
 
-  .profile {
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
+  .ant-avatar {
     background-color: ${({ theme }) => theme.color.bluishGray[300].value};
+    background-image: url("/assets/user-placeholder.png");
+    background-size: cover;
   }
 
   .name {

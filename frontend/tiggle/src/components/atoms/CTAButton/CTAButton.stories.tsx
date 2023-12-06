@@ -16,5 +16,6 @@ export const Default: Story = {
     size: "md",
     children: "기록하기",
     icon: <Edit3 />,
+    disabled: false,
   },
 };
