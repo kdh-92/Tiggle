@@ -2,6 +2,7 @@ package com.side.tiggle.domain.reaction.service;
 
 import com.side.tiggle.domain.member.model.Member;
 import com.side.tiggle.domain.member.service.MemberService;
+import com.side.tiggle.domain.reaction.dto.ReactionDto;
 import com.side.tiggle.domain.reaction.dto.req.ReactionCreateDto;
 import com.side.tiggle.domain.reaction.model.Reaction;
 import com.side.tiggle.domain.reaction.model.ReactionType;
@@ -29,18 +30,24 @@ public class ReactionService {
     }
 
     public Reaction upsertReaction(long txId, long senderId, ReactionCreateDto reactionDto) {
+        ReactionType type = reactionDto.getType();
         Transaction transaction = transactionService.getTransaction(txId); // transaction 유효성 확인을 위해 한번 조회
         Reaction reaction = reactionRepository.findByTxIdAndSenderId(txId, senderId);
 
         if (reaction == null) {
             Member sender = memberService.getMember(senderId);
-            Member receiver = memberService.getMember(reactionDto.getReceiverId());
-            reaction = reactionDto.toEntity(transaction, sender, receiver);
+            Member receiver = transaction.getMember();
+            reaction = Reaction.builder()
+                    .tx(transaction)
+                    .receiver(receiver)
+                    .sender(sender)
+                    .type(type)
+                    .build();
+        } else if (reaction.getType() != reactionDto.getType()) {
+            reaction.setType(reactionDto.getType());
         }
 
-        reaction.setType(reactionDto.getType());
-        reactionRepository.save(reaction);
-        return reaction;
+        return reactionRepository.save(reaction);
     }
 
     @Transactional

@@ -5,9 +5,13 @@ import com.side.tiggle.domain.reaction.dto.ReactionDto;
 import com.side.tiggle.domain.reaction.model.Reaction;
 import com.side.tiggle.domain.reaction.model.ReactionType;
 import com.side.tiggle.domain.transaction.model.Transaction;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
-@Setter
-public class ReactionCreateDto extends ReactionDto { }
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
+@Builder
+public class ReactionCreateDto {
+
+    private ReactionType type;
+}
