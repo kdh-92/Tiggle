@@ -85,7 +85,7 @@ public class MemberService {
             uploadFolder.mkdirs();
         }
         String folderPath = uploadFolder.getAbsolutePath();
-        Path savePath = Paths.get(folderPath + File.separator + "profile");
+        Path savePath = Paths.get(folderPath + File.separator + file.getOriginalFilename());
         file.transferTo(savePath);
 
         return savePath.toString();
