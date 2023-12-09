@@ -24,7 +24,12 @@ spring:
           uri: ${TIGGLE_CORE_URI}
           predicates:
             - Path=/login/**, /oauth2/**
-
+        - id: tiggle-notification
+          uri: ${TIGGLE_NOTI_URI}
+          predicates:
+            - Path=/noti/**
+          filters:
+            - RewritePath=/noti/(?<path>.*), /$\{path}
 server:
   port: 8081
 springdoc:

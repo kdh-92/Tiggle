@@ -155,3 +155,20 @@ ALTER TABLE comments ADD FOREIGN KEY (receiver_id) REFERENCES members(id);
 ALTER TABLE reactions ADD FOREIGN KEY (tx_id) REFERENCES transactions(id);
 ALTER TABLE reactions ADD FOREIGN KEY (sender_id) REFERENCES members(id);
 ALTER TABLE reactions ADD FOREIGN KEY (receiver_id) REFERENCES members(id);
+
+CREATE TABLE `notifications`
+(
+    `id` bigint NOT NULL AUTO_INCREMENT,
+    `sender_id` bigint NULL,
+    `receiver_id` bigint NOT NULL,
+    `title` varchar(255) NOT NULL,
+    `content` varchar(255) NULL,
+    `type` ENUM('TX', 'COMMENT', 'ETC') NOT NULL ,
+    `created_at` timestamp NOT NULL,
+    `viewed_at` timestamp NULL,
+    `image_url` varchar(255) NULL,
+
+    PRIMARY KEY (`id`),
+    FOREIGN KEY (`sender_id`) REFERENCES `members`(`id`),
+    FOREIGN KEY (`receiver_id`) REFERENCES `members`(`id`)
+);
