@@ -38,6 +38,12 @@ export default function MainHeader() {
                     <Bell size={20} />
                   </button>
                   <Link to={"/mypage"} className="right-bar-btn">
+<<<<<<< HEAD
+=======
+                    <Avatar size={24} src={profile?.profileUrl} />
+                  </Link>
+                  <button className="right-bar-btn">
+>>>>>>> 9506e4b (feat: my page router 생성, main header 연결)
                     <Avatar size={24} src={profile?.profileUrl} />
                   </Link>
                 </>

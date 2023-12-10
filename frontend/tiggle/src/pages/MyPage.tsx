@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { ChevronRight } from "react-feather";
 
 import { useQuery } from "@tanstack/react-query";
@@ -74,6 +75,10 @@ const MyPage = () => {
       </MypageStyle>
     </>
   );
+=======
+const MyPage = () => {
+  return <div>not found</div>;
+>>>>>>> 9506e4b (feat: my page router 생성, main header 연결)
 };
 
 export default MyPage;
