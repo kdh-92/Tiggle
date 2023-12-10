@@ -66,6 +66,33 @@ export const MypageStyle = styled.div`
     .transaction-title {
       color: ${({ theme: { color } }) => color.bluishGray[600].value};
       ${({ theme }) => expandTypography(theme.typography.body.large.bold)}
+      margin-bottom: 12px;
+    }
+
+    .transaction-cells {
+      width: 480px;
+      background: ${({ theme }) => theme.color.white.value};
+      border-radius: 16px;
+
+      .transaction-cell {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        height: 72px;
+        padding: 24px 28px;
+        color: ${({ theme: { color } }) => color.bluishGray[700].value};
+        border-bottom: 1px solid
+          ${({ theme: { color } }) => color.bluishGray[100].value};
+        &:last-child {
+          justify-content: center;
+          align-items: center;
+          border-bottom: none;
+          > button {
+            color: ${({ theme: { color } }) => color.blue[600].value};
+            ${({ theme }) => expandTypography(theme.typography.body.large.bold)}
+          }
+        }
+      }
     }
   }
 
@@ -143,6 +170,20 @@ const MyPage = () => {
             </div>
             <div className="user-transaction">
               <p className="transaction-title">내 거래 기록</p>
+              <div className="transaction-cells">
+                <div className="transaction-cell">
+                  <span>거래기록1</span>
+                </div>
+                <div className="transaction-cell">
+                  <span>거래기록2</span>
+                </div>
+                <div className="transaction-cell">
+                  <span>거래기록3</span>
+                </div>
+                <div className="transaction-cell">
+                  <button>내 거래기록 더 보기</button>
+                </div>
+              </div>
             </div>
             <div className="user-setting">
               <p className="setting-title">설정</p>
