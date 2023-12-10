@@ -13,6 +13,7 @@ import MainPage from "@/pages/MainPage";
 import queryClient from "@/query/queryClient";
 import GeneralTemplate from "@/templates/GeneralTemplate";
 
+import MyPage from "./pages/MyPage";
 import NotFoundPage from "./pages/NotFoundPage";
 
 export default createBrowserRouter(
@@ -41,6 +42,7 @@ export default createBrowserRouter(
           loader={detailPageLoader(queryClient)}
           errorElement={<div>error</div>}
         />
+        <Route path="/mypage" element={<MyPage />} />
         <Route path="/" element={<MainPage />} />
       </Route>
       <Route path="/login" element={<LoginPage />} />

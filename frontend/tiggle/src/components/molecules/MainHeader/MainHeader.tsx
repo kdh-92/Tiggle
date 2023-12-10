@@ -32,9 +32,9 @@ export default function MainHeader() {
               <button className="right-bar-btn">
                 <Bell size={20} />
               </button>
-              <button className="right-bar-btn">
+              <Link to={"/mypage"} className="right-bar-btn">
                 <Avatar size={24} />
-              </button>
+              </Link>
             </HeaderRightStyle>
           </div>
         </div>
