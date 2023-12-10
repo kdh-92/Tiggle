@@ -62,6 +62,7 @@ export const MypageStyle = styled.div`
 
   .user-transaction {
     margin-bottom: 80px;
+
     .transaction-title {
       color: ${({ theme: { color } }) => color.bluishGray[600].value};
       ${({ theme }) => expandTypography(theme.typography.body.large.bold)}
@@ -69,6 +70,8 @@ export const MypageStyle = styled.div`
   }
 
   .user-setting {
+    margin-bottom: 80px;
+
     .setting-title {
       color: ${({ theme: { color } }) => color.bluishGray[600].value};
       ${({ theme }) => expandTypography(theme.typography.body.large.bold)}
@@ -95,6 +98,15 @@ export const MypageStyle = styled.div`
         }
       }
     }
+  }
+
+  .logout-button {
+    width: 480px;
+    padding: 24px 28px;
+    border-radius: 12px;
+    background: ${({ theme }) => theme.color.white.value};
+    color: ${({ theme: { color } }) => color.blue[600].value};
+    ${({ theme }) => expandTypography(theme.typography.body.large.medium)}
   }
 `;
 
