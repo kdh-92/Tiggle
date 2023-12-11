@@ -1,7 +1,5 @@
 package com.side.tiggle.domain.transaction.api;
 
-import com.side.tiggle.domain.asset.service.AssetService;
-import com.side.tiggle.domain.category.service.CategoryService;
 import com.side.tiggle.domain.comment.dto.resp.CommentRespDto;
 import com.side.tiggle.domain.comment.service.CommentService;
 import com.side.tiggle.domain.reaction.model.ReactionType;
@@ -16,8 +14,6 @@ import com.side.tiggle.domain.transaction.service.TransactionService;
 import com.side.tiggle.global.common.constants.HttpHeaders;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -60,7 +56,7 @@ public class TransactionApiController {
     }
 
     @Operation(summary = "tx 상세 조회", description = "tx의 id에 대한 상세 정보를 반환합니다.", responses = {
-            @ApiResponse(responseCode = "200", description = "tx 상세 조회 성공", content = @Content(schema = @Schema(implementation = TransactionRespDto.class))),
+            @ApiResponse(responseCode = "200", description = "tx 상세 조회 성공"),
             @ApiResponse(responseCode = "400", description = "존재하지 않는 리소스 접근"),
     })
     @GetMapping("/{id}")
@@ -79,7 +75,7 @@ public class TransactionApiController {
             summary = "tx 페이지 조회 API",
             description = "페이지(index)에 해당하는 tx 개수(pageSize)의 정보를 반환합니다.",
             responses = {
-                    @ApiResponse(responseCode = "200", description = "tx 페이지 조회 성공", content = @Content(schema = @Schema(implementation = TransactionRespDto.class))),
+                    @ApiResponse(responseCode = "200", description = "tx 페이지 조회 성공"),
                     @ApiResponse(responseCode = "400", description = "존재하지 않는 리소스 접근")
             })
     @GetMapping
@@ -108,7 +104,7 @@ public class TransactionApiController {
             summary = "특정 유저 tx 페이지 조회 API",
             description = "memberId 유저의 페이지(index)에 해당하는 tx 개수(pageSize)의 정보를 반환합니다.",
             responses = {
-                    @ApiResponse(responseCode = "200", description = "tx 페이지 조회 성공", content = @Content(schema = @Schema(implementation = TransactionRespDto.class))),
+                    @ApiResponse(responseCode = "200", description = "tx 페이지 조회 성공"),
                     @ApiResponse(responseCode = "400", description = "존재하지 않는 리소스 접근")
             })
     @GetMapping("/member")
