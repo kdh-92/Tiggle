@@ -59,7 +59,7 @@ public class ReactionApiController {
             @PathVariable(name = "id") long txId,
             ReactionCreateDto reactionDto
     ) {
-        Reaction reaction = this.reactionService.upsertReaction(txId, senderId, reactionDto);
+        Reaction reaction = reactionService.upsertReaction(txId, senderId, reactionDto);
         return new ResponseEntity<>(ReactionDto.fromEntity(reaction), HttpStatus.CREATED);
     }
 

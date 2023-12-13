@@ -4,6 +4,7 @@ import com.side.tiggle.domain.asset.dto.AssetDto;
 import com.side.tiggle.domain.asset.service.AssetService;
 import com.side.tiggle.domain.category.dto.CategoryDto;
 import com.side.tiggle.domain.category.dto.resp.CategoryRespDto;
+import com.side.tiggle.domain.category.model.CategoryType;
 import com.side.tiggle.domain.category.service.CategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -27,6 +28,13 @@ public class CategoryApiController {
     @GetMapping("/{id}")
     public ResponseEntity<CategoryRespDto> getCategory(@PathVariable("id") Long categoryId) {
         return new ResponseEntity<>(CategoryRespDto.fromEntity(categoryService.getCategory(categoryId)), HttpStatus.OK);
+    }
+
+    @GetMapping("/type/{type}")
+    public ResponseEntity<List<CategoryRespDto>> getCategory(@PathVariable("type") CategoryType type) {
+        return new ResponseEntity<>(categoryService.getCategoryType(type).stream()
+                .map(CategoryRespDto::fromEntity)
+                .collect(Collectors.toList()), HttpStatus.OK);
     }
 
     @GetMapping("/all")

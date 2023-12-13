@@ -3,17 +3,20 @@ package com.side.tiggle.domain.reaction.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.side.tiggle.domain.member.model.Member;
 import com.side.tiggle.domain.transaction.model.Transaction;
+import com.side.tiggle.global.common.model.BaseEntity;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Data
-@EqualsAndHashCode(callSuper = false)
+@Getter
+@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
+@EntityListeners(AuditingEntityListener.class)
 @Table(name = "reactions")
 public class Reaction {
 

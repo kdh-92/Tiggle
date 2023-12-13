@@ -4,6 +4,7 @@ import com.side.tiggle.domain.asset.dto.AssetDto;
 import com.side.tiggle.domain.asset.model.Asset;
 import com.side.tiggle.domain.category.dto.CategoryDto;
 import com.side.tiggle.domain.category.model.Category;
+import com.side.tiggle.domain.category.model.CategoryType;
 import com.side.tiggle.domain.category.repository.CategoryRepository;
 import com.side.tiggle.global.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +30,10 @@ public class CategoryService {
     public Category getCategory(Long categoryId) {
         return categoryRepository.findById(categoryId)
                 .orElseThrow(NotFoundException::new);
+    }
+
+    public List<Category> getCategoryType(CategoryType type) {
+        return categoryRepository.findByType(type);
     }
 
     public List<Category> getAllCategory() {
