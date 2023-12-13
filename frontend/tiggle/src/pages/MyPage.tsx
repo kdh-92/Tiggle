@@ -6,7 +6,7 @@ import useLogin from "@/hooks/useLogin";
 import { MypageStyle } from "@/styles/pages/MypageStyle";
 
 const MyPage = () => {
-  const { profile, isError, isLoading } = useLogin();
+  const { profile, isError, isLoading, logOut } = useLogin();
 
   return (
     <>
@@ -53,18 +53,20 @@ const MyPage = () => {
             <div className="user-setting">
               <p className="setting-title">설정</p>
               <div className="setting-cells">
-                <div className="setting-cell">
+                <button className="setting-cell">
                   <span>자산 항목 관리</span> <ChevronRight />
-                </div>
-                <div className="setting-cell">
+                </button>
+                <button className="setting-cell">
                   <span>지출 카테고리 관리</span> <ChevronRight />
-                </div>
-                <div className="setting-cell">
+                </button>
+                <button className="setting-cell">
                   <span>수입 카테고리 관리</span> <ChevronRight />
-                </div>
+                </button>
               </div>
             </div>
-            <button className="logout-button">로그아웃</button>
+            <button onClick={() => logOut()} className="logout-button">
+              로그아웃
+            </button>
           </>
         )}
       </MypageStyle>

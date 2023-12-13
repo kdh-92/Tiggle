@@ -40,6 +40,7 @@ export default function useLogin() {
 
   const logOut = () => {
     removeCookie("Authorization");
+    navigate("/login");
   };
 
   const checkIsLogin = (callback?: () => void) => {
