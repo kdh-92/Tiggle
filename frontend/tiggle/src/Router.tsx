@@ -16,8 +16,6 @@ import NotFoundPage from "@/pages/NotFoundPage";
 import queryClient from "@/query/queryClient";
 import GeneralTemplate from "@/templates/GeneralTemplate";
 
-import MyPage from "./pages/MyPage";
-
 export default createBrowserRouter(
   createRoutesFromElements(
     <>
