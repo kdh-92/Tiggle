@@ -16,12 +16,8 @@ import NotFoundPage from "@/pages/NotFoundPage";
 import queryClient from "@/query/queryClient";
 import GeneralTemplate from "@/templates/GeneralTemplate";
 
-<<<<<<< HEAD
-=======
 import MyPage from "./pages/MyPage";
-import NotFoundPage from "./pages/NotFoundPage";
 
->>>>>>> 2822ed4 (feat: my page router 생성, main header 연결)
 export default createBrowserRouter(
   createRoutesFromElements(
     <>
