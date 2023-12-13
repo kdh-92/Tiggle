@@ -178,6 +178,7 @@ export const MypageStyle = styled.div`
     width: 327px;
     padding: 20px;
     border-radius: 12px;
+    margin-bottom: 82px;
     background: ${({ theme }) => theme.color.white.value};
     color: ${({ theme: { color } }) => color.blue[600].value};
     ${({ theme }) => expandTypography(theme.typography.body.medium.medium)}
@@ -185,6 +186,7 @@ export const MypageStyle = styled.div`
     ${({ theme }) => theme.mq.desktop} {
       width: 480px;
       padding: 24px 28px;
+      margin-bottom: 128px;
       ${({ theme }) => expandTypography(theme.typography.body.large.medium)}
     }
   }
