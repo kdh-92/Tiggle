@@ -4,8 +4,8 @@
 /* eslint-disable */
 
 export type CategoryRespDto = {
+    id?: number;
     name?: string;
     defaults?: boolean;
-    id?: number;
 };
 

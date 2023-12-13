@@ -19,6 +19,7 @@ export type { GradeDto } from './models/GradeDto';
 export type { MemberDto } from './models/MemberDto';
 export type { PageableObject } from './models/PageableObject';
 export type { PageCommentRespDto } from './models/PageCommentRespDto';
+export type { PageTransactionRespDto } from './models/PageTransactionRespDto';
 export type { ReactionCreateDto } from './models/ReactionCreateDto';
 export type { ReactionDto } from './models/ReactionDto';
 export type { ReactionSummaryDto } from './models/ReactionSummaryDto';

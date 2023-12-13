@@ -4,6 +4,7 @@
 /* eslint-disable */
 
 export type AssetDto = {
+    id?: number;
     name?: string;
     defaults?: boolean;
 };

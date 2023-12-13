@@ -4,9 +4,6 @@
 /* eslint-disable */
 
 export type ReactionCreateDto = {
-    txId?: number;
-    senderId?: number;
-    receiverId?: number;
     type?: 'UP' | 'DOWN';
 };
 

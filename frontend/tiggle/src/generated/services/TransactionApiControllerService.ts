@@ -3,6 +3,7 @@
 /* tslint:disable */
 /* eslint-disable */
 import type { PageCommentRespDto } from '../models/PageCommentRespDto';
+import type { PageTransactionRespDto } from '../models/PageTransactionRespDto';
 import type { TransactionDto } from '../models/TransactionDto';
 import type { TransactionRespDto } from '../models/TransactionRespDto';
 import type { TransactionUpdateReqDto } from '../models/TransactionUpdateReqDto';
@@ -103,13 +104,13 @@ export class TransactionApiControllerService {
      * 페이지(index)에 해당하는 tx 개수(pageSize)의 정보를 반환합니다.
      * @param index tx 페이지 번호
      * @param pageSize 페이지 내부 tx 개수
-     * @returns TransactionRespDto tx 페이지 조회 성공
+     * @returns PageTransactionRespDto tx 페이지 조회 성공
      * @throws ApiError
      */
     public static getCountOffsetTransaction(
         index: number,
         pageSize: number = 5,
-    ): CancelablePromise<TransactionRespDto> {
+    ): CancelablePromise<PageTransactionRespDto> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/v1/transaction',
@@ -188,14 +189,14 @@ export class TransactionApiControllerService {
      * @param memberId 유저 id
      * @param index tx 페이지 번호
      * @param pageSize 페이지 내부 tx 개수
-     * @returns TransactionRespDto tx 페이지 조회 성공
+     * @returns PageTransactionRespDto tx 페이지 조회 성공
      * @throws ApiError
      */
     public static getMemberCountOffsetTransaction(
         memberId: number,
         index: number,
         pageSize: number = 5,
-    ): CancelablePromise<TransactionRespDto> {
+    ): CancelablePromise<PageTransactionRespDto> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/v1/transaction/member',
