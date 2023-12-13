@@ -1,17 +1,12 @@
-<<<<<<< HEAD
 import { ChevronRight } from "react-feather";
 
-import { useQuery } from "@tanstack/react-query";
 import { Avatar } from "antd";
 
-import { MemberApiControllerService } from "@/generated/services/MemberApiControllerService";
+import useLogin from "@/hooks/useLogin";
 import { MypageStyle } from "@/styles/pages/MypageStyle";
 
 const MyPage = () => {
-  const { data, isError, isLoading } = useQuery({
-    queryKey: ["me"],
-    queryFn: () => MemberApiControllerService.getMe(5),
-  });
+  const { profile, isError, isLoading } = useLogin();
 
   return (
     <>
@@ -20,11 +15,11 @@ const MyPage = () => {
           <>
             <div className="user-info">
               <div className="user">
-                {data.profileUrl ? (
+                {profile.profileUrl ? (
                   <img
                     className="user-profile"
                     alt="user-profile"
-                    src={data.profileUrl}
+                    src={profile.profileUrl}
                   />
                 ) : (
                   <Avatar />
@@ -32,7 +27,7 @@ const MyPage = () => {
               </div>
               <div className="user-greeting">
                 <p>
-                  <span className="user-name">{data.nickname}</span>님,
+                  <span className="user-name">{profile.nickname}</span>님,
                 </p>
                 <p>안녕하세요</p>
               </div>
@@ -75,10 +70,6 @@ const MyPage = () => {
       </MypageStyle>
     </>
   );
-=======
-const MyPage = () => {
-  return <div>not found</div>;
->>>>>>> 9506e4b (feat: my page router 생성, main header 연결)
 };
 
 export default MyPage;
