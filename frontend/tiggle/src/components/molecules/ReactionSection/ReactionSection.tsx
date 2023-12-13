@@ -4,6 +4,7 @@ import { useMutation } from "@tanstack/react-query";
 
 import ReactionButton from "@/components/atoms/ReactionButton/ReactionButton";
 import { ReactionApiService, ReactionSummaryDto } from "@/generated";
+import useLogin from "@/hooks/useLogin";
 import queryClient from "@/query/queryClient";
 import { ReactionSectionStyle } from "@/styles/components/ReactionSectionStyle";
 import { Reaction, ReactionType } from "@/types";
@@ -20,6 +21,7 @@ export default function ReactionSection({
   downCount,
   className,
 }: ReactionSectionProps) {
+  const { checkIsLogin } = useLogin();
   const [selectedReaction, setSelectedReaction] =
     useState<ReactionType>(undefined);
 
@@ -61,13 +63,17 @@ export default function ReactionSection({
         <ReactionButton
           reaction={Reaction.Up}
           number={upCount}
-          onClick={() => handleReactionButtonClick(Reaction.Up)}
+          onClick={() =>
+            checkIsLogin(() => handleReactionButtonClick(Reaction.Up))
+          }
           checked={selectedReaction === Reaction.Up}
         />
         <ReactionButton
           reaction={Reaction.Down}
           number={downCount}
-          onClick={() => handleReactionButtonClick(Reaction.Down)}
+          onClick={() =>
+            checkIsLogin(() => handleReactionButtonClick(Reaction.Down))
+          }
           checked={selectedReaction === Reaction.Down}
         />
       </div>

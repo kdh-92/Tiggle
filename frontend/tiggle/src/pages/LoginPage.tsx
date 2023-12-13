@@ -2,6 +2,7 @@ import SocialLoginButton from "@/components/atoms/SocialLoginButton/SocialLoginB
 import LoginHeader from "@/components/molecules/LoginHeader/LoginHeader";
 import useCookie from "@/hooks/useCookie";
 import { LoginPageStyle } from "@/styles/components/LoginPageStyle";
+import withAuth from "@/utils/withAuth";
 
 const LoginPage = () => {
   const { setCookie } = useCookie();
@@ -28,4 +29,4 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage;
+export default withAuth(LoginPage, "auth");

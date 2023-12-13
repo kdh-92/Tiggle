@@ -6,11 +6,12 @@ import { RouterProvider } from "react-router-dom";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { ConfigProvider } from "antd";
+import { PersistGate } from "redux-persist/integration/react";
 import { ThemeProvider } from "styled-components";
 
 import router from "@/Router";
 import queryClient from "@/query/queryClient";
-import { store } from "@/store";
+import { store, persistedStore } from "@/store";
 import { GlobalStyle } from "@/styles/config/GlobalStyle";
 import { antTheme } from "@/styles/config/antTheme";
 import { mq } from "@/styles/config/mediaQueries";
@@ -23,13 +24,15 @@ root.render(
   <QueryClientProvider client={queryClient}>
     <CookiesProvider>
       <Provider store={store}>
-        <ThemeProvider theme={{ ...theme, mq }}>
-          <ConfigProvider theme={antTheme}>
-            {process.env.NODE_ENV === "development" && <ReactQueryDevtools />}
-            <GlobalStyle />
-            <RouterProvider router={router} />
-          </ConfigProvider>
-        </ThemeProvider>
+        <PersistGate persistor={persistedStore}>
+          <ThemeProvider theme={{ ...theme, mq }}>
+            <ConfigProvider theme={antTheme}>
+              {process.env.NODE_ENV === "development" && <ReactQueryDevtools />}
+              <GlobalStyle />
+              <RouterProvider router={router} />
+            </ConfigProvider>
+          </ThemeProvider>
+        </PersistGate>
       </Provider>
     </CookiesProvider>
   </QueryClientProvider>,

@@ -23,6 +23,7 @@ import {
 import { useMessage } from "@/templates/GeneralTemplate";
 import { TxType } from "@/types";
 import { convertTxTypeToWord } from "@/utils/txType";
+import withAuth from "@/utils/withAuth";
 
 import { createTransaction, TransactionFormData } from "./request";
 
@@ -111,7 +112,7 @@ const CreatePage = ({ type }: CreatePageProps) => {
   );
 };
 
-export default CreatePage;
+export default withAuth(CreatePage, "protected");
 
 interface TransactionPreviewCellProps
   extends Pick<TransactionRespDto, "type" | "content" | "reason" | "amount"> {}

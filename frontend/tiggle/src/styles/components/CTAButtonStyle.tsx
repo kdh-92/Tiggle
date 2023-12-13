@@ -14,6 +14,16 @@ export const CTAButtonStyle = styled.button`
   align-items: center;
   gap: 8px;
 
+  transition:
+    background-color 0.1s ease,
+    color 0.1s ease;
+
+  &.sm {
+    padding: 0 16px;
+    height: 28px;
+    ${({ theme }) => expandTypography(theme.typography.body.small.bold)}
+  }
+
   &.md {
     padding: 0 20px;
     height: 32px;
@@ -26,6 +36,10 @@ export const CTAButtonStyle = styled.button`
     ${({ theme }) => expandTypography(theme.typography.body.medium.bold)}
   }
 
+  &:disabled {
+    cursor: not-allowed;
+  }
+
   ${({ theme }) => {
     return CTAButtonColors.map(colorKey => {
       return css`
@@ -33,14 +47,23 @@ export const CTAButtonStyle = styled.button`
           &.primary {
             background-color: ${theme.color[colorKey][600].value};
             color: ${theme.color.white.value};
+            &:disabled {
+              background-color: ${theme.color[colorKey][400].value};
+            }
           }
           &.secondary {
             background-color: ${theme.color[colorKey][500].value};
             color: ${theme.color.white.value};
+            &:disabled {
+              background-color: ${theme.color[colorKey][300].value};
+            }
           }
           &.light {
             background-color: ${theme.color[colorKey][100].value};
             color: ${theme.color[colorKey][600].value};
+            &:disabled {
+              color: ${theme.color[colorKey][400].value};
+            }
           }
         }
       `;
