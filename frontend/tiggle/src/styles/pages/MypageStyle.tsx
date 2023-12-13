@@ -104,7 +104,10 @@ export const MypageStyle = styled.div`
           justify-content: center;
           align-items: center;
           border-bottom: none;
+          padding: 0;
           > button {
+            width: 100%;
+            height: 100%;
             color: ${({ theme: { color } }) => color.blue[600].value};
             ${({ theme }) =>
               expandTypography(theme.typography.body.medium.bold)}
@@ -143,6 +146,7 @@ export const MypageStyle = styled.div`
         display: flex;
         align-items: center;
         justify-content: space-between;
+        width: 100%;
         height: 62px;
         padding: 20px;
         color: ${({ theme: { color } }) => color.bluishGray[700].value};
