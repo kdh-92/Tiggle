@@ -10,7 +10,6 @@ import { MypageStyle } from "@/styles/pages/MypageStyle";
 import MyTransactionCell from "./MyTransactionCell";
 
 const MyPage = () => {
-  const TEMP_USER_ID = 1;
   const { isLogin, profile, isError, isLoading, logOut } = useLogin();
 
   const {
@@ -21,7 +20,7 @@ const MyPage = () => {
     ["myTransaction"],
     async () =>
       TransactionApiControllerService.getMemberCountOffsetTransaction(
-        TEMP_USER_ID,
+        profile?.id,
         0,
       ),
     {
