@@ -31,7 +31,7 @@ const MyPage = () => {
     },
   );
 
-  const SortArray = data?.content.sort((a, b) =>
+  const sortArray = data?.content.sort((a, b) =>
     dayjs(b.date).diff(dayjs(a.date)),
   );
 
@@ -64,9 +64,9 @@ const MyPage = () => {
           <div className="user-transaction">
             <p className="transaction-title">내 거래 기록</p>
             <div className="transaction-cells">
-              <MyTransactionCell {...SortArray[0]} />
-              <MyTransactionCell {...SortArray[1]} />
-              <MyTransactionCell {...SortArray[2]} />
+              {sortArray.slice(0, 3).map(props => (
+                <MyTransactionCell {...props} />
+              ))}
               <div className="transaction-cell">
                 <button>내 거래기록 더 보기</button>
               </div>
