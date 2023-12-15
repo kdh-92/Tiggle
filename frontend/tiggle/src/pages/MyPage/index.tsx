@@ -2,6 +2,7 @@ import { ChevronRight } from "react-feather";
 
 import { useQuery } from "@tanstack/react-query";
 import { Avatar } from "antd";
+import dayjs from "dayjs";
 
 import { TransactionApiControllerService } from "@/generated";
 import useLogin from "@/hooks/useLogin";
@@ -30,8 +31,8 @@ const MyPage = () => {
     },
   );
 
-  const SortArray = data?.content.sort(
-    (a, b) => (new Date(b.date) as any) - (new Date(a.date) as any),
+  const SortArray = data?.content.sort((a, b) =>
+    dayjs(b.date).diff(dayjs(a.date)),
   );
 
   return (
