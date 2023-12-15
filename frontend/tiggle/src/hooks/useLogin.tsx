@@ -22,8 +22,8 @@ export default function useLogin() {
 
   const {
     data: profile,
-    isError,
-    isLoading,
+    isError: isProfileLoading,
+    isLoading: isProfileError,
   } = useQuery(
     ["profile"],
     async () => MemberApiControllerService.getMe(TEMP_USER_ID),
@@ -51,5 +51,13 @@ export default function useLogin() {
     }
   };
 
-  return { isLogin, profile, logIn, logOut, checkIsLogin, isError, isLoading };
+  return {
+    isLogin,
+    profile,
+    logIn,
+    logOut,
+    checkIsLogin,
+    isProfileLoading,
+    isProfileError,
+  };
 }

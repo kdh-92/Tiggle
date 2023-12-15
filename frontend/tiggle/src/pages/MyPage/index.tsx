@@ -10,12 +10,13 @@ import { MypageStyle } from "@/styles/pages/MypageStyle";
 import MyTransactionCell from "./MyTransactionCell";
 
 const MyPage = () => {
-  const { isLogin, profile, isError, isLoading, logOut } = useLogin();
+  const { isLogin, profile, isProfileError, isProfileLoading, logOut } =
+    useLogin();
 
   const {
     data,
-    isError: txError,
-    isLoading: txLoading,
+    isError: isTxError,
+    isLoading: isTxLoading,
   } = useQuery(
     ["myTransaction"],
     async () =>
@@ -36,7 +37,7 @@ const MyPage = () => {
   return (
     <>
       <MypageStyle>
-        {!isLoading && !isError && (
+        {!isProfileLoading && !isProfileError && (
           <div className="user-info">
             <div className="user">
               {profile.profileUrl ? (
@@ -58,7 +59,7 @@ const MyPage = () => {
             <button className="profile-modify-button">프로필 수정</button>
           </div>
         )}
-        {!txLoading && !txError && (
+        {!isTxLoading && !isTxError && (
           <div className="user-transaction">
             <p className="transaction-title">내 거래 기록</p>
             <div className="transaction-cells">
