@@ -1,10 +1,12 @@
 import SocialLoginButton from "@/components/atoms/SocialLoginButton/SocialLoginButton";
 import LoginHeader from "@/components/molecules/LoginHeader/LoginHeader";
 import useCookie from "@/hooks/useCookie";
+import { scrollToTop } from "@/hooks/useScroll";
 import { LoginPageStyle } from "@/styles/components/LoginPageStyle";
 import withAuth from "@/utils/withAuth";
 
 const LoginPage = () => {
+  scrollToTop();
   const { setCookie } = useCookie();
 
   const onSet = () => {

@@ -57,6 +57,29 @@ export class CategoryApiControllerService {
     }
 
     /**
+     * @param type
+     * @returns CategoryRespDto OK
+     * @throws ApiError
+     */
+    public static getCategory1(
+        type: 'INCOME' | 'OUTCOME',
+    ): CancelablePromise<Array<CategoryRespDto>> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/v1/category/type/{type}',
+            path: {
+                'type': type,
+            },
+            errors: {
+                400: `Bad Request`,
+                401: `Unauthorized`,
+                404: `Not Found`,
+                500: `Internal Server Error`,
+            },
+        });
+    }
+
+    /**
      * @returns CategoryRespDto OK
      * @throws ApiError
      */

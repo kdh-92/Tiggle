@@ -12,7 +12,7 @@ export default function useCookie() {
   };
 
   const removeCookie = (name: string) => {
-    return cookies.remove(name);
+    return cookies.remove(name, { path: "/" });
   };
 
   return { setCookie, getCookie, removeCookie };

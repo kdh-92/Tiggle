@@ -37,9 +37,9 @@ export default function MainHeader() {
                   <button className="right-bar-btn">
                     <Bell size={20} />
                   </button>
-                  <button className="right-bar-btn">
+                  <Link to={"/mypage"} className="right-bar-btn">
                     <Avatar size={24} src={profile?.profileUrl} />
-                  </button>
+                  </Link>
                 </>
               ) : (
                 <CTAButton

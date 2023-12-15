@@ -20,7 +20,11 @@ export default function useLogin() {
   const authorization = getCookie("Authorization");
   const isLogin = useMemo(() => !!authorization, [authorization]);
 
-  const { data: profile } = useQuery(
+  const {
+    data: profile,
+    isError: isProfileLoading,
+    isLoading: isProfileError,
+  } = useQuery(
     ["profile"],
     async () => MemberApiControllerService.getMe(TEMP_USER_ID),
     {
@@ -36,6 +40,7 @@ export default function useLogin() {
 
   const logOut = () => {
     removeCookie("Authorization");
+    navigate("/login");
   };
 
   const checkIsLogin = (callback?: () => void) => {
@@ -46,5 +51,13 @@ export default function useLogin() {
     }
   };
 
-  return { isLogin, profile, logIn, logOut, checkIsLogin };
+  return {
+    isLogin,
+    profile,
+    logIn,
+    logOut,
+    checkIsLogin,
+    isProfileLoading,
+    isProfileError,
+  };
 }
