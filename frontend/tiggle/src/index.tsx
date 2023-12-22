@@ -1,3 +1,4 @@
+import { cloneElement } from "react";
 import { CookiesProvider } from "react-cookie";
 import { createRoot } from "react-dom/client";
 import { Provider } from "react-redux";
@@ -20,20 +21,34 @@ import { theme } from "@/styles/config/theme";
 const container = document.getElementById("root");
 const root = createRoot(container);
 
+interface MultiProvidersProps extends React.PropsWithChildren {
+  providers: Array<React.ReactElement>;
+}
+
+const MultiProviders = ({ providers, children }: MultiProvidersProps) => (
+  <>
+    {providers.reduceRight(
+      (accumulator: React.ReactNode, provider: React.ReactElement) =>
+        cloneElement(provider, {}, accumulator),
+      children,
+    )}
+  </>
+);
+
 root.render(
-  <QueryClientProvider client={queryClient}>
-    <CookiesProvider>
-      <Provider store={store}>
-        <PersistGate persistor={persistedStore}>
-          <ThemeProvider theme={{ ...theme, mq }}>
-            <ConfigProvider theme={antTheme}>
-              {process.env.NODE_ENV === "development" && <ReactQueryDevtools />}
-              <GlobalStyle />
-              <RouterProvider router={router} />
-            </ConfigProvider>
-          </ThemeProvider>
-        </PersistGate>
-      </Provider>
-    </CookiesProvider>
-  </QueryClientProvider>,
+  <Provider store={store}>
+    <MultiProviders
+      providers={[
+        <QueryClientProvider client={queryClient} />,
+        <CookiesProvider />,
+        <PersistGate persistor={persistedStore} />,
+        <ThemeProvider theme={{ ...theme, mq }} />,
+        <ConfigProvider theme={antTheme} />,
+      ]}
+    >
+      {process.env.NODE_ENV === "development" && <ReactQueryDevtools />}
+      <GlobalStyle />
+      <RouterProvider router={router} />
+    </MultiProviders>
+  </Provider>,
 );
