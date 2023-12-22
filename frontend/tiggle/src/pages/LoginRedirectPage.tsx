@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
-import { Loading } from "@/components/atoms";
+import LoadingPage from "@/components/templates/LoadingPage/LoadingPage";
 import useLogin from "@/hooks/useAuth";
 import { RootState } from "@/store";
 import continueUrlStore from "@/store/continueUrl";
@@ -24,11 +24,7 @@ const LoginRedirectPage = () => {
     }
   }, []);
 
-  return (
-    <div>
-      <Loading />
-    </div>
-  );
+  return <LoadingPage />;
 };
 
 export default LoginRedirectPage;

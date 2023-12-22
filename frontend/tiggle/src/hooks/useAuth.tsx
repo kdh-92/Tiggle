@@ -4,6 +4,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 
 import { MemberApiControllerService } from "@/generated";
+import { memberKeys } from "@/query/queryKeys";
 import continueUrlStore from "@/store/continueUrl";
 
 import useCookie from "./useCookie";
@@ -21,7 +22,7 @@ export default function useAuth() {
     isLoading: isLoginLoading,
     isError: isLoginError,
   } = useQuery(
-    ["profile"],
+    memberKeys.detail("me"),
     async () => MemberApiControllerService.getMe(TEMP_USER_ID),
     {
       staleTime: 1000 * 60 * 30,

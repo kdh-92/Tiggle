@@ -1,6 +1,6 @@
 import { ButtonHTMLAttributes } from "react";
 
-import { TextButtonStyle } from "@/styles/components/TextButtonStyle";
+import { TextButtonStyle } from "@/components/atoms/TextButton/TextButtonStyle";
 import { theme } from "@/styles/config/theme";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars

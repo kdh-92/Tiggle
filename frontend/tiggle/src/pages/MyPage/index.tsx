@@ -1,34 +1,25 @@
 import { ChevronRight } from "react-feather";
 
-import { useQuery } from "@tanstack/react-query";
 import { Avatar } from "antd";
 import dayjs from "dayjs";
 
-import { TransactionApiControllerService } from "@/generated";
 import useLogin from "@/hooks/useAuth";
-import { MypageStyle } from "@/styles/pages/MypageStyle";
+import { MypageStyle } from "@/pages/MyPage/MypageStyle";
+import withAuth, { AuthProps } from "@/utils/withAuth";
 
-import MyTransactionCell from "./MyTransactionCell";
+import MyTransactionCell from "./MyTransactionCell/MyTransactionCell";
+import { useTransactionsQueryByMember } from "./query";
 
-const MyPage = () => {
-  const { isLogin, profile, isLoginLoading, logOut } = useLogin();
+interface MyPageProps extends AuthProps {}
+
+const MyPage = ({ profile }: MyPageProps) => {
+  const { isLogin, isLoginLoading, logOut } = useLogin();
 
   const {
     data,
-    isError: isTxError,
     isLoading: isTxLoading,
-  } = useQuery(
-    ["myTransaction"],
-    async () =>
-      TransactionApiControllerService.getMemberCountOffsetTransaction(
-        profile?.id,
-        0,
-      ),
-    {
-      enabled: isLogin,
-      staleTime: 1000 * 60 * 10,
-    },
-  );
+    isError: isTxError,
+  } = useTransactionsQueryByMember(profile.id, 0, { enabled: isLogin });
 
   const sortArray = data?.content.sort((a, b) =>
     dayjs(b.date).diff(dayjs(a.date)),
@@ -96,4 +87,4 @@ const MyPage = () => {
   );
 };
 
-export default MyPage;
+export default withAuth(MyPage);

@@ -12,7 +12,6 @@ import {
 import storage from "redux-persist/lib/storage"; // defaults to localStorage for web
 
 import continueUrl from "@/store/continueUrl";
-import getDataReducer from "@/store/data/reducer";
 import detailPageStore from "@/store/detailPage";
 
 const persistConfig = {
@@ -23,7 +22,6 @@ const persistConfig = {
 };
 
 const reducers = combineReducers({
-  data: getDataReducer,
   detailPage: detailPageStore.reducer,
   continueUrl: continueUrl.reducer,
 });

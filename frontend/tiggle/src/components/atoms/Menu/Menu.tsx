@@ -14,7 +14,7 @@ import {
   MenuButtonStyle,
   MenuItemStyle,
   MenuStyle,
-} from "@/styles/components/MenuStyle";
+} from "@/components/atoms/Menu/MenuStyle";
 
 interface MenuItemProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   label: string;

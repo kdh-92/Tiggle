@@ -3,7 +3,7 @@ import { ChevronDown } from "react-feather";
 
 import { Select as AntSelect, SelectProps as AntSelectProps } from "antd";
 
-import { MultiSelectStyle } from "@/styles/components/MultiSelectStyle";
+import { MultiSelectStyle } from "@/components/atoms/MultiSelect/MultiSelectStyle";
 import { isDesktop } from "@/styles/util/screen";
 
 interface MultiSelectProps extends AntSelectProps {}

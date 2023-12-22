@@ -2,7 +2,7 @@ import { forwardRef } from "react";
 
 import { InputProps as AntInputProps, Input as AntInput } from "antd";
 
-import { InputStyle } from "@/styles/components/InputStyle";
+import { InputStyle } from "@/components/atoms/Input/InputStyle";
 import { isDesktop } from "@/styles/util/screen";
 
 interface InputProps extends AntInputProps {}

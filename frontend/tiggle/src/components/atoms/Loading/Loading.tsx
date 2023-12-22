@@ -1,4 +1,4 @@
-import { LoadingStyle } from "@/styles/components/LoadingStyle";
+import { LoadingStyle } from "@/components/atoms/Loading/LoadingStyle";
 
 const Loading = () => {
   return (

@@ -5,13 +5,13 @@ import { Avatar } from "antd";
 
 import Logo from "@/assets/logo_medium.svg";
 import { CTAButton } from "@/components/atoms";
-import useLogin from "@/hooks/useAuth";
-import useScroll from "@/hooks/useScroll";
 import {
   MainHeaderStyle,
   HeaderLeftStyle,
   HeaderRightStyle,
-} from "@/styles/components/MainHeaderStyle";
+} from "@/components/molecules/MainHeader/MainHeaderStyle";
+import useLogin from "@/hooks/useAuth";
+import useScroll from "@/hooks/useScroll";
 
 export default function MainHeader() {
   const { isLogin, profile, requireAuth } = useLogin();

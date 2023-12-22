@@ -2,7 +2,7 @@ import { ButtonHTMLAttributes, ReactElement, cloneElement } from "react";
 
 import cn from "classnames";
 
-import { CTAButtonStyle } from "@/styles/components/CTAButtonStyle";
+import { CTAButtonStyle } from "@/components/atoms/CTAButton/CTAButtonStyle";
 
 export const CTAButtonColors = [
   "peach",

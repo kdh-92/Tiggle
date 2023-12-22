@@ -2,7 +2,7 @@ import { HTMLAttributes } from "react";
 
 import cn from "classnames";
 
-import { TypeTagStyle } from "@/styles/components/TypeTagStyle";
+import { TypeTagStyle } from "@/components/atoms/TypeTag/TypeTagStyle";
 import { Tx, TxType } from "@/types";
 
 interface TypeTagProps extends HTMLAttributes<HTMLDivElement> {

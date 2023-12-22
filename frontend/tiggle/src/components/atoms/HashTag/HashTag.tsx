@@ -1,4 +1,4 @@
-import { HashTagStyle } from "@/styles/components/HashTagStyle";
+import { HashTagStyle } from "@/components/atoms/HashTag/HashTagStyle";
 
 interface HashTagProps {
   label: string;

@@ -6,7 +6,7 @@ import { MemberDto } from "@/generated";
 import useLogin from "@/hooks/useAuth";
 import continueUrlStore from "@/store/continueUrl";
 
-interface AuthProps {
+export interface AuthProps {
   profile: MemberDto;
 }
 
