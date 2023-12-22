@@ -4,7 +4,7 @@ import { useMutation } from "@tanstack/react-query";
 
 import ReactionButton from "@/components/atoms/ReactionButton/ReactionButton";
 import { ReactionApiService, ReactionSummaryDto } from "@/generated";
-import useLogin from "@/hooks/useLogin";
+import useLogin from "@/hooks/useAuth";
 import queryClient from "@/query/queryClient";
 import { ReactionSectionStyle } from "@/styles/components/ReactionSectionStyle";
 import { Reaction, ReactionType } from "@/types";

@@ -8,16 +8,16 @@ import type { SortObject } from './SortObject';
 import type { TransactionRespDto } from './TransactionRespDto';
 
 export type PageTransactionRespDto = {
-    totalPages?: number;
     totalElements?: number;
+    totalPages?: number;
     size?: number;
     content?: Array<TransactionRespDto>;
     number?: number;
     sort?: SortObject;
     pageable?: PageableObject;
-    numberOfElements?: number;
     first?: boolean;
     last?: boolean;
+    numberOfElements?: number;
     empty?: boolean;
 };
 

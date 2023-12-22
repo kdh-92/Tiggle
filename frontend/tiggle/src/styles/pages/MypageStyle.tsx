@@ -59,7 +59,7 @@ export const MypageStyle = styled.div`
       }
     }
 
-    > .profile-modify-button {
+    .profile-modify-button {
       width: fit-content;
       padding: 8px 24px;
       border-radius: 8px;

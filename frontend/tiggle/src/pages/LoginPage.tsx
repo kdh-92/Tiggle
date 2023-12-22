@@ -1,11 +1,14 @@
+import { useNavigate } from "react-router-dom";
+
 import SocialLoginButton from "@/components/atoms/SocialLoginButton/SocialLoginButton";
 import LoginHeader from "@/components/molecules/LoginHeader/LoginHeader";
+import useLogin from "@/hooks/useAuth";
 import useCookie from "@/hooks/useCookie";
 import { scrollToTop } from "@/hooks/useScroll";
 import { LoginPageStyle } from "@/styles/components/LoginPageStyle";
-import withAuth from "@/utils/withAuth";
 
 const LoginPage = () => {
+  const navigate = useNavigate();
   scrollToTop();
   const { setCookie } = useCookie();
 
@@ -16,6 +19,12 @@ const LoginPage = () => {
       maxAge: 3000,
     });
   };
+
+  const { isLogin } = useLogin();
+
+  if (isLogin) {
+    navigate("/");
+  }
 
   return (
     <LoginPageStyle>
@@ -31,4 +40,4 @@ const LoginPage = () => {
   );
 };
 
-export default withAuth(LoginPage, "auth");
+export default LoginPage;

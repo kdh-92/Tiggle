@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 import { Loading } from "@/components/atoms";
-import useLogin from "@/hooks/useLogin";
+import useLogin from "@/hooks/useAuth";
 import { RootState } from "@/store";
 import continueUrlStore from "@/store/continueUrl";
 

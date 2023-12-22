@@ -7,7 +7,7 @@ import { Avatar, message } from "antd";
 
 import CTAButton from "@/components/atoms/CTAButton/CTAButton";
 import { CommentApiService } from "@/generated";
-import useLogin from "@/hooks/useLogin";
+import useLogin from "@/hooks/useAuth";
 import queryClient from "@/query/queryClient";
 import { RootState } from "@/store";
 import { CommentSenderStyle } from "@/styles/components/CommentCellStyle";

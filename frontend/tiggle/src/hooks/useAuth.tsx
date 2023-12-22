@@ -1,4 +1,3 @@
-import { useMemo } from "react";
 import { useDispatch } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 
@@ -11,29 +10,27 @@ import useCookie from "./useCookie";
 
 const TEMP_USER_ID = 1;
 
-export default function useLogin() {
+export default function useAuth() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
-  const { getCookie, removeCookie } = useCookie();
-
-  const authorization = getCookie("Authorization");
-  const isLogin = useMemo(() => !!authorization, [authorization]);
+  const { removeCookie } = useCookie();
 
   const {
     data: profile,
-    isError: isProfileLoading,
-    isLoading: isProfileError,
+    isLoading: isLoginLoading,
+    isError: isLoginError,
   } = useQuery(
     ["profile"],
     async () => MemberApiControllerService.getMe(TEMP_USER_ID),
     {
-      enabled: isLogin,
-      staleTime: 1000 * 60 * 10,
+      staleTime: 1000 * 60 * 30,
     },
   );
 
-  const logIn = () => {
+  const isLogin = !isLoginLoading && !isLoginError && !!profile;
+
+  const requireAuth = () => {
     dispatch(continueUrlStore.actions.creators.set(location.pathname));
     navigate("/login");
   };
@@ -47,17 +44,16 @@ export default function useLogin() {
     if (isLogin) {
       callback?.();
     } else {
-      logIn();
+      requireAuth();
     }
   };
 
   return {
     isLogin,
     profile,
-    logIn,
+    requireAuth,
     logOut,
     checkIsLogin,
-    isProfileLoading,
-    isProfileError,
+    isLoginLoading,
   };
 }

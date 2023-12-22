@@ -112,7 +112,7 @@ const CreatePage = ({ type }: CreatePageProps) => {
   );
 };
 
-export default withAuth(CreatePage, "protected");
+export default withAuth(CreatePage);
 
 interface TransactionPreviewCellProps
   extends Pick<TransactionRespDto, "type" | "content" | "reason" | "amount"> {}
