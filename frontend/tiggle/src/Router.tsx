@@ -12,6 +12,8 @@ import LoginPage from "@/pages/LoginPage";
 import LoginRedirectPage from "@/pages/LoginRedirectPage";
 import MainPage from "@/pages/MainPage";
 import MyPage from "@/pages/MyPage";
+import MyProfilePage from "@/pages/MyProfilePage";
+import { loader as myProfilePageLoader } from "@/pages/MyProfilePage/controller";
 import NotFoundPage from "@/pages/NotFoundPage";
 import queryClient from "@/query/queryClient";
 import GeneralTemplate from "@/templates/GeneralTemplate";
@@ -43,6 +45,12 @@ export default createBrowserRouter(
           errorElement={<div>error</div>}
         />
         <Route path="/mypage" element={<MyPage />} />
+        <Route
+          path="/mypage/profile"
+          element={<MyProfilePage />}
+          loader={myProfilePageLoader(queryClient)}
+          errorElement={<div>error</div>}
+        />
         <Route path="/" element={<MainPage />} />
       </Route>
       <Route path="/login" element={<LoginPage />} />
