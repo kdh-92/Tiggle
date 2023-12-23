@@ -1,9 +1,11 @@
+import { useMemo } from "react";
 import { useDispatch } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 
 import { useQuery } from "@tanstack/react-query";
 
 import { MemberApiControllerService } from "@/generated";
+import queryClient from "@/query/queryClient";
 import { memberKeys } from "@/query/queryKeys";
 import continueUrlStore from "@/store/continueUrl";
 
@@ -15,7 +17,7 @@ export default function useAuth() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
-  const { removeCookie } = useCookie();
+  const { getCookie, removeCookie } = useCookie();
 
   const {
     data: profile,
@@ -23,13 +25,19 @@ export default function useAuth() {
     isError: isLoginError,
   } = useQuery(
     memberKeys.detail("me"),
-    async () => MemberApiControllerService.getMe(TEMP_USER_ID),
+    async () =>
+      MemberApiControllerService.getMe(
+        getCookie("Authorization") ? TEMP_USER_ID : undefined, // TODO: 프로필조회 api 수정 후 삭제
+      ),
     {
       staleTime: 1000 * 60 * 30,
     },
   );
 
-  const isLogin = !isLoginLoading && !isLoginError && !!profile;
+  const isLogin = useMemo(
+    () => !isLoginLoading && !isLoginError && !!profile,
+    [isLoginLoading, isLoginError, profile],
+  );
 
   const requireAuth = () => {
     dispatch(continueUrlStore.actions.creators.set(location.pathname));
@@ -37,6 +45,7 @@ export default function useAuth() {
   };
 
   const logOut = () => {
+    queryClient.invalidateQueries(memberKeys.detail("me"));
     removeCookie("Authorization");
     navigate("/login");
   };

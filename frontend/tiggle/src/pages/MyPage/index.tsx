@@ -3,7 +3,7 @@ import { ChevronRight } from "react-feather";
 import { Avatar } from "antd";
 import dayjs from "dayjs";
 
-import useLogin from "@/hooks/useAuth";
+import useAuth from "@/hooks/useAuth";
 import { MypageStyle } from "@/pages/MyPage/MypageStyle";
 import withAuth, { AuthProps } from "@/utils/withAuth";
 
@@ -13,7 +13,7 @@ import { useTransactionsQueryByMember } from "./query";
 interface MyPageProps extends AuthProps {}
 
 const MyPage = ({ profile }: MyPageProps) => {
-  const { isLogin, isLoginLoading, logOut } = useLogin();
+  const { isLogin, isLoginLoading, logOut } = useAuth();
 
   const {
     data,

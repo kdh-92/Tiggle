@@ -1,11 +1,12 @@
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-import SocialLoginButton from "@/pages/LoginPage/SocialLoginButton/SocialLoginButton";
-import useLogin from "@/hooks/useAuth";
+import useAuth from "@/hooks/useAuth";
 import useCookie from "@/hooks/useCookie";
 import { scrollToTop } from "@/hooks/useScroll";
 import LoginHeader from "@/pages/LoginPage/LoginHeader/LoginHeader";
 import { LoginPageStyle } from "@/pages/LoginPage/LoginPageStyle";
+import SocialLoginButton from "@/pages/LoginPage/SocialLoginButton/SocialLoginButton";
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -20,11 +21,13 @@ const LoginPage = () => {
     });
   };
 
-  const { isLogin } = useLogin();
+  const { isLogin } = useAuth();
 
-  if (isLogin) {
-    navigate("/");
-  }
+  useEffect(() => {
+    if (isLogin) {
+      navigate("/");
+    }
+  }, [isLogin]);
 
   return (
     <LoginPageStyle>

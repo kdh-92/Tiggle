@@ -3,7 +3,7 @@ import { Navigate, useLocation } from "react-router-dom";
 
 import LoadingPage from "@/components/templates/LoadingPage/LoadingPage";
 import { MemberDto } from "@/generated";
-import useLogin from "@/hooks/useAuth";
+import useAuth from "@/hooks/useAuth";
 import continueUrlStore from "@/store/continueUrl";
 
 export interface AuthProps {
@@ -18,7 +18,7 @@ const withAuth =
     const dispatch = useDispatch();
     const location = useLocation();
 
-    const { isLogin, isLoginLoading, profile } = useLogin();
+    const { isLogin, isLoginLoading, profile } = useAuth();
 
     const recordContinueUrl = () =>
       dispatch(continueUrlStore.actions.creators.set(location.pathname));

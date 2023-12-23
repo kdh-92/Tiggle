@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 
 import { ReactionApiService, ReactionSummaryDto } from "@/generated";
-import useLogin from "@/hooks/useAuth";
+import useAuth from "@/hooks/useAuth";
 import ReactionButton from "@/pages/DetailPage/ReactionButton/ReactionButton";
 import { ReactionSectionStyle } from "@/pages/DetailPage/ReactionSection/ReactionSectionStyle";
 import queryClient from "@/query/queryClient";
@@ -21,7 +21,7 @@ export default function ReactionSection({
   downCount,
   className,
 }: ReactionSectionProps) {
-  const { checkIsLogin } = useLogin();
+  const { checkIsLogin } = useAuth();
   const [selectedReaction, setSelectedReaction] =
     useState<ReactionType>(undefined);
 

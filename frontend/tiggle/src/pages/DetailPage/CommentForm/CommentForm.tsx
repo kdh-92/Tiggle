@@ -7,7 +7,7 @@ import { Avatar, message } from "antd";
 
 import CTAButton from "@/components/atoms/CTAButton/CTAButton";
 import { CommentApiService } from "@/generated";
-import useLogin from "@/hooks/useAuth";
+import useAuth from "@/hooks/useAuth";
 import { CommentSenderStyle } from "@/pages/DetailPage/CommentCell/CommentCellStyle";
 import { CommentFormStyle } from "@/pages/DetailPage/CommentForm/CommentFormStyle";
 import queryClient from "@/query/queryClient";
@@ -30,7 +30,7 @@ export default function CommentForm({
   receiverId,
   ...props
 }: CommentFormProps) {
-  const { isLogin, profile, checkIsLogin } = useLogin();
+  const { isLogin, profile, checkIsLogin } = useAuth();
   const txType = useSelector((state: RootState) => state.detailPage.txType);
   const [messageApi, contextHolder] = message.useMessage();
   const {

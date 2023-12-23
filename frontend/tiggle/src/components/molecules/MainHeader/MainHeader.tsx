@@ -10,11 +10,11 @@ import {
   HeaderLeftStyle,
   HeaderRightStyle,
 } from "@/components/molecules/MainHeader/MainHeaderStyle";
-import useLogin from "@/hooks/useAuth";
+import useAuth from "@/hooks/useAuth";
 import useScroll from "@/hooks/useScroll";
 
 export default function MainHeader() {
-  const { isLogin, profile, requireAuth } = useLogin();
+  const { isLogin, profile, requireAuth } = useAuth();
   const { scrolling } = useScroll();
 
   return (

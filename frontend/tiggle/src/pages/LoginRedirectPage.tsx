@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 import LoadingPage from "@/components/templates/LoadingPage/LoadingPage";
-import useLogin from "@/hooks/useAuth";
+import useAuth from "@/hooks/useAuth";
 import { RootState } from "@/store";
 import continueUrlStore from "@/store/continueUrl";
 
@@ -11,7 +11,7 @@ const LoginRedirectPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const { isLogin } = useLogin();
+  const { isLogin } = useAuth();
   const { url } = useSelector((state: RootState) => state.continueUrl);
 
   useEffect(() => {
