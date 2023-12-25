@@ -39,8 +39,8 @@ services:
       - springboot-mysql-net
   notification:
     build:
-      context: ./backend/tiggle-root/tiggle-notification
-      dockerfile: Dockerfile
+      context: ./backend/tiggle-root
+      dockerfile: Dockerfile.noti
     restart: always
     ports:
       - "8082:8082"
