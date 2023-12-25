@@ -17,8 +17,8 @@ services:
       - springboot-mysql-net
   application:
     build:
-      context: ./backend/tiggle-root/tiggle
-      dockerfile: Dockerfile
+      context: ./backend/tiggle-root
+      dockerfile: Dockerfile.tiggle
     restart: always
     ports:
       - "8080:8080"
@@ -37,16 +37,16 @@ services:
       OAUTH2_NAVER_CLIENT_SECRET: ISy4u_NWcP
     networks:
       - springboot-mysql-net
-  gateway:
+  notification:
     build:
-      context: ./backend/tiggle-root/tiggle-auth-gateway
-      dockerfile: Dockerfile
+      context: ./backend/tiggle-root
+      dockerfile: Dockerfile.noti
     restart: always
     ports:
       - "8081:8081"
     depends_on:
       - application
-    container_name: tiggle_gateway
+    container_name: tiggle-notification
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://database:3306/tiggle?useSSL=false&allowPublicKeyRetrieval=true
       SPRING_DATASOURCE_USERNAME: root
