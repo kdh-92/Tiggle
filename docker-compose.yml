@@ -39,19 +39,17 @@ services:
       - springboot-mysql-net
   notification:
     build:
-      context: ./backend/tiggle-root
-      dockerfile: Dockerfile.noti
+      context: ./backend/tiggle-root/tiggle-notification
+      dockerfile: Dockerfile
     restart: always
     ports:
-      - "8081:8081"
-    depends_on:
-      - application
-    container_name: tiggle-notification
+      - "8082:8082"
+    container_name: tiggle_noti
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://database:3306/tiggle?useSSL=false&allowPublicKeyRetrieval=true
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: tiggle1234
-      TIGGLE_CORE_URI: http://application:8080
+      KAFKA_URL: kafka:29092
     networks:
       - springboot-mysql-net
 networks:
