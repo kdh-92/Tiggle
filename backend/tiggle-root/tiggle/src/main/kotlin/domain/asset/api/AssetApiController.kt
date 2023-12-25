@@ -1,4 +1,4 @@
-package com.side.tiggle.kotlin.domain.asset.api
+package domain.asset.api
 
 import com.side.tiggle.domain.asset.dto.AssetDto
 import com.side.tiggle.domain.asset.dto.resp.AssetRespDto
