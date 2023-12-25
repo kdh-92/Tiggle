@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Award, Home, PieChart } from "react-feather";
 
-import { BottomTabStyle } from "@/styles/components/BottomTabStyle";
+import { BottomTabStyle } from "@/components/molecules/BottomTab/BottomTabStyle";
 
 export default function BottomTab() {
   const [isFocus, setIsFocus] = useState<string>("home");

@@ -2,7 +2,7 @@ import { forwardRef } from "react";
 
 import { DatePickerProps as AntDatePickerProps } from "antd";
 
-import { DatePickerStyle } from "@/styles/components/DatePickerStyle";
+import { DatePickerStyle } from "@/components/atoms/DatePicker/DatePickerStyle";
 import { isDesktop } from "@/styles/util/screen";
 
 type DatePickerProps = AntDatePickerProps;

@@ -1,35 +1,25 @@
 import { ChevronRight } from "react-feather";
 
-import { useQuery } from "@tanstack/react-query";
 import { Avatar } from "antd";
 import dayjs from "dayjs";
 
-import { TransactionApiControllerService } from "@/generated";
-import useLogin from "@/hooks/useLogin";
-import { MypageStyle } from "@/styles/pages/MypageStyle";
+import useAuth from "@/hooks/useAuth";
+import { MypageStyle } from "@/pages/MyPage/MypageStyle";
+import withAuth, { AuthProps } from "@/utils/withAuth";
 
-import MyTransactionCell from "./MyTransactionCell";
+import MyTransactionCell from "./MyTransactionCell/MyTransactionCell";
+import { useTransactionsQueryByMember } from "./query";
 
-const MyPage = () => {
-  const { isLogin, profile, isProfileError, isProfileLoading, logOut } =
-    useLogin();
+interface MyPageProps extends AuthProps {}
+
+const MyPage = ({ profile }: MyPageProps) => {
+  const { isLogin, isLoginLoading, logOut } = useAuth();
 
   const {
     data,
-    isError: isTxError,
     isLoading: isTxLoading,
-  } = useQuery(
-    ["myTransaction"],
-    async () =>
-      TransactionApiControllerService.getMemberCountOffsetTransaction(
-        profile?.id,
-        0,
-      ),
-    {
-      enabled: isLogin,
-      staleTime: 1000 * 60 * 10,
-    },
-  );
+    isError: isTxError,
+  } = useTransactionsQueryByMember(profile.id, 0, { enabled: isLogin });
 
   const sortArray = data?.content.sort((a, b) =>
     dayjs(b.date).diff(dayjs(a.date)),
@@ -38,7 +28,7 @@ const MyPage = () => {
   return (
     <>
       <MypageStyle>
-        {!isProfileLoading && !isProfileError && (
+        {!isLoginLoading && (
           <div className="user-info">
             <div className="user">
               {profile.profileUrl ? (
@@ -57,7 +47,9 @@ const MyPage = () => {
               </p>
               <p>안녕하세요</p>
             </div>
-            <button className="profile-modify-button">프로필 수정</button>
+            <a href="/mypage/profile">
+              <button className="profile-modify-button">프로필 수정</button>
+            </a>
           </div>
         )}
         {!isTxLoading && !isTxError && (
@@ -65,7 +57,7 @@ const MyPage = () => {
             <p className="transaction-title">내 거래 기록</p>
             <div className="transaction-cells">
               {sortArray.slice(0, 3).map(props => (
-                <MyTransactionCell {...props} />
+                <MyTransactionCell key={`tx-cell-${props.id}`} {...props} />
               ))}
               <div className="transaction-cell">
                 <button>내 거래기록 더 보기</button>
@@ -95,4 +87,4 @@ const MyPage = () => {
   );
 };
 
-export default MyPage;
+export default withAuth(MyPage);

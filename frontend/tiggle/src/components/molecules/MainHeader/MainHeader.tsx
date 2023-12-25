@@ -5,16 +5,16 @@ import { Avatar } from "antd";
 
 import Logo from "@/assets/logo_medium.svg";
 import { CTAButton } from "@/components/atoms";
-import useLogin from "@/hooks/useLogin";
-import useScroll from "@/hooks/useScroll";
 import {
   MainHeaderStyle,
   HeaderLeftStyle,
   HeaderRightStyle,
-} from "@/styles/components/MainHeaderStyle";
+} from "@/components/molecules/MainHeader/MainHeaderStyle";
+import useAuth from "@/hooks/useAuth";
+import useScroll from "@/hooks/useScroll";
 
 export default function MainHeader() {
-  const { isLogin, profile, logIn } = useLogin();
+  const { isLogin, profile, requireAuth } = useAuth();
   const { scrolling } = useScroll();
 
   return (
@@ -46,7 +46,7 @@ export default function MainHeader() {
                   variant="light"
                   color="blue"
                   size="sm"
-                  onClick={() => logIn()}
+                  onClick={requireAuth}
                 >
                   로그인
                 </CTAButton>

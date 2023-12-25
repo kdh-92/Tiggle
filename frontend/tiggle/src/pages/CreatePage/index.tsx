@@ -6,31 +6,21 @@ import {
   useLoaderData,
 } from "react-router-dom";
 
-import { QueryClient, useMutation, useQuery } from "@tanstack/react-query";
-import cn from "classnames";
+import { QueryClient, useMutation } from "@tanstack/react-query";
 import dayjs from "dayjs";
 
-import { TypeTag } from "@/components/atoms";
-import CreateForm, { FormInputs } from "@/components/templates/CreateForm";
-import {
-  TransactionApiControllerService,
-  TransactionRespDto,
-} from "@/generated";
-import {
-  CreatePageStyle,
-  TransactionPreviewCellStyle,
-} from "@/styles/pages/CreatePageStyle";
+import CreateForm, {
+  FormInputs,
+} from "@/pages/CreatePage/CreateForm/CreateForm";
+import { CreatePageStyle } from "@/pages/CreatePage/CreatePageStyle";
 import { useMessage } from "@/templates/GeneralTemplate";
 import { TxType } from "@/types";
 import { convertTxTypeToWord } from "@/utils/txType";
-import withAuth from "@/utils/withAuth";
+import withAuth, { AuthProps } from "@/utils/withAuth";
 
+import TransactionPreviewCell from "./TransactionPreviewCell/TransactionPreviewCell";
+import { transactionQuery, useTransactionQuery } from "./query";
 import { createTransaction, TransactionFormData } from "./request";
-
-const transactionQuery = (id: number) => ({
-  queryKey: ["transaction", "detail", id],
-  queryFn: async () => TransactionApiControllerService.getTransaction(id),
-});
 
 export const loader =
   (queryClient: QueryClient) =>
@@ -41,7 +31,7 @@ export const loader =
       : queryClient.ensureQueryData(transactionQuery(parentId));
   };
 
-interface CreatePageProps {
+interface CreatePageProps extends AuthProps {
   type: TxType;
 }
 
@@ -54,8 +44,7 @@ const CreatePage = ({ type }: CreatePageProps) => {
     ReturnType<ReturnType<typeof loader>>
   >;
 
-  const { data: parentTxData } = useQuery({
-    ...transactionQuery(parentId),
+  const { data: parentTxData } = useTransactionQuery(parentId, {
     initialData,
     enabled: type === "REFUND",
   });
@@ -106,36 +95,17 @@ const CreatePage = ({ type }: CreatePageProps) => {
           type === "REFUND" ? ["assetId", "categoryId"] : undefined
         }
         // TODO: parentTxData의 assetId, categoryId 전달
-        defaultValues={parentTxData ? { assetId: 1, categoryId: 1 } : undefined}
+        defaultValues={
+          parentTxData
+            ? {
+                assetId: parentTxData.asset?.id,
+                categoryId: parentTxData.category?.id,
+              }
+            : undefined
+        }
       />
     </CreatePageStyle>
   );
 };
 
-export default withAuth(CreatePage, "protected");
-
-interface TransactionPreviewCellProps
-  extends Pick<TransactionRespDto, "type" | "content" | "reason" | "amount"> {}
-
-const TransactionPreviewCell = ({
-  type,
-  amount,
-  content,
-  reason,
-}: TransactionPreviewCellProps) => {
-  return (
-    <TransactionPreviewCellStyle>
-      <p className="cell-label">원본 {convertTxTypeToWord(type)}</p>
-      <div className="cell-container">
-        <div className="cell-contents-wrapper">
-          <TypeTag txType={type} size={"md"} />
-          <p className={cn("amount", type)}>₩ {amount}</p>
-        </div>
-        <div className="cell-contents-wrapper">
-          <p className="content">{content}</p>
-          <p className="reason">{reason}</p>
-        </div>
-      </div>
-    </TransactionPreviewCellStyle>
-  );
-};
+export default withAuth(CreatePage);

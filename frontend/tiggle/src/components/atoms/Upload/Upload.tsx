@@ -3,7 +3,7 @@ import { Plus, Trash2, Upload as UploadIcon } from "react-feather";
 
 import cn from "classnames";
 
-import { UploadStyle } from "@/styles/components/UploadStyle";
+import { UploadStyle } from "@/components/atoms/Upload/UploadStyle";
 import { isDesktop } from "@/styles/util/screen";
 
 interface UploadProps extends React.InputHTMLAttributes<HTMLInputElement> {

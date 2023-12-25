@@ -4,7 +4,7 @@ import { ChevronDown } from "react-feather";
 import { SelectProps as AntSelectProps, Select as AntSelect } from "antd";
 import cn from "classnames";
 
-import { SelectStyle } from "@/styles/components/SelectStyle";
+import { SelectStyle } from "@/components/atoms/Select/SelectStyle";
 import { isDesktop } from "@/styles/util/screen";
 
 interface SelectProps extends AntSelectProps {

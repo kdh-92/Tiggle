@@ -3,7 +3,7 @@ import { forwardRef } from "react";
 import { TextAreaProps as AntTextAreaProps } from "antd/lib/input";
 import cn from "classnames";
 
-import { TextAreaStyle } from "@/styles/components/TextAreaStyle";
+import { TextAreaStyle } from "@/components/atoms/TextArea/TextAreaStyle";
 import { isDesktop } from "@/styles/util/screen";
 
 interface TextAreaProps extends AntTextAreaProps {
