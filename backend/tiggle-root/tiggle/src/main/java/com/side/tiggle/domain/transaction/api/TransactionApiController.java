@@ -19,6 +19,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -45,6 +46,7 @@ public class TransactionApiController {
     private final String DEFAULT_INDEX = "0";
     private final String DEFAULT_PAGE_SIZE = "5";
 
+    // TODO: Request Header 방식으로 변경한다
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<TransactionRespDto> createTransaction(
             @RequestPart TransactionDto dto,
@@ -153,7 +155,9 @@ public class TransactionApiController {
     }
 
     @PutMapping("/{id}")
+    @Operation(description = "트랜잭션 수정", security = @SecurityRequirement(name = "bearer-key"))
     public ResponseEntity<TransactionRespDto> updateTransaction(
+            @Parameter(hidden = true)
             @RequestHeader(name = HttpHeaders.MEMBER_ID) long memberId,
             @PathVariable("id") Long transactionId,
             @RequestBody TransactionUpdateReqDto dto
@@ -166,7 +170,9 @@ public class TransactionApiController {
         );
     }
     @DeleteMapping("/{id}")
+    @Operation(description = "트랜잭션 삭제", security = @SecurityRequirement(name = "bearer-key"))
     public ResponseEntity<Void> deleteTransaction(
+            @Parameter(hidden = true)
             @RequestHeader(name = HttpHeaders.MEMBER_ID) long memberId,
             @PathVariable("id") Long transactionId
     ) {

@@ -32,14 +32,10 @@ class JwtRequestFilter(
 
     override fun doFilterInternal(request: HttpServletRequest, response: HttpServletResponse, filterChain: FilterChain) {
         val requestWrapper = HeaderMapRequestWrapper(request)
-        try {
-            val authHeader = request.getHeader(HttpHeaders.AUTHORIZATION)
-            if (authHeader == null || authHeader.isEmpty()) {
-                throw NotAuthenticatedException("Token Not Provided")
-            }
-
+        val authHeader = request.getHeader(HttpHeaders.AUTHORIZATION)
+        if (authHeader.isNullOrEmpty().not()) {
             val accessToken = authHeader.replace("Bearer ", "")
-            if (jwtTokenProvider.isTokenValid(accessToken)) {
+            if (jwtTokenProvider.isTokenValid(accessToken).not()) {
                 throw NotAuthenticatedException("Invalid Token")
             }
 
@@ -48,7 +44,7 @@ class JwtRequestFilter(
 
             requestWrapper.addHeader(CustomHeaders.MEMBER_ID, memberId.toString())
             filterChain.doFilter(requestWrapper, response)
-        } catch (e: Exception) {
+        } else {
             requestWrapper.addHeader(CustomHeaders.MEMBER_ID, "-1")
             filterChain.doFilter(requestWrapper, response)
         }
