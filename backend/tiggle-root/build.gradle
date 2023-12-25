@@ -38,6 +38,9 @@ subprojects {
         implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
         compileOnly 'org.projectlombok:lombok'
         annotationProcessor 'org.projectlombok:lombok'
+
+        // Swagger
+        implementation 'org.springdoc:springdoc-openapi-ui:1.6.15'
     }
 }
 

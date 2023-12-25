@@ -14,14 +14,8 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'com.fasterxml.jackson.module:jackson-module-kotlin'
 	implementation 'org.jetbrains.kotlin:kotlin-reflect'
-	implementation 'com.mysql:mysql-connector-j'
-	implementation 'org.springframework.boot:spring-boot-starter-jdbc'
-	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.kafka:spring-kafka'
-	implementation "com.fasterxml.jackson.module:jackson-module-kotlin"
 
-	// Swagger
-	implementation 'org.springdoc:springdoc-openapi-ui:1.6.15'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
