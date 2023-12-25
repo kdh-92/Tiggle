@@ -1,4 +1,4 @@
-package domain.asset.api
+package com.side.tiggle.domain.asset.api
 
 import com.side.tiggle.domain.asset.dto.AssetDto
 import com.side.tiggle.domain.asset.dto.resp.AssetRespDto
@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*
 @RestController
 @RequestMapping("/api/v1/asset")
 class AssetApiController(
-    private val assetService: AssetService
+        private val assetService: AssetService
 ){
 
     @PostMapping
