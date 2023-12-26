@@ -14,6 +14,7 @@ import MainPage from "@/pages/MainPage";
 import MyPage from "@/pages/MyPage";
 import MyProfilePage from "@/pages/MyProfilePage";
 import { loader as myProfilePageLoader } from "@/pages/MyProfilePage/controller";
+import MyTransactionsPage from "@/pages/MyTransactionsPage";
 import NotFoundPage from "@/pages/NotFoundPage";
 import queryClient from "@/query/queryClient";
 import GeneralTemplate from "@/templates/GeneralTemplate";
@@ -49,6 +50,11 @@ export default createBrowserRouter(
           path="/mypage/profile"
           element={<MyProfilePage />}
           loader={myProfilePageLoader(queryClient)}
+          errorElement={<div>error</div>}
+        />
+        <Route
+          path="/mypage/my-transactions"
+          element={<MyTransactionsPage />}
           errorElement={<div>error</div>}
         />
         <Route path="/" element={<MainPage />} />

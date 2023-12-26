@@ -1,10 +1,11 @@
 import {
-  RefObject,
+  Ref,
   forwardRef,
   useCallback,
   useEffect,
   useMemo,
   useState,
+  useRef,
 } from "react";
 import { Check, ChevronDown } from "react-feather";
 
@@ -42,10 +43,11 @@ const FilterSelect = forwardRef(
       onChange,
       disabled = false,
     }: FilterSelectProps<ValueType>,
-    ref: RefObject<HTMLDivElement>,
+    ref: Ref<HTMLDivElement>,
   ) => {
     const desktop = isDesktop();
     const mobile = useMemo(() => !desktop, [desktop]);
+    const wrapperRef = useRef<HTMLDivElement | null>(null);
 
     const [isOptionOpen, setIsOptionOpen] = useState(false);
     const [innerValue, setInnerValue] = useState<Array<ValueType>>(value ?? []);
@@ -57,6 +59,7 @@ const FilterSelect = forwardRef(
     const closeOption = useCallback(() => {
       setIsOptionOpen(false);
     }, []);
+    useOnClickOutside(wrapperRef, closeOption);
 
     const updateInnerValue = useCallback(
       (selected: ValueType) => {
@@ -83,55 +86,60 @@ const FilterSelect = forwardRef(
       closeOption();
     };
 
-    useOnClickOutside(ref, closeOption);
-
     useEffect(() => {
       if (!isOptionOpen) {
         // initialized
-        setInnerValue(value);
+        setInnerValue(value ?? []);
       }
     }, [isOptionOpen]);
 
     return (
       <FilterSelectStyle ref={ref}>
-        <FilterSelectButtonStyle onClick={toggleOptionOpen} disabled={disabled}>
-          <p className="placeholder">{placeholder}</p>
-          <ChevronDown />
-        </FilterSelectButtonStyle>
-
-        {mobile && !disabled && (
-          <BottomSheet
-            isOpen={isOptionOpen}
-            header={{ title: `${placeholder} 선택하기`, reset: true }}
-            confirm={{ label: "확인", onClick: confirmBottomSheet }}
-            onClose={closeOption}
+        <div className="wrapper" ref={wrapperRef}>
+          <FilterSelectButtonStyle
+            onClick={toggleOptionOpen}
+            disabled={disabled}
+            type="button"
           >
-            {options.map(option => (
-              <OptionCell
-                key={`option-${option.value}`}
-                option={option}
-                onClick={selectBottomSheetOption}
-                selected={innerValue.includes(option.value)}
-              />
-            ))}
-          </BottomSheet>
-        )}
+            {" "}
+            <p className="placeholder">{placeholder}</p>
+            <ChevronDown />
+          </FilterSelectButtonStyle>
 
-        {desktop && !disabled && (
-          <PopOver
-            isOpen={isOptionOpen}
-            header={{ title: `${placeholder} 선택하기`, reset: true }}
-          >
-            {options.map(option => (
-              <OptionCell
-                key={`option-${option.value}`}
-                option={option}
-                onClick={selectPopoverOption}
-                selected={innerValue.includes(option.value)}
-              />
-            ))}
-          </PopOver>
-        )}
+          {mobile && !disabled && (
+            <BottomSheet
+              isOpen={isOptionOpen}
+              header={{ title: `${placeholder} 선택하기`, reset: true }}
+              confirm={{ label: "확인", onClick: confirmBottomSheet }}
+              onClose={closeOption}
+            >
+              {options.map(option => (
+                <OptionCell
+                  key={`option-${option.value}`}
+                  option={option}
+                  onClick={selectBottomSheetOption}
+                  selected={innerValue.includes(option.value)}
+                />
+              ))}
+            </BottomSheet>
+          )}
+
+          {desktop && !disabled && (
+            <PopOver
+              isOpen={isOptionOpen}
+              header={{ title: `${placeholder} 선택하기`, reset: true }}
+            >
+              {options.map(option => (
+                <OptionCell
+                  key={`option-${option.value}`}
+                  option={option}
+                  onClick={selectPopoverOption}
+                  selected={innerValue.includes(option.value)}
+                />
+              ))}
+            </PopOver>
+          )}
+        </div>
       </FilterSelectStyle>
     );
   },

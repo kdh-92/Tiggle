@@ -45,7 +45,7 @@ export const PopoverStyle = styled.div`
     flex-shrink: 1;
   }
 
-  transform-origin: top center;
+  transform-origin: top left;
   &.open {
     animation: ${popoverUnfold} 0.3s cubic-bezier(0.29, 1.05, 0.55, 1);
   }

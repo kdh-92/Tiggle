@@ -69,14 +69,23 @@ const BottomSheet = ({
         {header && (
           <BottomSheetHeaderStyle>
             <p className="title">{header.title}</p>
-            {header.reset && <button className="reset">초기화</button>}
+            {header.reset && (
+              <button className="reset" type="button">
+                초기화
+              </button>
+            )}
           </BottomSheetHeaderStyle>
         )}
 
         <div className="bottom-sheet-content">{children}</div>
 
         <BottomSheetFooterStyle>
-          <CTAButton fullWidth size="lg" onClick={confirm.onClick}>
+          <CTAButton
+            fullWidth
+            size="lg"
+            onClick={confirm.onClick}
+            type="button"
+          >
             {confirm.label}
           </CTAButton>
         </BottomSheetFooterStyle>
