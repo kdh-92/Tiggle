@@ -5,7 +5,7 @@ import { TxType } from "@/types";
 export interface FilterInputs {
   assetIds: Array<number>;
   categoryIds: Array<number>;
-  tagIds: Array<number>;
+  tagNames: Array<string>;
   txType: TxType;
   date: Dayjs;
 }

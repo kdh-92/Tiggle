@@ -38,5 +38,6 @@ export const useTransactionsQueryByMember = (memberId: number) =>
       TransactionApiControllerService.getMemberCountOffsetTransaction(
         memberId,
         0,
+        100, // TODO: Transaction API filtering 기능 개발 후, infinite scroll 구현
       ),
   });

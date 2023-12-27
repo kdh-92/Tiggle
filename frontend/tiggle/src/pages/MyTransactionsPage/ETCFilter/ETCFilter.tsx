@@ -41,7 +41,7 @@ const ETCFilter = ({}: ETCFilterProps) => {
   );
   const { data: tagsData } = useAllTagsQuery();
   const tagOptions = useMemo(
-    () => tagsData?.map(({ id, name }) => ({ label: name, value: id })) ?? [],
+    () => tagsData?.map(({ name }) => ({ label: name, value: name })) ?? [],
     [tagsData],
   );
 
@@ -56,10 +56,10 @@ const ETCFilter = ({}: ETCFilterProps) => {
     [isAccordionOpen],
   );
 
-  const watchSelected = watch(["assetIds", "categoryIds", "tagIds"]);
+  const watchSelected = watch(["assetIds", "categoryIds", "tagNames"]);
 
   const selectedETCTags = useMemo(() => {
-    const [assetIds, categoryIds, tagIds] = watchSelected;
+    const [assetIds, categoryIds, tagNames] = watchSelected;
 
     const assetTags = assetIds
       ?.map(id => assetsData?.find(data => data.id === id))
@@ -77,12 +77,12 @@ const ETCFilter = ({}: ETCFilterProps) => {
         keyName: "categoryIds" as const,
       }));
 
-    const tagTags = tagIds
-      ?.map(id => tagsData?.find(data => data.id === id))
-      .map(({ id, name }) => ({
-        label: `${name}`,
-        value: id,
-        keyName: "tagIds" as const,
+    const tagTags = tagNames
+      ?.map(name => tagsData?.find(data => data.name === name))
+      .map(({ name }) => ({
+        label: `#${name}`,
+        value: name,
+        keyName: "tagNames" as const,
       }));
 
     return [...(assetTags ?? []), ...(categoryTags ?? []), ...(tagTags ?? [])];
@@ -141,7 +141,7 @@ const ETCFilter = ({}: ETCFilterProps) => {
           />
           <Controller
             control={control}
-            name="tagIds"
+            name="tagNames"
             render={({ field }) => (
               <FilterSelect
                 placeholder="해시태그"

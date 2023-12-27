@@ -17,6 +17,11 @@ export const GlobalStyle = createGlobalStyle`
   * {
     box-sizing: border-box;
   }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
   
   br.break-m {
     ${({ theme }) => theme.mq.desktop} {

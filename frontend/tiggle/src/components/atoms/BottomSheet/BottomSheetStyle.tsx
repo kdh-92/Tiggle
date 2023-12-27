@@ -45,6 +45,7 @@ export const BottomSheetContainerStyle = styled.div`
 
   .bottom-sheet-content {
     flex-grow: 1;
+    overflow-y: scroll;
   }
 `;
 

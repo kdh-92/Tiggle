@@ -6,18 +6,21 @@ import { FilterInputs } from "../types";
 
 interface ETCFilterTagProps {
   label: string;
-  value: number;
-  keyName: keyof Pick<FilterInputs, "assetIds" | "categoryIds" | "tagIds">;
+  value: number | string;
+  keyName: keyof Pick<FilterInputs, "assetIds" | "categoryIds" | "tagNames">;
 }
 
 const ETCFilterTag = ({ label, value, keyName }: ETCFilterTagProps) => {
   const { getValues, setValue } = useFormContext<FilterInputs>();
 
   const deleteTag = () => {
-    const values = getValues(keyName);
-    const filteredValues = values.filter(_value => _value !== value);
-    console.log(values);
-    setValue(keyName, filteredValues);
+    if (keyName === "tagNames") {
+      const filteredValues = getValues(keyName).filter(v => v !== value);
+      setValue(keyName, filteredValues);
+    } else {
+      const filteredValues = getValues(keyName).filter(v => v !== value);
+      setValue(keyName, filteredValues);
+    }
   };
 
   return (
