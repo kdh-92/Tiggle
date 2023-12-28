@@ -39,6 +39,7 @@ export const PopoverStyle = styled.div`
 
   position: absolute;
   top: calc(100% + 8px);
+  z-index: 999;
 
   .popover-content {
     overflow-y: scroll;

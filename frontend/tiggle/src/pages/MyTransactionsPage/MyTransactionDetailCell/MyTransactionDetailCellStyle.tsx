@@ -156,3 +156,14 @@ export const MyTransactionDetailCellSkeletonStyle = styled.div`
     }
   }
 `;
+
+export const MyTransactionDetailCellEmptyStyle = styled.div`
+  padding: 24px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+
+  color: ${({ theme }) => theme.color.bluishGray[500].value};
+  ${({ theme }) => expandTypography(theme.typography.body.medium.medium)}
+`;

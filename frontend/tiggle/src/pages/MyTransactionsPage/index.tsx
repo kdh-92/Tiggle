@@ -42,7 +42,7 @@ const MyTransactionsPage = ({ profile }: MyTransactionPageProps) => {
       </FormProvider>
 
       <MyTransactionCellsStyle>
-        {data.transactions.map((data: MyTransactionDetailCellProps) => (
+        {data.transactions?.map((data: MyTransactionDetailCellProps) => (
           <MyTransactionDetailCell
             key={`transaction-cell-${data.id}`}
             {...data}
