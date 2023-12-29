@@ -19,6 +19,8 @@ import NotFoundPage from "@/pages/NotFoundPage";
 import queryClient from "@/query/queryClient";
 import GeneralTemplate from "@/templates/GeneralTemplate";
 
+import AssetSettingPage from "./pages/SettingPage/AssetSettingPage";
+
 export default createBrowserRouter(
   createRoutesFromElements(
     <>
@@ -55,6 +57,11 @@ export default createBrowserRouter(
         <Route
           path="/mypage/my-transactions"
           element={<MyTransactionsPage />}
+          errorElement={<div>error</div>}
+        />
+        <Route
+          path="/mypage/setting/asset"
+          element={<AssetSettingPage />}
           errorElement={<div>error</div>}
         />
         <Route path="/" element={<MainPage />} />
