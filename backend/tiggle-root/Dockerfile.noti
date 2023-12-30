@@ -1,0 +1,20 @@
+FROM openjdk:11
+EXPOSE 8080
+
+ARG HOME_DIR=/usr/app
+ARG PROJECT_NAME=tiggle-notification
+
+WORKDIR $HOME_DIR
+COPY . .
+COPY ./$PROJECT_NAME/src/main/resources/application.yml.example \
+    ./$PROJECT_NAME/src/main/resources/application.yml
+
+RUN ./gradlew clean $PROJECT_NAME:bootJar
+RUN ls ./$PROJECT_NAME/build/libs/
+
+ARG JAR_FILE=./$PROJECT_NAME/build/libs/$PROJECT_NAME.jar
+RUN cp ${JAR_FILE} ./app.jar
+# 소스 파일 삭제
+RUN rm -R ./$PROJECT_NAME/src
+
+ENTRYPOINT ["java", "-jar", "app.jar"]
