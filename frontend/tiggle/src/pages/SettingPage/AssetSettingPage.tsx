@@ -1,9 +1,9 @@
-import { useEffect } from "react";
-import { useFieldArray, useForm } from "react-hook-form";
+import { useMutation } from "@tanstack/react-query";
 
-import { ItemWrapperStyle } from "./AssetSettingPageStyle";
-import Item from "./Item/Item";
-import ItemAdd from "./ItemAdd/ItemAdd";
+import { Loading } from "@/components/atoms";
+import { AssetApiControllerService } from "@/generated";
+
+import SettingForm from "./SettingForm/SettingForm";
 import { useAssetsQuery } from "./query";
 import { MypageDetailPageStyle } from "../MyProfilePage/MyDetailPageCommonStyle";
 
@@ -18,46 +18,36 @@ export type AssetsInput = {
 };
 
 const AssetSettingPage = ({}: AssetSettingPageProps) => {
-  const { data: assetsData } = useAssetsQuery();
+  const { data: assetsData, isLoading } = useAssetsQuery();
 
-  const { control, setValue } = useForm<AssetsInput>({
-    defaultValues: { [fieldArrayName]: [] },
-  });
-  const { fields, append, update, remove } = useFieldArray({
-    control,
-    name: fieldArrayName,
-  });
+  const { mutate } = useMutation(async (name: string) =>
+    AssetApiControllerService.createAsset({ name }),
+  );
 
-  const appendField = () => {
-    append({ sid: -1, label: "" });
+  const create = (value: string) => {
+    mutate(value);
+    console.log(`ASSET PAGE - create api called`, value);
   };
-
-  useEffect(() => {
-    if (assetsData) {
-      setValue(
-        fieldArrayName,
-        assetsData.map(({ id, name }) => ({ sid: id, label: name })),
-      );
-    }
-  }, [assetsData]);
+  const update = (sid: number, newValue: string) => {
+    // TODO: API 연결
+    console.log(`ASSET PAGE - update api called`, sid, newValue);
+  };
+  const remove = (sid: number) => {
+    // TODO: API 연결
+    console.log(`ASSET PAGE - remove api called`, sid);
+  };
 
   return (
     <MypageDetailPageStyle>
       <p className="page-title">내 자산 관리</p>
 
-      <ItemWrapperStyle>
-        {fields.map((field, index) => (
-          <Item
-            key={`asset-item-${field.id}`}
-            index={index}
-            value={field}
-            updateField={update}
-            removeField={remove}
-            defaultStatus={field.label === "" ? "edit" : "display"}
-          />
-        ))}
-        <ItemAdd onClick={appendField} />
-      </ItemWrapperStyle>
+      {isLoading && <Loading />}
+      {!isLoading && assetsData && (
+        <SettingForm
+          data={assetsData.map(({ id, name }) => ({ sid: id, name }))}
+          requests={{ create, update, remove }}
+        />
+      )}
     </MypageDetailPageStyle>
   );
 };

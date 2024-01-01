@@ -1,54 +1,43 @@
 import { useCallback, useState } from "react";
-import { UseFieldArrayRemove, UseFieldArrayUpdate } from "react-hook-form";
 
-import { AssetsInput } from "../AssetSettingPage";
-import ItemDisplay from "../ItemDisplay/ItemDisplay";
-import ItemEdit from "../ItemEdit/ItemEdit";
+import ItemDisplay from "./ItemDisplay";
+import ItemEdit from "./ItemEdit";
+import { SettingItem } from "../SettingForm/useSettingForm";
 
 type ItemStatus = "display" | "edit";
 
 interface ItemProps {
-  index: number;
-  value: {
-    sid: number;
-    label: string;
-  };
-  updateField: UseFieldArrayUpdate<AssetsInput>;
-  removeField: UseFieldArrayRemove;
+  value: SettingItem;
+  save: (newValue: string) => void;
+  deleteSelf: () => void;
   defaultStatus?: ItemStatus;
 }
 
-const Item = ({
-  index,
-  value,
-  updateField,
-  removeField,
-  defaultStatus,
-}: ItemProps) => {
+const Item = ({ value, save, deleteSelf, defaultStatus }: ItemProps) => {
   const [status, setStatus] = useState<ItemStatus>(defaultStatus || "display");
 
-  const edit = useCallback(() => setStatus("edit"), [status]);
-  const cancel = useCallback(() => setStatus("display"), [status]);
-  const save = (newValue: string) => {
+  const handleEdit = useCallback(() => setStatus("edit"), [status]);
+
+  const handleSave = useCallback(
+    (newValue: string) => {
+      save(newValue);
+      setStatus("display");
+    },
+    [status, save],
+  );
+
+  const handleCancel = useCallback(() => {
     if (value.sid === -1) {
-      // TODO: Asset Create API 연결
-      console.log("create asset");
+      deleteSelf();
     } else {
-      // TODO: Asset Update API 연결
-      console.log("update asset");
+      setStatus("display");
     }
-    updateField(index, { ...value, label: newValue });
-  };
-  const remove = () => {
-    // TODO: alert
-    removeField(index);
-    // TODO: Asset Delete API 연결
-  };
+  }, [status, value]);
 
   return status === "edit" ? (
-    <ItemEdit label={value.label} onCancel={cancel} onSave={save} />
+    <ItemEdit label={value.name} onCancel={handleCancel} onSave={handleSave} />
   ) : (
-    <ItemDisplay label={value.label} onEdit={edit} onRemove={remove} />
+    <ItemDisplay label={value.name} onEdit={handleEdit} onDelete={deleteSelf} />
   );
 };
 

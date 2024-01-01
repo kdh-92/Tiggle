@@ -1,14 +1,14 @@
 import { useEffect, useRef } from "react";
 
-import { ItemEditInputStyle, ItemStyle } from "../AssetSettingPageStyle";
+import { ItemEditInputStyle, ItemStyle } from "./ItemStyle";
 
 interface ItemEditProps {
   label: string;
-  onCancel: () => void;
   onSave: (newValue: string) => void;
+  onCancel: () => void;
 }
 
-const ItemEdit = ({ label, onCancel, onSave }: ItemEditProps) => {
+const ItemEdit = ({ label, onSave, onCancel }: ItemEditProps) => {
   const inputRef = useRef<HTMLInputElement | null>(null);
 
   const handleSave = () => {

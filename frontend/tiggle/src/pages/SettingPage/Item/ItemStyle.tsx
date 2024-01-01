@@ -52,9 +52,3 @@ export const ItemAddStyle = styled.button`
     height: 14px;
   }
 `;
-
-export const ItemWrapperStyle = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-`;

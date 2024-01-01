@@ -1,6 +1,6 @@
 import { PlusCircle } from "react-feather";
 
-import { ItemAddStyle } from "../AssetSettingPageStyle";
+import { ItemAddStyle } from "./ItemStyle";
 
 interface ItemAddProps {
   onClick: () => void;
