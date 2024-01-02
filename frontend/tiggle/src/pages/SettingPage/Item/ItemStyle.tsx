@@ -24,6 +24,7 @@ export const ItemStyle = styled.li`
 
     display: flex;
     gap: 16px;
+    flex-shrink: 0;
   }
 `;
 
