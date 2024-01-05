@@ -1,3 +1,5 @@
+export { default as BottomSheet } from "./BottomSheet/BottomSheet";
+
 export { default as CTAButton } from "./CTAButton/CTAButton";
 
 export { default as DatePicker } from "./DatePicker/DatePicker";
@@ -11,6 +13,8 @@ export { default as Loading } from "./Loading/Loading";
 export { Menu, MenuItem } from "./Menu/Menu";
 
 export { default as MultiSelect } from "./MultiSelect/MultiSelect";
+
+export { default as PopOver } from "./PopOver/PopOver";
 
 export { default as Select } from "./Select/Select";
 

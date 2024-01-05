@@ -18,6 +18,7 @@ export default function useAuth() {
   const navigate = useNavigate();
   const location = useLocation();
   const { getCookie, removeCookie } = useCookie();
+  const token = getCookie("Authorization");
 
   const {
     data: profile,
@@ -27,10 +28,11 @@ export default function useAuth() {
     memberKeys.detail("me"),
     async () =>
       MemberApiControllerService.getMe(
-        getCookie("Authorization") ? TEMP_USER_ID : undefined, // TODO: 프로필조회 api 수정 후 삭제
+        token ? TEMP_USER_ID : undefined, // TODO: 프로필조회 api 수정 후 삭제
       ),
     {
       staleTime: 1000 * 60 * 30,
+      enabled: !!token,
     },
   );
 
@@ -45,8 +47,8 @@ export default function useAuth() {
   };
 
   const logOut = () => {
-    queryClient.invalidateQueries(memberKeys.detail("me"));
     removeCookie("Authorization");
+    queryClient.invalidateQueries(memberKeys.detail("me"));
     navigate("/login");
   };
 
