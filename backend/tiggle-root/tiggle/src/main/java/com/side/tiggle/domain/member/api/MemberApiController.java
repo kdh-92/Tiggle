@@ -3,6 +3,9 @@ package com.side.tiggle.domain.member.api;
 import com.side.tiggle.domain.member.dto.MemberDto;
 import com.side.tiggle.domain.member.service.MemberService;
 import com.side.tiggle.global.common.constants.HttpHeaders;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
@@ -25,11 +28,6 @@ public class MemberApiController {
 
     private final MemberService memberService;
 
-    @PostMapping
-    public ResponseEntity<MemberDto> createMember(@RequestBody MemberDto memberDto) {
-        return new ResponseEntity<>(memberService.createMember(memberDto), HttpStatus.CREATED);
-    }
-
     @GetMapping("/{id}")
     public ResponseEntity<MemberDto> getMember(@PathVariable("id") Long memberId) {
         return new ResponseEntity<>(MemberDto.fromEntity(memberService.getMember(memberId)), HttpStatus.OK);
@@ -41,15 +39,19 @@ public class MemberApiController {
     }
 
     @GetMapping("/me")
+    @Operation(summary = "내 정보 조회", security = @SecurityRequirement(name = "bearer-key"))
     public ResponseEntity<MemberDto> getMe(
-            @RequestHeader(HttpHeaders.MEMBER_ID) Long memberId
+            @Parameter(hidden = true)
+            @RequestHeader(name = HttpHeaders.MEMBER_ID) Long memberId
     ) {
         return new ResponseEntity<>(MemberDto.fromEntity(memberService.getMember(memberId)), HttpStatus.OK);
     }
 
     @PutMapping(value = "/me", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @Operation(summary = "프로필 업데이트", security = @SecurityRequirement(name = "bearer-key"))
     public ResponseEntity<MemberDto> updateMe(
-            @RequestHeader(HttpHeaders.MEMBER_ID) Long memberId,
+            @Parameter(hidden = true)
+            @RequestHeader(name = HttpHeaders.MEMBER_ID) Long memberId,
             @RequestPart MemberDto memberDto,
             @RequestPart("multipartFile")MultipartFile file
             ) throws IOException {
