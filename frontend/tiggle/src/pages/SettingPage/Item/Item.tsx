@@ -2,7 +2,7 @@ import { useCallback, useState } from "react";
 
 import ItemDisplay from "./ItemDisplay";
 import ItemEdit from "./ItemEdit";
-import { SettingItem } from "../SettingForm/useSettingForm";
+import { SettingItem } from "../SettingForm/types";
 
 type ItemStatus = "display" | "edit";
 
@@ -32,12 +32,21 @@ const Item = ({ value, save, deleteSelf, defaultStatus }: ItemProps) => {
     } else {
       setStatus("display");
     }
-  }, [status, value]);
+  }, [status, value, deleteSelf]);
+
+  const handleDelete = useCallback(() => {
+    // TODO: open alert 로직 추가
+    deleteSelf();
+  }, [deleteSelf]);
 
   return status === "edit" ? (
     <ItemEdit label={value.name} onCancel={handleCancel} onSave={handleSave} />
   ) : (
-    <ItemDisplay label={value.name} onEdit={handleEdit} onDelete={deleteSelf} />
+    <ItemDisplay
+      label={value.name}
+      onEdit={handleEdit}
+      onDelete={handleDelete}
+    />
   );
 };
 

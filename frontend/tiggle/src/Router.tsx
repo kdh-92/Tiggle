@@ -20,6 +20,8 @@ import queryClient from "@/query/queryClient";
 import GeneralTemplate from "@/templates/GeneralTemplate";
 
 import AssetSettingPage from "./pages/SettingPage/AssetSettingPage";
+import IncomeCategorySettingPage from "./pages/SettingPage/IncomeCategorySettingPage";
+import OutcomeCategorySettingPage from "./pages/SettingPage/OutcomeCategorySettingPage";
 
 export default createBrowserRouter(
   createRoutesFromElements(
@@ -62,6 +64,16 @@ export default createBrowserRouter(
         <Route
           path="/mypage/setting/asset"
           element={<AssetSettingPage />}
+          errorElement={<div>error</div>}
+        />
+        <Route
+          path="/mypage/setting/income-category"
+          element={<IncomeCategorySettingPage />}
+          errorElement={<div>error</div>}
+        />
+        <Route
+          path="/mypage/setting/outcome-category"
+          element={<OutcomeCategorySettingPage />}
           errorElement={<div>error</div>}
         />
         <Route path="/" element={<MainPage />} />

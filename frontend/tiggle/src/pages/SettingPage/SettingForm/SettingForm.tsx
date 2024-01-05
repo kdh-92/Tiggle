@@ -1,16 +1,8 @@
 import { SettingFormStyle } from "./SettingFormStyle";
-import useSettingForm, { SettingItem } from "./useSettingForm";
+import { SettingFormProps } from "./types";
+import useSettingForm from "./useSettingForm";
 import Item from "../Item/Item";
 import ItemAdd from "../Item/ItemAdd";
-
-export interface SettingFormProps {
-  data: Array<SettingItem>;
-  requests: {
-    create: (value: string) => void;
-    update: (sid: number, value: string) => void;
-    remove: (sid: number) => void;
-  };
-}
 
 const SettingForm = (props: SettingFormProps) => {
   const { fields, appendItem, updateItem, removeItem } = useSettingForm(props);

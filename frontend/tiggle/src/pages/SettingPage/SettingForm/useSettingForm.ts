@@ -1,24 +1,11 @@
 import { useFieldArray, useForm } from "react-hook-form";
 
-import { SettingFormProps } from "./SettingForm";
-
-export interface SettingItem {
-  /**
-   * server에서 부여되는 id
-   * React-hook-form에서 부여되는 client측 id와 구분하기 위해
-   * sid로 기재
-   */
-  sid: number;
-  name: string;
-}
+import { SettingInput, SettingFormProps, SettingItem } from "./types";
 
 const fieldArrayName = "items";
-interface SettingInput {
-  [fieldArrayName]: SettingItem[];
-}
 
 const useSettingForm = ({ data, requests }: SettingFormProps) => {
-  const { control } = useForm<SettingInput>({
+  const { control } = useForm<SettingInput<typeof fieldArrayName>>({
     defaultValues: { [fieldArrayName]: data },
   });
 
@@ -32,18 +19,21 @@ const useSettingForm = ({ data, requests }: SettingFormProps) => {
   };
 
   const updateItem = (index: number, item: SettingItem) => {
-    update(index, item);
-
     if (item.sid === -1) {
-      requests.create(item.name);
+      requests.create(item.name, data => {
+        update(index, { sid: data.id, name: item.name });
+      });
     } else {
-      requests.update(item.sid, item.name);
+      requests.update(item.sid, item.name, () => {
+        update(index, item);
+      });
     }
   };
 
   const removeItem = (index: number, sid: number) => {
-    remove(index);
-    requests.remove(sid);
+    requests.remove(sid, () => {
+      remove(index);
+    });
   };
 
   return {

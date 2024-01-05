@@ -6,7 +6,7 @@ import dayjs from "dayjs";
 
 import useUpload from "@/components/atoms/Upload/useUpload";
 import { MemberApiControllerService } from "@/generated";
-import { useMessage } from "@/templates/GeneralTemplate";
+import useMessage from "@/hooks/useMessage";
 
 import { MemberFormData, updateProfile } from "./request";
 
@@ -23,7 +23,7 @@ export const loader = (queryClient: QueryClient) => () =>
   queryClient.ensureQueryData(profileQuery());
 
 export const useProfilePage = () => {
-  const { messageApi } = useMessage();
+  const messageApi = useMessage();
 
   const initialData = useLoaderData() as Awaited<
     ReturnType<ReturnType<typeof loader>>
