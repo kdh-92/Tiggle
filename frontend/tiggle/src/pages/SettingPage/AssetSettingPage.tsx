@@ -67,7 +67,7 @@ const AssetSettingPage = ({}: AssetSettingPageProps) => {
 
   return (
     <MypageDetailPageStyle>
-      <p className="page-title">내 자산 관리</p>
+      <p className="page-title">자산 관리</p>
 
       {isDataLoading && <Loading />}
       {!isDataLoading && data && (

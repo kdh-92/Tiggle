@@ -70,7 +70,7 @@ const IncomeCategorySettingPage = ({}: IncomeCategorySettingPageProps) => {
 
   return (
     <MypageDetailPageStyle>
-      <p className="page-title">내 수입 카테고리 관리</p>
+      <p className="page-title">수입 카테고리 관리</p>
 
       {isLoading && <Loading />}
       {!isLoading && categoriesData && (

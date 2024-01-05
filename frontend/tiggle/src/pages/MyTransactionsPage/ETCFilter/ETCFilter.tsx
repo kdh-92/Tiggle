@@ -114,7 +114,7 @@ const ETCFilter = ({}: ETCFilterProps) => {
       <ETCFilterAccordionStyle
         ref={accordionRef}
         className={cn(isAccordionOpen ? "open" : "close")}
-        _height={accordionHeight}
+        $height={accordionHeight}
       >
         <div className="container">
           <Controller

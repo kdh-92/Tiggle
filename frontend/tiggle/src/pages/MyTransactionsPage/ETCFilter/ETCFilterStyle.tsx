@@ -85,8 +85,8 @@ const accordionOpen = keyframes`
   }
 `;
 
-export const ETCFilterAccordionStyle = styled.div<{ _height: number }>`
-  max-height: ${({ _height }) => _height}px;
+export const ETCFilterAccordionStyle = styled.div<{ $height: number }>`
+  max-height: ${({ $height }) => $height}px;
   transition: max-height 0.3s ease;
 
   .container {
