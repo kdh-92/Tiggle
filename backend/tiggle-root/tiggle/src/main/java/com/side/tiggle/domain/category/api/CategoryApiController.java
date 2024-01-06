@@ -1,8 +1,7 @@
 package com.side.tiggle.domain.category.api;
 
-import com.side.tiggle.domain.asset.dto.AssetDto;
-import com.side.tiggle.domain.asset.service.AssetService;
 import com.side.tiggle.domain.category.dto.CategoryDto;
+import com.side.tiggle.domain.category.dto.controller.CategoryUpdateReqDto;
 import com.side.tiggle.domain.category.dto.resp.CategoryRespDto;
 import com.side.tiggle.domain.category.model.CategoryType;
 import com.side.tiggle.domain.category.service.CategoryService;
@@ -20,10 +19,12 @@ import java.util.stream.Collectors;
 public class CategoryApiController {
 
     private final CategoryService categoryService;
-    @PutMapping
+    
+    @PostMapping
     public ResponseEntity<CategoryRespDto> createCategory(@RequestBody CategoryDto categoryDto) {
         return new ResponseEntity<>(CategoryRespDto.fromEntity(categoryService.createCategory(categoryDto)), HttpStatus.OK);
     }
+    
 
     @GetMapping("/{id}")
     public ResponseEntity<CategoryRespDto> getCategory(@PathVariable("id") Long categoryId) {
@@ -43,5 +44,21 @@ public class CategoryApiController {
                 .stream()
                 .map(CategoryRespDto::fromEntity)
                 .collect(Collectors.toList()), HttpStatus.OK);
+    }
+    
+    @PutMapping("/{id}")
+    public ResponseEntity<CategoryRespDto> updateCategory(
+            @PathVariable("id") Long categoryId,
+            @RequestBody CategoryUpdateReqDto dto
+    ) {
+        return new ResponseEntity<>(CategoryRespDto.fromEntity(categoryService.updateCategory(categoryId, dto)), HttpStatus.OK);
+    }
+    
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteCategory(
+            @PathVariable("id") Long categoryId
+    ) {
+        categoryService.deleteCategory(categoryId);
+        return new ResponseEntity<>(null, HttpStatus.OK);
     }
 }
