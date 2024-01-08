@@ -11,6 +11,7 @@ import java.time.LocalDate;
 
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import net.minidev.json.annotate.JsonIgnore;
 
 @Getter
 @Setter
@@ -19,7 +20,7 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 public class TransactionDto {
 
-    @NotBlank(message = "member 입력이 필요합니다.")
+    @JsonIgnore
     private Long memberId;
     private Long parentId;
     private Long assetId;
