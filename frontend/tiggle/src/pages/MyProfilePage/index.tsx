@@ -23,6 +23,7 @@ const MyProfilePage = () => {
     handleSubmit,
     handleUpload,
     handleResetImage,
+    handleCancel,
   } = useProfilePage();
 
   return (
@@ -90,10 +91,7 @@ const MyProfilePage = () => {
             <CTAButton type="submit" size="lg" fullWidth disabled={!isDirty}>
               수정하기
             </CTAButton>
-            <TextButton
-              color="bluishGray500"
-              onClick={() => console.log("cancel")}
-            >
+            <TextButton color="bluishGray500" onClick={handleCancel}>
               취소
             </TextButton>
           </ProfileFormControllerStyle>

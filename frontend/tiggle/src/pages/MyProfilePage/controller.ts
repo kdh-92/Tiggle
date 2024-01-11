@@ -1,5 +1,5 @@
 import { useForm } from "react-hook-form";
-import { useLoaderData } from "react-router-dom";
+import { useLoaderData, useNavigate } from "react-router-dom";
 
 import { QueryClient, useMutation, useQuery } from "@tanstack/react-query";
 import dayjs from "dayjs";
@@ -24,6 +24,7 @@ export const loader = (queryClient: QueryClient) => () =>
 
 export const useProfilePage = () => {
   const messageApi = useMessage();
+  const navigate = useNavigate();
 
   const initialData = useLoaderData() as Awaited<
     ReturnType<ReturnType<typeof loader>>
@@ -98,6 +99,10 @@ export const useProfilePage = () => {
     },
   );
 
+  const handleCancel = () => {
+    navigate(-1);
+  };
+
   return {
     control,
     profileUrlRegister,
@@ -106,5 +111,6 @@ export const useProfilePage = () => {
     handleSubmit,
     handleUpload,
     handleResetImage: handleReset,
+    handleCancel,
   };
 };
