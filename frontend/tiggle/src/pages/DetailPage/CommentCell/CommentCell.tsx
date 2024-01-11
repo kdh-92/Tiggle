@@ -8,6 +8,7 @@ import { Avatar } from "antd";
 import CTAButton from "@/components/atoms/CTAButton/CTAButton";
 import TextArea from "@/components/atoms/TextArea/TextArea";
 import { CommentApiService, CommentRespDto } from "@/generated";
+import useMessage from "@/hooks/useMessage";
 import {
   CommentCellStyle,
   CommentRepliesStyle,
@@ -17,7 +18,6 @@ import {
 } from "@/pages/DetailPage/CommentCell/CommentCellStyle";
 import queryClient from "@/query/queryClient";
 import { RootState } from "@/store";
-import { useMessage } from "@/templates/GeneralTemplate";
 import { calculateDateTimeDiff } from "@/utils/date";
 import { convertTxTypeToColor } from "@/utils/txType";
 
@@ -43,7 +43,7 @@ export default function CommentCell({
   sender,
   receiverId,
 }: CommentCellProps) {
-  const { messageApi } = useMessage();
+  const messageApi = useMessage();
   const [replyOpen, setReplyOpen] = useState(false);
 
   const toggleReplySection = () => {

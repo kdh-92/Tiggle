@@ -9,11 +9,11 @@ import {
 import { QueryClient, useMutation } from "@tanstack/react-query";
 import dayjs from "dayjs";
 
+import useMessage from "@/hooks/useMessage";
 import CreateForm, {
   FormInputs,
 } from "@/pages/CreatePage/CreateForm/CreateForm";
 import { CreatePageStyle } from "@/pages/CreatePage/CreatePageStyle";
-import { useMessage } from "@/templates/GeneralTemplate";
 import { TxType } from "@/types";
 import { convertTxTypeToWord } from "@/utils/txType";
 import withAuth, { AuthProps } from "@/utils/withAuth";
@@ -37,7 +37,7 @@ interface CreatePageProps extends AuthProps {
 
 const CreatePage = ({ type }: CreatePageProps) => {
   const navigate = useNavigate();
-  const { messageApi } = useMessage();
+  const messageApi = useMessage();
   const parentId = Number(useParams().id);
 
   const initialData = useLoaderData() as Awaited<

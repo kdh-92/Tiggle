@@ -32,7 +32,7 @@ export const assetKeys = {
 };
 
 export const categoryKeys = {
-  key: "asset" as const,
+  key: "category" as const,
   lists: () => [categoryKeys.key, "list"] as const,
   list: (filter: Record<string, any>) =>
     [...categoryKeys.lists(), filter] as const,
