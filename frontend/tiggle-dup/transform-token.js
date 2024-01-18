@@ -1,6 +1,5 @@
-const fs = require("fs");
-
 const { transformTokens } = require("token-transformer");
+const fs = require("fs");
 
 const INPUT_PATH = "./tokens.json";
 const OUTPUT_PATH = "./src/styles/config/theme.ts";

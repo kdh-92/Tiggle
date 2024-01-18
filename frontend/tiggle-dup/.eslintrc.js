@@ -2,7 +2,7 @@ module.exports = {
   root: true,
   env: {
     browser: true,
-    es2021: true,
+    node: true,
   },
   extends: [
     "plugin:@typescript-eslint/eslint-recommended",
@@ -15,8 +15,8 @@ module.exports = {
   rules: {
     "prettier/prettier": "error",
     "@typescript-eslint/no-explicit-any": "off",
-    "@typescript-eslint/no-var-requires": "off",
     "@typescript-eslint/explicit-function-return-type": "off",
+    "@typescript-eslint/no-var-requires": "off",
     "import/order": [
       "error",
       {
@@ -55,6 +55,7 @@ module.exports = {
     "import/no-named-as-default": "off",
     "import/prefer-default-export": "off",
     "import/no-mutable-exports": "off",
+    "import/no-named-as-default-member": "off",
   },
   parserOptions: {
     parser: "@typescript-eslint/parser",

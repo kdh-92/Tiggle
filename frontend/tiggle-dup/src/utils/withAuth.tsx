@@ -21,7 +21,7 @@ const withAuth =
     const { isLogin, isLoginLoading, profile } = useAuth();
 
     const recordContinueUrl = () =>
-      dispatch(continueUrlStore.actions.creators.set(location.pathname));
+      dispatch(continueUrlStore.actions.set(location.pathname));
 
     if (isLoginLoading) return <LoadingPage />;
 

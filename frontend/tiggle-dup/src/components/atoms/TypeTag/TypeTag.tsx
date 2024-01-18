@@ -25,8 +25,8 @@ export default function TypeTag({
         {txType === Tx.OUTCOME
           ? "지출"
           : txType === Tx.REFUND
-          ? "환불"
-          : "수익"}
+            ? "환불"
+            : "수익"}
       </p>
     </TypeTagStyle>
   );
