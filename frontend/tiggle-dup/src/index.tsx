@@ -10,6 +10,7 @@ import { ConfigProvider } from "antd";
 import { PersistGate } from "redux-persist/integration/react";
 import { ThemeProvider } from "styled-components";
 
+import MessageProvider from "@/hooks/useMessage/MessageProvider";
 import queryClient from "@/query/queryClient";
 import router from "@/router";
 import { store, persistedStore } from "@/store";
@@ -45,6 +46,7 @@ root.render(
           <PersistGate persistor={persistedStore} />,
           <ThemeProvider theme={{ ...theme, mq }} />,
           <ConfigProvider theme={antTheme} />,
+          <MessageProvider />,
         ]}
       >
         {process.env.NODE_ENV === "development" && <ReactQueryDevtools />}
