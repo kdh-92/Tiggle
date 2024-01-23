@@ -36,7 +36,7 @@ const BottomSheet = ({
   children,
 }: BottomSheetProps) => {
   const [isMount, setIsMount] = useState(isOpen);
-  const unmountRef = useRef<() => void | null>(null);
+  const unmountRef = useRef<(() => void) | null>(null);
   const sheetRef = useRef<HTMLDivElement | null>(null);
 
   useOnClickOutside(sheetRef, onClose);

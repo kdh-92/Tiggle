@@ -1,17 +1,18 @@
 import { forwardRef } from "react";
 import { ChevronDown } from "react-feather";
 
-import { SelectProps as AntSelectProps, Select as AntSelect } from "antd";
+import { Select as AntSelect } from "antd";
 import cn from "classnames";
 
 import { SelectStyle } from "@/components/atoms/Select/SelectStyle";
 import { isDesktop } from "@/styles/util/screen";
 
-interface SelectProps extends AntSelectProps {
+type AntSelectProps = Parameters<typeof AntSelect>[0];
+type SelectRef = AntSelectProps["ref"];
+
+interface SelectProps extends Omit<AntSelectProps, "variant"> {
   variant?: "default" | "compact";
 }
-
-type SelectRef = Parameters<typeof AntSelect>[0]["ref"];
 
 const Select = forwardRef(
   (

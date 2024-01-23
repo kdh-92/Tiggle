@@ -2,6 +2,7 @@ import { useMemo } from "react";
 import { Info } from "react-feather";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 
+import { useQuery } from "@tanstack/react-query";
 import { Dayjs } from "dayjs";
 
 import {
@@ -14,15 +15,15 @@ import {
   TextButton,
   Upload,
 } from "@/components/atoms";
+import {
+  AssetApiControllerService,
+  CategoryApiControllerService,
+  TagApiControllerService,
+} from "@/generated";
 import { CreateFormStyle } from "@/pages/CreatePage/CreateForm/CreateFormStyle";
+import { assetKeys, categoryKeys, tagKeys } from "@/query/queryKeys";
 import { TxType } from "@/types";
 import { convertTxTypeToWord } from "@/utils/txType";
-
-import {
-  useAllAssetsQuery,
-  useAllCategoriesQuery,
-  useAllTagsQuery,
-} from "../query";
 
 export interface FormInputs {
   assetId: number;
@@ -52,20 +53,27 @@ function CreateForm({
   defaultValues,
   disabledInputs,
 }: CreateFormProps) {
-  const { data: assetsData, isLoading: isAssetsLoading } = useAllAssetsQuery();
+  const { data: assetsData, isLoading: isAssetsLoading } = useQuery(
+    assetKeys.lists(),
+    async () => AssetApiControllerService.getAllAsset(),
+  );
+  const { data: categoriesData, isLoading: isCategoriesLoading } = useQuery(
+    categoryKeys.lists(),
+    async () => CategoryApiControllerService.getAllCategory(),
+  );
+  const { data: tagsData, isLoading: isTagsLoading } = useQuery(
+    tagKeys.lists(),
+    async () => TagApiControllerService.getAllDefaultTag(),
+  );
+
   const assets = useMemo(
     () => assetsData?.map(({ name, id }) => ({ value: id, label: name })),
     [assetsData],
   );
-
-  const { data: categoriesData, isLoading: isCategoriesLoading } =
-    useAllCategoriesQuery();
   const categories = useMemo(
     () => categoriesData?.map(({ name, id }) => ({ value: id, label: name })),
     [categoriesData],
   );
-
-  const { data: tagsData, isLoading: isTagsLoading } = useAllTagsQuery();
   const tags = useMemo(
     () => tagsData?.map(({ name }) => ({ value: name, label: `#${name}` })),
     [tagsData],
@@ -184,7 +192,6 @@ function CreateForm({
           rules={{ required: true, max: 300 }}
           render={({ field }) => (
             <TextArea
-              name="reason"
               placeholder={`${convertTxTypeToWord(type)} 이유를 입력하세요.`}
               count={{ show: true, max: 300 }}
               disabled={disabledInputs?.includes("reason")}
@@ -218,7 +225,6 @@ function CreateForm({
       <div className="form-item">
         <label>사진</label>
         <Upload
-          name="imageUrl"
           onReset={handleResetImageUrl}
           disabled={disabledInputs?.includes("imageUrl")}
           {...register("imageUrl", { required: true })}

@@ -9,12 +9,12 @@ import { MoreVertical } from "react-feather";
 
 import cn from "classnames";
 
-import useOnClickOutside from "@/hooks/useOnClickOutside";
 import {
   MenuButtonStyle,
   MenuItemStyle,
   MenuStyle,
 } from "@/components/atoms/Menu/MenuStyle";
+import useOnClickOutside from "@/hooks/useOnClickOutside";
 
 interface MenuItemProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   label: string;
@@ -35,7 +35,7 @@ export interface MenuProps
   onToggle?: (e?: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
-export function Menu({
+export default function Menu({
   children,
   align = "right",
   onToggle,

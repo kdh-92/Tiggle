@@ -30,18 +30,20 @@ const ETCFilter = ({}: ETCFilterProps) => {
 
   const { data: assetsData } = useAllAssetsQuery();
   const assetOptions = useMemo(
-    () => assetsData?.map(({ id, name }) => ({ label: name, value: id })) ?? [],
+    () =>
+      assetsData?.map(({ id, name }) => ({ label: name!, value: id! })) ?? [],
     [assetsData],
   );
   const { data: categoriesData } = useAllCategoriesQuery();
   const categoryOptions = useMemo(
     () =>
-      categoriesData?.map(({ id, name }) => ({ label: name, value: id })) ?? [],
+      categoriesData?.map(({ id, name }) => ({ label: name!, value: id! })) ??
+      [],
     [categoriesData],
   );
   const { data: tagsData } = useAllTagsQuery();
   const tagOptions = useMemo(
-    () => tagsData?.map(({ name }) => ({ label: name, value: name })) ?? [],
+    () => tagsData?.map(({ name }) => ({ label: name!, value: name! })) ?? [],
     [tagsData],
   );
 
@@ -63,24 +65,24 @@ const ETCFilter = ({}: ETCFilterProps) => {
 
     const assetTags = assetIds
       ?.map(id => assetsData?.find(data => data.id === id))
-      .map(({ id, name }) => ({
-        label: `${name}`,
-        value: id,
+      .map(asset => ({
+        label: `${asset!.name}`,
+        value: asset!.id,
         keyName: "assetIds" as const,
       }));
 
     const categoryTags = categoryIds
       ?.map(id => categoriesData?.find(data => data.id === id))
-      .map(({ id, name }) => ({
-        label: `${name}`,
-        value: id,
+      .map(category => ({
+        label: `${category!.name}`,
+        value: category!.id,
         keyName: "categoryIds" as const,
       }));
 
     const tagTags = tagNames
       ?.map(name => tagsData?.find(data => data.name === name))
-      .map(({ name }) => ({
-        label: `#${name}`,
+      .map(tag => ({
+        label: `#${tag!.name}`,
         value: name,
         keyName: "tagNames" as const,
       }));
@@ -105,7 +107,12 @@ const ETCFilter = ({}: ETCFilterProps) => {
         {selectedETCTags?.length > 0 && (
           <div className="selected-filter">
             {selectedETCTags.map(props => (
-              <ETCFilterTag key={`filter-${props.label}`} {...props} />
+              <ETCFilterTag
+                key={`filter-${props.label}`}
+                label={props.label}
+                value={props.value!}
+                keyName={props.keyName}
+              />
             ))}
           </div>
         )}

@@ -44,14 +44,14 @@ export default function CommentForm({
   const { mutate: createComment } = useMutation(async (content: string) =>
     CommentApiService.createComment(TEMP_USER_ID, {
       txId,
-      senderId: profile.id,
+      senderId: profile!.id!,
       receiverId: receiverId,
       content,
     }),
   );
 
   const onSubmit: SubmitHandler<CommentFormInputs> = ({ comment }, event) => {
-    event.preventDefault();
+    event?.preventDefault();
     createComment(comment, {
       onSuccess: () => {
         messageApi.open({ type: "success", content: "댓글이 등록되었습니다." });

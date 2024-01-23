@@ -31,7 +31,7 @@ export default function TransactionCell({
   return (
     <div onClick={handleGoDetail}>
       <TransactionCellStyle className={cn(type, id)}>
-        <TypeTag className="tag" txType={type} size={"md"} />
+        <TypeTag className="tag" txType={type!} size={"md"} />
         <div className={cn("amount", type)}>
           <span className="amount-unit">₩ {amount}</span>
         </div>
@@ -41,18 +41,18 @@ export default function TransactionCell({
         </div>
         <div className="transaction-cell-footer">
           <div className="user">
-            {member.profileUrl ? (
+            {member!.profileUrl ? (
               <img
                 className="user-profile"
                 alt="member profile"
-                src={member.profileUrl}
+                src={member!.profileUrl}
               />
             ) : (
               <Avatar />
             )}
             <div>
-              <p className="user-name">{member.nickname}</p>
-              <p className="user-createdAt">{timeDiff(createdAt)}</p>
+              <p className="user-name">{member!.nickname}</p>
+              <p className="user-createdAt">{timeDiff(createdAt!)}</p>
             </div>
           </div>
           <div className="icon-unit">

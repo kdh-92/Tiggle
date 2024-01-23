@@ -13,12 +13,12 @@ function ReplyCell({ id, content, createdAt, sender }: ReplyCellProps) {
       <CommentSenderStyle className="user">
         <img
           className="profile"
-          src={sender.profileUrl ?? "/assets/user-placeholder.png"}
-          alt={`${sender.nickname} profile`}
+          src={sender!.profileUrl ?? "/assets/user-placeholder.png"}
+          alt={`${sender!.nickname} profile`}
         />
         <div>
-          <p className="name">{sender.nickname}</p>
-          <p className="date">{calculateDateTimeDiff(createdAt)}</p>
+          <p className="name">{sender!.nickname}</p>
+          <p className="date">{calculateDateTimeDiff(createdAt!)}</p>
         </div>
       </CommentSenderStyle>
 

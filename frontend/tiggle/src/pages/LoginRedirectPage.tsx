@@ -17,7 +17,7 @@ const LoginRedirectPage = () => {
   useEffect(() => {
     if (isLogin) {
       navigate(url ?? "/");
-      dispatch(continueUrlStore.actions.creators.reset());
+      dispatch(continueUrlStore.actions.reset());
     } else {
       navigate("/login");
       // messageApi.error("로그인에 실패했습니다. 다시 시도해주세요.");

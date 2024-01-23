@@ -2,7 +2,7 @@ import { useState } from "react";
 import { SubmitHandler, useForm, Controller } from "react-hook-form";
 import { useSelector } from "react-redux";
 
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { Avatar } from "antd";
 
 import CTAButton from "@/components/atoms/CTAButton/CTAButton";
@@ -17,12 +17,12 @@ import {
   ReplyFormStyle,
 } from "@/pages/DetailPage/CommentCell/CommentCellStyle";
 import queryClient from "@/query/queryClient";
+import { commentKeys } from "@/query/queryKeys";
 import { RootState } from "@/store";
 import { calculateDateTimeDiff } from "@/utils/date";
 import { convertTxTypeToColor } from "@/utils/txType";
 
 import ReplyToggleButton from "../ReplyToggleButton/ReplyToggleButton";
-import { useCommentRepliesQuery } from "../query";
 
 const TEMP_USER_ID = 1;
 
@@ -50,9 +50,14 @@ export default function CommentCell({
     setReplyOpen(!replyOpen);
   };
 
-  const { data: repliesData } = useCommentRepliesQuery(id, {
-    enabled: replyOpen,
-  });
+  const { data: repliesData } = useQuery(
+    commentKeys.reply(id!),
+    async () => CommentApiService.getAllCommentsByCommentId(id!),
+    {
+      staleTime: 1000 * 60 * 10,
+      enabled: replyOpen,
+    },
+  );
 
   const { mutate: createReply } = useMutation(async (comment: string) =>
     CommentApiService.createComment(TEMP_USER_ID, {
@@ -81,12 +86,12 @@ export default function CommentCell({
       <CommentSenderStyle>
         <Avatar
           size={32}
-          src={sender.profileUrl}
-          alt={`${sender.nickname} profile`}
+          src={sender!.profileUrl}
+          alt={`${sender!.nickname} profile`}
         />
         <div>
-          <p className="name">{sender.nickname}</p>
-          <p className="date">{calculateDateTimeDiff(createdAt)}</p>
+          <p className="name">{sender!.nickname}</p>
+          <p className="date">{calculateDateTimeDiff(createdAt!)}</p>
         </div>
       </CommentSenderStyle>
 
@@ -94,13 +99,13 @@ export default function CommentCell({
 
       <ReplyToggleButton
         open={replyOpen}
-        repliesCount={childCount}
+        repliesCount={childCount!}
         onClick={toggleReplySection}
       />
 
       {replyOpen && (
         <CommentRepliesStyle>
-          {childCount > 0 && <div className="divider" />}
+          {childCount! > 0 && <div className="divider" />}
 
           {repliesData?.content?.map(reply => (
             <ReplyCell key={`comment-reply-${reply.id}`} {...reply} />
@@ -122,12 +127,12 @@ function ReplyCell({ id, content, createdAt, sender }: ReplyCellProps) {
       <CommentSenderStyle className="user">
         <img
           className="profile"
-          src={sender.profileUrl ?? "/assets/user-placeholder.png"}
-          alt={`${sender.nickname} profile`}
+          src={sender!.profileUrl ?? "/assets/user-placeholder.png"}
+          alt={`${sender!.nickname} profile`}
         />
         <div>
-          <p className="name">{sender.nickname}</p>
-          <p className="date">{calculateDateTimeDiff(createdAt)}</p>
+          <p className="name">{sender!.nickname}</p>
+          <p className="date">{calculateDateTimeDiff(createdAt!)}</p>
         </div>
       </CommentSenderStyle>
 

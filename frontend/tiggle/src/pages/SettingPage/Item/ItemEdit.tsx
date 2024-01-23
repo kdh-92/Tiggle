@@ -12,8 +12,11 @@ const ItemEdit = ({ label, onSave, onCancel }: ItemEditProps) => {
   const inputRef = useRef<HTMLInputElement | null>(null);
 
   const handleSave = () => {
-    const { value } = inputRef.current;
-    onSave(value);
+    const { current } = inputRef;
+    if (current) {
+      const { value } = current;
+      onSave(value);
+    }
   };
 
   useEffect(() => {

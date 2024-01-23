@@ -17,7 +17,7 @@ interface PopOverProps extends PropsWithChildren, OverlayProps {
 
 const PopOver = ({ isOpen, header, children }: PopOverProps) => {
   const [isMount, setIsMount] = useState(isOpen);
-  const unmountRef = useRef<() => void | null>(null);
+  const unmountRef = useRef<(() => void) | null>(null);
 
   useEffect(() => {
     if (isOpen) {

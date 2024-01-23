@@ -2,9 +2,13 @@ import { useLayoutEffect } from "react";
 import { useDispatch } from "react-redux";
 import { LoaderFunctionArgs, useLoaderData, useParams } from "react-router-dom";
 
-import { QueryClient } from "@tanstack/react-query";
+import { QueryClient, useQuery } from "@tanstack/react-query";
 
-import HashTag from "@/components/atoms/HashTag/HashTag";
+import { HashTag } from "@/components/atoms";
+import {
+  ReactionApiService,
+  TransactionApiControllerService,
+} from "@/generated";
 import CommentCell from "@/pages/DetailPage/CommentCell/CommentCell";
 import CommentForm from "@/pages/DetailPage/CommentForm/CommentForm";
 import {
@@ -14,16 +18,15 @@ import {
 } from "@/pages/DetailPage/DetailPageStyle";
 import PostHeader from "@/pages/DetailPage/PostHeader/PostHeader";
 import ReactionSection from "@/pages/DetailPage/ReactionSection/ReactionSection";
+import { commentKeys, reactionKeys, transactionKeys } from "@/query/queryKeys";
 import store from "@/store/detailPage";
 
-import {
-  transactionQuery,
-  useCommentsQuery,
-  useReactionQuery,
-  useTransactionQuery,
-} from "./query";
+const transactionQuery = (id: number) => ({
+  queryKey: transactionKeys.detail(id),
+  queryFn: async () => TransactionApiControllerService.getTransaction(id),
+});
 
-export const loader =
+export const detailPageLoader =
   (queryClient: QueryClient) =>
   ({ params }: LoaderFunctionArgs) =>
     queryClient.ensureQueryData(transactionQuery(Number(params.id)));
@@ -31,16 +34,25 @@ export const loader =
 const DetailPage = () => {
   const id = Number(useParams().id);
   const initialData = useLoaderData() as Awaited<
-    ReturnType<ReturnType<typeof loader>>
+    ReturnType<ReturnType<typeof detailPageLoader>>
   >;
 
-  const { data: transactionData } = useTransactionQuery(id, { initialData });
-  const { data: reactionData } = useReactionQuery(id);
-  const { data: commentsData } = useCommentsQuery(id);
+  const { data: transactionData } = useQuery({
+    ...transactionQuery(id),
+    initialData,
+  });
+  const { data: reactionData } = useQuery({
+    queryKey: reactionKeys.detail(id),
+    queryFn: async () => ReactionApiService.getReactionSummary(id),
+  });
+  const { data: commentsData } = useQuery({
+    queryKey: commentKeys.list(id),
+    queryFn: async () => TransactionApiControllerService.getAllCommentsByTx(id),
+  });
 
   const dispatch = useDispatch();
   useLayoutEffect(() => {
-    dispatch(store.actions.creators.setType(transactionData.type));
+    dispatch(store.actions.setType(transactionData.type!));
   }, [transactionData]);
 
   return (
@@ -51,8 +63,8 @@ const DetailPage = () => {
           sender={{
             nickname: "사용자1",
           }}
-          asset={transactionData.asset.name}
-          category={transactionData.category.name}
+          asset={transactionData.asset!.name!}
+          category={transactionData.category!.name!}
         />
 
         <DetailPageContentStyle>
@@ -88,12 +100,12 @@ const DetailPage = () => {
             <CommentCell
               {...comment}
               key={`comment-cell-${comment.id}`}
-              receiverId={transactionData.member?.id}
+              receiverId={transactionData.member!.id!}
             />
           ))}
         </div>
 
-        <CommentForm txId={id} receiverId={transactionData.member?.id} />
+        <CommentForm txId={id} receiverId={transactionData.member!.id!} />
       </DetailPageCommentSectionStyle>
     </DetailPageStyle>
   );

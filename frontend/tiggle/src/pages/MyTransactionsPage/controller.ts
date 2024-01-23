@@ -10,7 +10,7 @@ import { FilterInputs } from "./types";
 
 const pageSize = 3;
 
-export const useMyTransactionsPage = (profile: MemberDto) => {
+export const useMyTransactionsPage = (profile: Required<MemberDto>) => {
   const method = useForm<FilterInputs>({ defaultValues: { date: dayjs() } });
   const handleSubmit: FormEventHandler<HTMLFormElement> = e => {
     e.preventDefault();

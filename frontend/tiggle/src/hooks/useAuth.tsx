@@ -28,7 +28,7 @@ export default function useAuth() {
     memberKeys.detail("me"),
     async () =>
       MemberApiControllerService.getMe(
-        token ? TEMP_USER_ID : undefined, // TODO: 프로필조회 api 수정 후 삭제
+        token ? TEMP_USER_ID : -1, // TODO: 프로필조회 api 수정 후 삭제
       ),
     {
       staleTime: 1000 * 60 * 30,
@@ -42,7 +42,7 @@ export default function useAuth() {
   );
 
   const requireAuth = () => {
-    dispatch(continueUrlStore.actions.creators.set(location.pathname));
+    dispatch(continueUrlStore.actions.set(location.pathname));
     navigate("/login");
   };
 

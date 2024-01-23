@@ -1,14 +1,16 @@
 import { ChevronRight } from "react-feather";
 
+import { useQuery } from "@tanstack/react-query";
 import { Avatar } from "antd";
 import dayjs from "dayjs";
 
+import { TransactionApiControllerService } from "@/generated";
 import useAuth from "@/hooks/useAuth";
 import { MypageStyle } from "@/pages/MyPage/MypageStyle";
+import { transactionKeys } from "@/query/queryKeys";
 import withAuth, { AuthProps } from "@/utils/withAuth";
 
 import MyTransactionCell from "./MyTransactionCell/MyTransactionCell";
-import { useTransactionsQueryByMember } from "./query";
 
 interface MyPageProps extends AuthProps {}
 
@@ -19,9 +21,17 @@ const MyPage = ({ profile }: MyPageProps) => {
     data,
     isLoading: isTxLoading,
     isError: isTxError,
-  } = useTransactionsQueryByMember(profile.id, 0, { enabled: isLogin });
+  } = useQuery(
+    transactionKeys.list({ id: profile.id }),
+    async () =>
+      TransactionApiControllerService.getMemberCountOffsetTransaction(
+        profile.id,
+        0,
+      ),
+    { staleTime: 1000 * 60 * 10, enabled: isLogin },
+  );
 
-  const sortArray = data?.content.sort((a, b) =>
+  const sortArray = data?.content?.sort((a, b) =>
     dayjs(b.date).diff(dayjs(a.date)),
   );
 
@@ -55,9 +65,11 @@ const MyPage = ({ profile }: MyPageProps) => {
         <div className="user-transaction">
           <p className="transaction-title">내 거래 기록</p>
           <div className="transaction-cells">
-            {sortArray.slice(0, 3).map(props => (
-              <MyTransactionCell key={`tx-cell-${props.id}`} {...props} />
-            ))}
+            {sortArray
+              ?.slice(0, 3)
+              .map(props => (
+                <MyTransactionCell key={`tx-cell-${props.id}`} {...props} />
+              ))}
             <a href="/mypage/my-transactions">
               <div className="transaction-cell">
                 <button>내 거래기록 더 보기</button>
