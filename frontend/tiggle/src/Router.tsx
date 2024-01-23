@@ -8,6 +8,9 @@ import MainPage from "@/pages/MainPage";
 import MyPage from "@/pages/MyPage";
 import MyProfilePage, { myProfilePageLoader } from "@/pages/MyProfilePage";
 import MyTransactionsPage from "@/pages/MyTransactionsPage";
+import AssetSettingPage from "@/pages/SettingPage/AssetSettingPage";
+import IncomeCategorySettingPage from "@/pages/SettingPage/IncomeCategorySettingPage";
+import OutcomeCategorySettingPage from "@/pages/SettingPage/OutcomeCategorySettingPage";
 import queryClient from "@/query/queryClient";
 import GeneralTemplate from "@/templates/GeneralTemplate";
 
@@ -51,6 +54,18 @@ const router = createBrowserRouter([
       {
         path: "/mypage/my-transactions",
         element: <MyTransactionsPage />,
+      },
+      {
+        path: "/mypage/setting/asset",
+        element: <AssetSettingPage />,
+      },
+      {
+        path: "/mypage/setting/income-category",
+        element: <IncomeCategorySettingPage />,
+      },
+      {
+        path: "/mypage/setting/outcome-category",
+        element: <OutcomeCategorySettingPage />,
       },
     ],
   },
