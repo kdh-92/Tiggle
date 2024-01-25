@@ -19,7 +19,7 @@ export default {
   render: ({ txType, ...args }) => {
     const dispatch = useDispatch();
     useEffect(() => {
-      dispatch(detailPageStore.actions.creators.setType(txType));
+      dispatch(detailPageStore.actions.setType(txType));
     }, [txType]);
     return <ReplyToggleButton {...args} />;
   },

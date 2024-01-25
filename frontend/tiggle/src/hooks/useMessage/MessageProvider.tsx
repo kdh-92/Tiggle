@@ -7,7 +7,16 @@ interface MessageState {
   api: MessageInstance;
 }
 
-export const MessageContext = createContext<MessageState>({ api: undefined });
+export const mockApi = {
+  open: (args: any) => console.log(args),
+  info: (args: any) => console.log(args),
+  success: (args: any) => console.log(args),
+  error: (args: any) => console.log(args),
+  warning: (args: any) => console.log(args),
+  loading: (args: any) => console.log(args),
+} as MessageInstance;
+
+export const MessageContext = createContext<MessageState>({ api: mockApi });
 if (process.env.NODE_ENV !== "production") {
   MessageContext.displayName = "MessageContext";
 }

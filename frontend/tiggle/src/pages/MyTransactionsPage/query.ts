@@ -66,34 +66,33 @@ export const useTransactionQueryByFilter = (
       )
         .then(({ content }) => {
           if (!filter.date) return content;
-          return content.filter(data =>
+          return content!.filter(data =>
             dayjs(filter.date).isSame(dayjs(data.date), "month"),
           );
         })
         .then(content => {
           if (!filter.assetIds || !filter.assetIds.length) return content;
-          return content.filter(data =>
-            filter.assetIds.includes(data.asset.id),
+          return content!.filter(data =>
+            filter.assetIds!.includes(data.asset!.id!),
           );
         })
         .then(content => {
           if (!filter.categoryIds || !filter.categoryIds.length) return content;
-          return content.filter(data =>
-            filter.categoryIds.includes(data.category.id),
+          return content!.filter(data =>
+            filter.categoryIds!.includes(data.category!.id!),
           );
         })
         .then(content => {
           if (!filter.tagNames || !filter.tagNames.length) return content;
-          return content.filter(
-            data =>
-              data.txTagNames
-                ?.split(", ")
-                .some(tagName => filter.tagNames.includes(tagName)),
+          return content!.filter(data =>
+            data.txTagNames
+              ?.split(", ")
+              .some(tagName => filter.tagNames!.includes(tagName)),
           );
         })
         .then(content => {
           if (!filter.type) return content;
-          return content.filter(data => data.type === filter.type);
+          return content!.filter(data => data.type === filter.type);
         }),
   });
 };

@@ -7,7 +7,7 @@ import useAuth from "@/hooks/useAuth";
 import continueUrlStore from "@/store/continueUrl";
 
 export interface AuthProps {
-  profile: MemberDto;
+  profile: Required<MemberDto>;
 }
 
 const LOGIN_PATH = "/login";
@@ -21,7 +21,7 @@ const withAuth =
     const { isLogin, isLoginLoading, profile } = useAuth();
 
     const recordContinueUrl = () =>
-      dispatch(continueUrlStore.actions.creators.set(location.pathname));
+      dispatch(continueUrlStore.actions.set(location.pathname));
 
     if (isLoginLoading) return <LoadingPage />;
 

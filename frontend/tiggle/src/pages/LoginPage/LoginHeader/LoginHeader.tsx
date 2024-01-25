@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 
-import Logo from "@/assets/logo_large.svg";
+import { ReactComponent as Logo } from "@/assets/logo_large.svg";
 import { LoginHeaderStyle } from "@/pages/LoginPage/LoginHeader/LoginHeaderStyle";
 
 export default function LoginHeader() {

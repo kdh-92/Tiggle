@@ -30,7 +30,11 @@ export const Default: Story = {
 
     return (
       <>
-        <FilterSelect {...args} value={value} onChange={handleOnChange} />
+        <FilterSelect
+          {...args}
+          value={value}
+          onChange={handleOnChange as any}
+        />
         <div>
           <p>selected</p>
           <ul>

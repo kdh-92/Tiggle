@@ -102,3 +102,5 @@ const MyProfilePage = () => {
 };
 
 export default withAuth(MyProfilePage);
+
+export { loader as myProfilePageLoader } from "./controller";

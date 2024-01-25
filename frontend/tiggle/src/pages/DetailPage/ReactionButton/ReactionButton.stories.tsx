@@ -20,7 +20,7 @@ export default {
       setChecked(!checked);
     };
     useEffect(() => {
-      dispatch(detailPageStore.actions.creators.setType(txType));
+      dispatch(detailPageStore.actions.setType(txType));
     }, [txType]);
     return <ReactionButton {...args} checked={checked} onClick={toggle} />;
   },

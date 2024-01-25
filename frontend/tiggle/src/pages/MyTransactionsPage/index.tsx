@@ -4,9 +4,7 @@ import withAuth, { AuthProps } from "@/utils/withAuth";
 
 import DateFilter from "./DateFilter/DateFilter";
 import ETCFilter from "./ETCFilter/ETCFilter";
-import MyTransactionDetailCell, {
-  MyTransactionDetailCellProps,
-} from "./MyTransactionDetailCell/MyTransactionDetailCell";
+import MyTransactionDetailCell from "./MyTransactionDetailCell/MyTransactionDetailCell";
 import MyTransactionDetailCellSkeleton from "./MyTransactionDetailCell/MyTransactionDetailCellSkeleton";
 import {
   FilteBoxStyle,
@@ -42,10 +40,14 @@ const MyTransactionsPage = ({ profile }: MyTransactionPageProps) => {
       </FormProvider>
 
       <MyTransactionCellsStyle>
-        {data.transactions?.map((data: MyTransactionDetailCellProps) => (
+        {data.transactions?.map(data => (
           <MyTransactionDetailCell
             key={`transaction-cell-${data.id}`}
-            {...data}
+            id={data.id!}
+            type={data.type!}
+            amount={data.amount!}
+            content={data.content!}
+            reason={data.reason!}
           />
         ))}
         {data.isLoadable && (

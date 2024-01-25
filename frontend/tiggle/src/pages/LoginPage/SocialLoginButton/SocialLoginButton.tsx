@@ -1,15 +1,15 @@
 import { ButtonHTMLAttributes } from "react";
 import { Link } from "react-router-dom";
 
-import Google from "@/assets/google_logo.svg";
-import Kakao from "@/assets/kakao_logo.svg";
-import Naver from "@/assets/naver_logo.svg";
+import { ReactComponent as Google } from "@/assets/google_logo.svg";
+import { ReactComponent as Kakao } from "@/assets/kakao_logo.svg";
+import { ReactComponent as Naver } from "@/assets/naver_logo.svg";
 import { SocialLoginButtonStyle } from "@/pages/LoginPage/SocialLoginButton/SocialLoginButtonStyle";
 
 interface SocialLoginButtonProps
   extends ButtonHTMLAttributes<HTMLButtonElement> {
   social_logo: string;
-  href?: string;
+  href: string;
 }
 
 export default function SocialLoginButton({
@@ -30,8 +30,8 @@ export default function SocialLoginButton({
           {social_logo === "kakao"
             ? "카카오 "
             : social_logo === "naver"
-            ? "네이버 "
-            : "Google "}
+              ? "네이버 "
+              : "Google "}
           로그인
         </span>
       </SocialLoginButtonStyle>

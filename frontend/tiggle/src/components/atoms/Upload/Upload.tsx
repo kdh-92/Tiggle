@@ -27,7 +27,7 @@ const Upload = forwardRef<HTMLInputElement, UploadProps>(
       <UploadStyle className={cn({ filled })}>
         {filled && (
           <div className="view">
-            <img src={imageUrl} alt={`preview of file ${file.name}`} />
+            <img src={imageUrl} alt={`preview of file ${file!.name}`} />
           </div>
         )}
 

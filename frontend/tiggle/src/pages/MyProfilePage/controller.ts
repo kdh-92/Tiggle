@@ -72,7 +72,7 @@ export const useProfilePage = () => {
           ...(dirtyFields["email"] && { email }),
           ...(dirtyFields["birth"] && { birth: dayjs(birth).toISOString() }),
         },
-        multipartFile: dirtyFields["profileUrl"] && profileUrl[0],
+        multipartFile: dirtyFields["profileUrl"] && profileUrl![0],
       };
 
       mutate(formData, {
@@ -83,9 +83,9 @@ export const useProfilePage = () => {
           });
           refetchProfileData().then(({ data }) => {
             reset({
-              nickname: data.nickname,
-              email: data.email,
-              birth: dayjs(data.birth),
+              nickname: data!.nickname,
+              email: data!.email,
+              birth: dayjs(data!.birth),
             });
           });
         },

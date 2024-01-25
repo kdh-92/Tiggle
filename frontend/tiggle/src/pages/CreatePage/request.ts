@@ -4,9 +4,10 @@ import {
 } from "@/generated";
 import { getAxiosInstance } from "@/query/openapi-request";
 
-export type TransactionFormData = Parameters<
-  typeof TransactionApiControllerService.createTransaction
->[0];
+export type TransactionFormData = Exclude<
+  Parameters<typeof TransactionApiControllerService.createTransaction>[0],
+  undefined
+>;
 
 export const createTransaction = async ({
   dto,

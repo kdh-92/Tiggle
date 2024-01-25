@@ -10,7 +10,10 @@ export const TextButtonStyle = styled.button<{ $color: Color }>`
   ${({ theme }) => expandTypography(theme.typography.body.medium.bold)}
 
   ${({ $color, theme }) => {
-    const [, key, index] = /([a-zA-Z]+)(\d+)/.exec($color);
+    const regex = /([a-zA-Z]+)(\d+)/.exec($color);
+    if (!regex) return;
+    const [, key, index] = regex;
+
     if (key === "black") {
       return css`
         color: ${theme.color[key].value};
@@ -35,8 +38,8 @@ export const TextButtonStyle = styled.button<{ $color: Color }>`
         color: ${nIndex === 900
           ? theme.color.black.value
           : nIndex === 50
-          ? theme.color[key][100].value
-          : theme.color[key][nIndex + 100].value};
+            ? theme.color[key][100].value
+            : theme.color[key][nIndex + 100].value};
       }
     `;
   }}

@@ -4,7 +4,7 @@ import { CancelablePromise, OpenAPIConfig } from "@/generated";
 import type { ApiRequestOptions } from "@/generated/core/ApiRequestOptions";
 import useCookie from "@/hooks/useCookie";
 
-const getAxiosInstance = () => {
+export const getAxiosInstance = () => {
   const { getCookie } = useCookie();
   const token = getCookie("Authorization");
 

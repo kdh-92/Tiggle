@@ -12,7 +12,7 @@ export default function MyTransactionCell({
 }: TransactionRespDto) {
   return (
     <MyTransactionCellStyle className={cn(type, id)}>
-      <TypeTag className="tag" txType={type} size={"md"} />
+      <TypeTag className="tag" txType={type!} size={"md"} />
       <div className={cn("amount", type)}>
         <span className="amount-unit">₩ {amount}</span>
       </div>

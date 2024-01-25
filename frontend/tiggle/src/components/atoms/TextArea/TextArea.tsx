@@ -6,7 +6,7 @@ import cn from "classnames";
 import { TextAreaStyle } from "@/components/atoms/TextArea/TextAreaStyle";
 import { isDesktop } from "@/styles/util/screen";
 
-interface TextAreaProps extends AntTextAreaProps {
+interface TextAreaProps extends Omit<AntTextAreaProps, "variant" | "color"> {
   variant?: "default" | "compact";
   color?: "light" | "toned";
 }
@@ -28,7 +28,7 @@ const TextArea = forwardRef<HTMLInputElement, TextAreaProps>(
         className={cn(className, variant, color)}
         size={desktop ? "large" : "middle"}
         rows={3}
-        count={variant !== "compact" && { show: true, max: 300 }}
+        count={variant !== "compact" ? { show: true, max: 300 } : undefined}
         {...props}
       />
     );

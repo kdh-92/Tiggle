@@ -1,13 +1,15 @@
 import { forwardRef } from "react";
 import { ChevronDown } from "react-feather";
 
-import { Select as AntSelect, SelectProps as AntSelectProps } from "antd";
+import { Select as AntSelect } from "antd";
 
 import { MultiSelectStyle } from "@/components/atoms/MultiSelect/MultiSelectStyle";
 import { isDesktop } from "@/styles/util/screen";
 
+type AntSelectProps = Parameters<typeof AntSelect>[0];
+type SelectRef = AntSelectProps["ref"];
+
 interface MultiSelectProps extends AntSelectProps {}
-type SelectRef = Parameters<typeof AntSelect>[0]["ref"];
 
 const MultiSelect = forwardRef(
   ({ ...props }: MultiSelectProps, ref: SelectRef) => {

@@ -1,6 +1,6 @@
 import { useCallback } from "react";
 
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 
 import { Loading } from "@/components/atoms";
 import { CategoryApiControllerService } from "@/generated";
@@ -11,14 +11,16 @@ import { Tx } from "@/types";
 import withAuth, { AuthProps } from "@/utils/withAuth";
 
 import SettingForm from "./SettingForm/SettingForm";
-import { useCategoryQueryByTx } from "./query";
 import { MypageDetailPageStyle } from "../MyProfilePage/MyDetailPageCommonStyle";
 
 interface IncomeCategorySettingPageProps extends AuthProps {}
 
 const IncomeCategorySettingPage = ({}: IncomeCategorySettingPageProps) => {
   const messageApi = useMessage();
-  const { data: categoriesData, isLoading } = useCategoryQueryByTx(Tx.INCOME);
+  const { data: categoriesData, isLoading } = useQuery({
+    queryKey: categoryKeys.list({ type: Tx.INCOME }),
+    queryFn: async () => CategoryApiControllerService.getCategory1(Tx.INCOME),
+  });
   const { mutate: createMutate } = useMutation(async (name: string) =>
     CategoryApiControllerService.createCategory({ name }),
   );
@@ -30,7 +32,7 @@ const IncomeCategorySettingPage = ({}: IncomeCategorySettingPageProps) => {
     ) => {
       createMutate(value, {
         onSuccess: ({ id, name }) => {
-          callback?.({ id, name });
+          callback?.({ id: id!, name: name! });
           queryClient.invalidateQueries({
             queryKey: categoryKeys.list({ type: Tx.INCOME }),
           });
@@ -51,7 +53,7 @@ const IncomeCategorySettingPage = ({}: IncomeCategorySettingPageProps) => {
       callback?: (data: { id: number; name: string }) => void,
     ) => {
       // TODO: API 연결
-      callback({ id: sid, name: newValue });
+      callback?.({ id: sid, name: newValue });
       console.log(`INCOME CATEGORY PAGE - update api called`, sid, newValue);
       messageApi.open({ type: "success", content: "카테고리 수정 성공" });
     },
@@ -61,7 +63,7 @@ const IncomeCategorySettingPage = ({}: IncomeCategorySettingPageProps) => {
   const remove = useCallback(
     (sid: number, callback?: (data: { id: number; name: string }) => void) => {
       // TODO: API 연결
-      callback({ id: sid, name: "temp" });
+      callback?.({ id: sid, name: "temp" });
       console.log(`INCOME CATEGORY PAGE - delete api called`, sid);
       messageApi.open({ type: "success", content: "카테고리 삭제 성공" });
     },
@@ -75,7 +77,10 @@ const IncomeCategorySettingPage = ({}: IncomeCategorySettingPageProps) => {
       {isLoading && <Loading />}
       {!isLoading && categoriesData && (
         <SettingForm
-          data={categoriesData.map(({ id, name }) => ({ sid: id, name }))}
+          data={categoriesData.map(({ id, name }) => ({
+            sid: id!,
+            name: name!,
+          }))}
           requests={{ create, update, remove }}
         />
       )}
