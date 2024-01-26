@@ -7,7 +7,9 @@
 # ALTER TABLE reactions DROP FOREIGN KEY reactions_ibfk_1;
 # ALTER TABLE reactions DROP FOREIGN KEY reactions_ibfk_2;
 # ALTER TABLE reactions DROP FOREIGN KEY reactions_ibfk_3;
-
+# ALTER TABLE notifications DROP FOREIGN KEY notifications_ibfk_1;
+# ALTER TABLE notifications DROP FOREIGN KEY notifications_ibfk_2;
+#
 # DROP TABLE if exists comments;
 # DROP TABLE if exists grades;
 # DROP TABLE if exists members;
@@ -17,6 +19,7 @@
 # DROP TABLE if exists assets;
 # DROP TABLE if exists categories;
 # DROP TABLE if exists tx_tags;
+# DROP TABLE if exists notifications;
 
 CREATE TABLE `comments`
 (
