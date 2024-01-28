@@ -3,7 +3,8 @@ package com.side.tiggle.domain.comment.dto.resp;
 import com.side.tiggle.domain.comment.service.CommentService;
 import com.side.tiggle.domain.comment.dto.CommentDto;
 import com.side.tiggle.domain.comment.model.Comment;
-import com.side.tiggle.domain.member.dto.MemberDto;
+import com.side.tiggle.domain.member.dto.controller.MemberResponseDto;
+import com.side.tiggle.domain.member.dto.service.MemberDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -22,15 +23,15 @@ public class CommentRespDto extends CommentDto {
     Long id;
     LocalDateTime createdAt;
     int childCount = 0;
-    MemberDto sender; // 작성자 정보
-    MemberDto receiver; // 수신자 정보
+    MemberResponseDto sender; // 작성자 정보
+    MemberResponseDto receiver; // 수신자 정보
 
     public static CommentRespDto fromEntity(Comment comment) {
         CommentRespDto dto = new CommentRespDto();
         dto.setContent(comment.getContent());
         dto.setParentId(comment.getParentId());
-        dto.setSender(MemberDto.fromEntity(comment.getSender()));
-        dto.setReceiver(MemberDto.fromEntity(comment.getReceiver()));
+        dto.setSender(MemberDto.fromEntityToMemberResponseDto(comment.getSender()));
+        dto.setReceiver(MemberDto.fromEntityToMemberResponseDto(comment.getReceiver()));
         dto.setTxId(comment.getTx().getId());
         dto.setId(comment.getId());
         dto.setCreatedAt(comment.getCreatedAt());

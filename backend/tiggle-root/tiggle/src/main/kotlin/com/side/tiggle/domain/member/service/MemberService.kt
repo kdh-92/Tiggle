@@ -28,18 +28,15 @@ class MemberService(
         return MemberDto.fromEntityToMemberResponseDto(memberRepository.save(member))
     }
 
-    fun getMember(memberId: Long): MemberResponseDto {
-        return MemberDto.fromEntityToMemberResponseDto(
-            memberRepository.findById(memberId).orElseThrow{ NotFoundException() }
-        )
+    fun getMember(memberId: Long): Member {
+        return memberRepository.findById(memberId).orElseThrow{ NotFoundException() }
     }
 
-    fun getAllMember(): List<MemberResponseDto> {
+    fun getAllMember(): List<Member> {
         return memberRepository.findAll()
-            .map { MemberDto.fromEntityToMemberResponseDto(it) }
     }
 
-    fun updateMember(memberId: Long, memberDto: MemberDto, file: MultipartFile?): MemberResponseDto {
+    fun updateMember(memberId: Long, memberDto: MemberDto, file: MultipartFile?): Member {
         val member: Member = memberRepository.findById(memberId)
             .orElseThrow { NotFoundException() }
         if (file != null && !file.isEmpty) {
@@ -49,7 +46,7 @@ class MemberService(
         member.nickname = memberDto.nickname
         member.birth = memberDto.birth
 
-        return MemberDto.fromEntityToMemberResponseDto(memberRepository.save(member))
+        return memberRepository.save(member)
     }
 
     fun uploadProfile(memberId: Long, file: MultipartFile): String {

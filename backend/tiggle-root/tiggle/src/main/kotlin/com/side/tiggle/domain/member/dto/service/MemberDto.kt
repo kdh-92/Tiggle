@@ -9,9 +9,10 @@ data class MemberDto(
     val email: String,
     val profileUrl: String?,
     val nickname: String,
-    val birth: LocalDate
+    val birth: LocalDate?
 ) {
     companion object {
+        @JvmStatic
         fun fromEntityToMemberResponseDto(member: Member): MemberResponseDto {
             return MemberResponseDto(member.id, member.email, member.profileUrl, member.nickname, member.birth)
         }

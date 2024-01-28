@@ -2,6 +2,7 @@ package com.side.tiggle.domain.member.api
 
 import com.side.tiggle.domain.member.dto.controller.MemberRequestDto
 import com.side.tiggle.domain.member.dto.controller.MemberResponseDto
+import com.side.tiggle.domain.member.dto.service.MemberDto
 import com.side.tiggle.domain.member.service.MemberService
 import com.side.tiggle.global.common.constants.HttpHeaders
 import io.swagger.v3.oas.annotations.Operation
@@ -34,7 +35,7 @@ class MemberApiController(
         @PathVariable("id") memberId: Long
     ): ResponseEntity<MemberResponseDto> {
         return ResponseEntity(
-            memberService.getMember(memberId),
+            MemberDto.fromEntityToMemberResponseDto(memberService.getMember(memberId)),
             HttpStatus.OK
         )
     }
@@ -43,7 +44,8 @@ class MemberApiController(
     @GetMapping("/all")
     fun getAllMember(): ResponseEntity<List<MemberResponseDto>> {
         return ResponseEntity(
-            memberService.getAllMember(),
+            memberService.getAllMember()
+                .map { MemberDto.fromEntityToMemberResponseDto(it) },
             HttpStatus.OK
         )
     }
@@ -56,7 +58,7 @@ class MemberApiController(
         @RequestHeader(name = HttpHeaders.MEMBER_ID) memberId: Long
     ): ResponseEntity<MemberResponseDto> {
         return ResponseEntity(
-            memberService.getMember(memberId),
+            MemberDto.fromEntityToMemberResponseDto(memberService.getMember(memberId)),
             HttpStatus.OK
         )
     }
@@ -70,7 +72,7 @@ class MemberApiController(
         @RequestPart("multipartFile") file: MultipartFile?
     ): ResponseEntity<MemberResponseDto> {
         return ResponseEntity(
-            memberService.updateMember(memberId, MemberRequestDto.fromMemberRequestDtoToMemberDto(memberRequestDto), file),
+            MemberDto.fromEntityToMemberResponseDto(memberService.updateMember(memberId, MemberRequestDto.fromMemberRequestDtoToMemberDto(memberRequestDto), file)),
             HttpStatus.OK
         )
     }

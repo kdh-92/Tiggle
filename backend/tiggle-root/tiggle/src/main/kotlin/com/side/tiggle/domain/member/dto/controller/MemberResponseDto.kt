@@ -7,6 +7,6 @@ data class MemberResponseDto(
     val email: String,
     val profileUrl: String?,
     val nickname: String,
-    val birth: LocalDate
+    val birth: LocalDate?
 ) {
 }
