@@ -15,43 +15,43 @@ services:
       - "--collation-server=utf8mb4_unicode_ci"
     networks:
       - springboot-mysql-net
-  application:
-    build:
-      context: ./backend/tiggle-root
-      dockerfile: Dockerfile.tiggle
-    restart: always
-    ports:
-      - "8080:8080"
-    depends_on:
-      - database
-    container_name: tiggle_app
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://database:3306/tiggle?useSSL=false&allowPublicKeyRetrieval=true
-      SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: tiggle1234
-      OAUTH2_GOOGLE_CLIENT_ID: 11539140822-9afg5kme24glol1f3rfdc4ohoumtsnvp.apps.googleusercontent.com
-      OAUTH2_GOOGLE_CLIENT_SECRET: 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
-      OAUTH2_KAKAO_CLIENT_ID: 741efbf5275436c671ed90d7c30cb57f
-      OAUTH2_KAKAO_CLIENT_SECRET: wHgvgC45Mn4jXGqLwb7OvpUL86w1fPpC
-      OAUTH2_NAVER_CLIENT_ID: bIMfzZ1Ct5UpwVgF4tep
-      OAUTH2_NAVER_CLIENT_SECRET: ISy4u_NWcP
-    networks:
-      - springboot-mysql-net
-  notification:
-    build:
-      context: ./backend/tiggle-root
-      dockerfile: Dockerfile.noti
-    restart: always
-    ports:
-      - "8082:8082"
-    container_name: tiggle_noti
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://database:3306/tiggle?useSSL=false&allowPublicKeyRetrieval=true
-      SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: tiggle1234
-      KAFKA_URL: kafka:29092
-    networks:
-      - springboot-mysql-net
+#  application:
+#    build:
+#      context: ./backend/tiggle-root
+#      dockerfile: Dockerfile.tiggle
+#    restart: always
+#    ports:
+#      - "8080:8080"
+#    depends_on:
+#      - database
+#    container_name: tiggle_app
+#    environment:
+#      SPRING_DATASOURCE_URL: jdbc:mysql://database:3306/tiggle?useSSL=false&allowPublicKeyRetrieval=true
+#      SPRING_DATASOURCE_USERNAME: root
+#      SPRING_DATASOURCE_PASSWORD: tiggle1234
+#      OAUTH2_GOOGLE_CLIENT_ID: 11539140822-9afg5kme24glol1f3rfdc4ohoumtsnvp.apps.googleusercontent.com
+#      OAUTH2_GOOGLE_CLIENT_SECRET: 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
+#      OAUTH2_KAKAO_CLIENT_ID: 741efbf5275436c671ed90d7c30cb57f
+#      OAUTH2_KAKAO_CLIENT_SECRET: wHgvgC45Mn4jXGqLwb7OvpUL86w1fPpC
+#      OAUTH2_NAVER_CLIENT_ID: bIMfzZ1Ct5UpwVgF4tep
+#      OAUTH2_NAVER_CLIENT_SECRET: ISy4u_NWcP
+#    networks:
+#      - springboot-mysql-net
+#  notification:
+#    build:
+#      context: ./backend/tiggle-root
+#      dockerfile: Dockerfile.noti
+#    restart: always
+#    ports:
+#      - "8082:8082"
+#    container_name: tiggle_noti
+#    environment:
+#      SPRING_DATASOURCE_URL: jdbc:mysql://database:3306/tiggle?useSSL=false&allowPublicKeyRetrieval=true
+#      SPRING_DATASOURCE_USERNAME: root
+#      SPRING_DATASOURCE_PASSWORD: tiggle1234
+#      KAFKA_URL: kafka:29092
+#    networks:
+#      - springboot-mysql-net
 networks:
   springboot-mysql-net:
     driver: bridge

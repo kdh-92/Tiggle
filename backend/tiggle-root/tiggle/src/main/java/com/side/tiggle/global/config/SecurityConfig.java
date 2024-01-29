@@ -2,7 +2,7 @@ package com.side.tiggle.global.config;
 
 import com.side.tiggle.global.auth.JwtTokenProvider;
 import com.side.tiggle.global.auth.OAuth2SuccessHandler;
-import global.filter.JwtRequestFilter;
+import com.side.tiggle.global.filter.JwtRequestFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

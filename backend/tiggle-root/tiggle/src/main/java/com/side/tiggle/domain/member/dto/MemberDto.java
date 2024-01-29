@@ -9,7 +9,7 @@ import java.time.LocalDate;
 @Getter
 @Setter
 public class MemberDto {
-    long id;
+    public long id;
     String email;
     String profileUrl;
     String nickname;
