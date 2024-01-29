@@ -81,6 +81,7 @@ public class TransactionService {
             String uploadedFilePath = uploadFileToFolder(file);
             savePath = Paths.get(uploadedFilePath);
             dto.setImageUrl(uploadedFilePath);
+
             Member member = memberService.getMember(dto.getMemberId());
             Asset asset = assetService.getAsset(dto.getAssetId());
             Category category = categoryService.getCategory(dto.getCategoryId());

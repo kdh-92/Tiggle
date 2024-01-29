@@ -53,8 +53,9 @@ public class MemberApiController {
             @Parameter(hidden = true)
             @RequestHeader(name = HttpHeaders.MEMBER_ID) Long memberId,
             @RequestPart MemberDto memberDto,
-            @RequestPart("multipartFile")MultipartFile file
+            @RequestPart(value = "multipartFile", required = false)MultipartFile file
             ) throws IOException {
+        memberDto.setId(memberId);
         return new ResponseEntity<>(memberService.updateMember(memberId, memberDto, file), HttpStatus.OK);
     }
 }

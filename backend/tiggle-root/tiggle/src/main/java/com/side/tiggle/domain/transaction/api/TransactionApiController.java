@@ -10,6 +10,7 @@ import com.side.tiggle.domain.transaction.dto.TransactionDto;
 import com.side.tiggle.domain.transaction.dto.resp.TransactionRespDto;
 import com.side.tiggle.domain.transaction.dto.resp.TransactionUpdateRespDto;
 import com.side.tiggle.domain.transaction.model.Transaction;
+import com.side.tiggle.domain.transaction.model.TransactionType;
 import com.side.tiggle.domain.transaction.service.TransactionService;
 import com.side.tiggle.global.common.constants.HttpHeaders;
 import io.swagger.v3.oas.annotations.Operation;
@@ -26,6 +27,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotBlank;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -41,11 +44,15 @@ public class TransactionApiController {
     private final String DEFAULT_PAGE_SIZE = "5";
 
     // TODO: Request Header 방식으로 변경한다
+    @Operation(description = "tx 생성", security = @SecurityRequirement(name = "bearer-key"))
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<TransactionRespDto> createTransaction(
+            @Parameter(hidden = true)
+            @RequestHeader(name = HttpHeaders.MEMBER_ID) long memberId,
             @RequestPart TransactionDto dto,
-            @RequestPart("multipartFile") MultipartFile file
+            @RequestPart(value = "multipartFile", required = false) MultipartFile file
     ) throws IOException {
+        dto.setMemberId(memberId);
         Transaction tx = transactionService.createTransaction(dto, file);
         Transaction parentTx = (tx.getParentId() != null) ? transactionService.getTransaction(tx.getParentId()) : null;
 
@@ -113,11 +120,38 @@ public class TransactionApiController {
     public ResponseEntity<Page<TransactionRespDto>> getMemberCountOffsetTransaction(
             @Parameter(name = "memberId", description = "유저 id") @NotBlank @RequestParam Long memberId,
             @Parameter(name = "index", description = "tx 페이지 번호") @NotBlank @RequestParam(defaultValue = DEFAULT_INDEX) int index,
-            @Parameter(name = "pageSize", description = "페이지 내부 tx 개수") @RequestParam(defaultValue = DEFAULT_PAGE_SIZE) int pageSize
+            @Parameter(name = "pageSize", description = "페이지 내부 tx 개수") @RequestParam(defaultValue = DEFAULT_PAGE_SIZE) int pageSize,
+            // 이하 필터링 항목
+            @Parameter(description = "(필터링) 트랜잭션 일자 기준 시작")
+            @RequestParam(required = false) LocalDate start,
+            @Parameter(description = "(필터링) 트랜잭션 일자 기준 끝")
+            @RequestParam(required = false) LocalDate end,
+            @Parameter(description = "(필터링) 트랜잭션 타입")
+            @RequestParam(required = false) TransactionType type,
+            @Parameter(description = "(필터링) 카테고리 종류 (복수)")
+            @RequestParam(required = false) List<Long> category,
+            @Parameter(description = "(필터링) 자산 종류 (복수)")
+            @RequestParam(required = false) List<Long> asset,
+            @Parameter(description = "(필터링) 태그 이름 (복수)")
+            @RequestParam(required = false) List<String> tagNames
     ) {
         Page<Transaction> txPage = transactionService.getMemberCountOffsetTransaction(memberId, pageSize, index);
         List<TransactionRespDto> dtoList = txPage.getContent()
                 .stream()
+                .filter( tx -> {
+                    // TODO : 필터링을 repository 레벨에서 수행한다?
+                        boolean startCheck = start == null || start.isBefore(tx.getDate());
+                        boolean endCheck = end == null || end.isAfter(tx.getDate());
+                        boolean typeCheck = type == null || type == tx.getType();
+                        boolean categoryCheck = category == null || category.isEmpty() || category.contains(tx.getCategory().getId());
+                        boolean assetCheck = asset == null || asset.isEmpty() || asset.contains(tx.getAsset().getId());
+
+                        List<String> currentTags = Arrays.stream(tx.getTagNames().split(",")).collect(Collectors.toList());
+                        boolean tagNamesCheck = tagNames == null || tagNames.isEmpty() || currentTags.stream().anyMatch(tagNames::contains);
+
+                        return startCheck && endCheck && typeCheck && categoryCheck && assetCheck && tagNamesCheck;
+                    }
+                )
                 .map(tx -> {
                     long txId = tx.getId();
                     int txUpCount = reactionService.getReactionCount(txId, ReactionType.DOWN);

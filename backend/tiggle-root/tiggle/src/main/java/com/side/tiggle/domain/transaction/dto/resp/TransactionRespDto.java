@@ -112,6 +112,7 @@ public class TransactionRespDto extends TransactionDto {
                 .txDownCount(txDownCount)
                 .txCommentCount(txCommentCount)
                 .createdAt(tx.getCreatedAt())
+                .txTagNames(tx.getTagNames())
                 .build();
     }
 

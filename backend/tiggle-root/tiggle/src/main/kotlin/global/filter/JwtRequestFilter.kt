@@ -68,7 +68,7 @@ class JwtRequestFilter(
             headerMap[name] = value
         }
 
-        override fun getHeader(name: String): String {
+        override fun getHeader(name: String): String? {
             var headerValue = super.getHeader(name)
             if (headerMap.containsKey(name)) {
                 headerValue = headerMap[name]!!
