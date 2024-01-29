@@ -10,13 +10,11 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 public class AssetDto {
 
-    private Long id;
     private String name;
     private boolean defaults;
 
     public static AssetDto fromEntity(Asset asset) {
         return AssetDto.builder()
-                .id(asset.getId())
                 .name(asset.getName())
                 .defaults(asset.isDefaults())
                 .build();

@@ -6,29 +6,33 @@ import {
   useLoaderData,
 } from "react-router-dom";
 
-import { QueryClient, useMutation } from "@tanstack/react-query";
+import { QueryClient, useMutation, useQuery } from "@tanstack/react-query";
 import dayjs from "dayjs";
 
+import { TransactionApiControllerService } from "@/generated";
+import useMessage from "@/hooks/useMessage";
 import CreateForm, {
   FormInputs,
 } from "@/pages/CreatePage/CreateForm/CreateForm";
 import { CreatePageStyle } from "@/pages/CreatePage/CreatePageStyle";
-import { useMessage } from "@/templates/GeneralTemplate";
+import { transactionKeys } from "@/query/queryKeys";
 import { TxType } from "@/types";
 import { convertTxTypeToWord } from "@/utils/txType";
 import withAuth, { AuthProps } from "@/utils/withAuth";
 
 import TransactionPreviewCell from "./TransactionPreviewCell/TransactionPreviewCell";
-import { transactionQuery, useTransactionQuery } from "./query";
 import { createTransaction, TransactionFormData } from "./request";
 
-export const loader =
+export const transactionQuery = (id: number) => ({
+  queryKey: transactionKeys.detail(id),
+  queryFn: async () => TransactionApiControllerService.getTransaction(id),
+});
+
+export const createPageLoader =
   (queryClient: QueryClient) =>
   ({ params }: LoaderFunctionArgs) => {
     const parentId = Number(params.id);
-    return isNaN(parentId)
-      ? undefined
-      : queryClient.ensureQueryData(transactionQuery(parentId));
+    return queryClient.ensureQueryData(transactionQuery(parentId));
   };
 
 interface CreatePageProps extends AuthProps {
@@ -37,14 +41,15 @@ interface CreatePageProps extends AuthProps {
 
 const CreatePage = ({ type }: CreatePageProps) => {
   const navigate = useNavigate();
-  const { messageApi } = useMessage();
+  const messageApi = useMessage();
   const parentId = Number(useParams().id);
 
   const initialData = useLoaderData() as Awaited<
-    ReturnType<ReturnType<typeof loader>>
+    ReturnType<ReturnType<typeof createPageLoader>>
   >;
 
-  const { data: parentTxData } = useTransactionQuery(parentId, {
+  const { data: parentTxData } = useQuery({
+    ...transactionQuery(parentId),
     initialData,
     enabled: type === "REFUND",
   });
@@ -61,7 +66,7 @@ const CreatePage = ({ type }: CreatePageProps) => {
         date: dayjs(date).toISOString(),
         ...rest,
       },
-      multipartFile: imageUrl.item(0),
+      multipartFile: imageUrl.item(0)!,
     };
 
     mutate(formData, {

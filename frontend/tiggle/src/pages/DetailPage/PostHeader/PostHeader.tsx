@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import cn from "classnames";
 import dayjs from "dayjs";
 
-import { Menu, MenuItem } from "@/components/atoms/Menu/Menu";
+import { Menu, MenuItem } from "@/components/atoms";
 import TypeTag from "@/components/atoms/TypeTag/TypeTag";
 import { MemberDto, TransactionRespDto } from "@/generated";
 import {

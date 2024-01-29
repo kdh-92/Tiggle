@@ -17,10 +17,10 @@ const TransactionPreviewCell = ({
 }: TransactionPreviewCellProps) => {
   return (
     <TransactionPreviewCellStyle>
-      <p className="cell-label">원본 {convertTxTypeToWord(type)}</p>
+      <p className="cell-label">원본 {convertTxTypeToWord(type!)}</p>
       <div className="cell-container">
         <div className="cell-contents-wrapper">
-          <TypeTag txType={type} size={"md"} />
+          <TypeTag txType={type!} size={"md"} />
           <p className={cn("amount", type)}>₩ {amount}</p>
         </div>
         <div className="cell-contents-wrapper">

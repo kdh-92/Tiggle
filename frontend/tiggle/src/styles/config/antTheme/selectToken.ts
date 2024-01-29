@@ -1,4 +1,4 @@
-import { SelectToken } from "antd/lib/select/style";
+import { SelectToken } from "antd/lib/select/style/token";
 
 import { theme } from "../theme";
 

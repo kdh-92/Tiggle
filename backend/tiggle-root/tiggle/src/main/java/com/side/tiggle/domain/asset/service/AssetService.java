@@ -1,10 +1,12 @@
 package com.side.tiggle.domain.asset.service;
 
 import com.side.tiggle.domain.asset.dto.AssetDto;
+import com.side.tiggle.domain.asset.dto.controller.AssetUpdateReqDto;
 import com.side.tiggle.domain.asset.repository.AssetRepository;
 import com.side.tiggle.domain.asset.model.Asset;
 import com.side.tiggle.global.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.Nullable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -31,5 +33,20 @@ public class AssetService {
 
     public List<Asset> getAllAsset() {
         return assetRepository.findAll();
+    }
+
+    public Asset updateAsset(Long assetId, AssetUpdateReqDto dto) {
+        Asset asset = assetRepository.findById(assetId)
+                .orElseThrow(NotFoundException::new);
+
+        asset.setName(dto.getName());
+        asset.setDefaults(dto.getDefaults());
+
+        return assetRepository.save(asset);
+    }
+
+    public void deleteAsset(long memberId, long assetId) {
+        assetRepository.findById(assetId)
+                .orElseThrow(NotFoundException::new);
     }
 }

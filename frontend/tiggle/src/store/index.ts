@@ -12,7 +12,7 @@ import {
 import storage from "redux-persist/lib/storage"; // defaults to localStorage for web
 
 import continueUrl from "@/store/continueUrl";
-import detailPageStore from "@/store/detailPage";
+import detailPage from "@/store/detailPage";
 
 const persistConfig = {
   key: "root",
@@ -22,10 +22,11 @@ const persistConfig = {
 };
 
 const reducers = combineReducers({
-  detailPage: detailPageStore.reducer,
+  detailPage: detailPage.reducer,
   continueUrl: continueUrl.reducer,
 });
-const persistedReducer = persistReducer(persistConfig, reducers);
+type Reducers = ReturnType<typeof reducers>;
+const persistedReducer = persistReducer<Reducers>(persistConfig, reducers);
 
 export const store = configureStore({
   reducer: persistedReducer,

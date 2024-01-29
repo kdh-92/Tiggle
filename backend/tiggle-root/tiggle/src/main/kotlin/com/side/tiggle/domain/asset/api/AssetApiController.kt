@@ -1,8 +1,10 @@
 package com.side.tiggle.domain.asset.api
 
 import com.side.tiggle.domain.asset.dto.AssetDto
+import com.side.tiggle.domain.asset.dto.controller.AssetUpdateReqDto
 import com.side.tiggle.domain.asset.dto.resp.AssetRespDto
 import com.side.tiggle.domain.asset.service.AssetService
+import com.side.tiggle.global.common.constants.HttpHeaders
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
@@ -14,11 +16,10 @@ class AssetApiController(
 
     @PostMapping
     fun createAsset(@RequestBody assetDto: AssetDto): ResponseEntity<AssetRespDto> {
-        print("kotlin asset post api test")
         return ResponseEntity.ok(AssetRespDto.fromEntity(assetService.createAsset(assetDto)))
     }
 
-    @GetMapping
+    @GetMapping("/{id}")
     fun getAsset(@PathVariable("id") assetId: Long): ResponseEntity<AssetRespDto> {
         return ResponseEntity.ok(AssetRespDto.fromEntity(assetService.getAsset(assetId)))
     }
@@ -28,5 +29,21 @@ class AssetApiController(
         val allAssets = assetService.getAllAsset()
         val assetRespDtos = allAssets.map { AssetRespDto.fromEntity(it) }
         return ResponseEntity.ok(assetRespDtos)
+    }
+
+    @PutMapping("/{id}")
+    fun updateAsset(
+        @PathVariable("id") assetId: Long,
+        @RequestBody dto: AssetUpdateReqDto
+    ): ResponseEntity<AssetRespDto> {
+        return ResponseEntity.ok(AssetRespDto.fromEntity(assetService.updateAsset(assetId, dto)));
+    }
+
+    @DeleteMapping("/{id}")
+    fun deleteAsset(
+        @RequestHeader(name = HttpHeaders.MEMBER_ID) memberId: Long,
+        @PathVariable("id") assetId: Long
+    ): ResponseEntity<Unit> {
+        return ResponseEntity.ok(assetService.deleteAsset(memberId, assetId))
     }
 }

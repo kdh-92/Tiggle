@@ -1,6 +1,7 @@
 package com.side.tiggle.domain.category.dto;
 
 import com.side.tiggle.domain.category.model.Category;
+import com.side.tiggle.domain.category.model.CategoryType;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
@@ -10,14 +11,14 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 public class CategoryDto {
 
-    private Long id;
     private String name;
+    private CategoryType type;
     private Boolean defaults;
 
     public static CategoryDto fromEntity(Category category) {
         return CategoryDto.builder()
-                .id(category.getId())
                 .name(category.getName())
+                .type(category.getType())
                 .defaults(category.isDefaults())
                 .build();
     }

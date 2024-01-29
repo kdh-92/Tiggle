@@ -1,13 +1,13 @@
-import axios from "axios";
-
 import {
   TransactionApiControllerService,
   TransactionRespDto,
 } from "@/generated";
+import { getAxiosInstance } from "@/query/openapi-request";
 
-export type TransactionFormData = Parameters<
-  typeof TransactionApiControllerService.createTransaction
->[0];
+export type TransactionFormData = Exclude<
+  Parameters<typeof TransactionApiControllerService.createTransaction>[0],
+  undefined
+>;
 
 export const createTransaction = async ({
   dto,
@@ -17,7 +17,7 @@ export const createTransaction = async ({
   formData.append("dto", JSON.stringify(dto));
   formData.append("multipartFile", multipartFile);
 
-  return axios
+  return getAxiosInstance()
     .post<TransactionRespDto>("/api/v1/transaction", formData, {
       baseURL: process.env.REACT_APP_API_URL,
       headers: {

@@ -22,8 +22,9 @@ export default function ReactionSection({
   className,
 }: ReactionSectionProps) {
   const { checkIsLogin } = useAuth();
-  const [selectedReaction, setSelectedReaction] =
-    useState<ReactionType>(undefined);
+  const [selectedReaction, setSelectedReaction] = useState<
+    ReactionType | undefined
+  >(undefined);
 
   const { mutate: upsertReaction } = useMutation(
     async (type: ReactionType) =>
@@ -62,7 +63,7 @@ export default function ReactionSection({
       <div className="button-wrapper">
         <ReactionButton
           reaction={Reaction.Up}
-          number={upCount}
+          number={upCount!}
           onClick={() =>
             checkIsLogin(() => handleReactionButtonClick(Reaction.Up))
           }
@@ -70,7 +71,7 @@ export default function ReactionSection({
         />
         <ReactionButton
           reaction={Reaction.Down}
-          number={downCount}
+          number={downCount!}
           onClick={() =>
             checkIsLogin(() => handleReactionButtonClick(Reaction.Down))
           }

@@ -1,11 +1,14 @@
 import Masonry from "react-masonry-css";
 
+import { useQuery } from "@tanstack/react-query";
+
+import { TransactionApiControllerService } from "@/generated";
 import { TransactionRespDto } from "@/generated/models/TransactionRespDto";
 import { TransactionCellsStyle } from "@/pages/MainPage/TransactionCell/TransactionCellsStyle";
+import { transactionKeys } from "@/query/queryKeys";
 
 import TransactionCell from "./TransactionCell";
 import TransactionCellSkeleton from "./TransactionCellSkeleton";
-import { useAllTransactionsQuery } from "../query";
 
 interface TransactionCellsProps {
   data: TransactionRespDto[];
@@ -17,7 +20,10 @@ export default function TransactionCells({ data }: TransactionCellsProps) {
     767: 1,
   };
 
-  const { isError, isLoading } = useAllTransactionsQuery();
+  const { isError, isLoading } = useQuery({
+    queryKey: transactionKeys.lists(),
+    queryFn: () => TransactionApiControllerService.getAllTransaction(),
+  });
 
   return (
     <>

@@ -1,10 +1,12 @@
-import { ChangeEvent, forwardRef, useMemo, useState } from "react";
+import { forwardRef, useMemo } from "react";
 import { Plus, Trash2, Upload as UploadIcon } from "react-feather";
 
 import cn from "classnames";
 
 import { UploadStyle } from "@/components/atoms/Upload/UploadStyle";
 import { isDesktop } from "@/styles/util/screen";
+
+import useUpload from "./useUpload";
 
 interface UploadProps extends React.InputHTMLAttributes<HTMLInputElement> {
   onReset: () => void;
@@ -14,38 +16,18 @@ const Upload = forwardRef<HTMLInputElement, UploadProps>(
   ({ name = "upload", onChange, onReset, ...props }, ref) => {
     const desktop = isDesktop();
 
-    const [file, setFile] = useState<File | null>(null);
-    const [imageUrl, setImageUrl] = useState("");
+    const { file, imageUrl, handleUpload, handleReset } = useUpload({
+      onChange,
+      onReset,
+    });
+
     const filled = useMemo(() => file !== null, [file]);
-
-    const encodeFileToImageUrl = (file: File) => {
-      const reader = new FileReader();
-      reader.onload = function () {
-        setImageUrl(reader.result as string);
-      };
-      reader.readAsDataURL(file);
-    };
-
-    const handleUpload = (e: ChangeEvent<HTMLInputElement>) => {
-      onChange(e);
-      const uploadedFile = e.target.files?.[0];
-      if (uploadedFile) {
-        setFile(uploadedFile);
-        encodeFileToImageUrl(uploadedFile);
-      }
-    };
-
-    const handleReset = () => {
-      onReset();
-      setFile(null);
-      setImageUrl("");
-    };
 
     return (
       <UploadStyle className={cn({ filled })}>
         {filled && (
           <div className="view">
-            <img src={imageUrl} alt={`preview of file ${file.name}`} />
+            <img src={imageUrl} alt={`preview of file ${file!.name}`} />
           </div>
         )}
 

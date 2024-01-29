@@ -1,7 +1,7 @@
 import { Meta, StoryObj } from "@storybook/react";
 import styled from "styled-components";
 
-import { Menu, MenuItem } from "@/components/atoms/Menu/Menu";
+import { Menu, MenuItem } from "@/components/atoms";
 
 export default {
   title: "atoms/Menu",
