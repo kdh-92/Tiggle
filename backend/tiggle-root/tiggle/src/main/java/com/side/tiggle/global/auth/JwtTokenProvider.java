@@ -1,7 +1,7 @@
 package com.side.tiggle.global.auth;
 
 
-import com.side.tiggle.domain.member.dto.MemberDto;
+import com.side.tiggle.domain.member.dto.service.MemberDto;
 import com.side.tiggle.domain.member.model.Member;
 import com.side.tiggle.domain.member.repository.MemberRepository;
 import io.jsonwebtoken.Claims;
@@ -75,7 +75,7 @@ public class JwtTokenProvider {
             return null;
         }
         SimpleGrantedAuthority authority = new SimpleGrantedAuthority("ROLE_USER");
-        return new UsernamePasswordAuthenticationToken(MemberDto.fromEntity(member.get()), null, List.of(authority));
+        return new UsernamePasswordAuthenticationToken(MemberDto.fromEntityToMemberResponseDto(member.get()), null, List.of(authority));
     }
 
     public String resolveAccessToken(HttpServletRequest request) {

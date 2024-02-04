@@ -69,7 +69,7 @@ public class CommentService {
 
     public Comment updateComment(Long memberId, Long commentId, String content) {
         Comment comment = commentRepository.findById(commentId).stream()
-                .filter( it -> it.getSender().getId().equals(memberId)).findFirst()
+                .filter( it -> it.getSender().getId() == memberId).findFirst()
                 .orElseThrow(NotFoundException::new);
         comment.setContent(content);
         commentRepository.save(comment);
@@ -78,7 +78,7 @@ public class CommentService {
 
     public void deleteComment(Long memberId, Long commentId) {
         Comment comment = commentRepository.findById(commentId).stream()
-                .filter( it -> it.getSender().getId().equals(memberId)).findFirst()
+                .filter( it -> it.getSender().getId() == memberId).findFirst()
                 .orElseThrow(NotFoundException::new);
         commentRepository.delete(comment);
     }
