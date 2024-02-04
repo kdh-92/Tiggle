@@ -19,15 +19,15 @@ import javax.persistence.MappedSuperclass
 abstract class BaseEntity() {
     @Column(name = "created_at", nullable = false, updatable = false)
     @CreatedDate
-    var createdAt: LocalDateTime? = null
+    open var createdAt: LocalDateTime? = null
 
     @Column(name = "updated_at")
     @LastModifiedDate
-    var updatedAt: LocalDateTime? = null
+    open var updatedAt: LocalDateTime? = null
 
     @Column(name = "deleted_at")
-    var deletedAt: LocalDateTime? = null
+    open var deletedAt: LocalDateTime? = null
 
     @Column(name = "deleted", nullable = false)
-    var deleted: Boolean = false
+    open var deleted: Boolean = false
 }
