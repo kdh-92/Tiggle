@@ -36,7 +36,7 @@ class CommentRespDto(
                 receiver = MemberDto.fromEntity(comment.receiver),
                 txId = comment.tx.id!!,
                 id = comment.id,
-                createdAt = comment.createdAt
+                createdAt = comment.createdAt!!
             )
         }
 

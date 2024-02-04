@@ -27,9 +27,9 @@ public class Member extends BaseEntity {
     public Long id;
 
     @Column(name = "email", nullable = false)
-    private String email;
+    public String email;
     @Column(name = "profile_url")
-    private String profileUrl;
+    public String profileUrl;
 
     @Column(name = "nickname", nullable = false)
     private String nickname;
@@ -38,7 +38,7 @@ public class Member extends BaseEntity {
     private LocalDate birth;
 
     @Column(name = "provider")
-    private String provider;
+    public String provider;
 
     @Column(name = "provider_id")
     private String providerId;

@@ -13,7 +13,7 @@ open class ReactionDto(
     companion object {
         fun fromEntity(reaction: Reaction): ReactionDto {
             return ReactionDto(
-                txId = reaction.tx.id,
+                txId = reaction.tx.id!!,
                 senderId = reaction.sender.id,
                 receiverId = reaction.receiver.id,
                 type = reaction.type
