@@ -3,13 +3,11 @@ package com.side.tiggle.domain.comment.dto.resp
 import com.side.tiggle.domain.comment.dto.CommentDto
 import com.side.tiggle.domain.comment.model.Comment
 import com.side.tiggle.domain.comment.service.CommentService
-import com.side.tiggle.domain.member.dto.MemberDto
-import com.side.tiggle.domain.member.model.Member
+import com.side.tiggle.domain.member.dto.controller.MemberResponseDto
+import com.side.tiggle.domain.member.dto.service.MemberDto
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageImpl
 import java.time.LocalDateTime
-import java.util.function.Consumer
-import java.util.stream.Collectors
 
 class CommentRespDto(
     txId: Long,
@@ -18,8 +16,8 @@ class CommentRespDto(
     val id: Long,
     val createdAt: LocalDateTime,
     var childCount: Int = 0,
-    val sender: MemberDto,
-    val receiver: MemberDto
+    val sender: MemberResponseDto,
+    val receiver: MemberResponseDto
 ): CommentDto(
     txId, parentId, sender.id, receiver.id, content
 ) {
@@ -32,8 +30,8 @@ class CommentRespDto(
             return CommentRespDto(
                 content = comment.content,
                 parentId = comment.parentId,
-                sender = MemberDto.fromEntity(comment.sender),
-                receiver = MemberDto.fromEntity(comment.receiver),
+                sender = MemberDto.fromEntityToMemberResponseDto(comment.sender),
+                receiver = MemberDto.fromEntityToMemberResponseDto(comment.receiver),
                 txId = comment.tx.id!!,
                 id = comment.id,
                 createdAt = comment.createdAt
