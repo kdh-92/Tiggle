@@ -9,6 +9,7 @@ COPY . .
 COPY ./$PROJECT_NAME/src/main/resources/application.yml.example \
     ./$PROJECT_NAME/src/main/resources/application.yml
 
+RUN chmod +x ./gradlew
 RUN ./gradlew clean $PROJECT_NAME:bootJar
 RUN ls ./$PROJECT_NAME/build/libs/
 
