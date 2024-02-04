@@ -51,20 +51,24 @@ class CommentService(
         return commentRepository.findAllByParentId(parentId!!, pageable)
     }
 
-    fun createComment(commentDto: CommentCreateReqDto): Comment {
+    fun createComment(memberId: Long, commentDto: CommentCreateReqDto): Comment {
         // TODO : Service 메소드로 수정한다
         val tx = transactionService.getTransaction(commentDto.txId)
-        val sender: Member = memberRepository.findById(commentDto.senderId).orElseThrow { NotFoundException() }
-        val receiver: Member = memberRepository.findById(commentDto.receiverId).orElseThrow { NotFoundException() }
+        val sender: Member = memberRepository.findById(memberId).orElseThrow { NotFoundException() }
 
-        assertValid(commentDto)
-        val comment: Comment = commentDto.toEntity(tx, sender, receiver)
+        if (commentDto.parentId != null) {
+            commentRepository.findById(commentDto.parentId).orElseThrow { NotFoundException() }
+        }
+
+        val comment: Comment = commentDto.toEntity(tx, sender)
         return commentRepository.save(comment)
     }
 
-    fun updateComment(memberId: Long, commentId: Long, content: String): Comment {
+    fun  updateComment(memberId: Long, commentId: Long, content: String): Comment {
         val comment = commentRepository.findById(commentId)
-            .filter { it.sender.id == memberId }
+            .filter {
+                it.sender.id == memberId
+            }
             .orElseThrow { NotFoundException() }
             .apply {
                 this.content = content
@@ -77,13 +81,5 @@ class CommentService(
             .filter { it.sender.id == memberId }
             .orElseThrow { NotFoundException() }
         commentRepository.delete(comment)
-    }
-
-    private fun assertValid(dto: CommentCreateReqDto) {
-        if (dto.parentId != null) {
-            commentRepository.findById(dto.parentId).orElseThrow { NotFoundException() }
-        }
-        memberRepository.findById(dto.senderId).orElseThrow { NotFoundException() }
-        memberRepository.findById(dto.receiverId).orElseThrow { NotFoundException() }
     }
 }

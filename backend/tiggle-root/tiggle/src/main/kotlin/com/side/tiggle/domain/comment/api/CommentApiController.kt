@@ -38,8 +38,7 @@ class CommentApiController(
     fun createComment(
         @Parameter(hidden = true) @RequestHeader(name = HttpHeaders.MEMBER_ID) memberId: Long,
         @RequestBody commentDto: @Valid CommentCreateReqDto): ResponseEntity<CommentRespDto> {
-        commentDto.senderId = memberId
-        val respDto = CommentRespDto.fromEntity(commentService.createComment(commentDto))
+        val respDto = CommentRespDto.fromEntity(commentService.createComment(memberId, commentDto))
         return ResponseEntity(respDto, HttpStatus.CREATED)
     }
 
