@@ -25,7 +25,7 @@ class MemberApiController(
         @RequestBody memberRequestDto: MemberRequestDto
     ): ResponseEntity<MemberResponseDto> {
         return ResponseEntity(
-            memberService.createMember(MemberRequestDto.fromMemberRequestDtoToMemberDto(memberRequestDto)),
+            MemberDto.fromEntityToMemberResponseDto(memberService.createMember(MemberRequestDto.fromMemberRequestDtoToMemberDto(memberRequestDto))),
             HttpStatus.CREATED
         )
     }

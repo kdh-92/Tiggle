@@ -18,14 +18,14 @@ class MemberService(
 
     private val FOLDER_PATH: String = System.getProperty("user.dir") + "/upload/profile";
 
-    fun createMember(memberDto: MemberDto): MemberResponseDto {
+    fun createMember(memberDto: MemberDto): Member {
         val member = Member(
             memberDto.email,
             memberDto.profileUrl,
             memberDto.nickname,
             memberDto.birth
         )
-        return MemberDto.fromEntityToMemberResponseDto(memberRepository.save(member))
+        return memberRepository.save(member)
     }
 
     fun getMember(memberId: Long): Member {
