@@ -21,7 +21,7 @@ class CommentRespDto(
     val sender: MemberDto,
     val receiver: MemberDto
 ): CommentDto(
-    txId, parentId, sender.id, content
+    txId, parentId, sender.id, receiver.id, content
 ) {
     fun setChildCount(service: CommentService) {
         childCount = service.getChildCount(txId, id)

@@ -9,6 +9,7 @@ open class CommentDto(
     val txId: Long,
     val parentId: Long?,
     var senderId: Long,
+    var receiverId: Long,
     @Size(max = 255)
     val content: String
 ) {
@@ -28,6 +29,7 @@ open class CommentDto(
                 txId = comment.tx.id,
                 parentId = comment.parentId,
                 senderId = comment.sender.id,
+                receiverId = comment.receiver.id,
                 content = comment.content
             )
         }
