@@ -4,6 +4,7 @@ import com.side.tiggle.domain.member.model.Member;
 import com.side.tiggle.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -17,6 +18,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.Optional;
 
@@ -55,27 +57,34 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         log.info("oAuth2User : {}", userPrincipal);
 
         OAuth2Attribute attributes = OAuth2Attribute.of(authenticationToken.getAuthorizedClientRegistrationId(), userPrincipal.getName(), userPrincipal.getAttributes());
-        Optional<Member> member = this.memberRepository.findByEmail(attributes.getEmail());
+        Member member = this.memberRepository.findByEmail(attributes.getEmail());
         attributes.getAttributes().get("id");
+        Member authMember = getMember(authenticationToken, member, attributes);
+        this.memberRepository.save(authMember);
+
+        return authMember;
+    }
+
+    @NotNull
+    private static Member getMember(OAuth2AuthenticationToken authenticationToken, Member member, OAuth2Attribute attributes) {
         Member authMember;
         // 최초 로그인이라면 회원가입 처리를 한다.
-        if (member.isEmpty()) {
+        if (member == null) {
             authMember = new Member(
                     attributes.getEmail(),
                     attributes.getProfileUrl(),
                     attributes.getNickname(),
+                    null,
                     authenticationToken.getAuthorizedClientRegistrationId(),
                     attributes.getProviderId()
             );
         }
         else {
             // 이미 가입 되어있다면 수정한다
-            authMember = member.get();
+            authMember = member;
             authMember.setProfileUrl(attributes.getProfileUrl());
             authMember.setProvider(authenticationToken.getAuthorizedClientRegistrationId());
         }
-        this.memberRepository.save(authMember);
-
         return authMember;
     }
 

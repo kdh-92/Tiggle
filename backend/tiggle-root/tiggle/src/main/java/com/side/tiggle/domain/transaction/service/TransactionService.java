@@ -131,7 +131,7 @@ public class TransactionService {
     @Transactional
     public Transaction updateTransaction(Long memberId, Long transactionId, TransactionUpdateReqDto dto) {
         Transaction transaction = transactionRepository.findById(transactionId)
-                .stream().filter(item -> item.getMember().getId().equals(memberId)).findAny()
+                .stream().filter(item -> item.getMember().getId() == memberId).findAny()
                 .orElseThrow(NotFoundException::new);
 
         transaction.setType(dto.getType());
@@ -149,7 +149,7 @@ public class TransactionService {
     public void deleteTransaction(Long memberId, Long transactionId) {
         transactionRepository.delete(transactionRepository.findById(transactionId)
                 .stream()
-                .filter(item -> item.getMember().getId().equals(memberId))
+                .filter(item -> item.getMember().getId() == memberId)
                 .findAny()
                 .orElseThrow(NotFoundException::new)
         );

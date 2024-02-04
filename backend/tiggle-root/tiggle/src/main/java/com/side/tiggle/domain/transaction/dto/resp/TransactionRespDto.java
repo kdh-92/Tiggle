@@ -2,13 +2,12 @@ package com.side.tiggle.domain.transaction.dto.resp;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.side.tiggle.domain.asset.dto.AssetDto;
-import com.side.tiggle.domain.asset.model.Asset;
 import com.side.tiggle.domain.category.dto.CategoryDto;
-import com.side.tiggle.domain.category.model.Category;
-import com.side.tiggle.domain.member.dto.MemberDto;
-import com.side.tiggle.domain.member.model.Member;
+import com.side.tiggle.domain.member.dto.controller.MemberResponseDto;
 import com.side.tiggle.domain.transaction.model.Transaction;
 import com.side.tiggle.domain.transaction.dto.TransactionDto;
+import com.side.tiggle.domain.member.dto.service.MemberDto;
+import com.side.tiggle.domain.member.dto.controller.MemberResponseDto;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.springframework.data.domain.Page;
@@ -16,7 +15,6 @@ import org.springframework.data.domain.PageImpl;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -24,7 +22,7 @@ import java.util.stream.Collectors;
 public class TransactionRespDto extends TransactionDto {
 
     private Long id;
-    private MemberDto member;
+    private MemberResponseDto member;
     private TransactionDto parentTx;
     private AssetDto asset;
     private CategoryDto category;
@@ -62,7 +60,7 @@ public class TransactionRespDto extends TransactionDto {
         return TransactionRespDto.builder()
                 .id(tx.getId())
                 .parentId(tx.getParentId())
-                .member(MemberDto.fromEntity(tx.getMember()))
+                .member(MemberDto.fromEntityToMemberResponseDto(tx.getMember()))
                 .asset(AssetDto.fromEntity(tx.getAsset()))
                 .category(CategoryDto.fromEntity(tx.getCategory()))
                 .type(tx.getType())
@@ -78,7 +76,7 @@ public class TransactionRespDto extends TransactionDto {
     public static TransactionRespDto fromEntityDetailTx(Transaction tx, Transaction parentTx) {
         TransactionRespDtoBuilder builder = TransactionRespDto.builder()
                 .id(tx.getId())
-                .member(MemberDto.fromEntity(tx.getMember()))
+                .member(MemberDto.fromEntityToMemberResponseDto(tx.getMember()))
                 .asset(AssetDto.fromEntity(tx.getAsset()))
                 .category(CategoryDto.fromEntity(tx.getCategory()))
                 .type(tx.getType())
@@ -99,7 +97,7 @@ public class TransactionRespDto extends TransactionDto {
         return TransactionRespDto.builder()
                 .id(tx.getId())
                 .parentId(tx.getParentId())
-                .member(MemberDto.fromEntity(tx.getMember()))
+                .member(MemberDto.fromEntityToMemberResponseDto(tx.getMember()))
                 .asset(AssetDto.fromEntity(tx.getAsset()))
                 .category(CategoryDto.fromEntity(tx.getCategory()))
                 .type(tx.getType())
