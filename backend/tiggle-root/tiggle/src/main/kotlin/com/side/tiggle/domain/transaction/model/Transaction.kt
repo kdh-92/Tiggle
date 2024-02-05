@@ -46,5 +46,5 @@ class Transaction(
 
     @OneToMany(mappedBy = "tx", fetch = FetchType.LAZY)
     @JsonIgnore
-    var reactionList: List<Reaction> = listOf()
+    var reactionList: MutableList<Reaction> = mutableListOf()
 }

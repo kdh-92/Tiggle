@@ -45,7 +45,7 @@ class TransactionApiController(
     ): ResponseEntity<TransactionRespDto> {
         val tx = transactionService.createTransaction(dto, file)
         val parentTx = if (tx.parentId != null) {
-            transactionService.getTransaction(tx.parentId)
+            transactionService.getTransaction(tx.parentId!!)
         } else {
             null
         }
@@ -63,7 +63,7 @@ class TransactionApiController(
     ): ResponseEntity<TransactionRespDto> {
         val tx = transactionService.getTransaction(transactionId)
         val parentTx = if (tx.parentId != null) {
-            transactionService.getTransaction(tx.parentId)
+            transactionService.getTransaction(tx.parentId!!)
         } else {
             null
         }

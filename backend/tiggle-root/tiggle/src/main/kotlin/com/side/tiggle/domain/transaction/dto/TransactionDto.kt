@@ -46,8 +46,8 @@ data class TransactionDto(
             return TransactionDto(
                 memberId = tx.member.id,
                 parentId = tx.parentId,
-                assetId = tx.asset.id,
-                categoryId = tx.category.id,
+                assetId = tx.asset.id!!,
+                categoryId = tx.category.id!!,
                 type = tx.type,
                 imageUrl = tx.imageUrl,
                 amount = tx.amount,

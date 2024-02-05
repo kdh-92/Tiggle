@@ -1,4 +1,4 @@
-package com.side.tiggle.domain.asset.dto.controller
+package com.side.tiggle.domain.asset.dto.req
 
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty

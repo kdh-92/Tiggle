@@ -1,16 +1,16 @@
-package com.side.tiggle.domain.asset.model
+package com.side.tiggle.domain.category.model
 
 import javax.persistence.*
 
 @Entity
-@Table(name = "assets")
-class Asset(
-    @Column(name = "name", nullable = false)
+@Table(name = "categories")
+class Category(
     var name: String,
-
-    @Column(name = "defaults", nullable = false)
+    @Enumerated(EnumType.STRING)
+    var type: CategoryType,
     var defaults: Boolean
 ) {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null

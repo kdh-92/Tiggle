@@ -50,21 +50,17 @@ class OAuth2SuccessHandler(
             userPrincipal.attributes
         )
         val member = memberRepository.findByEmail(attributes.email)
-        val authMember: Member = if (member.isEmpty) {
-            Member(
-                attributes.email,
-                attributes.profileUrl,
-                attributes.nickname,
-                authenticationToken.authorizedClientRegistrationId,
-                attributes.providerId
-            )
-        } else {
-            member.get()
-                .apply {
-                    profileUrl = attributes.profileUrl
-                    provider = authenticationToken.authorizedClientRegistrationId
-                }
+        val authMember: Member = member?.apply {
+            profileUrl = attributes.profileUrl
+            provider = authenticationToken.authorizedClientRegistrationId
         }
+            ?: Member(
+                email = attributes.email,
+                profileUrl = attributes.profileUrl,
+                nickname = attributes.nickname,
+                provider = authenticationToken.authorizedClientRegistrationId.toString(),
+                providerId = attributes.providerId
+            )
         memberRepository.save(authMember)
         return authMember
     }

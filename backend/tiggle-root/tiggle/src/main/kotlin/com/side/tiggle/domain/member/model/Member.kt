@@ -15,7 +15,7 @@ class Member (
     var email: String,
     var profileUrl: String?,
     var nickname: String,
-    var birth: LocalDate?,
+    var birth: LocalDate? = null,
     var provider: String? = null,
     var providerId: String? = null
 ): BaseEntity() {
