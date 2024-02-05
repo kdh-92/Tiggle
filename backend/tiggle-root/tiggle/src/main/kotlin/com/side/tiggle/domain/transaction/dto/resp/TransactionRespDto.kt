@@ -1,7 +1,9 @@
 package com.side.tiggle.domain.transaction.dto.resp
 
 import com.side.tiggle.domain.asset.dto.AssetDto
+import com.side.tiggle.domain.asset.dto.resp.AssetRespDto
 import com.side.tiggle.domain.category.dto.CategoryDto
+import com.side.tiggle.domain.category.dto.resp.CategoryRespDto
 import com.side.tiggle.domain.member.dto.controller.MemberResponseDto
 import com.side.tiggle.domain.member.dto.service.MemberDto
 import com.side.tiggle.domain.transaction.dto.TransactionDto
@@ -15,8 +17,8 @@ import java.time.LocalDateTime
 data class TransactionRespDto(
     val id: Long,
     val member: MemberResponseDto,
-    val asset: AssetDto,
-    val category: CategoryDto,
+    val asset: AssetRespDto,
+    val category: CategoryRespDto,
     val txTagNames: String,
     val createdAt: LocalDateTime,
     val parentId: Long? = null,
@@ -37,8 +39,8 @@ data class TransactionRespDto(
             return TransactionRespDto(
                 id = tx.id!!,
                 member = MemberDto.fromEntityToMemberResponseDto(tx.member),
-                asset = AssetDto.fromEntity(tx.asset),
-                category = CategoryDto.fromEntity(tx.category),
+                asset = AssetRespDto.fromEntity(tx.asset),
+                category = CategoryRespDto.fromEntity(tx.category),
                 type = tx.type,
                 imageUrl = tx.imageUrl,
                 amount = tx.amount,
