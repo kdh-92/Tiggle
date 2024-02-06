@@ -30,12 +30,12 @@ public class Transaction extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    public Long id;
 
     @JsonIgnore
     @JoinColumn(name = "member_id", nullable = false)
     @ManyToOne(fetch = FetchType.LAZY)
-    private Member member;
+    public Member member;
 
     @JsonIgnore
     @JoinColumn(name = "asset_id", nullable = false)
