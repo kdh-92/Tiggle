@@ -19,17 +19,18 @@ export const useMyTransactionsPage = (profile: Required<MemberDto>) => {
   const filterWatch = method.watch();
 
   const { data: filteredTxData } = useQuery({
-    queryKey: transactionKeys.list({
-      memberId: profile.id,
-      filter: filterWatch,
-    }),
+    queryKey: transactionKeys.list({ memberId: profile.id }),
     queryFn: async () =>
       TransactionApiControllerService.getMemberCountOffsetTransaction(
         profile.id,
         0,
         100,
-        undefined, // dayjs(filterWatch.date).date(1).format(),
-        undefined, // dayjs(filterWatch.date).add(1, "month").date(1).subtract(1, "day").format(),
+        dayjs(filterWatch.date).date(1).format(),
+        dayjs(filterWatch.date)
+          .add(1, "month")
+          .date(1)
+          .subtract(1, "day")
+          .format(),
         filterWatch.txType,
         filterWatch.categoryIds,
         filterWatch.assetIds,
