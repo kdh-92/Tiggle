@@ -60,7 +60,7 @@ export default function CommentCell({
   );
 
   const { mutate: createReply } = useMutation(async (comment: string) =>
-    CommentApiService.createComment(TEMP_USER_ID, {
+    CommentApiService.createComment({
       txId,
       senderId: TEMP_USER_ID,
       parentId: id,

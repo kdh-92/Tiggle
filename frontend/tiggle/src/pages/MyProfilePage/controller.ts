@@ -12,11 +12,9 @@ import { MemberFormData, updateProfile } from "./request";
 
 import type { ProfileInputs } from "./types";
 
-const TEMP_MEMBER_ID = 4;
-
 const profileQuery = () => ({
   queryKey: ["profile", "me"],
-  queryFn: async () => MemberApiControllerService.getMe(TEMP_MEMBER_ID),
+  queryFn: async () => MemberApiControllerService.getMe(),
 });
 
 export const loader = (queryClient: QueryClient) => () =>
@@ -66,7 +64,6 @@ export const useProfilePage = () => {
 
       const formData: MemberFormData = {
         // TODO: xMemberId 삭제
-        xMemberId: TEMP_MEMBER_ID,
         memberDto: {
           ...(dirtyFields["nickname"] && { nickname }),
           ...(dirtyFields["email"] && { email }),
