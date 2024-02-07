@@ -11,19 +11,14 @@ import { request as __request } from '../core/request';
 export class MemberApiControllerService {
 
     /**
-     * @param xMemberId
+     * 내 정보 조회
      * @returns MemberDto OK
      * @throws ApiError
      */
-    public static getMe(
-        xMemberId: number,
-    ): CancelablePromise<MemberDto> {
+    public static getMe(): CancelablePromise<MemberDto> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/v1/member/me',
-            headers: {
-                'x-member-id': xMemberId,
-            },
             errors: {
                 400: `Bad Request`,
                 401: `Unauthorized`,
@@ -34,48 +29,22 @@ export class MemberApiControllerService {
     }
 
     /**
-     * @param xMemberId
+     * 프로필 업데이트
      * @param formData
      * @returns MemberDto OK
      * @throws ApiError
      */
     public static updateMe(
-        xMemberId: number,
         formData?: {
             memberDto: MemberDto;
-            multipartFile: Blob;
+            multipartFile?: Blob;
         },
     ): CancelablePromise<MemberDto> {
         return __request(OpenAPI, {
             method: 'PUT',
             url: '/api/v1/member/me',
-            headers: {
-                'x-member-id': xMemberId,
-            },
             formData: formData,
             mediaType: 'multipart/form-data',
-            errors: {
-                400: `Bad Request`,
-                401: `Unauthorized`,
-                404: `Not Found`,
-                500: `Internal Server Error`,
-            },
-        });
-    }
-
-    /**
-     * @param requestBody
-     * @returns MemberDto OK
-     * @throws ApiError
-     */
-    public static createMember(
-        requestBody: MemberDto,
-    ): CancelablePromise<MemberDto> {
-        return __request(OpenAPI, {
-            method: 'POST',
-            url: '/api/v1/member',
-            body: requestBody,
-            mediaType: 'application/json',
             errors: {
                 400: `Bad Request`,
                 401: `Unauthorized`,

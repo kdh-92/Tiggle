@@ -4,7 +4,7 @@
 /* eslint-disable */
 
 export type TransactionDto = {
-    memberId: number;
+    memberId?: number;
     parentId?: number;
     assetId?: number;
     categoryId?: number;

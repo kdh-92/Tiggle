@@ -10,7 +10,7 @@
     "build-storybook": "storybook build",
     "transform-token": "node transform-token.js",
     "chromatic": "npx chromatic --project-token=chpt_bf3f5c4ddba9975",
-    "generate": "openapi --input swagger.json --output ./src/generated --useUnionTypes --client axios --request ./src/query/openapi-request.ts"
+    "generate": "node --trace-warnings generate-openapi.js"
   },
   "eslintConfig": {
     "extends": [

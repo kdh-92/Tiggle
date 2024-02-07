@@ -14,13 +14,11 @@ export class ReactionApiService {
 
     /**
      * 해당 tx에 대한 나의 reaction을 조회
-     * @param xMemberId
      * @param id
      * @returns ReactionDto OK
      * @throws ApiError
      */
     public static getReaction(
-        xMemberId: number,
         id: number,
     ): CancelablePromise<ReactionDto> {
         return __request(OpenAPI, {
@@ -28,9 +26,6 @@ export class ReactionApiService {
             url: '/api/v1/transaction/{id}/reaction',
             path: {
                 'id': id,
-            },
-            headers: {
-                'x-member-id': xMemberId,
             },
             errors: {
                 400: `Bad Request`,
@@ -43,14 +38,12 @@ export class ReactionApiService {
 
     /**
      * 리액션을 추가하거나 수정함
-     * @param xMemberId
      * @param id
      * @param reactionDto
      * @returns ReactionDto OK
      * @throws ApiError
      */
     public static upsertReaction(
-        xMemberId: number,
         id: number,
         reactionDto: ReactionCreateDto,
     ): CancelablePromise<ReactionDto> {
@@ -59,9 +52,6 @@ export class ReactionApiService {
             url: '/api/v1/transaction/{id}/reaction',
             path: {
                 'id': id,
-            },
-            headers: {
-                'x-member-id': xMemberId,
             },
             query: {
                 'reactionDto': reactionDto,
@@ -77,13 +67,11 @@ export class ReactionApiService {
 
     /**
      * Reaction을 제거
-     * @param xMemberId
      * @param id
      * @returns number OK
      * @throws ApiError
      */
     public static deleteReaction(
-        xMemberId: number,
         id: number,
     ): CancelablePromise<number> {
         return __request(OpenAPI, {
@@ -91,9 +79,6 @@ export class ReactionApiService {
             url: '/api/v1/transaction/{id}/reaction',
             path: {
                 'id': id,
-            },
-            headers: {
-                'x-member-id': xMemberId,
             },
             errors: {
                 400: `Bad Request`,
