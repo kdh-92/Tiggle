@@ -13,12 +13,12 @@ data class TransactionDto(
     val assetId: Long,
     val categoryId:Long,
     val type: TransactionType,
-    var imageUrl: String,
+    var imageUrl: String?,
     val amount: Int,
     val date: LocalDate,
     val content: String,
     val reason: String,
-    val tagNames: String
+    val tagNames: String?
 ) {
 
     fun toEntity(

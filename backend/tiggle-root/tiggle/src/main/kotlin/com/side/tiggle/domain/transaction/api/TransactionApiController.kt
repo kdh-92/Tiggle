@@ -17,6 +17,7 @@ import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import org.springframework.data.domain.Page
+import org.springframework.format.annotation.DateTimeFormat
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
@@ -99,8 +100,10 @@ class TransactionApiController(
         @RequestParam(defaultValue = DEFAULT_PAGE_SIZE) pageSize: Int,
         // 이하 필터링 항목
         @Parameter(description = "(필터링) 트랜잭션 일자 기준 시작")
+        @DateTimeFormat(pattern = "yyyy-MM-dd")
         @RequestParam(required = false) start: LocalDate?,
         @Parameter(description = "(필터링) 트랜잭션 일자 기준 끝")
+        @DateTimeFormat(pattern = "yyyy-MM-dd")
         @RequestParam(required = false) end: LocalDate?,
         @Parameter(description = "(필터링) 트랜잭션 타입")
         @RequestParam(required = false) type: TransactionType?,
@@ -121,8 +124,12 @@ class TransactionApiController(
             val categoryCheck = category.isNullOrEmpty() || category.contains(it.category.id!!)
             val assetCheck = asset.isNullOrEmpty() || asset.contains(it.asset.id!!)
 
-            val currentTags = it.tagNames.split(",")
-            val tagNamesCheck = tagNames.isNullOrEmpty() || currentTags.stream().anyMatch { o: String? -> tagNames.contains(o) }
+            val currentTags = it.tagNames?.split(",")
+            val tagNamesCheck = if (currentTags != null && tagNames.isNullOrEmpty().not()) {
+                currentTags.stream().anyMatch { o: String? -> tagNames!!.contains(o) }
+            } else {
+                true
+            }
             startCheck && endCheck && typeCheck && categoryCheck && assetCheck && tagNamesCheck
         }.map {mapTxRespDto(it) }
         return ResponseEntity(

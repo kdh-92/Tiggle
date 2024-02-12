@@ -12,7 +12,7 @@ class TxTag(
     val memberId: Long,
 
     @Column(name = "tag_names", nullable = false)
-    var tagNames: String
+    var tagNames: String?
 ) {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

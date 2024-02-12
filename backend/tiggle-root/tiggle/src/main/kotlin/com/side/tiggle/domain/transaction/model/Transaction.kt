@@ -31,13 +31,15 @@ class Transaction(
     @JoinColumn(name = "category_id", nullable = false)
     @ManyToOne(fetch = FetchType.LAZY)
     val category: Category,
+
+    @Enumerated(EnumType.STRING)
     var type: TransactionType,
-    val imageUrl: String,
+    val imageUrl: String? = null,
     var amount: Int,
     var date: LocalDate,
     var content: String,
     var reason: String,
-    var tagNames: String,
+    var tagNames: String? = null,
     val parentId: Long? = null
 ): BaseEntity() {
     @Id

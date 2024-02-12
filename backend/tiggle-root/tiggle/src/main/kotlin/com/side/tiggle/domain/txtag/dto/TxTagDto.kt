@@ -6,7 +6,7 @@ data class TxTagDto (
     val id: Long,
     val txId: Long,
     val memberId: Long,
-    val tagNames: String
+    val tagNames: String?
 ) {
 
     fun toEntity(dto: TxTagDto): TxTag {
