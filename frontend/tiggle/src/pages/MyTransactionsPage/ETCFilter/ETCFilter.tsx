@@ -2,9 +2,16 @@ import { useCallback, useMemo, useRef, useState } from "react";
 import { ChevronUp, Filter as FilterIcon, Plus } from "react-feather";
 import { Controller, useFormContext } from "react-hook-form";
 
+import { useQuery } from "@tanstack/react-query";
 import cn from "classnames";
 
 import FilterSelect from "@/components/molecules/FilterSelect/FilterSelect";
+import {
+  AssetApiControllerService,
+  CategoryApiControllerService,
+  TagApiControllerService,
+} from "@/generated";
+import { assetKeys, categoryKeys, tagKeys } from "@/query/queryKeys";
 
 import {
   ETCFilterHeaderStyle,
@@ -12,11 +19,6 @@ import {
   ETCFilterStyle,
 } from "./ETCFilterStyle";
 import ETCFilterTag from "../ETCFilterTag/ETCFilterTag";
-import {
-  useAllAssetsQuery,
-  useAllCategoriesQuery,
-  useAllTagsQuery,
-} from "../query";
 import { FilterInputs } from "../types";
 
 interface ETCFilterProps {
@@ -28,20 +30,31 @@ const ETCFilter = ({}: ETCFilterProps) => {
   const [isAccordionOpen, setIsAccordionOpen] = useState<boolean>(false);
   const accordionRef = useRef<HTMLDivElement | null>(null);
 
-  const { data: assetsData } = useAllAssetsQuery();
+  const { data: assetsData } = useQuery({
+    queryKey: assetKeys.lists(),
+    queryFn: async () => AssetApiControllerService.getAllAsset(),
+  });
   const assetOptions = useMemo(
     () =>
       assetsData?.map(({ id, name }) => ({ label: name!, value: id! })) ?? [],
     [assetsData],
   );
-  const { data: categoriesData } = useAllCategoriesQuery();
+
+  const { data: categoriesData } = useQuery({
+    queryKey: categoryKeys.lists(),
+    queryFn: async () => CategoryApiControllerService.getAllCategory(),
+  });
   const categoryOptions = useMemo(
     () =>
       categoriesData?.map(({ id, name }) => ({ label: name!, value: id! })) ??
       [],
     [categoriesData],
   );
-  const { data: tagsData } = useAllTagsQuery();
+
+  const { data: tagsData } = useQuery({
+    queryKey: tagKeys.lists(),
+    queryFn: async () => TagApiControllerService.getAllDefaultTag(),
+  });
   const tagOptions = useMemo(
     () => tagsData?.map(({ name }) => ({ label: name!, value: name! })) ?? [],
     [tagsData],

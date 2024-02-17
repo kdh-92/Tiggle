@@ -100,14 +100,7 @@ const CreatePage = ({ type }: CreatePageProps) => {
           type === "REFUND" ? ["assetId", "categoryId"] : undefined
         }
         // TODO: parentTxData의 assetId, categoryId 전달
-        defaultValues={
-          parentTxData
-            ? {
-                assetId: parentTxData.asset?.id,
-                categoryId: parentTxData.category?.id,
-              }
-            : undefined
-        }
+        defaultValues={parentTxData ? {} : undefined}
       />
     </CreatePageStyle>
   );

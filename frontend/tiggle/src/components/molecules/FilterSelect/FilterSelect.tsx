@@ -50,6 +50,7 @@ const FilterSelect = forwardRef(
     const wrapperRef = useRef<HTMLDivElement | null>(null);
 
     const [isOptionOpen, setIsOptionOpen] = useState(false);
+    // TODO: Popover의 Inner value와 FormValue의 sync가 안맞는 문제 해결하기
     const [innerValue, setInnerValue] = useState<Array<ValueType>>(value ?? []);
 
     const toggleOptionOpen = useCallback(() => {
@@ -86,6 +87,7 @@ const FilterSelect = forwardRef(
       closeOption();
     };
 
+    // todo: state 책임 명확하게 수정
     useEffect(() => {
       if (!isOptionOpen) {
         // initialized

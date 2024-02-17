@@ -14,14 +14,13 @@ import { request as __request } from '../core/request';
 export class CommentApiService {
 
     /**
-     * @param xMemberId
+     * 코멘트 수정
      * @param id
      * @param requestBody
      * @returns CommentRespDto OK
      * @throws ApiError
      */
     public static updateComment(
-        xMemberId: number,
         id: number,
         requestBody: CommentUpdateReqDto,
     ): CancelablePromise<CommentRespDto> {
@@ -30,9 +29,6 @@ export class CommentApiService {
             url: '/api/v1/comments/{id}',
             path: {
                 'id': id,
-            },
-            headers: {
-                'x-member-id': xMemberId,
             },
             body: requestBody,
             mediaType: 'application/json',
@@ -46,13 +42,12 @@ export class CommentApiService {
     }
 
     /**
-     * @param xMemberId
+     * 코멘트 삭제
      * @param id
      * @returns any OK
      * @throws ApiError
      */
     public static deleteComment(
-        xMemberId: number,
         id: number,
     ): CancelablePromise<any> {
         return __request(OpenAPI, {
@@ -60,9 +55,6 @@ export class CommentApiService {
             url: '/api/v1/comments/{id}',
             path: {
                 'id': id,
-            },
-            headers: {
-                'x-member-id': xMemberId,
             },
             errors: {
                 400: `Bad Request`,
@@ -74,21 +66,17 @@ export class CommentApiService {
     }
 
     /**
-     * @param xMemberId
+     * 코멘트 작성
      * @param requestBody
      * @returns CommentRespDto OK
      * @throws ApiError
      */
     public static createComment(
-        xMemberId: number,
         requestBody: CommentCreateReqDto,
     ): CancelablePromise<CommentRespDto> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/api/v1/comments',
-            headers: {
-                'x-member-id': xMemberId,
-            },
             body: requestBody,
             mediaType: 'application/json',
             errors: {

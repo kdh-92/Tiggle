@@ -15,6 +15,7 @@ const ETCFilterTag = ({ label, value, keyName }: ETCFilterTagProps) => {
 
   const deleteTag = () => {
     if (keyName === "tagNames") {
+      // TODO: Tag 삭제 동작하지 않는 문제 해결
       const filteredValues = getValues(keyName).filter(v => v !== value);
       setValue(keyName, filteredValues);
     } else {

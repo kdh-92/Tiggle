@@ -4,8 +4,8 @@
 /* eslint-disable */
 
 export type CategoryDto = {
-    id?: number;
     name?: string;
+    type?: 'INCOME' | 'OUTCOME';
     defaults?: boolean;
 };
 

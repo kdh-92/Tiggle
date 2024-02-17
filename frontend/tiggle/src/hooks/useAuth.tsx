@@ -11,8 +11,6 @@ import continueUrlStore from "@/store/continueUrl";
 
 import useCookie from "./useCookie";
 
-const TEMP_USER_ID = 1;
-
 export default function useAuth() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -26,10 +24,7 @@ export default function useAuth() {
     isError: isLoginError,
   } = useQuery(
     memberKeys.detail("me"),
-    async () =>
-      MemberApiControllerService.getMe(
-        token ? TEMP_USER_ID : -1, // TODO: 프로필조회 api 수정 후 삭제
-      ),
+    async () => MemberApiControllerService.getMe(),
     {
       staleTime: 1000 * 60 * 30,
       enabled: !!token,

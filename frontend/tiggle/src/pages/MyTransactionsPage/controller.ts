@@ -1,11 +1,12 @@
 import { FormEventHandler, useEffect, useMemo, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 
-import dayjs, { Dayjs } from "dayjs";
+import { useQuery } from "@tanstack/react-query";
+import dayjs from "dayjs";
 
-import { MemberDto } from "@/generated";
+import { MemberDto, TransactionApiControllerService } from "@/generated";
+import { transactionKeys } from "@/query/queryKeys";
 
-import { useTransactionQueryByFilter } from "./query";
 import { FilterInputs } from "./types";
 
 const pageSize = 3;
@@ -17,18 +18,29 @@ export const useMyTransactionsPage = (profile: Required<MemberDto>) => {
   };
   const filterWatch = method.watch();
 
-  const { data: filteredTxData } = useTransactionQueryByFilter(profile.id, {
-    date: dayjs(filterWatch.date as Dayjs).format(),
-    type: filterWatch.txType,
-    assetIds: filterWatch.assetIds,
-    categoryIds: filterWatch.categoryIds,
-    tagNames: filterWatch.tagNames,
+  const { data: filteredTxData } = useQuery({
+    queryKey: transactionKeys.list({
+      memberId: profile.id,
+      filter: filterWatch,
+    }),
+    queryFn: async () =>
+      TransactionApiControllerService.getMemberCountOffsetTransaction(
+        profile.id,
+        0,
+        100,
+        undefined, // dayjs(filterWatch.date).date(1).format(),
+        undefined, // dayjs(filterWatch.date).add(1, "month").date(1).subtract(1, "day").format(),
+        filterWatch.txType,
+        filterWatch.categoryIds,
+        filterWatch.assetIds,
+        filterWatch.tagNames,
+      ),
   });
 
   const [index, setIndex] = useState(0);
   const sliceSize = useMemo(() => (index + 1) * pageSize, [index]);
   const isLoadable = useMemo(
-    () => filteredTxData && sliceSize < filteredTxData.length,
+    () => filteredTxData?.content && sliceSize < filteredTxData.content.length,
     [filteredTxData, sliceSize],
   );
 
@@ -59,7 +71,7 @@ export const useMyTransactionsPage = (profile: Required<MemberDto>) => {
   return {
     form: { method, handleSubmit },
     data: {
-      transactions: filteredTxData?.slice(0, sliceSize),
+      transactions: filteredTxData?.content,
       isLoadable,
       loaderRef,
     },

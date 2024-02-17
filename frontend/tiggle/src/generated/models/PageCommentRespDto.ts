@@ -8,16 +8,16 @@ import type { PageableObject } from './PageableObject';
 import type { SortObject } from './SortObject';
 
 export type PageCommentRespDto = {
-    totalElements?: number;
     totalPages?: number;
+    totalElements?: number;
     size?: number;
     content?: Array<CommentRespDto>;
     number?: number;
     sort?: SortObject;
     pageable?: PageableObject;
+    numberOfElements?: number;
     first?: boolean;
     last?: boolean;
-    numberOfElements?: number;
     empty?: boolean;
 };
 
