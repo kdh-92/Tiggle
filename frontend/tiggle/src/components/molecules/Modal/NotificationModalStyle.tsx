@@ -13,7 +13,7 @@ export const NotificationModalStyle = styled.div`
 
   .notification-background {
     width: auto;
-    height: fit-content;
+    height: 100vh;
     display: flex;
     padding: 0;
     justify-content: center;

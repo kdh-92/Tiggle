@@ -13,6 +13,7 @@ import storage from "redux-persist/lib/storage"; // defaults to localStorage for
 
 import continueUrl from "@/store/continueUrl";
 import detailPage from "@/store/detailPage";
+import notificationModal from "@/store/notificationModal";
 
 const persistConfig = {
   key: "root",
@@ -24,6 +25,7 @@ const persistConfig = {
 const reducers = combineReducers({
   detailPage: detailPage.reducer,
   continueUrl: continueUrl.reducer,
+  notificationModal: notificationModal.reducer,
 });
 type Reducers = ReturnType<typeof reducers>;
 const persistedReducer = persistReducer<Reducers>(persistConfig, reducers);

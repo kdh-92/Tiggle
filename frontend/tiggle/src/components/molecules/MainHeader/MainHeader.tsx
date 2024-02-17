@@ -1,4 +1,5 @@
 import { Bell } from "react-feather";
+import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 
 import { Avatar } from "antd";
@@ -12,10 +13,12 @@ import {
 } from "@/components/molecules/MainHeader/MainHeaderStyle";
 import useAuth from "@/hooks/useAuth";
 import useScroll from "@/hooks/useScroll";
+import { toggleModal } from "@/store/notificationModal";
 
 export default function MainHeader() {
   const { isLogin, profile, requireAuth } = useAuth();
   const { scrolling } = useScroll();
+  const dispatch = useDispatch();
 
   return (
     <MainHeaderStyle>
@@ -34,7 +37,10 @@ export default function MainHeader() {
             <HeaderRightStyle>
               {isLogin ? (
                 <>
-                  <button className="right-bar-btn">
+                  <button
+                    className="right-bar-btn"
+                    onClick={() => dispatch(toggleModal())}
+                  >
                     <Bell size={20} />
                   </button>
                   <Link to={"/mypage"} className="right-bar-btn">
