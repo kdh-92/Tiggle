@@ -18,7 +18,11 @@ class Notification(
     @Column(name = "content")
     var content: String? = null,
     @Column(name = "image_url")
-    var imageUrl: String? = null
+    var imageUrl: String? = null,
+    @Column(name = "tx_id")
+    var txId: Long? = null,
+    @Column(name = "comment_id")
+    var commentId: Long? = null
 ) {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,6 +33,6 @@ class Notification(
     var viewedAt: LocalDateTime? = null
 
     enum class Type {
-        TX, COMMENT, ETC
+        TX, COMMENT, REPLY, ETC
     }
 }
