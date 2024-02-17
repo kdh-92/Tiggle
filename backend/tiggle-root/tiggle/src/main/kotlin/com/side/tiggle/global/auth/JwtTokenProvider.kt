@@ -20,16 +20,12 @@ class JwtTokenProvider(
 
     // TODO: @Value로 받아야 한다
     private val secret = "secrettigglesecrettigglesecrettiggle"
-    private val secretKey: SecretKey
+    private val secretKey: SecretKey = Keys.hmacShaKeyFor(secret.toByteArray(StandardCharsets.UTF_8))
 
     private val tokenExpiry = 60L * 30L
     private val refreshTokenExpiry = 60L * 60L * 24L
 
     private val zone = ZoneId.systemDefault()
-
-    init {
-        secretKey = Keys.hmacShaKeyFor(secret.toByteArray(StandardCharsets.UTF_8))
-    }
 
     fun generateToken(
         memberId: Long,
@@ -88,7 +84,7 @@ class JwtTokenProvider(
             return Jwts.parserBuilder()
                 .setSigningKey(secretKey)
                 .build()
-                .parseClaimsJwt(jwtToken)
+                .parseClaimsJws(jwtToken)
                 .body
         } catch (e: JwtException) {
             throw IllegalStateException()
