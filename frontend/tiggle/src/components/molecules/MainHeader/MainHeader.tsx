@@ -1,5 +1,5 @@
 import { Bell } from "react-feather";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
 import { Avatar } from "antd";
@@ -13,12 +13,16 @@ import {
 } from "@/components/molecules/MainHeader/MainHeaderStyle";
 import useAuth from "@/hooks/useAuth";
 import useScroll from "@/hooks/useScroll";
+import { RootState } from "@/store";
 import { toggleModal } from "@/store/notificationModal";
 
 export default function MainHeader() {
   const { isLogin, profile, requireAuth } = useAuth();
   const { scrolling } = useScroll();
   const dispatch = useDispatch();
+  const isModalOpen = useSelector(
+    (state: RootState) => state.notificationModal.isOpen,
+  );
 
   return (
     <MainHeaderStyle>
@@ -38,7 +42,7 @@ export default function MainHeader() {
               {isLogin ? (
                 <>
                   <button
-                    className="right-bar-btn"
+                    className={`right-bar-btn ${isModalOpen ? "click" : ""}`}
                     onClick={() => dispatch(toggleModal())}
                   >
                     <Bell size={20} />

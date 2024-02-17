@@ -82,13 +82,29 @@ export const HeaderRightStyle = styled.div`
   gap: 10px;
 
   .right-bar-btn {
-    display: flex;
-    align-items: center;
-    background: ${({ theme: { color } }) => color.bluishGray[50].value};
-    border: none;
-    padding: 0 4px;
+    /* Auto layout */
+    width: 40px;
     height: 40px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 0px;
+    isolation: isolate;
+
+    /* color/bluishGray/100 */
+    background: ${({ theme: { color } }) => color.bluishGray[50].value};
+    border-radius: 50px;
+
     color: ${({ theme: { color } }) => color.bluishGray[600].value};
+
+    /* Notification Button */
+
+    &.click {
+      /* color/bluishGray/100 */
+      background: #eceff4;
+      border-radius: 50px;
+    }
   }
 
   .ant-avatar {
