@@ -23,11 +23,6 @@ class NotificationController(
         return ResponseEntity(retValue, HttpStatus.OK)
     }
 
-    @PostMapping("/message")
-    fun sendMessage(@RequestBody dto: NotificationDto) {
-        kafkaTemplate.send("tiggle-notification", dtoToString(dto))
-    }
-
     private fun dtoToString(dto: NotificationDto): String? =
         objectMapper.writeValueAsString(dto)
 }

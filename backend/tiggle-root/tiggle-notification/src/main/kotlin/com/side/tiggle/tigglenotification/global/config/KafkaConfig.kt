@@ -1,14 +1,11 @@
 package com.side.tiggle.tigglenotification.global.config
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import com.side.tiggle.tigglenotification.notification.NotificationService
-import com.side.tiggle.tigglenotification.notification.model.Notification
 import com.side.tiggle.tigglenotification.notification.model.NotificationDto
 import org.apache.kafka.clients.consumer.ConsumerRecord
 import org.slf4j.LoggerFactory
 import org.springframework.context.annotation.Configuration
 import org.springframework.kafka.annotation.KafkaListener
-import java.lang.Exception
 
 
 @Configuration
