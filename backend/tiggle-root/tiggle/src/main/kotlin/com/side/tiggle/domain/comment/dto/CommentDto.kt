@@ -26,7 +26,7 @@ open class CommentDto(
     companion object {
         fun fromEntity(comment: Comment): CommentDto {
             return CommentDto(
-                txId = comment.tx.id,
+                txId = comment.tx.id!!,
                 parentId = comment.parentId,
                 senderId = comment.sender.id,
                 receiverId = comment.receiver.id,

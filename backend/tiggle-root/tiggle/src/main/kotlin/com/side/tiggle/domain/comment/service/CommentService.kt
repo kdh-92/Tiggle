@@ -40,7 +40,7 @@ class CommentService(
         return commentRepository.countAllByTx(transaction)
     }
 
-    fun getParentsByTxId(txId: Long?, page: Int, size: Int): Page<Comment> {
+    fun getParentsByTxId(txId: Long, page: Int, size: Int): Page<Comment> {
         val tx = transactionService.getTransaction(txId)
         val pageable: Pageable = PageRequest.of(page, size, Sort.Direction.DESC, "id")
         return commentRepository.findAllByTxAndParentIdNull(tx, pageable)

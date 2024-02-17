@@ -1,7 +1,7 @@
 package com.side.tiggle.domain.asset.api
 
 import com.side.tiggle.domain.asset.dto.AssetDto
-import com.side.tiggle.domain.asset.dto.controller.AssetUpdateReqDto
+import com.side.tiggle.domain.asset.dto.req.AssetUpdateReqDto
 import com.side.tiggle.domain.asset.dto.resp.AssetRespDto
 import com.side.tiggle.domain.asset.service.AssetService
 import com.side.tiggle.global.common.constants.HttpHeaders
