@@ -6,11 +6,20 @@ data class NotificationDto(
     val content: String,
     val receiverId: Long,
     val senderId: Long?,
+    val commentId: Long?,
+    val txId: Long?,
     val type: Notification.Type
 ) {
-
     fun toEntity(): Notification {
-        return Notification(receiverId, senderId, type, title, content, imageUrl)
+        return Notification(
+            receiverId = receiverId,
+            senderId = senderId,
+            txId = txId,
+            commentId = commentId,
+            type = type,
+            title = title,
+            content = content,
+            imageUrl = imageUrl)
     }
 
     companion object {
@@ -21,6 +30,8 @@ data class NotificationDto(
                 type = entity.type,
                 content = entity.content ?: "",
                 title = entity.title ?: "",
+                txId = entity.txId,
+                commentId = entity.commentId,
                 imageUrl = entity.imageUrl
             )
         }
