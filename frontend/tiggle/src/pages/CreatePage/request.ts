@@ -21,7 +21,7 @@ export const createTransaction = async ({
 
   return getAxiosInstance()
     .post<TransactionRespDto>("/api/v1/transaction", formData, {
-      baseURL: process.env.REACT_APP_API_URL,
+      baseURL: process.env.VITE_API_URL,
       headers: {
         "Content-Type": "multipart/form-data",
       },

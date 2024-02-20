@@ -36,7 +36,7 @@ const LoginPage = () => {
       <SocialLoginButton social_logo={"naver"} href="#" />
       <SocialLoginButton
         social_logo={"google"}
-        href={process.env.REACT_APP_GOOGLE_REDIRECT_URL ?? "#"}
+        href={process.env.VITE_GOOGLE_REDIRECT_URL ?? "#"}
         onClick={onSet}
       />
     </LoginPageStyle>
