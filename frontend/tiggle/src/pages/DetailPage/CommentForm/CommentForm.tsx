@@ -24,8 +24,6 @@ interface CommentFormInputs {
   comment: string;
 }
 
-const TEMP_USER_ID = 1;
-
 export default function CommentForm({
   txId,
   receiverId,
@@ -42,7 +40,7 @@ export default function CommentForm({
   } = useForm<CommentFormInputs>();
 
   const { mutate: createComment } = useMutation(async (content: string) =>
-    CommentApiService.createComment(TEMP_USER_ID, {
+    CommentApiService.createComment({
       txId,
       senderId: profile!.id!,
       receiverId: receiverId,

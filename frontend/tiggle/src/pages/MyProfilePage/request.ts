@@ -2,7 +2,7 @@ import { MemberApiControllerService, MemberDto } from "@/generated";
 import { getAxiosInstance } from "@/query/openapi-request";
 
 export type MemberFormData = Partial<
-  Parameters<typeof MemberApiControllerService.updateMe>[1] & {
+  Parameters<typeof MemberApiControllerService.updateMe>[0] & {
     xMemberId: number;
   }
 >;

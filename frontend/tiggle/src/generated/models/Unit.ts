@@ -3,8 +3,4 @@
 /* tslint:disable */
 /* eslint-disable */
 
-export type AssetDto = {
-    name?: string;
-    defaults?: boolean;
-};
-
+export type Unit = Record<string, any>;

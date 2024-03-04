@@ -28,14 +28,14 @@ export default function ReactionSection({
 
   const { mutate: upsertReaction } = useMutation(
     async (type: ReactionType) =>
-      ReactionApiService.upsertReaction(1, txId, { type }),
+      ReactionApiService.upsertReaction(txId, { type }),
     {
       onSuccess: () =>
         queryClient.invalidateQueries(["reaction", "detail", txId]),
     },
   );
   const { mutate: deleteReaction } = useMutation(
-    async () => ReactionApiService.deleteReaction(1, txId),
+    async () => ReactionApiService.deleteReaction(txId),
     {
       onSuccess: () =>
         queryClient.invalidateQueries(["reaction", "detail", txId]),

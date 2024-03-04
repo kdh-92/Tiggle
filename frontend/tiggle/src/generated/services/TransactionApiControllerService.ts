@@ -40,14 +40,13 @@ export class TransactionApiControllerService {
     }
 
     /**
-     * @param xMemberId
+     * 트랜잭션 수정
      * @param id
      * @param requestBody
      * @returns TransactionRespDto OK
      * @throws ApiError
      */
     public static updateTransaction(
-        xMemberId: number,
         id: number,
         requestBody: TransactionUpdateReqDto,
     ): CancelablePromise<TransactionRespDto> {
@@ -56,9 +55,6 @@ export class TransactionApiControllerService {
             url: '/api/v1/transaction/{id}',
             path: {
                 'id': id,
-            },
-            headers: {
-                'x-member-id': xMemberId,
             },
             body: requestBody,
             mediaType: 'application/json',
@@ -72,13 +68,12 @@ export class TransactionApiControllerService {
     }
 
     /**
-     * @param xMemberId
+     * 트랜잭션 삭제
      * @param id
      * @returns any OK
      * @throws ApiError
      */
     public static deleteTransaction(
-        xMemberId: number,
         id: number,
     ): CancelablePromise<any> {
         return __request(OpenAPI, {
@@ -86,9 +81,6 @@ export class TransactionApiControllerService {
             url: '/api/v1/transaction/{id}',
             path: {
                 'id': id,
-            },
-            headers: {
-                'x-member-id': xMemberId,
             },
             errors: {
                 400: `Bad Request`,
@@ -128,6 +120,7 @@ export class TransactionApiControllerService {
     }
 
     /**
+     * tx 생성
      * @param formData
      * @returns TransactionRespDto OK
      * @throws ApiError
@@ -135,7 +128,7 @@ export class TransactionApiControllerService {
     public static createTransaction(
         formData?: {
             dto: TransactionDto;
-            multipartFile: Blob;
+            multipartFile?: Blob;
         },
     ): CancelablePromise<TransactionRespDto> {
         return __request(OpenAPI, {
@@ -189,6 +182,12 @@ export class TransactionApiControllerService {
      * @param memberId 유저 id
      * @param index tx 페이지 번호
      * @param pageSize 페이지 내부 tx 개수
+     * @param start (필터링) 트랜잭션 일자 기준 시작
+     * @param end (필터링) 트랜잭션 일자 기준 끝
+     * @param type (필터링) 트랜잭션 타입
+     * @param category (필터링) 카테고리 종류 (복수)
+     * @param asset (필터링) 자산 종류 (복수)
+     * @param tagNames (필터링) 태그 이름 (복수)
      * @returns PageTransactionRespDto tx 페이지 조회 성공
      * @throws ApiError
      */
@@ -196,6 +195,12 @@ export class TransactionApiControllerService {
         memberId: number,
         index: number,
         pageSize: number = 5,
+        start?: string,
+        end?: string,
+        type?: 'INCOME' | 'OUTCOME' | 'REFUND',
+        category?: Array<number>,
+        asset?: Array<number>,
+        tagNames?: Array<string>,
     ): CancelablePromise<PageTransactionRespDto> {
         return __request(OpenAPI, {
             method: 'GET',
@@ -204,6 +209,12 @@ export class TransactionApiControllerService {
                 'memberId': memberId,
                 'index': index,
                 'pageSize': pageSize,
+                'start': start,
+                'end': end,
+                'type': type,
+                'category': category,
+                'asset': asset,
+                'tagNames': tagNames,
             },
             errors: {
                 400: `존재하지 않는 리소스 접근`,
