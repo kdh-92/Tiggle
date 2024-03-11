@@ -36,7 +36,7 @@ export const store = configureStore({
         ignoredActions: [FLUSH, REHYDRATE, REGISTER, PAUSE, PERSIST, PURGE],
       },
     }),
-  devTools: process.env.NODE_ENV !== "production",
+  devTools: import.meta.env.DEV,
 });
 export const persistedStore = persistStore(store);
 
