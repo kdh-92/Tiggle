@@ -49,7 +49,7 @@ root.render(
           <MessageProvider />,
         ]}
       >
-        {process.env.NODE_ENV === "development" && <ReactQueryDevtools />}
+        {import.meta.env.DEV && <ReactQueryDevtools />}
         <GlobalStyle />
         <RouterProvider router={router} />
       </MultiProviders>
