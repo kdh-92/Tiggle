@@ -17,7 +17,7 @@ export const mockApi = {
 } as MessageInstance;
 
 export const MessageContext = createContext<MessageState>({ api: mockApi });
-if (process.env.NODE_ENV !== "production") {
+if (import.meta.env.DEV === true) {
   MessageContext.displayName = "MessageContext";
 }
 

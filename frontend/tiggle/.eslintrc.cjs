@@ -1,17 +1,16 @@
 module.exports = {
   root: true,
-  env: {
-    browser: true,
-    node: true,
-  },
+  env: { browser: true, es2020: true },
+  ignorePatterns: ['dist', '.eslintrc.cjs'],
+  parser: '@typescript-eslint/parser',
   extends: [
     "plugin:@typescript-eslint/eslint-recommended",
     "plugin:@typescript-eslint/recommended",
     "plugin:prettier/recommended",
     "plugin:import/recommended",
     "plugin:import/typescript",
+    "prettier"
   ],
-  plugins: ["prettier"],
   rules: {
     "prettier/prettier": "error",
     "@typescript-eslint/no-explicit-any": "off",
@@ -56,9 +55,6 @@ module.exports = {
     "import/prefer-default-export": "off",
     "import/no-mutable-exports": "off",
     "import/no-named-as-default-member": "off",
-  },
-  parserOptions: {
-    parser: "@typescript-eslint/parser",
   },
   settings: {
     "import/parser": {
