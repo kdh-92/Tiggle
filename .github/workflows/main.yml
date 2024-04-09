@@ -19,6 +19,4 @@ jobs:
 
           run: |
             ssh -o StrictHostKeyChecking=no admin@tiggle.duckdns.org
-          script_stop: true
-          script: |
-            cd /var/services/homes/admin/Tiggle && ./server.sh
+            cd Tiggle && ./server.sh
