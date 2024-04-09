@@ -17,9 +17,8 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-        - name: 원격 서버에 연결 & 명령 실행
           run: |
-            ssh -o StrictHostKeyChecking=no user@your-server-ip 'some-command'
+            ssh -o StrictHostKeyChecking=no admin@tiggle.duckdns.org
           script_stop: true
           script: |
             cd /var/services/homes/admin/Tiggle && ./server.sh
