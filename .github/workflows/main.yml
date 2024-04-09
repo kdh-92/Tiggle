@@ -16,7 +16,10 @@ jobs:
         uses: webfactory/ssh-agent@v0.9.0 # appleboy/ssh-action@v0.1.10
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+        - name: 원격 서버에 연결 & 명령 실행
+          run: |
+            ssh -o StrictHostKeyChecking=no user@your-server-ip 'some-command'
           script_stop: true
           script: |
-            cd /var/services/homes/admin/Tiggle
-            ./server.sh
+            cd /var/services/homes/admin/Tiggle && ./server.sh
