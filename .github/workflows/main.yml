@@ -13,10 +13,13 @@ jobs:
 
     steps:
       - name: ssh connect & docker compose up
-        uses: webfactory/ssh-agent@v0.9.0 # appleboy/ssh-action@v0.1.10
+        uses: appleboy/ssh-action@v1.0.3
         with:
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.PORT }}
 
-          run: |
-            ssh -o StrictHostKeyChecking=no admin@tiggle.duckdns.org
-            cd Tiggle && ./server.sh
+          script: |
+            whoami
+            ls -al
