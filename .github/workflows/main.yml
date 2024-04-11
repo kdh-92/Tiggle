@@ -7,6 +7,19 @@ on:
     branches: [ main ]
 
 jobs:
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      - name: Build
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          load: true
+          
   deploy:
     name: Deploy
     runs-on: ubuntu-latest
