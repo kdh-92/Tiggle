@@ -13,7 +13,7 @@ jobs:
 
     steps:
       - name: ssh connect & docker compose up
-        uses: appleboy/ssh-action@v1.0.3
+        uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
@@ -22,5 +22,4 @@ jobs:
 
           script: |
             cd Tiggle
-            ls -al
-            which docker
+            docker ps
