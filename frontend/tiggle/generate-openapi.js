@@ -7,7 +7,7 @@ process.env.NODE_ENV === "production"
   ? dotenv.config({ path: ".env.production" })
   : dotenv.config({ path: ".env.development" });
 
-const specURL = `${process.env.REACT_APP_API_URL}v3/api-docs`;
+const specURL = `${process.env.VITE_API_URL}v3/api-docs`;
 const specPath = "src/generated/spec.json";
 
 async function generate() {

@@ -7,11 +7,6 @@ spring:
     username: ${SPRING_DATASOURCE_USERNAME}
     password: ${SPRING_DATASOURCE_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
-  sql:
-    init:
-      mode: always
-      schema-locations: classpath*:db/schema.sql
-      data-locations: classpath*:db/data.sql
   servlet:
     multipart:
       enabled: true

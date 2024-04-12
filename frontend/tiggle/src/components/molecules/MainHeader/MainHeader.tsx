@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 import { Avatar } from "antd";
 
-import { ReactComponent as Logo } from "@/assets/logo_medium.svg";
+import Logo from "@/assets/logo_medium.svg?react";
 import { CTAButton } from "@/components/atoms";
 import {
   MainHeaderStyle,

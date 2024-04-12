@@ -1,9 +1,9 @@
 import { ButtonHTMLAttributes } from "react";
 import { Link } from "react-router-dom";
 
-import { ReactComponent as Google } from "@/assets/google_logo.svg";
-import { ReactComponent as Kakao } from "@/assets/kakao_logo.svg";
-import { ReactComponent as Naver } from "@/assets/naver_logo.svg";
+import Google from "@/assets/google_logo.svg?react";
+import Kakao from "@/assets/kakao_logo.svg?react";
+import Naver from "@/assets/naver_logo.svg?react";
 import { SocialLoginButtonStyle } from "@/pages/LoginPage/SocialLoginButton/SocialLoginButtonStyle";
 
 interface SocialLoginButtonProps
