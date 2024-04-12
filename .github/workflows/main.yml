@@ -3,23 +3,8 @@ name: Deploy to NAS Server
 on:
   push:
     branches: [ main ]
-  pull_request:
-    branches: [ main ]
 
-jobs:
-  docker:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-      - name: Build
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          load: true
-          
+jobs:     
   deploy:
     name: Deploy
     runs-on: ubuntu-latest
@@ -34,5 +19,6 @@ jobs:
           port: ${{ secrets.PORT }}
 
           script: |
+            export PATH="$PATH:/usr/local/bin"
             cd Tiggle
-            docker ps
+            ./server.sh
