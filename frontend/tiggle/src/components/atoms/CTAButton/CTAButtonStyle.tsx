@@ -9,13 +9,10 @@ export const CTAButtonStyle = styled.button`
   background-color: ${({ theme }) => theme.color.blue[600].value};
   color: ${({ theme }) => theme.color.white.value};
   border-radius: 50px;
-
-  a {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 8px;
-  }
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
 
   transition:
     background-color 0.1s ease,
