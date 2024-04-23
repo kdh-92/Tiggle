@@ -1,5 +1,4 @@
 import { ButtonHTMLAttributes, ReactElement, cloneElement } from "react";
-import { Link } from "react-router-dom";
 
 import cn from "classnames";
 
@@ -34,10 +33,8 @@ export default function CTAButton({
       className={cn(className, size, color, variant, { fullWidth })}
       {...props}
     >
-      <Link to={"/create/income"}>
-        {icon && cloneElement(icon, { className: "cta-button-icon" })}
-        {children}
-      </Link>
+      {icon && cloneElement(icon, { className: "cta-button-icon" })}
+      {children}
     </CTAButtonStyle>
   );
 }
