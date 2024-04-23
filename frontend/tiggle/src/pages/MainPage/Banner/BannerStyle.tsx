@@ -14,6 +14,10 @@ export const BannerStyle = styled.div`
     align-items: center;
     padding: 60px 24px;
 
+    a {
+      margin-top: 24px;
+    }
+
     ${({ theme }) => theme.mq.desktop} {
       width: 768px;
       padding: 80px 24px;
@@ -37,10 +41,6 @@ export const BannerStyle = styled.div`
       ${({ theme }) => theme.mq.desktop} {
         ${({ theme }) => expandTypography(theme.typography.body.large.medium)};
       }
-    }
-
-    > .banner-button {
-      margin-top: 24px;
     }
   }
 `;
