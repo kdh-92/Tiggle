@@ -22,7 +22,11 @@ const IncomeCategorySettingPage = ({}: IncomeCategorySettingPageProps) => {
     queryFn: async () => CategoryApiControllerService.getCategory1(Tx.INCOME),
   });
   const { mutate: createMutate } = useMutation(async (name: string) =>
-    CategoryApiControllerService.createCategory({ name }),
+    CategoryApiControllerService.createCategory({
+      name,
+      type: Tx.INCOME,
+      defaults: true,
+    }),
   );
 
   const create = useCallback(
