@@ -4,7 +4,7 @@ import { MemberDto } from "@/generated";
 
 export type ProfileInputs = Partial<
   Omit<MemberDto, "id" | "birth" | "profileUrl"> & {
-    birth: Dayjs;
+    birth: Dayjs | null;
     profileUrl: File[];
   }
 >;
