@@ -9,6 +9,7 @@ export const GlobalStyle = createGlobalStyle`
     font-family: 'Pretendard Variable', Pretendard, system-ui, sans-serif;
     
     margin: 0;
+    min-width: 375px;
     width: 100vw;
     height: 100vh;
     background-color: ${({ theme }) => theme.color.bluishGray[50].value};
