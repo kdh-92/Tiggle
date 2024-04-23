@@ -21,8 +21,16 @@ const OutcomeCategorySettingPage = ({}: OutcomeCategorySettingPageProps) => {
     queryKey: categoryKeys.list({ type: Tx.OUTCOME }),
     queryFn: async () => CategoryApiControllerService.getCategory1(Tx.OUTCOME),
   });
+  // const { mutate: createMutate } = useMutation(async (name: string) =>
+  //   CategoryApiControllerService.createCategory({ name }),
+  // );
+
   const { mutate: createMutate } = useMutation(async (name: string) =>
-    CategoryApiControllerService.createCategory({ name }),
+    CategoryApiControllerService.createCategory({
+      name,
+      type: Tx.OUTCOME,
+      defaults: true,
+    }),
   );
 
   const create = useCallback(
