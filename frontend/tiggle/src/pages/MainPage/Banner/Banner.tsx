@@ -14,6 +14,7 @@ export default function Banner() {
           icon={<Edit3 />}
           children={"기록하기"}
           className="banner-button"
+          link="/create/income"
         />
       </div>
     </BannerStyle>
