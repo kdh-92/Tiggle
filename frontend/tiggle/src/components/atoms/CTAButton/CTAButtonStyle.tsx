@@ -5,6 +5,7 @@ import { expandTypography } from "@/styles/util";
 
 export const CTAButtonStyle = styled.button`
   width: fit-content;
+  white-space: nowrap;
   background-color: ${({ theme }) => theme.color.blue[600].value};
   color: ${({ theme }) => theme.color.white.value};
   border-radius: 50px;
