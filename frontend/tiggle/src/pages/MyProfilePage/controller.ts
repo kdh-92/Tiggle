@@ -45,7 +45,7 @@ export const useProfilePage = () => {
     defaultValues: {
       nickname: profileData.nickname,
       email: profileData.email,
-      birth: dayjs(profileData.birth),
+      birth: profileData.birth ? dayjs(profileData.birth) : null,
     },
   });
   const profileUrlRegister = register("profileUrl");
