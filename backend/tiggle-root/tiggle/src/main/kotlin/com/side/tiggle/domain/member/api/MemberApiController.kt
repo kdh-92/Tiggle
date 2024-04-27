@@ -2,6 +2,7 @@ package com.side.tiggle.domain.member.api
 
 import com.side.tiggle.domain.member.dto.controller.MemberRequestDto
 import com.side.tiggle.domain.member.dto.controller.MemberResponseDto
+import com.side.tiggle.domain.member.dto.controller.MemberUpdateReqDto
 import com.side.tiggle.domain.member.dto.service.MemberDto
 import com.side.tiggle.domain.member.service.MemberService
 import com.side.tiggle.global.common.constants.HttpHeaders
@@ -68,11 +69,11 @@ class MemberApiController(
     fun updateMe(
         @Parameter(hidden = true)
         @RequestHeader(name = HttpHeaders.MEMBER_ID) memberId: Long,
-        @RequestPart memberRequestDto: MemberRequestDto,
-        @RequestPart("multipartFile") file: MultipartFile?
+        @RequestPart(required = false) memberRequestDto: MemberUpdateReqDto?,
+        @RequestPart("multipartFile", required = false) file: MultipartFile?
     ): ResponseEntity<MemberResponseDto> {
         return ResponseEntity(
-            MemberDto.fromEntityToMemberResponseDto(memberService.updateMember(memberId, MemberRequestDto.fromMemberRequestDtoToMemberDto(memberRequestDto), file)),
+            MemberDto.fromEntityToMemberResponseDto(memberService.updateMember(memberId, memberRequestDto, file)),
             HttpStatus.OK
         )
     }
