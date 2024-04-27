@@ -1,6 +1,7 @@
 package com.side.tiggle.domain.member.service
 
 import com.side.tiggle.domain.member.dto.controller.MemberResponseDto
+import com.side.tiggle.domain.member.dto.controller.MemberUpdateReqDto
 import com.side.tiggle.domain.member.dto.service.MemberDto
 import com.side.tiggle.domain.member.model.Member
 import com.side.tiggle.domain.member.repository.MemberRepository
@@ -36,17 +37,29 @@ class MemberService(
         return memberRepository.findAll()
     }
 
-    fun updateMember(memberId: Long, memberDto: MemberDto, file: MultipartFile?): Member {
+    fun updateMember(memberId: Long, memberUpdateReqDto: MemberUpdateReqDto?, file: MultipartFile?): Member {
+        var isModified = false
         val member: Member = memberRepository.findById(memberId)
             .orElseThrow { NotFoundException() }
         if (file != null && !file.isEmpty) {
             member.profileUrl = uploadProfile(memberId, file)
+            isModified = true
         }
 
-        member.nickname = memberDto.nickname
-        member.birth = memberDto.birth
+        if (memberUpdateReqDto?.nickname != null) {
+            member.nickname = memberUpdateReqDto.nickname
+            isModified = true
+        }
 
-        return memberRepository.save(member)
+        if (memberUpdateReqDto?.birth != null) {
+            member.birth = memberUpdateReqDto.birth
+            isModified = true
+        }
+
+        if (isModified) {
+            memberRepository.save(member)
+        }
+        return member
     }
 
     fun uploadProfile(memberId: Long, file: MultipartFile): String {
