@@ -59,6 +59,16 @@ services:
       - KAFKA_CLUSTERS_0_ZOOKEEPER=zookeeper:2181
     networks:
       - springboot-mysql-net
+  image-server:
+    build:
+      context: ./backend/image-server
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - "8000:8000"
+    container_name: image_server
+    volumes:
+      - "/var/services/homes/dev/images:/app/images"
 networks:
   springboot-mysql-net:
     driver: bridge
