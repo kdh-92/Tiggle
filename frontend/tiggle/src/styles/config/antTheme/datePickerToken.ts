@@ -23,6 +23,7 @@ const datePickerToken: Partial<DatePickerToken> = {
   colorTextDisabled: color.bluishGray[600].value,
   colorBgContainer: color.white.value,
   colorBgContainerDisabled: color.bluishGray[100].value,
+  colorError: color.peach[300].value,
 };
 
 export default datePickerToken;

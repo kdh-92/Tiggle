@@ -19,6 +19,10 @@ export const InputStyle = styled(Input)`
       }
     }
 
+    &.ant-input-status-error {
+      border-width: 1px;
+    }
+
     .ant-input-prefix {
       color: ${({ theme }) => theme.color.bluishGray[400].value};
       margin-right: 8px;
@@ -47,4 +51,9 @@ export const InputStyle = styled(Input)`
       width: 480px;
     }
   }
+`;
+
+export const ErrorMessageStyle = styled.span`
+  color: ${({ theme }) => theme.color.peach[500].value};
+  ${({ theme }) => expandTypography(theme.typography.body.small.medium)}
 `;

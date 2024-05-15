@@ -36,7 +36,7 @@ export const CTAButtonStyle = styled.button`
     ${({ theme }) => expandTypography(theme.typography.body.medium.bold)}
   }
 
-  &:disabled {
+  &.disabled {
     cursor: not-allowed;
   }
 
@@ -47,21 +47,21 @@ export const CTAButtonStyle = styled.button`
           &.primary {
             background-color: ${theme.color[colorKey][600].value};
             color: ${theme.color.white.value};
-            &:disabled {
+            &.disabled {
               background-color: ${theme.color[colorKey][400].value};
             }
           }
           &.secondary {
             background-color: ${theme.color[colorKey][500].value};
             color: ${theme.color.white.value};
-            &:disabled {
+            &.disabled {
               background-color: ${theme.color[colorKey][300].value};
             }
           }
           &.light {
             background-color: ${theme.color[colorKey][100].value};
             color: ${theme.color[colorKey][600].value};
-            &:disabled {
+            &.disabled {
               color: ${theme.color[colorKey][400].value};
             }
           }

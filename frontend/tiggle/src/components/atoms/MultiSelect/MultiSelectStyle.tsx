@@ -83,5 +83,17 @@ export const MultiSelectStyle = styled(Select)`
         color: ${({ theme }) => theme.color.bluishGray[500].value};
       }
     }
+
+    // ---- error ----
+    &.ant-select-status-error {
+      .ant-select-selector {
+        border-width: 1px;
+      }
+    }
   }
+`;
+
+export const ErrorMessageStyle = styled.span`
+  color: ${({ theme }) => theme.color.peach[500].value};
+  ${({ theme }) => expandTypography(theme.typography.body.small.medium)}
 `;

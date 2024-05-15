@@ -1,6 +1,8 @@
 import { DatePicker } from "antd";
 import styled from "styled-components";
 
+import { expandTypography } from "@/styles/util";
+
 export const DatePickerStyle = styled(DatePicker)`
   &&& {
     width: 100%;
@@ -19,6 +21,10 @@ export const DatePickerStyle = styled(DatePicker)`
       }
     }
 
+    &.ant-picker-status-error {
+      border-width: 1px;
+    }
+
     .ant-picker-suffix {
       color: ${({ theme }) => theme.color.bluishGray[500].value};
     }
@@ -27,4 +33,9 @@ export const DatePickerStyle = styled(DatePicker)`
       width: 480px;
     }
   }
+`;
+
+export const ErrorMessageStyle = styled.span`
+  color: ${({ theme }) => theme.color.peach[500].value};
+  ${({ theme }) => expandTypography(theme.typography.body.small.medium)}
 `;
