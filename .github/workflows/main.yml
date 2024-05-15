@@ -10,15 +10,22 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: ssh connect & docker compose up
+      - name: ssh connect
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.PORT }}
+      
+      - name: Checkout code
+        uses: actions/checkout@v2
+        
+      - name: Pull latest changes
+        run: git pull origin main
 
-          script: |
-            export PATH="$PATH:/usr/local/bin"
-            cd Tiggle
-            ./server.sh
+      - name: Run server.sh
+        run: |
+          export PATH="$PATH:/usr/local/bin"
+          cd Tiggle
+          ./server.sh
