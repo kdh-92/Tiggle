@@ -70,12 +70,12 @@ export class TransactionApiControllerService {
     /**
      * 트랜잭션 삭제
      * @param id
-     * @returns any OK
+     * @returns string OK
      * @throws ApiError
      */
     public static deleteTransaction(
         id: number,
-    ): CancelablePromise<any> {
+    ): CancelablePromise<string> {
         return __request(OpenAPI, {
             method: 'DELETE',
             url: '/api/v1/transaction/{id}',
@@ -100,7 +100,7 @@ export class TransactionApiControllerService {
      * @throws ApiError
      */
     public static getCountOffsetTransaction(
-        index: number,
+        index?: number,
         pageSize: number = 5,
     ): CancelablePromise<PageTransactionRespDto> {
         return __request(OpenAPI, {
@@ -193,7 +193,7 @@ export class TransactionApiControllerService {
      */
     public static getMemberCountOffsetTransaction(
         memberId: number,
-        index: number,
+        index?: number,
         pageSize: number = 5,
         start?: string,
         end?: string,

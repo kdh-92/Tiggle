@@ -4,9 +4,9 @@
 /* eslint-disable */
 
 export type CategoryRespDto = {
-    name?: string;
-    type?: 'INCOME' | 'OUTCOME';
-    defaults?: boolean;
     id?: number;
+    name?: string;
+    defaults?: boolean;
+    type?: 'INCOME' | 'OUTCOME';
 };
 

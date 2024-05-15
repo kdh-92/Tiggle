@@ -4,7 +4,6 @@
 /* eslint-disable */
 import type { CategoryDto } from '../models/CategoryDto';
 import type { CategoryRespDto } from '../models/CategoryRespDto';
-import type { CategoryUpdateReqDto } from '../models/CategoryUpdateReqDto';
 
 import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
@@ -14,36 +13,13 @@ export class CategoryApiControllerService {
 
     /**
      * @param id
-     * @returns CategoryRespDto OK
-     * @throws ApiError
-     */
-    public static getCategory(
-        id: number,
-    ): CancelablePromise<CategoryRespDto> {
-        return __request(OpenAPI, {
-            method: 'GET',
-            url: '/api/v1/category/{id}',
-            path: {
-                'id': id,
-            },
-            errors: {
-                400: `Bad Request`,
-                401: `Unauthorized`,
-                404: `Not Found`,
-                500: `Internal Server Error`,
-            },
-        });
-    }
-
-    /**
-     * @param id
      * @param requestBody
      * @returns CategoryRespDto OK
      * @throws ApiError
      */
     public static updateCategory(
         id: number,
-        requestBody: CategoryUpdateReqDto,
+        requestBody: CategoryDto,
     ): CancelablePromise<CategoryRespDto> {
         return __request(OpenAPI, {
             method: 'PUT',
@@ -64,12 +40,12 @@ export class CategoryApiControllerService {
 
     /**
      * @param id
-     * @returns any OK
+     * @returns string OK
      * @throws ApiError
      */
     public static deleteCategory(
         id: number,
-    ): CancelablePromise<any> {
+    ): CancelablePromise<string> {
         return __request(OpenAPI, {
             method: 'DELETE',
             url: '/api/v1/category/{id}',
@@ -112,7 +88,7 @@ export class CategoryApiControllerService {
      * @returns CategoryRespDto OK
      * @throws ApiError
      */
-    public static getCategory1(
+    public static getCategory(
         type: 'INCOME' | 'OUTCOME',
     ): CancelablePromise<Array<CategoryRespDto>> {
         return __request(OpenAPI, {

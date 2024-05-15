@@ -3,7 +3,7 @@
 /* tslint:disable */
 /* eslint-disable */
 
-export type MemberDto = {
+export type MemberResponseDto = {
     id?: number;
     email?: string;
     profileUrl?: string;
