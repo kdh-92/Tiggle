@@ -17,7 +17,6 @@ import { convertTxTypeToColor } from "@/utils/txType";
 
 interface CommentFormProps extends FormHTMLAttributes<HTMLFormElement> {
   txId: number;
-  receiverId: number;
 }
 
 interface CommentFormInputs {

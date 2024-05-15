@@ -39,7 +39,7 @@ interface CreatePageProps extends AuthProps {
   type: TxType;
 }
 
-const CreatePage = ({ type }: CreatePageProps) => {
+const CreatePage = ({ type, profile }: CreatePageProps) => {
   const navigate = useNavigate();
   const messageApi = useMessage();
   const parentId = Number(useParams().id);
@@ -61,7 +61,7 @@ const CreatePage = ({ type }: CreatePageProps) => {
     const formData: TransactionFormData = {
       dto: {
         type,
-        memberId: 1,
+        memberId: profile.id,
         tagNames: tags?.join(", "),
         date: dayjs(date).toISOString(),
         ...rest,
