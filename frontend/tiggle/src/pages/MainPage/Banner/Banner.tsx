@@ -10,7 +10,7 @@ export default function Banner() {
       <div className="banner-wrap">
         <p className="banner-title">함께 해서 즐거운 절약 생활 🎣</p>
         <p className="banner-sub-title">나의 지출/수입을 공유해보세요</p>
-        <Link to="/create/income">
+        <Link to="/create/outcome">
           <CTAButton
             size={"lg"}
             icon={<Edit3 />}
