@@ -1,0 +1,20 @@
+{
+  "name": "image-server",
+  "version": "1.0.0",
+  "description": "tiggle의 이미지 서버 입니다",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "cross-env NODE_ENV=dev node index.js",
+    "start": "cross-env NODE_ENV=prod node index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cross-env": "^7.0.3",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "multer": "^1.4.5-lts.1",
+    "uuid": "^9.0.1"
+  }
+}
