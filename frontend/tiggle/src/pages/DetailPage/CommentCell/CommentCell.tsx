@@ -24,13 +24,10 @@ import { convertTxTypeToColor } from "@/utils/txType";
 
 import ReplyToggleButton from "../ReplyToggleButton/ReplyToggleButton";
 
-export interface CommentCellProps
-  extends Pick<
-    CommentRespDto,
-    "id" | "txId" | "content" | "createdAt" | "childCount" | "sender"
-  > {
-  receiverId: number;
-}
+export type CommentCellProps = Pick<
+  CommentRespDto,
+  "id" | "txId" | "content" | "createdAt" | "childCount" | "sender"
+>;
 
 export default function CommentCell({
   id,
