@@ -20,7 +20,7 @@ export default function useAuth() {
 
   const {
     data: profile,
-    isLoading: isLoginLoading,
+    isLoading: isLoginQueryLoading,
     isError: isLoginError,
   } = useQuery(
     memberKeys.detail("me"),
@@ -31,10 +31,26 @@ export default function useAuth() {
     },
   );
 
-  const isLogin = useMemo(
-    () => !isLoginLoading && !isLoginError && !!profile,
-    [isLoginLoading, isLoginError, profile],
-  );
+  // token이 없는 경우, loading 없음
+  const isLoginLoading = !!token && isLoginQueryLoading;
+
+  const isLogin = useMemo(() => {
+    // token이 없는 경우, false
+    if (!token) return false;
+
+    // token이 유효하지 않은 경우
+    if (isLoginError) {
+      console.log("mari debug - invalid token");
+      removeCookie("Authorization");
+      queryClient.invalidateQueries(memberKeys.detail("me"));
+      // reload page
+      navigate(0);
+    }
+
+    // token이 있는 경우,
+    // query 로딩 종료, error 없음, data 존재하면 true
+    return !isLoginLoading && !isLoginError && !!profile;
+  }, [token, isLoginLoading, isLoginError, profile]);
 
   const requireAuth = () => {
     dispatch(continueUrlStore.actions.set(location.pathname));

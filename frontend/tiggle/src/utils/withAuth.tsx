@@ -2,12 +2,12 @@ import { useDispatch } from "react-redux";
 import { Navigate, useLocation } from "react-router-dom";
 
 import LoadingPage from "@/components/templates/LoadingPage/LoadingPage";
-import { MemberDto } from "@/generated";
+import { MemberResponseDto } from "@/generated";
 import useAuth from "@/hooks/useAuth";
 import continueUrlStore from "@/store/continueUrl";
 
 export interface AuthProps {
-  profile: Required<MemberDto>;
+  profile: Required<MemberResponseDto>;
 }
 
 const LOGIN_PATH = "/login";

@@ -11,10 +11,12 @@ const LoginRedirectPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const { isLogin } = useAuth();
+  const { isLogin, isLoginLoading } = useAuth();
   const { url } = useSelector((state: RootState) => state.continueUrl);
 
   useEffect(() => {
+    if (isLoginLoading) return;
+
     if (isLogin) {
       navigate(url ?? "/");
       dispatch(continueUrlStore.actions.reset());
@@ -22,7 +24,7 @@ const LoginRedirectPage = () => {
       navigate("/login");
       // messageApi.error("로그인에 실패했습니다. 다시 시도해주세요.");
     }
-  }, []);
+  }, [isLoginLoading]);
 
   return <LoadingPage />;
 };
