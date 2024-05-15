@@ -26,11 +26,12 @@ export default function CTAButton({
   variant = "primary",
   className,
   children,
+  disabled,
   ...props
 }: CTAButtonProps) {
   return (
     <CTAButtonStyle
-      className={cn(className, size, color, variant, { fullWidth })}
+      className={cn(className, size, color, variant, { fullWidth, disabled })}
       {...props}
     >
       {icon && cloneElement(icon, { className: "cta-button-icon" })}

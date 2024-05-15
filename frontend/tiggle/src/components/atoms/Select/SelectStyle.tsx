@@ -1,6 +1,8 @@
 import { Select } from "antd";
 import styled from "styled-components";
 
+import { expandTypography } from "@/styles/util";
+
 export const SelectStyle = styled(Select)`
   &&& {
     width: 100%;
@@ -53,6 +55,13 @@ export const SelectStyle = styled(Select)`
       }
     }
 
+    // ---- error ----
+    &.ant-select-status-error {
+      .ant-select-selector {
+        border-width: 1px;
+      }
+    }
+
     // ---- variant ----
     &.compact {
       width: fit-content;
@@ -86,4 +95,9 @@ export const SelectStyle = styled(Select)`
       }
     }
   }
+`;
+
+export const ErrorMessageStyle = styled.span`
+  color: ${({ theme }) => theme.color.peach[500].value};
+  ${({ theme }) => expandTypography(theme.typography.body.small.medium)}
 `;
