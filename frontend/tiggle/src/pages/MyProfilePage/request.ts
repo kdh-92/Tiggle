@@ -1,4 +1,4 @@
-import { MemberApiControllerService, MemberDto } from "@/generated";
+import { MemberApiControllerService, MemberResponseDto } from "@/generated";
 import { getAxiosInstance } from "@/query/openapi-request";
 
 export type MemberFormData = Partial<
@@ -9,17 +9,21 @@ export type MemberFormData = Partial<
 
 export const updateProfile = async ({
   xMemberId,
-  memberDto,
+  memberRequestDto,
   multipartFile,
 }: MemberFormData) => {
   const formData = new FormData();
-  formData.append("memberDto", JSON.stringify(memberDto));
+
+  if (memberRequestDto) {
+    formData.append("memberRequestDto", JSON.stringify(memberRequestDto));
+  }
+
   if (multipartFile) {
     formData.append("multipartFile", multipartFile);
   }
 
   return getAxiosInstance()
-    .put<MemberDto>("/api/v1/member/me", formData, {
+    .put<MemberResponseDto>("/api/v1/member/me", formData, {
       headers: {
         "x-member-id": xMemberId,
         "Content-Type": "multipart/form-data",

@@ -3,9 +3,10 @@
 /* tslint:disable */
 /* eslint-disable */
 
-export type CategoryUpdateReqDto = {
-    name?: string;
-    type?: 'INCOME' | 'OUTCOME';
-    defaults?: boolean;
+export type MemberRequestDto = {
+    email?: string;
+    profileUrl?: string;
+    nickname?: string;
+    birth?: string;
 };
 

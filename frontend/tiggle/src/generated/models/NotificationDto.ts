@@ -3,18 +3,17 @@
 /* tslint:disable */
 /* eslint-disable */
 
+import type { CommentRespDto } from './CommentRespDto';
 import type { MemberResponseDto } from './MemberResponseDto';
 
-export type CommentRespDto = {
-    txId?: number;
-    parentId?: number;
-    senderId?: number;
-    receiverId?: number;
-    content?: string;
+export type NotificationDto = {
     id?: number;
+    title?: string;
+    content?: string;
     createdAt?: string;
-    childCount?: number;
+    viewedAt?: string;
     sender?: MemberResponseDto;
     receiver?: MemberResponseDto;
+    comment?: CommentRespDto;
 };
 

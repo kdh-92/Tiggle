@@ -24,11 +24,7 @@ interface CommentFormInputs {
   comment: string;
 }
 
-export default function CommentForm({
-  txId,
-  receiverId,
-  ...props
-}: CommentFormProps) {
+export default function CommentForm({ txId, ...props }: CommentFormProps) {
   const { isLogin, profile, checkIsLogin } = useAuth();
   const txType = useSelector((state: RootState) => state.detailPage.txType);
   const messageApi = useMessage();
@@ -42,8 +38,6 @@ export default function CommentForm({
   const { mutate: createComment } = useMutation(async (content: string) =>
     CommentApiService.createComment({
       txId,
-      senderId: profile!.id!,
-      receiverId: receiverId,
       content,
     }),
   );
