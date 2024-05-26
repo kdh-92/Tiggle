@@ -26,6 +26,7 @@ jobs:
 
       - name: Run server.sh
         run: |
+          ls -al
           export PATH="$PATH:/usr/local/bin"
           cd Tiggle
           ./server.sh
