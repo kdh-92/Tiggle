@@ -28,5 +28,4 @@ jobs:
         run: |
           ls -al
           export PATH="$PATH:/usr/local/bin"
-          cd Tiggle
           ./server.sh
