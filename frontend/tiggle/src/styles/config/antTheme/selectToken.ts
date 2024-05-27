@@ -20,6 +20,7 @@ const selectToken: Partial<SelectToken> = {
   controlItemBgHover: color.bluishGray[50].value,
   colorBgBase: color.white.value,
   colorBgContainerDisabled: color.bluishGray[100].value,
+  colorError: color.peach[300].value,
 };
 
 export default selectToken;

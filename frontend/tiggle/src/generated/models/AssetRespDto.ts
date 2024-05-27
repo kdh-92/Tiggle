@@ -4,8 +4,8 @@
 /* eslint-disable */
 
 export type AssetRespDto = {
+    id?: number;
     name?: string;
     defaults?: boolean;
-    id?: number;
 };
 

@@ -49,7 +49,7 @@ export class CommentApiService {
      */
     public static deleteComment(
         id: number,
-    ): CancelablePromise<any> {
+    ): CancelablePromise<Record<string, any>> {
         return __request(OpenAPI, {
             method: 'DELETE',
             url: '/api/v1/comments/{id}',

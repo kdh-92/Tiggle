@@ -97,15 +97,11 @@ const DetailPage = () => {
 
         <div className="comment-cards">
           {commentsData?.content?.map(comment => (
-            <CommentCell
-              {...comment}
-              key={`comment-cell-${comment.id}`}
-              receiverId={transactionData.member!.id!}
-            />
+            <CommentCell {...comment} key={`comment-cell-${comment.id}`} />
           ))}
         </div>
 
-        <CommentForm txId={id} receiverId={transactionData.member!.id!} />
+        <CommentForm txId={id} />
       </DetailPageCommentSectionStyle>
     </DetailPageStyle>
   );

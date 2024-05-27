@@ -19,6 +19,10 @@ export const UploadStyle = styled.div`
     height: 240px;
   }
 
+  &.error {
+    border: 1px solid ${({ theme }) => theme.color.peach[300].value};
+  }
+
   input[type="file"] {
     position: absolute;
     width: 0;
@@ -108,4 +112,9 @@ export const UploadStyle = styled.div`
       ${({ theme }) => expandTypography(theme.typography.body.medium.regular)}
     }
   }
+`;
+
+export const ErrorMessageStyle = styled.span`
+  color: ${({ theme }) => theme.color.peach[500].value};
+  ${({ theme }) => expandTypography(theme.typography.body.small.medium)}
 `;

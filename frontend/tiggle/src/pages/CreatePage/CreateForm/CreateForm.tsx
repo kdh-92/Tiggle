@@ -1,6 +1,11 @@
 import { useMemo } from "react";
 import { Info } from "react-feather";
-import { Controller, SubmitHandler, useForm } from "react-hook-form";
+import {
+  Controller,
+  FieldError,
+  SubmitHandler,
+  useForm,
+} from "react-hook-form";
 
 import { useQuery } from "@tanstack/react-query";
 import { Dayjs } from "dayjs";
@@ -79,7 +84,13 @@ function CreateForm({
     [tagsData],
   );
 
-  const { register, control, handleSubmit, resetField } = useForm<FormInputs>({
+  const {
+    register,
+    control,
+    handleSubmit,
+    resetField,
+    formState: { isValid, errors },
+  } = useForm<FormInputs>({
     defaultValues,
   });
 
@@ -98,7 +109,7 @@ function CreateForm({
         <Controller
           name="assetId"
           control={control}
-          rules={{ required: true }}
+          rules={{ required: "자산을 선택해 주세요." }}
           render={({ field }) => (
             <Select
               placeholder="자산 선택"
@@ -106,6 +117,7 @@ function CreateForm({
               // TODO: loading ui 추가
               notFoundContent={isAssetsLoading ? <p>loading...</p> : null}
               disabled={disabledInputs?.includes("assetId")}
+              error={errors.assetId}
               {...field}
             />
           )}
@@ -117,7 +129,7 @@ function CreateForm({
         <Controller
           name="categoryId"
           control={control}
-          rules={{ required: true }}
+          rules={{ required: "카테고리를 선택해 주세요." }}
           render={({ field }) => (
             <Select
               placeholder="카테고리 선택"
@@ -125,6 +137,7 @@ function CreateForm({
               // TODO: loading ui 추가
               notFoundContent={isCategoriesLoading ? <p>loading...</p> : null}
               disabled={disabledInputs?.includes("categoryId")}
+              error={errors.categoryId}
               {...field}
             />
           )}
@@ -138,12 +151,16 @@ function CreateForm({
         <Controller
           name="content"
           control={control}
-          rules={{ max: 20, required: true }}
+          rules={{
+            max: { value: 20, message: "20자 이내로 작성해 주세요." },
+            required: "제목을 입력해 주세요.",
+          }}
           render={({ field }) => (
             <Input
               placeholder="제목을 입력하세요"
               count={{ show: true, max: 20 }}
               disabled={disabledInputs?.includes("content")}
+              error={errors.content}
               {...field}
             />
           )}
@@ -155,13 +172,14 @@ function CreateForm({
         <Controller
           name="amount"
           control={control}
-          rules={{ required: true }}
+          rules={{ required: "금액을 입력해 주세요." }}
           render={({ field }) => (
             <Input
               placeholder="금액을 입력하세요"
               prefix="₩"
               type="number"
               disabled={disabledInputs?.includes("amount")}
+              error={errors.amount}
               {...field}
             />
           )}
@@ -173,11 +191,12 @@ function CreateForm({
         <Controller
           name="date"
           control={control}
-          rules={{ required: true }}
+          rules={{ required: "날짜를 입력해 주세요." }}
           render={({ field }) => (
             <DatePicker
               placeholder="날짜를 입력하세요"
               disabled={disabledInputs?.includes("date")}
+              error={errors.date as FieldError}
               {...field}
             />
           )}
@@ -189,12 +208,16 @@ function CreateForm({
         <Controller
           name="reason"
           control={control}
-          rules={{ required: true, max: 300 }}
+          rules={{
+            required: "설명을 입력해 주세요.",
+            max: { value: 300, message: "300자 이내로 입력해 주세요." },
+          }}
           render={({ field }) => (
             <TextArea
               placeholder={`${convertTxTypeToWord(type)} 이유를 입력하세요.`}
               count={{ show: true, max: 300 }}
               disabled={disabledInputs?.includes("reason")}
+              error={errors.reason}
               {...field}
             />
           )}
@@ -208,7 +231,13 @@ function CreateForm({
         <Controller
           name="tags"
           control={control}
-          rules={{ required: true, max: 5 }}
+          rules={{
+            required: "해시태그를 1개 이상 선택해 주세요.",
+            max: {
+              value: 5,
+              message: "해시태그는 최대 5개까지 선택 가능합니다.",
+            },
+          }}
           render={({ field }) => (
             <MultiSelect
               placeholder="해시태그 선택"
@@ -216,6 +245,7 @@ function CreateForm({
               // TODO: loading ui 추가
               notFoundContent={isTagsLoading ? <p>loading...</p> : null}
               disabled={disabledInputs?.includes("tags")}
+              error={errors.tags as FieldError}
               {...field}
             />
           )}
@@ -227,7 +257,8 @@ function CreateForm({
         <Upload
           onReset={handleResetImageUrl}
           disabled={disabledInputs?.includes("imageUrl")}
-          {...register("imageUrl", { required: true })}
+          {...register("imageUrl", { required: "사진을 업로드 해주세요" })}
+          error={errors.imageUrl}
         />
         <div className="form-item-caption">
           <Info size={12} />
@@ -238,7 +269,7 @@ function CreateForm({
       </div>
 
       <div className="form-controller">
-        <CTAButton type="submit" size="lg" fullWidth>
+        <CTAButton type="submit" size="lg" fullWidth disabled={!isValid}>
           등록하기
         </CTAButton>
         <TextButton color="bluishGray500" onClick={onCancel}>

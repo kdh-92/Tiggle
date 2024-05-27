@@ -2,7 +2,8 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { MemberDto } from '../models/MemberDto';
+import type { MemberRequestDto } from '../models/MemberRequestDto';
+import type { MemberResponseDto } from '../models/MemberResponseDto';
 
 import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
@@ -12,10 +13,10 @@ export class MemberApiControllerService {
 
     /**
      * 내 정보 조회
-     * @returns MemberDto OK
+     * @returns MemberResponseDto OK
      * @throws ApiError
      */
-    public static getMe(): CancelablePromise<MemberDto> {
+    public static getMe(): CancelablePromise<MemberResponseDto> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/v1/member/me',
@@ -31,15 +32,15 @@ export class MemberApiControllerService {
     /**
      * 프로필 업데이트
      * @param formData
-     * @returns MemberDto OK
+     * @returns MemberResponseDto OK
      * @throws ApiError
      */
     public static updateMe(
         formData?: {
-            memberDto: MemberDto;
-            multipartFile?: Blob;
+            memberRequestDto: MemberRequestDto;
+            multipartFile: Blob;
         },
-    ): CancelablePromise<MemberDto> {
+    ): CancelablePromise<MemberResponseDto> {
         return __request(OpenAPI, {
             method: 'PUT',
             url: '/api/v1/member/me',
@@ -55,13 +56,35 @@ export class MemberApiControllerService {
     }
 
     /**
+     * @param requestBody
+     * @returns MemberResponseDto OK
+     * @throws ApiError
+     */
+    public static createMember(
+        requestBody: MemberRequestDto,
+    ): CancelablePromise<MemberResponseDto> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/v1/member',
+            body: requestBody,
+            mediaType: 'application/json',
+            errors: {
+                400: `Bad Request`,
+                401: `Unauthorized`,
+                404: `Not Found`,
+                500: `Internal Server Error`,
+            },
+        });
+    }
+
+    /**
      * @param id
-     * @returns MemberDto OK
+     * @returns MemberResponseDto OK
      * @throws ApiError
      */
     public static getMember(
         id: number,
-    ): CancelablePromise<MemberDto> {
+    ): CancelablePromise<MemberResponseDto> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/v1/member/{id}',
@@ -78,10 +101,10 @@ export class MemberApiControllerService {
     }
 
     /**
-     * @returns MemberDto OK
+     * @returns MemberResponseDto OK
      * @throws ApiError
      */
-    public static getAllMember(): CancelablePromise<Array<MemberDto>> {
+    public static getAllMember(): CancelablePromise<Array<MemberResponseDto>> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/v1/member/all',

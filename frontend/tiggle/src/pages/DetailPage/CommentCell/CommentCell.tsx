@@ -24,15 +24,10 @@ import { convertTxTypeToColor } from "@/utils/txType";
 
 import ReplyToggleButton from "../ReplyToggleButton/ReplyToggleButton";
 
-const TEMP_USER_ID = 1;
-
-export interface CommentCellProps
-  extends Pick<
-    CommentRespDto,
-    "id" | "txId" | "content" | "createdAt" | "childCount" | "sender"
-  > {
-  receiverId: number;
-}
+export type CommentCellProps = Pick<
+  CommentRespDto,
+  "id" | "txId" | "content" | "createdAt" | "childCount" | "sender"
+>;
 
 export default function CommentCell({
   id,
@@ -41,7 +36,6 @@ export default function CommentCell({
   createdAt,
   childCount,
   sender,
-  receiverId,
 }: CommentCellProps) {
   const messageApi = useMessage();
   const [replyOpen, setReplyOpen] = useState(false);
@@ -62,9 +56,7 @@ export default function CommentCell({
   const { mutate: createReply } = useMutation(async (comment: string) =>
     CommentApiService.createComment({
       txId,
-      senderId: TEMP_USER_ID,
       parentId: id,
-      receiverId,
       content: comment,
     }),
   );

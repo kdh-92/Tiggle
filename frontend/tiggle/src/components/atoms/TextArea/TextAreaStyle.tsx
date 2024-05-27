@@ -21,6 +21,10 @@ export const TextAreaStyle = styled(Input.TextArea)`
       }
     }
 
+    &.ant-input-status-error {
+      border-width: 1px;
+    }
+
     &.compact {
       border-radius: 8px;
       .ant-input,
@@ -76,4 +80,9 @@ export const TextAreaStyle = styled(Input.TextArea)`
       }
     }
   }
+`;
+
+export const ErrorMessageStyle = styled.span`
+  color: ${({ theme }) => theme.color.peach[500].value};
+  ${({ theme }) => expandTypography(theme.typography.body.small.medium)}
 `;

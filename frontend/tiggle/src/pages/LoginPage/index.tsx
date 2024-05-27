@@ -32,8 +32,14 @@ const LoginPage = () => {
   return (
     <LoginPageStyle>
       <LoginHeader />
-      <SocialLoginButton social_logo={"kakao"} href="#" />
-      <SocialLoginButton social_logo={"naver"} href="#" />
+      <SocialLoginButton
+        social_logo={"kakao"}
+        href={import.meta.env.VITE_KAKAO_REDIRECT_URL ?? "#"}
+      />
+      <SocialLoginButton
+        social_logo={"naver"}
+        href={import.meta.env.VITE_NAVER_REDIRECT_URL ?? "#"}
+      />
       <SocialLoginButton
         social_logo={"google"}
         href={import.meta.env.VITE_GOOGLE_REDIRECT_URL ?? "#"}
