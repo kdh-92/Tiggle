@@ -26,5 +26,5 @@ application.yml
 
 .idea
 
-docker-compose.yml
-**/db/
+#docker-compose.yml
+#**/db/
