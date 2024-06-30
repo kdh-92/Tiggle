@@ -11,8 +11,6 @@ export default function NotificationModal() {
     (state: RootState) => state.notificationModal.isOpen,
   );
 
-  console.log(isModalOpen);
-
   return (
     <>
       {isModalOpen && (

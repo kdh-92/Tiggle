@@ -3,12 +3,14 @@ import { styled } from "styled-components";
 import { expandTypography } from "@/styles/util/expandTypography";
 
 export const NotificationModalStyle = styled.div`
-  position: absolute;
+  position: fixed;
+  overflow: hidden;
   width: 100%;
-  z-index: 999;
+  z-index: 9999;
 
   ${({ theme }) => theme.mq.desktop} {
     position: fixed;
+    overflow: auto;
   }
 
   .notification-background {
