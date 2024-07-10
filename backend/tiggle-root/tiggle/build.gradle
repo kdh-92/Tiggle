@@ -22,6 +22,9 @@ dependencies {
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
 //	testImplementation 'org.springframework.security:spring-security-test'
 
+	// batch
+	implementation 'org.springframework.boot:spring-boot-starter-batch'
+
 	// configurationProperties를 사용하기 위해 추가
 	annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
 
