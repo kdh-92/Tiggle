@@ -2,16 +2,22 @@ package com.side.tiggle.global.config
 
 import org.springframework.batch.core.Job
 import org.springframework.batch.core.Step
-import org.springframework.batch.core.configuration.annotation.DefaultBatchConfigurer
-import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing
-import org.springframework.batch.core.configuration.annotation.JobBuilderFactory
-import org.springframework.batch.core.configuration.annotation.StepBuilderFactory
+import org.springframework.batch.core.configuration.annotation.*
+import org.springframework.batch.core.explore.JobExplorer
+import org.springframework.batch.core.explore.support.JobExplorerFactoryBean
+import org.springframework.batch.core.launch.JobLauncher
 import org.springframework.batch.core.launch.support.RunIdIncrementer
+import org.springframework.batch.core.launch.support.SimpleJobLauncher
+import org.springframework.batch.core.repository.JobRepository
+import org.springframework.batch.core.repository.support.JobRepositoryFactoryBean
 import org.springframework.batch.core.step.tasklet.Tasklet
 import org.springframework.batch.repeat.RepeatStatus
+import org.springframework.batch.support.transaction.ResourcelessTransactionManager
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.orm.jpa.JpaTransactionManager
+import org.springframework.transaction.PlatformTransactionManager
 import javax.sql.DataSource
 
 @Configuration
@@ -19,8 +25,12 @@ import javax.sql.DataSource
 class BatchConfig(
     private val jobBuilderFactory: JobBuilderFactory,
     private val stepBuilderFactory: StepBuilderFactory,
-    @Qualifier("batchDataSource") private val batchDataSource: DataSource
-) : DefaultBatchConfigurer() {
+    @Qualifier("batchDataSource") private val batchDataSource: DataSource,
+    @Qualifier("batchTransactionManager") private val batchTransactionManager: JpaTransactionManager
+) : BatchConfigurer {
+
+    private var jobRepository: JobRepository? = null
+    private var jobExplorer: JobExplorer? = null
 
     @Bean
     fun job(): Job {
@@ -45,7 +55,32 @@ class BatchConfig(
         }
     }
 
-    override fun setDataSource(dataSource: DataSource) {
-        super.setDataSource(batchDataSource)
+    override fun getJobRepository(): JobRepository {
+        val factory = JobRepositoryFactoryBean()
+        factory.setDataSource(batchDataSource)
+        factory.setTransactionManager(batchTransactionManager)
+        factory.afterPropertiesSet()
+        return factory.getObject()!!
+    }
+
+    override fun getTransactionManager(): PlatformTransactionManager {
+        return ResourcelessTransactionManager()
+    }
+
+    override fun getJobLauncher(): JobLauncher {
+        val jobLauncher = SimpleJobLauncher()
+        jobLauncher.setJobRepository(getJobRepository())
+        jobLauncher.afterPropertiesSet()
+        return jobLauncher
+    }
+
+    override fun getJobExplorer(): JobExplorer {
+        if (jobExplorer == null) {
+            val factory = JobExplorerFactoryBean()
+            factory.setDataSource(batchDataSource)
+            factory.afterPropertiesSet()
+            jobExplorer = factory.getObject()
+        }
+        return jobExplorer!!
     }
 }

@@ -18,7 +18,7 @@ class MultiSchemaTest(
     override fun extensions() = listOf(SpringExtension)
 
     init {
-        given("multi schema - batch 접근 테스트") {
+        given("multi schema - batch schema에 있는 example 테이블 접근 테스트") {
             print(exampleRepository.findById(1L))
             exampleRepository.count() shouldBe 1
         }
