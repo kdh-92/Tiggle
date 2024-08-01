@@ -1,14 +1,11 @@
 package com.side.tiggle.domain.transaction.service
 
-import com.side.tiggle.domain.asset.service.AssetService
 import com.side.tiggle.domain.category.service.CategoryService
 import com.side.tiggle.domain.member.service.MemberService
 import com.side.tiggle.domain.transaction.dto.TransactionDto
 import com.side.tiggle.domain.transaction.dto.req.TransactionUpdateReqDto
 import com.side.tiggle.domain.transaction.model.Transaction
 import com.side.tiggle.domain.transaction.repository.TransactionRepository
-import com.side.tiggle.domain.txtag.model.TxTag
-import com.side.tiggle.domain.txtag.service.TxTagService
 import com.side.tiggle.global.exception.NotFoundException
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
@@ -26,9 +23,7 @@ import java.util.*
 
 @Service
 class TransactionService(
-    private val txTagService: TxTagService,
     private val memberService: MemberService,
-    private val assetService: AssetService,
     private val categoryService: CategoryService,
     private val transactionRepository: TransactionRepository
 ) {
@@ -71,27 +66,19 @@ class TransactionService(
     }
 
     @Transactional
-    fun createTransaction(dto: TransactionDto, file: MultipartFile): Transaction {
+    fun createTransaction(memberId: Long, dto: TransactionDto, file: MultipartFile?): Transaction {
         var savePath: Path? = null
         try {
-            val uploadedFilePath = uploadFileToFolder(file)
-            savePath = Paths.get(uploadedFilePath)
-            dto.imageUrl = uploadedFilePath
+//            val uploadedFilePath = uploadFileToFolder(file)
+//            savePath = Paths.get(uploadedFilePath)
+//            dto.imageUrl = uploadedFilePath
 
-            val member = memberService.getMember(dto.memberId)
-            val asset = assetService.getAsset(dto.assetId)
+            val member = memberService.getMember(memberId)
             val category = categoryService.getCategory(dto.categoryId)
             val tx = transactionRepository.save(
-                dto.toEntity(member, asset, category)
+                dto.toEntity(member, category)
             )
 
-            val txTag = TxTag(
-                txId = tx.id!!,
-                memberId = dto.memberId,
-                tagNames = dto.tagNames
-            )
-
-            txTagService.createTxTag(txTag)
             return tx
         } catch (e: Exception) {
             if (savePath != null) {
@@ -144,7 +131,6 @@ class TransactionService(
             .filter { it.member.id == memberId }
             .orElseThrow { NotFoundException() }
         transaction.apply {
-            type = dto.type
             amount = dto.amount
             date = dto.date
             content = dto.content
@@ -152,7 +138,6 @@ class TransactionService(
             tagNames = dto.tagNames
         }
 
-        txTagService.updateTxTag(transactionId, transaction.member.id!!, dto.tagNames)
         return transactionRepository.save(transaction)
     }
 

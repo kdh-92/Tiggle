@@ -9,7 +9,6 @@ import com.side.tiggle.domain.transaction.dto.TransactionDto
 import com.side.tiggle.domain.transaction.dto.req.TransactionUpdateReqDto
 import com.side.tiggle.domain.transaction.dto.resp.TransactionRespDto
 import com.side.tiggle.domain.transaction.model.Transaction
-import com.side.tiggle.domain.transaction.model.TransactionType
 import com.side.tiggle.domain.transaction.service.TransactionService
 import com.side.tiggle.global.common.constants.HttpHeaders
 import io.swagger.v3.oas.annotations.Operation
@@ -24,8 +23,6 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.multipart.MultipartFile
 import java.time.LocalDate
-import java.util.*
-import java.util.stream.Collectors
 
 @RestController
 @RequestMapping("/api/v1/transaction")
@@ -42,17 +39,11 @@ class TransactionApiController(
         @Parameter(hidden = true)
         @RequestHeader(name = HttpHeaders.MEMBER_ID) memberId: Long,
         @RequestPart dto: TransactionDto,
-        @RequestPart(value = "multipartFile", required = false) file: MultipartFile
+        @RequestPart(value = "multipartFile", required = false) file: MultipartFile?
     ): ResponseEntity<TransactionRespDto> {
-        val tx = transactionService.createTransaction(dto, file)
-        val parentTx = if (tx.parentId != null) {
-            transactionService.getTransaction(tx.parentId!!)
-        } else {
-            null
-        }
-
+        val tx = transactionService.createTransaction(memberId, dto, file)
         return ResponseEntity(
-            TransactionRespDto.fromEntityDetailTx(tx, parentTx), HttpStatus.CREATED
+            TransactionRespDto.fromEntityDetailTx(tx), HttpStatus.CREATED
         )
     }
 
@@ -63,13 +54,8 @@ class TransactionApiController(
         @PathVariable("id") transactionId: Long
     ): ResponseEntity<TransactionRespDto> {
         val tx = transactionService.getTransaction(transactionId)
-        val parentTx = if (tx.parentId != null) {
-            transactionService.getTransaction(tx.parentId!!)
-        } else {
-            null
-        }
         return ResponseEntity(
-            TransactionRespDto.fromEntityDetailTx(tx, parentTx), HttpStatus.OK
+            TransactionRespDto.fromEntityDetailTx(tx), HttpStatus.OK
         )
     }
 
@@ -105,8 +91,6 @@ class TransactionApiController(
         @Parameter(description = "(필터링) 트랜잭션 일자 기준 끝")
         @DateTimeFormat(pattern = "yyyy-MM-dd")
         @RequestParam(required = false) end: LocalDate?,
-        @Parameter(description = "(필터링) 트랜잭션 타입")
-        @RequestParam(required = false) type: TransactionType?,
         @Parameter(description = "(필터링) 카테고리 종류 (복수)")
         @RequestParam(required = false) category: List<Long>?,
         @Parameter(description = "(필터링) 자산 종류 (복수)")
@@ -120,17 +104,15 @@ class TransactionApiController(
             // TODO : 필터링을 repository 레벨에서 수행한다?
             val startCheck = start == null || start.isBefore(it.date)
             val endCheck = end == null || end.isAfter(it.date)
-            val typeCheck = type == null || type == it.type
             val categoryCheck = category.isNullOrEmpty() || category.contains(it.category.id!!)
-            val assetCheck = asset.isNullOrEmpty() || asset.contains(it.asset.id!!)
 
-            val currentTags = it.tagNames?.split(",")
+            val currentTags = it.tagNames
             val tagNamesCheck = if (currentTags != null && tagNames.isNullOrEmpty().not()) {
                 currentTags.stream().anyMatch { o: String? -> tagNames!!.contains(o) }
             } else {
                 true
             }
-            startCheck && endCheck && typeCheck && categoryCheck && assetCheck && tagNamesCheck
+            startCheck && endCheck && categoryCheck && tagNamesCheck
         }.map {mapTxRespDto(it) }
         return ResponseEntity(
             TransactionRespDto.fromEntityPage(txPage, dtoList),

@@ -50,10 +50,6 @@ class JwtRequestFilter(
         }
     }
 
-    /*
-    eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI1Iiwicm9sZXMiOiJST0xFX1VTRVIiLCJpYXQiOjE3MDM0OTE1MzMsImV4cCI6MTcwMzQ5MzMzM30.vxb0rr_sx8xGJ06Xh2vN-gPmNe_HWKYW6yeqH88hob8
-     */
-
     override fun shouldNotFilter(request: HttpServletRequest): Boolean {
         return excludeUrl.any {
             request.servletPath.startsWith(it)

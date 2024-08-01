@@ -1,16 +1,12 @@
 package com.side.tiggle.domain.transaction
 
-import com.side.tiggle.domain.asset.model.Asset
-import com.side.tiggle.domain.asset.repository.AssetRepository
 import com.side.tiggle.domain.category.model.Category
-import com.side.tiggle.domain.category.model.CategoryType
 import com.side.tiggle.domain.category.repository.CategoryRepository
 import com.side.tiggle.domain.member.model.Member
 import com.side.tiggle.domain.member.repository.MemberRepository
 import com.side.tiggle.domain.transaction.dto.TransactionDto
 import com.side.tiggle.domain.transaction.dto.resp.TransactionRespDto
 import com.side.tiggle.domain.transaction.model.Transaction
-import com.side.tiggle.domain.transaction.model.TransactionType
 import com.side.tiggle.domain.transaction.repository.TransactionRepository
 import com.side.tiggle.util.MockMvcSupport
 import com.side.tiggle.util.fromJson
@@ -31,7 +27,6 @@ class TransactionApiController(
     private val mockMvc: MockMvc,
     private val mockMvcSupport: MockMvcSupport,
     private val memberRepository: MemberRepository,
-    private val assetRepository: AssetRepository,
     private val categoryRepository: CategoryRepository,
     private val transactionRepository: TransactionRepository
 ): BehaviorSpec({
@@ -46,26 +41,17 @@ class TransactionApiController(
         id = memberId
     }
 
-    val asset = Asset(
-        name = "asdf",
-        defaults = true
-    ).apply {
-        id = 1L
-    }
-
     val category = Category(
         name = "asdfasdf",
         defaults = true,
-        type = CategoryType.OUTCOME
     ).apply {
         id = 1L
     }
 
-    val tx = getTransaction(member, asset, category)
+    val tx = getTransaction(member, category)
 
     beforeTest {
         memberRepository.save(member)
-        assetRepository.save(asset)
         categoryRepository.save(category)
         transactionRepository.save(tx)
     }
@@ -73,22 +59,19 @@ class TransactionApiController(
     given("트랜잭션 CRUD") {
         val request = TransactionDto(
             memberId = memberId,
-            parentId = null,
-            assetId = asset.id!!,
             categoryId = category.id!!,
-            type = TransactionType.OUTCOME,
             imageUrl = "imageUrl",
             amount = 1,
             date = LocalDate.now(),
             content = "내용",
             reason = "이유",
-            tagNames = "asdf,asdf"
+            tagNames = listOf("asdf", "zxcv")
         )
 
         val url = "/api/v1/transaction"
-        val txForCreate = getTransaction(member, asset, category).apply { id = 10 }
-        val txForUpdate = getTransaction(member, asset, category).apply { id = 20 }
-        val txForDelete = getTransaction(member, asset, category).apply { id = 30 }
+        val txForCreate = getTransaction(member, category).apply { id = 10 }
+        val txForUpdate = getTransaction(member, category).apply { id = 20 }
+        val txForDelete = getTransaction(member, category).apply { id = 30 }
         transactionRepository.saveAll(
             listOf(txForCreate, txForUpdate, txForDelete)
         )
@@ -113,7 +96,6 @@ class TransactionApiController(
 
                 body.amount shouldBe request.amount
                 body.member.email shouldBe member.email
-                body.asset.name shouldBe asset.name
                 body.category.name shouldBe category.name
             }
         }
@@ -131,7 +113,6 @@ class TransactionApiController(
                 body.amount shouldBe tx.amount
                 body.member.email shouldBe member.email
                 body.id shouldBe tx.id!!
-                body.asset.name shouldBe asset.name
                 body.category.name shouldBe category.name
             }
         }
@@ -142,16 +123,14 @@ class TransactionApiController(
     }
 }) {
     companion object {
-        fun getTransaction(member: Member, asset: Asset, category: Category): Transaction {
+        fun getTransaction(member: Member, category: Category): Transaction {
             return Transaction(
                 member = member,
-                asset = asset,
                 category = category,
                 amount = 100,
                 content = "asdfasdf",
                 date = LocalDate.now(),
                 reason = "zxcvzxcv",
-                type = TransactionType.OUTCOME
             )
         }
     }

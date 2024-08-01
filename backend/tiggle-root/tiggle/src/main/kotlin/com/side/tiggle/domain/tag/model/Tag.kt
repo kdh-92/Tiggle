@@ -1,5 +1,6 @@
 package com.side.tiggle.domain.tag.model
 
+import com.side.tiggle.domain.member.model.Member
 import javax.persistence.*
 
 @Entity
@@ -13,4 +14,8 @@ class Tag(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long = 0
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id")
+    var member: Member? = null
 }

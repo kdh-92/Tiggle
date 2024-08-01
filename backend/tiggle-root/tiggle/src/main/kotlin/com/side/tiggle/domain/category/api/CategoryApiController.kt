@@ -2,7 +2,6 @@ package com.side.tiggle.domain.category.api
 
 import com.side.tiggle.domain.category.dto.CategoryDto
 import com.side.tiggle.domain.category.dto.resp.CategoryRespDto
-import com.side.tiggle.domain.category.model.CategoryType
 import com.side.tiggle.domain.category.service.CategoryService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -22,17 +21,6 @@ class CategoryApiController(
             CategoryRespDto.fromEntity(
                 categoryService.createCategory(categoryDto)
             ), HttpStatus.CREATED
-        )
-    }
-
-    @GetMapping("/type/{type}")
-    fun getCategory(
-        @PathVariable("type") type: CategoryType
-    ): ResponseEntity<List<CategoryRespDto>> {
-        return ResponseEntity(
-            categoryService.getCategoryType(type).map {
-                CategoryRespDto.fromEntity(it)
-            }, HttpStatus.OK
         )
     }
 
