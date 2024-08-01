@@ -23,7 +23,7 @@ import java.time.LocalDate
 
 @SpringBootTest
 @AutoConfigureMockMvc(addFilters = false)
-class TransactionApiController(
+class TransactionApiControllerTest(
     private val mockMvc: MockMvc,
     private val mockMvcSupport: MockMvcSupport,
     private val memberRepository: MemberRepository,
