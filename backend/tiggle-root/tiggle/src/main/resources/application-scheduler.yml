@@ -1,0 +1,11 @@
+week-schedule:
+  cron: "0 0 0 * * MON"
+  use: true
+
+monthly-schedule:
+  cron: "0 0 0 1 * *"
+  use: true
+
+now-schedule:
+  cron: "0 0/1 * * * ?"  # 매분 동작
+  use: true
