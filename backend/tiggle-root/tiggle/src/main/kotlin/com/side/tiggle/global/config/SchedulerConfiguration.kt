@@ -34,8 +34,8 @@ class SchedulerConfig(
     private fun runJob(jobType: String) {
         try {
             when (jobType) {
-                "weekly" -> jobService.runWeeklyJob()
-                "monthly" -> jobService.runMonthlyJob()
+                "weekly" -> jobService.generateWeeklySummary()
+                "monthly" -> jobService.generateMonthlySummary()
                 "now" -> jobService.runNowJob()
                 else -> println("Unknown job type: $jobType")
             }
