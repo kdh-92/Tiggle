@@ -2,7 +2,7 @@ name: Deploy to NAS Server
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, be-feat/v2-build-test ]
 
 jobs:     
   deploy:
