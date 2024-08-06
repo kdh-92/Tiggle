@@ -1,6 +1,6 @@
 package com.side.tiggle.global.config
 
-import com.side.tiggle.global.scheduler.JobService
+import com.side.tiggle.domain.scheduler.service.JobService
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Configuration
 import org.springframework.scheduling.annotation.EnableScheduling
