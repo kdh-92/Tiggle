@@ -7,6 +7,7 @@ services:
       - "8080:8080"
     container_name: tiggle_app
     environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://tiggle.duckdns.org:3307/tiggle?useSSL=false&allowPublicKeyRetrieval=true
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: tiggle2024!#
       OAUTH2_GOOGLE_CLIENT_ID: 39538605611-murngjhufa3alnvqcuil4qr86oalf5as.apps.googleusercontent.com
