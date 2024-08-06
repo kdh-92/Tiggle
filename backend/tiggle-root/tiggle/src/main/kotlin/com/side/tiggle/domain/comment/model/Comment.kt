@@ -15,7 +15,7 @@ import javax.persistence.*
 class Comment(
     @JsonIgnore
     @JoinColumn(name = "tx_id", nullable = false)
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     val tx: Transaction,
 
     @JsonIgnore

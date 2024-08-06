@@ -30,4 +30,9 @@ abstract class BaseEntity() {
 
     @Column(name = "deleted", nullable = false)
     open var deleted: Boolean = false
+
+    fun delete() {
+        this.deletedAt = LocalDateTime.now()
+        this.deleted = true
+    }
 }

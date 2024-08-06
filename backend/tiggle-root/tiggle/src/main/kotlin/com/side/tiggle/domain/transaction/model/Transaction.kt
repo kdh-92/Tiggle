@@ -1,7 +1,6 @@
 package com.side.tiggle.domain.transaction.model
 
 import com.fasterxml.jackson.annotation.JsonIgnore
-import com.side.tiggle.domain.asset.model.Asset
 import com.side.tiggle.domain.category.model.Category
 import com.side.tiggle.domain.member.model.Member
 import com.side.tiggle.domain.reaction.model.Reaction
@@ -23,24 +22,18 @@ class Transaction(
     val member: Member,
 
     @JsonIgnore
-    @JoinColumn(name = "asset_id", nullable = false)
-    @ManyToOne(fetch = FetchType.LAZY)
-    val asset: Asset,
-
-    @JsonIgnore
     @JoinColumn(name = "category_id", nullable = false)
     @ManyToOne(fetch = FetchType.LAZY)
     val category: Category,
 
-    @Enumerated(EnumType.STRING)
-    var type: TransactionType,
     val imageUrl: String? = null,
     var amount: Int,
     var date: LocalDate,
     var content: String,
     var reason: String,
-    var tagNames: String? = null,
-    val parentId: Long? = null
+
+    @Convert(converter = TagNamesConverter::class)
+    var tagNames: List<String>? = null,
 ): BaseEntity() {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

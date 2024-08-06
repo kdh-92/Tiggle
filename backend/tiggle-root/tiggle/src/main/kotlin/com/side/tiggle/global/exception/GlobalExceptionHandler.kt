@@ -1,5 +1,6 @@
 package com.side.tiggle.global.exception
 
+import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.ResponseStatus
@@ -9,28 +10,33 @@ import javax.servlet.http.HttpServletRequest
 
 @RestControllerAdvice
 class GlobalExceptionHandler {
+    val logger = LoggerFactory.getLogger(this::class.java)
 
     @ExceptionHandler(value = [Exception::class])
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     fun handleException(e: Exception, request: HttpServletRequest): ErrorResponse {
+        logger.error(e.message, e)
         return ErrorResponse(e, HttpStatus.INTERNAL_SERVER_ERROR, request)
     }
 
     @ExceptionHandler(value = [IllegalArgumentException::class])
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     fun handleIllegalArgumentException(e: IllegalArgumentException, request: HttpServletRequest): ErrorResponse {
+        logger.error(e.message, e)
         return ErrorResponse(e, HttpStatus.BAD_REQUEST, request)
     }
 
     @ExceptionHandler(value = [NotFoundException::class])
     @ResponseStatus(HttpStatus.NOT_FOUND)
     fun handleNotFoundException(e: NotFoundException, request: HttpServletRequest): ErrorResponse {
+        logger.error(e.message, e)
         return ErrorResponse(e, HttpStatus.NOT_FOUND, request)
     }
 
     @ExceptionHandler(value = [NotAuthorizedException::class])
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     fun handleNotAuthorizedException(e: NotAuthorizedException, request: HttpServletRequest): ErrorResponse {
+        logger.error(e.message, e)
         return ErrorResponse(e, HttpStatus.UNAUTHORIZED, request)
     }
 

@@ -2,7 +2,6 @@ package com.side.tiggle.domain.category.service
 
 import com.side.tiggle.domain.category.dto.CategoryDto
 import com.side.tiggle.domain.category.model.Category
-import com.side.tiggle.domain.category.model.CategoryType
 import com.side.tiggle.domain.category.repository.CategoryRepository
 import com.side.tiggle.global.exception.NotFoundException
 import org.springframework.stereotype.Service
@@ -20,10 +19,6 @@ class CategoryService(
             .orElseThrow { NotFoundException() }
     }
 
-    fun getCategoryType(type: CategoryType): List<Category> {
-        return categoryRepository.findByType(type)
-    }
-
     fun getAllCategory(): List<Category> {
         return categoryRepository.findAll()
     }
@@ -32,7 +27,6 @@ class CategoryService(
         val category = categoryRepository.findById(id)
             .orElseThrow { NotFoundException() }
         category.apply {
-            type = dto.type
             name = dto.name
             defaults = dto.defaults
         }
