@@ -1,5 +1,7 @@
 #!/bin/bash
 
+pwd
+
 # 실행 중인 컨테이너 전체 제거
 docker compose -f docker-compose.kafka.yml down
 
