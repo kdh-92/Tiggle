@@ -23,11 +23,13 @@ jobs:
         
       - name: Pull latest changes
         run: | 
+          whoami
+          pwd
           git pull -f origin be-feat/v2-build-test
           git checkout be-feat/v2-build-test
-
-      - name: Run server.sh
-        run: |
-          ls -al
-          export PATH="$PATH:/usr/local/bin"
-          ./server.sh
+#
+#      - name: Run server.sh
+#        run: |
+#          ls -al
+#          export PATH="$PATH:/usr/local/bin"
+#          ./server.sh
