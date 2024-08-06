@@ -24,6 +24,7 @@ jobs:
       - name: Pull latest changes
         run: | 
           whoami
+          ls -al
           pwd
           git pull -f origin be-feat/v2-build-test
           git checkout be-feat/v2-build-test
