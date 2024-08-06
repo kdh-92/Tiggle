@@ -4,7 +4,7 @@ import { expandTypography } from "../../../styles/util";
 
 export const UploadStyle = styled.div`
   width: 100%;
-  height: 108px;
+  height: 48px;
   padding: 16px;
   background-color: ${({ theme }) => theme.color.white.value};
   border-radius: 12px;
@@ -65,9 +65,8 @@ export const UploadStyle = styled.div`
     &-empty {
       ${({ theme }) => expandTypography(theme.typography.body.medium.regular)}
       display: flex;
-      flex-direction: column;
       align-items: center;
-      gap: 4px;
+      gap: 8px;
     }
   }
 
@@ -80,7 +79,7 @@ export const UploadStyle = styled.div`
 
   ${({ theme }) => theme.mq.desktop} {
     width: 480px;
-    height: 180px;
+    height: 56px;
     border-radius: 16px;
     gap: 16px;
 

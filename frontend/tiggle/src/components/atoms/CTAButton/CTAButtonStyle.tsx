@@ -36,6 +36,12 @@ export const CTAButtonStyle = styled.button`
     ${({ theme }) => expandTypography(theme.typography.body.medium.bold)}
   }
 
+  &.xl {
+    padding: 0 24px;
+    height: 48px;
+    ${({ theme }) => expandTypography(theme.typography.body.medium.bold)}
+  }
+
   &.disabled {
     cursor: not-allowed;
   }
@@ -87,6 +93,13 @@ export const CTAButtonStyle = styled.button`
       padding: 0 32px;
       width: 148px;
       height: 48px;
+      ${({ theme }) => expandTypography(theme.typography.body.large.bold)}
+    }
+
+    &.xl {
+      padding: 0 32px;
+      width: 180px;
+      height: 56px;
       ${({ theme }) => expandTypography(theme.typography.body.large.bold)}
     }
 

@@ -30,17 +30,8 @@ const router = createBrowserRouter([
         loader: detailPageLoader(queryClient),
       },
       {
-        path: "/create/income", // TODO: optional segment 이용해서 반복 줄이기
-        element: <CreatePage type="INCOME" />,
-      },
-      {
-        path: "/create/outcome", // TODO: optional segment 이용해서 반복 줄이기
-        element: <CreatePage type="OUTCOME" />,
-      },
-      {
-        path: "/create/refund/:id", // TODO: optional segment 이용해서 반복 줄이기
-        element: <CreatePage type="REFUND" />,
-        loader: createPageLoader(queryClient),
+        path: "/create",
+        element: <CreatePage />,
       },
       {
         path: "/mypage",

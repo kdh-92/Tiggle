@@ -22,6 +22,7 @@ export { default as TextButton } from "./TextButton/TextButton";
 
 export { default as Upload } from "./Upload/Upload";
 export { default as useUpload } from "./Upload/useUpload";
+export { default as NewUpload } from "./Upload/NewUpload";
 
 export { default as BottomSheet } from "./BottomSheet/BottomSheet";
 
