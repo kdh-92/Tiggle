@@ -21,14 +21,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
         
-      - name: Pull latest changes
-        run: | 
-          whoami
-          pwd
-          ls -al
-#
-#      - name: Run server.sh
-#        run: |
-#          ls -al
-#          export PATH="$PATH:/usr/local/bin"
-#          ./server.sh
+
+     - name: Run server.sh
+       run: |
+         ls -al
+         export PATH="$PATH:/usr/local/bin"
+         ./server.sh
