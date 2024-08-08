@@ -23,7 +23,6 @@ jobs:
       
       - name: Pull latest changes
         run: |
-          cat ${{ secrets.USERNAME }}
           cd /home
           ls -al
           # git pull -f origin be-feat/v2-build-test
