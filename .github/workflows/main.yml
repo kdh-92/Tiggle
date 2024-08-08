@@ -21,8 +21,8 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.PORT }}
           script: |
-            pwd
             cd Tiggle
+            export PATH="$PATH:/usr/local/bin"
             ./server.sh
       
       # - name: Pull latest changes
