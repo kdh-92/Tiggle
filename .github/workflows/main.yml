@@ -14,21 +14,30 @@ jobs:
         # uses: appleboy/ssh-action@master
         uses : webfactory/ssh-agent@v0.5.0
         with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+          
+      - name : Deploy to NAS
+        env:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          port: ${{ secrets.PORT }}
-      
-      - name: Checkout code
-        uses: actions/checkout@v2
-      
-      - name: Pull latest changes
         run: |
-          pwd
-          cd /home
-          ls -al
-          # git pull -f origin be-feat/v2-build-test
-          # git checkout be-feat/v2-build-test
+          ssh $username@$host << EOF
+            ls -al
+            pwd
+            cd /home
+            ls -al
+          EOF
+      
+      # - name: Checkout code
+      #   uses: actions/checkout@v2
+      
+      # - name: Pull latest changes
+      #   run: |
+      #     pwd
+      #     cd /home
+      #     ls -al
+      #     git pull -f origin be-feat/v2-build-test
+      #     git checkout be-feat/v2-build-test
       #   run: git pull origin main
       
       # - name: Run server.sh
