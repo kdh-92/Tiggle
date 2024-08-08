@@ -10,6 +10,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+            
       - name: ssh connect
         uses: appleboy/ssh-action@master
         with:
@@ -17,21 +20,13 @@ jobs:
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.PORT }}
-      
-      - name: Checkout code
-        uses: actions/checkout@v2
-      
-      - name: SSH into NAS and run server.sh
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.HOST }}
-          username: admin  # admin 사용자로 접속
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          port: ${{ secrets.PORT }}
           script: |
+            pwd
             cd /home/admin/Tiggle
+            cd Tiggle
+            pwd
             ls -al
-            
+      
       # - name: Pull latest changes
       #   run: |
       #     git pull -f origin be-feat/v2-build-test
