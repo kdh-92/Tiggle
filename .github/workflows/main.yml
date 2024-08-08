@@ -23,9 +23,11 @@ jobs:
       
       - name: Pull latest changes
         run: |
-          cd /home/${{ secrets.USERNAME }}/Tiggle
-          git pull -f origin be-feat/v2-build-test
-          git checkout be-feat/v2-build-test
+          cat ${{ secrets.USERNAME }}
+          cd /home
+          ls -al
+          # git pull -f origin be-feat/v2-build-test
+          # git checkout be-feat/v2-build-test
       #   run: git pull origin main
       
       - name: Run server.sh
