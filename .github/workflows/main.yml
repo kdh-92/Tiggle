@@ -20,16 +20,27 @@ jobs:
       
       - name: Checkout code
         uses: actions/checkout@v2
-
-      - name: Pull latest changes
-        run: |
-          git pull -f origin be-feat/v2-build-test
-          git checkout be-feat/v2-build-test
-        # run: git pull origin main
       
-      - name: Run server.sh
-        run: |
-          pwd
-          ls -al
-          export PATH="$PATH:/usr/local/bin"
-          sudo ./server.sh
+      - name: SSH into NAS and run server.sh
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: admin  # admin 사용자로 접속
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.PORT }}
+          script: |
+            cd /home/admin/Tiggle
+            ls -al
+            
+      # - name: Pull latest changes
+      #   run: |
+      #     git pull -f origin be-feat/v2-build-test
+      #     git checkout be-feat/v2-build-test
+      #   # run: git pull origin main
+      
+      # - name: Run server.sh
+      #   run: |
+      #     pwd
+      #     ls -al
+      #     export PATH="$PATH:/usr/local/bin"
+      #     sudo ./server.sh
