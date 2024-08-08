@@ -23,13 +23,14 @@ jobs:
       
       - name: Pull latest changes
         run: |
+          cd /home/admin/Tiggle
           git pull -f origin be-feat/v2-build-test
           git checkout be-feat/v2-build-test
       #   run: git pull origin main
       
       - name: Run server.sh
         run: |
-          cd ~/Tiggle
+          pwd
           ls -al
           export PATH="$PATH:/usr/local/bin"
           ./server.sh
