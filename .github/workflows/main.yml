@@ -2,7 +2,7 @@ name: Deploy to NAS Server
 
 on:
   push:
-    branches: [ main, be-feat/v2-build-test ]
+    branches: [ main ]
 
 jobs:     
   deploy:
@@ -21,21 +21,7 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.PORT }}
           script: |
+            git pull origin main
             cd Tiggle
             export PATH="$PATH:/usr/local/bin"
             ./server.sh
-      
-      # - name: Pull latest changes
-      #   run: |
-      #     git pull -f origin be-feat/v2-build-test
-      #     git checkout be-feat/v2-build-test
-      #   # run: git pull origin main
-      
-      # - name: Run server.sh
-      #   run: |
-      #     pwd
-      #     cd Tiggle
-      #     pwd
-      #     ls -al
-      #     export PATH="$PATH:/usr/local/bin"
-      #     sudo ./server.sh
