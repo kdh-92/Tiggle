@@ -4,36 +4,32 @@ on:
   push:
     branches: [ main, be-feat/v2-build-test ]
 
-jobs:
+jobs:     
   deploy:
     name: Deploy
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3.3.0
-      
       - name: ssh connect
         uses: appleboy/ssh-action@master
-        # uses : webfactory/ssh-agent@v0.5.0
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.PORT }}
-          
+      
+      - name: Checkout code
+        uses: actions/checkout@v2
+
       - name: Pull latest changes
         run: |
-          pwd
-          ls -al
-          cd /home
-          ls -al
           git pull -f origin be-feat/v2-build-test
           git checkout be-feat/v2-build-test
         # run: git pull origin main
       
-      # - name: Run server.sh
-      #   run: |
-      #     pwd
-      #     ls -al
-      #     export PATH="$PATH:/usr/local/bin"
-      #     ./server.sh
+      - name: Run server.sh
+        run: |
+          pwd
+          ls -al
+          export PATH="$PATH:/usr/local/bin"
+          sudo ./server.sh
