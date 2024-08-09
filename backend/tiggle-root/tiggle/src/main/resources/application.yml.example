@@ -61,8 +61,7 @@ part:
     path: upload/image/
 
 app:
-  gateway-path: http://localhost:8081
-  client-redirect-uri: http://localhost:3000/login/success
+  client-redirect-uri: https://tiggle.duckdns.org/login/success
 
 ---
 spring:
