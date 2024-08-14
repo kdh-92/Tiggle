@@ -21,7 +21,6 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.PORT }}
           script: |
-            git pull origin main
             cd Tiggle
-            export PATH="$PATH:/usr/local/bin"
+            git pull origin main
             ./server.sh
