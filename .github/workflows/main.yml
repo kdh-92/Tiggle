@@ -10,6 +10,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+            
       - name: ssh connect
         uses: appleboy/ssh-action@master
         with:
@@ -17,15 +20,8 @@ jobs:
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.PORT }}
-      
-      - name: Checkout code
-        uses: actions/checkout@v2
-        
-      - name: Pull latest changes
-        run: git pull origin main
-
-      - name: Run server.sh
-        run: |
-          ls -al
-          export PATH="$PATH:/usr/local/bin"
-          ./server.sh
+          script: |
+            git pull origin main
+            cd Tiggle
+            export PATH="$PATH:/usr/local/bin"
+            ./server.sh
