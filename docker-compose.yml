@@ -3,6 +3,7 @@ services:
   application:
     build:
       context: ./backend/tiggle-root
+      dockerfile: Dockerfile.tiggle
     ports:
       - "8080:8080"
     container_name: tiggle_app
