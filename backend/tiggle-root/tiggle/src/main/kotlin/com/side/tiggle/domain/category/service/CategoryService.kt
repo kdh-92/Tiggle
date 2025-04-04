@@ -3,15 +3,18 @@ package com.side.tiggle.domain.category.service
 import com.side.tiggle.domain.category.dto.CategoryDto
 import com.side.tiggle.domain.category.model.Category
 import com.side.tiggle.domain.category.repository.CategoryRepository
+import com.side.tiggle.domain.member.service.MemberService
 import com.side.tiggle.global.exception.NotFoundException
 import org.springframework.stereotype.Service
 
 @Service
 class CategoryService(
-    private val categoryRepository: CategoryRepository
+    private val categoryRepository: CategoryRepository,
+    private val memberService: MemberService
 ) {
     fun createCategory(dto: CategoryDto): Category {
-        return categoryRepository.save(dto.toEntity())
+        val member = memberService.getMember(dto.memberId);
+        return categoryRepository.save(dto.toEntity(member))
     }
 
     fun getCategory(categoryId: Long): Category {
