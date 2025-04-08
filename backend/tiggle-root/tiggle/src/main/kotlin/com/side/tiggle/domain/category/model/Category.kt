@@ -8,14 +8,13 @@ import javax.persistence.*
 @Table(name = "categories")
 class Category(
     var name: String,
-    var defaults: Boolean
+    var defaults: Boolean,
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id")
+    val member: Member
 ): BaseEntity() {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
-    var member: Member? = null
 }

@@ -4,7 +4,7 @@ import { LoaderFunctionArgs, useLoaderData, useParams } from "react-router-dom";
 
 import { QueryClient, useQuery } from "@tanstack/react-query";
 
-import { HashTag } from "@/components/atoms";
+// import { HashTag } from "@/components/atoms";
 import {
   ReactionApiService,
   TransactionApiControllerService,
@@ -63,8 +63,8 @@ const DetailPage = () => {
           sender={{
             nickname: "사용자1",
           }}
-          asset={transactionData.asset!.name!}
-          category={transactionData.category!.name!}
+          // asset={transactionData.asset!.name!}
+          // category={transactionData.category!.name!}
         />
 
         <DetailPageContentStyle>
@@ -77,9 +77,9 @@ const DetailPage = () => {
           <div className="content">
             <p className="content-reason">{transactionData.reason}</p>
             <ul className="content-tags">
-              {transactionData.txTagNames
-                ?.split(",")
-                .map(tag => <HashTag key={`tag-${tag}`} label={tag} />)}
+              {/*{transactionData.txTagNames*/}
+              {/*  ?.split(",")*/}
+              {/*  .map(tag => <HashTag key={`tag-${tag}`} label={tag} />)}*/}
             </ul>
           </div>
         </DetailPageContentStyle>

@@ -3,17 +3,15 @@
 /* tslint:disable */
 /* eslint-disable */
 
-import type { AssetRespDto } from './AssetRespDto';
-import type { CategoryRespDto } from './CategoryRespDto';
 import type { MemberResponseDto } from './MemberResponseDto';
 import type { TransactionDto } from './TransactionDto';
 
 export type TransactionRespDto = {
     id?: number;
     member?: MemberResponseDto;
-    asset?: AssetRespDto;
-    category?: CategoryRespDto;
-    txTagNames?: string;
+    // asset?: AssetRespDto;
+    // category?: CategoryRespDto;
+    // txTagNames?: string;
     createdAt?: string;
     parentId?: number;
     type?: 'INCOME' | 'OUTCOME' | 'REFUND';

@@ -18,8 +18,8 @@ export interface PostHeaderProps
   extends Pick<TransactionRespDto, "id" | "content" | "amount" | "date"> {
   // TODO: api response 변경된 후, TransactionDto 에서 Pick 하는 것으로 수정
   sender: MemberDto;
-  category: string;
-  asset: string;
+  // category: string;
+  // asset: string;
 }
 
 export default function PostHeader({
@@ -28,8 +28,8 @@ export default function PostHeader({
   amount,
   date,
   sender,
-  category,
-  asset,
+  // category,
+  // asset,
 }: PostHeaderProps) {
   const txType = useSelector((state: RootState) => state.detailPage.txType);
 
@@ -58,14 +58,14 @@ export default function PostHeader({
             <p className="item-title">{convertTxTypeToWord(txType)}일자</p>
             <p className="item-data">{dayjs(date).format("YYYY.MM.DD")}</p>
           </div>
-          <div className="item">
-            <p className="item-title">자산</p>
-            <p className="item-data">{asset}</p>
-          </div>
-          <div className="item">
-            <p className="item-title">카테고리</p>
-            <p className="item-data">{category}</p>
-          </div>
+          {/*<div className="item">*/}
+          {/*  <p className="item-title">자산</p>*/}
+          {/*  <p className="item-data">{asset}</p>*/}
+          {/*</div>*/}
+          {/*<div className="item">*/}
+          {/*  <p className="item-title">카테고리</p>*/}
+          {/*  <p className="item-data">{category}</p>*/}
+          {/*</div>*/}
         </div>
       </StyledPostHeaderDetail>
 
