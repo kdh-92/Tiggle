@@ -49,7 +49,7 @@ interface CreateFormProps {
   onSubmit: SubmitHandler<FormInputs>;
   onCancel: () => void;
   defaultValues?: Partial<FormInputs>;
-  disabledInputs?: Array<FormInputsKey>;
+  disabledInputs?: FormInputsKey[];
 }
 
 function CreateForm({

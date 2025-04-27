@@ -17,6 +17,7 @@ export type { CommentRespDto } from './models/CommentRespDto';
 export type { CommentUpdateReqDto } from './models/CommentUpdateReqDto';
 export type { ErrorResponse } from './models/ErrorResponse';
 export type { GradeDto } from './models/GradeDto';
+export type { MemberDto } from './models/MemberDto';
 export type { MemberRequestDto } from './models/MemberRequestDto';
 export type { MemberResponseDto } from './models/MemberResponseDto';
 export type { NotificationDto } from './models/NotificationDto';

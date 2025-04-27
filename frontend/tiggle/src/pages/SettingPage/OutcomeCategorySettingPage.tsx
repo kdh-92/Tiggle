@@ -19,7 +19,7 @@ const OutcomeCategorySettingPage = ({}: OutcomeCategorySettingPageProps) => {
   const messageApi = useMessage();
   const { data: categoriesData, isLoading } = useQuery({
     queryKey: categoryKeys.list({ type: Tx.OUTCOME }),
-    queryFn: async () => CategoryApiControllerService.getCategory1(Tx.OUTCOME),
+    queryFn: async () => CategoryApiControllerService.getCategory(Tx.OUTCOME),
   });
   // const { mutate: createMutate } = useMutation(async (name: string) =>
   //   CategoryApiControllerService.createCategory({ name }),

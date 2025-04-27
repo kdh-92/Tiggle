@@ -41,8 +41,6 @@ export const Default: Story = {
       profileUrl: "image.jpg",
     },
     date: "2023-08-06T06:00:00.000Z",
-    category: "카테고리 텍스트",
-    asset: "자산 텍스트",
     txType: Tx.OUTCOME,
   },
 };

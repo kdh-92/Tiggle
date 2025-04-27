@@ -64,7 +64,7 @@ export const useProfilePage = () => {
 
       const formData: MemberFormData = {
         // TODO: xMemberId 삭제
-        memberDto: {
+        memberRequestDto: {
           ...(dirtyFields["nickname"] && { nickname }),
           ...(dirtyFields["email"] && { email }),
           ...(dirtyFields["birth"] && { birth: dayjs(birth).toISOString() }),

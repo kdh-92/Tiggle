@@ -57,12 +57,12 @@ const CreatePage = ({ type, profile }: CreatePageProps) => {
   const { mutate } = useMutation(createTransaction);
 
   const handleOnSubmit: SubmitHandler<FormInputs> = data => {
-    const { tags, date, imageUrl, ...rest } = data;
+    const { date, imageUrl, ...rest } = data;
     const formData: TransactionFormData = {
       dto: {
         type,
         memberId: profile.id,
-        tagNames: tags?.join(", "),
+        // tagNames: tags?.join(", "),
         date: dayjs(date).toISOString(),
         ...rest,
       },
@@ -96,9 +96,7 @@ const CreatePage = ({ type, profile }: CreatePageProps) => {
         type={type}
         onSubmit={handleOnSubmit}
         onCancel={handleOnCancel}
-        disabledInputs={
-          type === "REFUND" ? ["assetId", "categoryId"] : undefined
-        }
+        disabledInputs={[]}
         // TODO: parentTxData의 assetId, categoryId 전달
         defaultValues={parentTxData ? {} : undefined}
       />

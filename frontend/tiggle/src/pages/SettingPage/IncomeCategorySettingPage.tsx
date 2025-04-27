@@ -19,7 +19,7 @@ const IncomeCategorySettingPage = ({}: IncomeCategorySettingPageProps) => {
   const messageApi = useMessage();
   const { data: categoriesData, isLoading } = useQuery({
     queryKey: categoryKeys.list({ type: Tx.INCOME }),
-    queryFn: async () => CategoryApiControllerService.getCategory1(Tx.INCOME),
+    queryFn: async () => CategoryApiControllerService.getCategory(Tx.INCOME),
   });
   const { mutate: createMutate } = useMutation(async (name: string) =>
     CategoryApiControllerService.createCategory({
