@@ -21,6 +21,8 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.PORT }}
           script: |
-            cd Tiggle
-            git pull origin main
-            ./server.sh
+            bash -l -c "
+              cd Tiggle
+              git pull origin main
+              ./server.sh
+            "
