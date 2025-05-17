@@ -4,9 +4,11 @@ services:
     build:
       context: ./backend/tiggle-root
       dockerfile: Dockerfile.tiggle
+    restart: always
     ports:
       - "8080:8080"
     container_name: tiggle_app
+    network_mode: host
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://tiggle.duckdns.org:3307/tiggle?useSSL=false&allowPublicKeyRetrieval=true
       SPRING_DATASOURCE_USERNAME: root
@@ -17,8 +19,6 @@ services:
       OAUTH2_KAKAO_CLIENT_SECRET: 0dsuAWhu33cAQcZL2Njh5ZKtq8BJqxIq
       OAUTH2_NAVER_CLIENT_ID: bIMfzZ1Ct5UpwVgF4tep
       OAUTH2_NAVER_CLIENT_SECRET: ISy4u_NWcP
-    networks:
-      - springboot-mysql-net
   notification:
     build:
       context: ./backend/tiggle-root
