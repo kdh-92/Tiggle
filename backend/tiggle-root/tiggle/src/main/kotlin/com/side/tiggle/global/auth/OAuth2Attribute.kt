@@ -67,13 +67,15 @@ class OAuth2Attribute(
             userNameAttributeName: String,
             attributes: Map<String, Any>
         ): OAuth2Attribute {
-            val kakaoAccount = attributes["kakao_account"] as Map<String, Any>
-            val kakaoProfile = attributes["profile"] as Map<String, Any>
+            val kakaoAccount = attributes["kakao_account"] as? Map<String, Any>
+                ?: throw IllegalArgumentException("Kakao account information not found")
+            val profile = kakaoAccount["profile"] as? Map<String, Any>
+                ?: throw IllegalArgumentException("Kakao profile information not found")
             return OAuth2Attribute(
-                email = kakaoAccount["email"] as String,
-                nickname = kakaoProfile["nickname"] as String,
-                profileUrl = kakaoProfile["profile_image_url"] as String,
-                providerId = attributes["id"] as String,
+                email = kakaoAccount["email"] as? String ?: "",
+                nickname = profile["nickname"] as? String ?: "Unknown User",
+                profileUrl = profile["profile_image_url"] as? String ?: "",
+                providerId = attributes["id"].toString(),
                 attributes = attributes,
                 attributeKey = userNameAttributeName
             )
