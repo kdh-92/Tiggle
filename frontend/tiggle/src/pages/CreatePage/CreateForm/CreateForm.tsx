@@ -1,4 +1,4 @@
-// import { useMemo } from "react";
+import { useMemo } from "react";
 import { Info } from "react-feather";
 import {
   Controller,
@@ -7,27 +7,28 @@ import {
   useForm,
 } from "react-hook-form";
 
-// import { useQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { Dayjs } from "dayjs";
 
 import {
   CTAButton,
   DatePicker,
   Input,
-  // MultiSelect,
-  // Select,
+  MultiSelect,
+  Select,
   TextArea,
   TextButton,
   Upload,
 } from "@/components/atoms";
-// import {
-//   AssetApiControllerService,
-//   CategoryApiControllerService,
-//   TagApiControllerService,
-// } from "@/generated";
+import {
+  // AssetApiControllerService,
+  CategoryApiControllerService,
+  TagApiControllerService,
+} from "@/generated";
 import { CreateFormStyle } from "@/pages/CreatePage/CreateForm/CreateFormStyle";
 // import { tagKeys } from "@/query/queryKeys";
 // import { assetKeys, categoryKeys, tagKeys } from "@/query/queryKeys";
+import { categoryKeys, tagKeys } from "@/query/queryKeys";
 import { TxType } from "@/types";
 import { convertTxTypeToWord } from "@/utils/txType";
 
@@ -37,7 +38,7 @@ export interface FormInputs {
   amount: number;
   content: string;
   reason: string;
-  // tags: Array<string>;
+  tags: Array<string>;
   date: Dayjs;
   imageUrl: FileList;
 }
@@ -63,27 +64,27 @@ function CreateForm({
   //   assetKeys.lists(),
   //   async () => AssetApiControllerService.getAllAsset(),
   // );
-  // const { data: categoriesData, isLoading: isCategoriesLoading } = useQuery(
-  //   categoryKeys.lists(),
-  //   async () => CategoryApiControllerService.getAllCategory(),
-  // );
-  // const { data: tagsData, isLoading: isTagsLoading } = useQuery(
-  //   tagKeys.lists(),
-  //   async () => TagApiControllerService.getAllDefaultTag(),
-  // );
+  const { data: categoriesData, isLoading: isCategoriesLoading } = useQuery(
+    categoryKeys.lists(),
+    async () => CategoryApiControllerService.getAllCategory(),
+  );
+  const { data: tagsData, isLoading: isTagsLoading } = useQuery(
+    tagKeys.lists(),
+    async () => TagApiControllerService.getAllDefaultTag(),
+  );
 
   // const assets = useMemo(
   //   () => assetsData?.map(({ name, id }) => ({ value: id, label: name })),
   //   [assetsData],
   // );
-  // const categories = useMemo(
-  //   () => categoriesData?.map(({ name, id }) => ({ value: id, label: name })),
-  //   [categoriesData],
-  // );
-  // const tags = useMemo(
-  //   () => tagsData?.map(({ name }) => ({ value: name, label: `#${name}` })),
-  //   [tagsData],
-  // );
+  const categories = useMemo(
+    () => categoriesData?.map(({ name, id }) => ({ value: id, label: name })),
+    [categoriesData],
+  );
+  const tags = useMemo(
+    () => tagsData?.map(({ name }) => ({ value: name, label: `#${name}` })),
+    [tagsData],
+  );
 
   const {
     register,
@@ -125,25 +126,25 @@ function CreateForm({
       {/*  />*/}
       {/*</div>*/}
 
-      {/*<div className="form-item">*/}
-      {/*  <label>카테고리</label>*/}
-      {/*  <Controller*/}
-      {/*    name="categoryId"*/}
-      {/*    control={control}*/}
-      {/*    rules={{ required: "카테고리를 선택해 주세요." }}*/}
-      {/*    render={({ field }) => (*/}
-      {/*      <Select*/}
-      {/*        placeholder="카테고리 선택"*/}
-      {/*        options={categories}*/}
-      {/*        // TODO: loading ui 추가*/}
-      {/*        notFoundContent={isCategoriesLoading ? <p>loading...</p> : null}*/}
-      {/*        disabled={disabledInputs?.includes("categoryId")}*/}
-      {/*        error={errors.categoryId}*/}
-      {/*        {...field}*/}
-      {/*      />*/}
-      {/*    )}*/}
-      {/*  />*/}
-      {/*</div>*/}
+      <div className="form-item">
+        <label>카테고리</label>
+        <Controller
+          name="categoryId"
+          control={control}
+          rules={{ required: "카테고리를 선택해 주세요." }}
+          render={({ field }) => (
+            <Select
+              placeholder="카테고리 선택"
+              options={categories}
+              // TODO: loading ui 추가
+              notFoundContent={isCategoriesLoading ? <p>loading...</p> : null}
+              disabled={disabledInputs?.includes("categoryId")}
+              error={errors.categoryId}
+              {...field}
+            />
+          )}
+        />
+      </div>
 
       <div className="form-divider" />
 
@@ -227,31 +228,31 @@ function CreateForm({
 
       <div className="form-divider" />
 
-      {/*<div className="form-item">*/}
-      {/*  <label>해시태그</label>*/}
-      {/*  <Controller*/}
-      {/*    name="tags"*/}
-      {/*    control={control}*/}
-      {/*    rules={{*/}
-      {/*      required: "해시태그를 1개 이상 선택해 주세요.",*/}
-      {/*      max: {*/}
-      {/*        value: 5,*/}
-      {/*        message: "해시태그는 최대 5개까지 선택 가능합니다.",*/}
-      {/*      },*/}
-      {/*    }}*/}
-      {/*    render={({ field }) => (*/}
-      {/*      <MultiSelect*/}
-      {/*        placeholder="해시태그 선택"*/}
-      {/*        options={tags}*/}
-      {/*        // TODO: loading ui 추가*/}
-      {/*        notFoundContent={isTagsLoading ? <p>loading...</p> : null}*/}
-      {/*        disabled={disabledInputs?.includes("tags")}*/}
-      {/*        error={errors.tags as FieldError}*/}
-      {/*        {...field}*/}
-      {/*      />*/}
-      {/*    )}*/}
-      {/*  />*/}
-      {/*</div>*/}
+      <div className="form-item">
+        <label>해시태그</label>
+        <Controller
+          name="tags"
+          control={control}
+          rules={{
+            required: "해시태그를 1개 이상 선택해 주세요.",
+            max: {
+              value: 5,
+              message: "해시태그는 최대 5개까지 선택 가능합니다.",
+            },
+          }}
+          render={({ field }) => (
+            <MultiSelect
+              placeholder="해시태그 선택"
+              options={tags}
+              // TODO: loading ui 추가
+              notFoundContent={isTagsLoading ? <p>loading...</p> : null}
+              disabled={disabledInputs?.includes("tags")}
+              error={errors.tags as FieldError}
+              {...field}
+            />
+          )}
+        />
+      </div>
 
       <div className="form-item">
         <label>사진</label>
