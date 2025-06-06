@@ -10,7 +10,7 @@ const ItemAdd = ({ onClick }: ItemAddProps) => {
   return (
     <ItemAddStyle onClick={onClick}>
       <PlusCircle />
-      <p>새 자산 추가하기</p>
+      <p>새 카테고리 추가하기</p>
     </ItemAddStyle>
   );
 };

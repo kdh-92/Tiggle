@@ -6,6 +6,7 @@ import com.side.tiggle.domain.category.repository.CategoryRepository
 import com.side.tiggle.domain.member.service.MemberService
 import com.side.tiggle.global.exception.NotFoundException
 import org.springframework.stereotype.Service
+import java.time.LocalDateTime
 
 @Service
 class CategoryService(
@@ -26,6 +27,10 @@ class CategoryService(
         return categoryRepository.findAll()
     }
 
+    fun getCategoryByMemberIdAndDefaults(memberId: Long): List<Category> {
+        return categoryRepository.findCategoryByMemberIdAndDefaults(memberId, true)
+    }
+
     fun updateCategory(id: Long, dto: CategoryDto): Category {
         val category = categoryRepository.findById(id)
             .orElseThrow { NotFoundException() }
@@ -36,7 +41,17 @@ class CategoryService(
         return categoryRepository.save(category)
     }
 
-    fun deleteCategory(categoryId: Long) {
-        categoryRepository.deleteById(categoryId)
+    fun deleteCategory(categoryId: Long): Category {
+        val category = categoryRepository.findById(categoryId)
+            .orElseThrow { NotFoundException() }
+        category.apply {
+            deleted = true
+            deletedAt = LocalDateTime.now()
+        }
+        return categoryRepository.save(category)
     }
+//    fun deleteCategory(categoryId: Long) {
+
+//        categoryRepository.deleteById(categoryId)
+//    }
 }
