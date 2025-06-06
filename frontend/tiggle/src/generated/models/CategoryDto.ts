@@ -5,7 +5,7 @@
 
 export type CategoryDto = {
     name?: string;
-    type?: 'INCOME' | 'OUTCOME';
+    // type?: 'INCOME' | 'OUTCOME';
     defaults?: boolean;
 };
 
