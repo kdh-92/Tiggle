@@ -7,7 +7,7 @@ import { CategoryApiControllerService } from "@/generated";
 import useMessage from "@/hooks/useMessage";
 import queryClient from "@/query/queryClient";
 import { categoryKeys } from "@/query/queryKeys";
-import { Tx } from "@/types";
+// import { Tx } from "@/types";
 import withAuth, { AuthProps } from "@/utils/withAuth";
 
 import SettingForm from "./SettingForm/SettingForm";
@@ -18,8 +18,10 @@ interface OutcomeCategorySettingPageProps extends AuthProps {}
 const OutcomeCategorySettingPage = ({}: OutcomeCategorySettingPageProps) => {
   const messageApi = useMessage();
   const { data: categoriesData, isLoading } = useQuery({
-    queryKey: categoryKeys.list({ type: Tx.OUTCOME }),
-    queryFn: async () => CategoryApiControllerService.getCategory(Tx.OUTCOME),
+    // queryKey: categoryKeys.list({ type: Tx.OUTCOME }),
+    // queryFn: async () => CategoryApiControllerService.getCategory(Tx.OUTCOME),
+    queryKey: categoryKeys.list(),
+    queryFn: async () => CategoryApiControllerService.getCategory(),
   });
   // const { mutate: createMutate } = useMutation(async (name: string) =>
   //   CategoryApiControllerService.createCategory({ name }),
@@ -28,7 +30,7 @@ const OutcomeCategorySettingPage = ({}: OutcomeCategorySettingPageProps) => {
   const { mutate: createMutate } = useMutation(async (name: string) =>
     CategoryApiControllerService.createCategory({
       name,
-      type: Tx.OUTCOME,
+      // type: Tx.OUTCOME,
       defaults: true,
     }),
   );
@@ -42,7 +44,8 @@ const OutcomeCategorySettingPage = ({}: OutcomeCategorySettingPageProps) => {
         onSuccess: ({ id, name }) => {
           callback?.({ id: id!, name: name! });
           queryClient.invalidateQueries({
-            queryKey: categoryKeys.list({ type: Tx.OUTCOME }),
+            // queryKey: categoryKeys.list({ type: Tx.OUTCOME }),
+            queryKey: categoryKeys.list(),
           });
           messageApi.open({ type: "success", content: "카테고리 생성 성공" });
         },
@@ -60,27 +63,44 @@ const OutcomeCategorySettingPage = ({}: OutcomeCategorySettingPageProps) => {
       newValue: string,
       callback?: (data: { id: number; name: string }) => void,
     ) => {
-      // TODO: API 연결
-      callback?.({ id: sid, name: newValue });
-      console.log(`OUTCOME CATEGORY PAGE - update api called`, sid, newValue);
-      messageApi.open({ type: "success", content: "카테고리 수정 성공" });
+      CategoryApiControllerService.updateCategory(sid, {
+        name: newValue,
+        defaults: true,
+      })
+        .then(() => {
+          callback?.({ id: sid, name: newValue });
+          queryClient.invalidateQueries({
+            queryKey: categoryKeys.list(),
+          });
+          messageApi.open({ type: "success", content: "카테고리 수정 성공" });
+        })
+        .catch(() => {
+          messageApi.open({ type: "error", content: "카테고리 수정 실패" });
+        });
     },
     [],
   );
 
   const remove = useCallback(
     (sid: number, callback?: (data: { id: number; name: string }) => void) => {
-      // TODO: API 연결
-      callback?.({ id: sid, name: "temp" });
-      console.log(`OUTCOME CATEGORY PAGE - delete api called`, sid);
-      messageApi.open({ type: "success", content: "카테고리 삭제 성공" });
+      CategoryApiControllerService.deleteCategory(sid)
+        .then(() => {
+          callback?.({ id: sid, name: "temp" });
+          queryClient.invalidateQueries({
+            queryKey: categoryKeys.list({}),
+          });
+          messageApi.open({ type: "success", content: "카테고리 삭제 성공" });
+        })
+        .catch(() => {
+          messageApi.open({ type: "error", content: "카테고리 삭제 실패" });
+        });
     },
     [],
   );
 
   return (
     <MypageDetailPageStyle>
-      <p className="page-title">지출 카테고리 관리</p>
+      <p className="page-title">카테고리 관리</p>
 
       {isLoading && <Loading />}
       {!isLoading && categoriesData && (
