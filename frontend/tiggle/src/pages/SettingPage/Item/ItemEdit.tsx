@@ -31,7 +31,7 @@ const ItemEdit = ({ label, onSave, onCancel }: ItemEditProps) => {
         ref={inputRef}
         className="label"
         defaultValue={label}
-        placeholder="자산을 입력하세요"
+        placeholder="카테고리을 입력하세요"
       />
       <div className="controllers">
         <button onClick={onCancel}>취소</button>
