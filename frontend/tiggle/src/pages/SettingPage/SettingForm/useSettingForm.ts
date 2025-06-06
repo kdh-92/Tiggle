@@ -31,9 +31,13 @@ const useSettingForm = ({ data, requests }: SettingFormProps) => {
   };
 
   const removeItem = (index: number, sid: number) => {
-    requests.remove(sid, () => {
+    if (sid === -1) {
       remove(index);
-    });
+    } else {
+      requests.remove(sid, () => {
+        remove(index);
+      });
+    }
   };
 
   return {
