@@ -5,6 +5,7 @@ import com.side.tiggle.domain.category.dto.resp.CategoryRespDto
 import com.side.tiggle.domain.category.service.CategoryService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import com.side.tiggle.global.common.constants.HttpHeaders
 import org.springframework.web.bind.annotation.*
 
 @RestController
@@ -15,11 +16,13 @@ class CategoryApiController(
 
     @PostMapping
     fun createCategory(
-        @RequestBody categoryDto: CategoryDto
+        @RequestBody categoryDto: CategoryDto,
+        @RequestHeader(name = HttpHeaders.MEMBER_ID) memberId: Long
     ): ResponseEntity<CategoryRespDto> {
+        val categoryDtoWithMemberId = categoryDto.copy(memberId = memberId)
         return ResponseEntity(
             CategoryRespDto.fromEntity(
-                categoryService.createCategory(categoryDto)
+                categoryService.createCategory(categoryDtoWithMemberId)
             ), HttpStatus.CREATED
         )
     }
@@ -28,6 +31,17 @@ class CategoryApiController(
     fun getAllCategory(): ResponseEntity<List<CategoryRespDto>> {
         return ResponseEntity(
             categoryService.getAllCategory()
+                .map { CategoryRespDto.fromEntity(it) }
+            , HttpStatus.OK
+        )
+    }
+
+    @GetMapping()
+    fun getCategory(
+        @RequestHeader(name = HttpHeaders.MEMBER_ID) memberId: Long
+    ): ResponseEntity<List<CategoryRespDto>> {
+        return ResponseEntity(
+            categoryService.getCategoryByMemberIdAndDefaults(memberId)
                 .map { CategoryRespDto.fromEntity(it) }
             , HttpStatus.OK
         )

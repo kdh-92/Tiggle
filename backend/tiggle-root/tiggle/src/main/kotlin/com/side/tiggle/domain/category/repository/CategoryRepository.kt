@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface CategoryRepository: JpaRepository<Category, Long> {
+    fun findCategoryByMemberIdAndDefaults(memberId: Long, default: Boolean): List<Category>
 }

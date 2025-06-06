@@ -5,13 +5,14 @@
 
 import type { MemberResponseDto } from './MemberResponseDto';
 import type { TransactionDto } from './TransactionDto';
+import { CategoryRespDto } from "@/generated";
 
 export type TransactionRespDto = {
     id?: number;
     member?: MemberResponseDto;
     // asset?: AssetRespDto;
-    // category?: CategoryRespDto;
-    // txTagNames?: string;
+    category?: CategoryRespDto;
+    txTagNames?: string;
     createdAt?: string;
     parentId?: number;
     type?: 'INCOME' | 'OUTCOME' | 'REFUND';

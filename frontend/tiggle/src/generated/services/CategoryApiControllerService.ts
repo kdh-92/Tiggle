@@ -89,18 +89,19 @@ export class CategoryApiControllerService {
      * @throws ApiError
      */
     public static getCategory(
-        type: 'INCOME' | 'OUTCOME',
+        // type: 'INCOME' | 'OUTCOME',
     ): CancelablePromise<Array<CategoryRespDto>> {
         return __request(OpenAPI, {
             method: 'GET',
-            url: '/api/v1/category/type/{type}',
-            path: {
-                'type': type,
-            },
+            url: '/api/v1/category',
+            // url: '/api/v1/category/type/{type}',
+            // path: {
+            //     'type': type,
+            // },
             errors: {
                 400: `Bad Request`,
                 401: `Unauthorized`,
-                404: `Not Found`,
+                404: `Not Found`, //-> 해당 에러가 로그인이후 마이페이지에서 지출카테고리로 이동시 발생함
                 500: `Internal Server Error`,
             },
         });
