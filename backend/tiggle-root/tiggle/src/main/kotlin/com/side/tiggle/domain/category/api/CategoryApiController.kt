@@ -19,7 +19,10 @@ class CategoryApiController(
         @RequestBody categoryDto: CategoryDto,
         @RequestHeader(name = HttpHeaders.MEMBER_ID) memberId: Long
     ): ResponseEntity<CategoryRespDto> {
-        val categoryDtoWithMemberId = categoryDto.copy(memberId = memberId)
+        val categoryDtoWithMemberId = categoryDto.copy(
+            memberId = memberId,
+            defaults = false // 기본값은 false로 설정
+        )
         return ResponseEntity(
             CategoryRespDto.fromEntity(
                 categoryService.createCategory(categoryDtoWithMemberId)
@@ -41,7 +44,7 @@ class CategoryApiController(
         @RequestHeader(name = HttpHeaders.MEMBER_ID) memberId: Long
     ): ResponseEntity<List<CategoryRespDto>> {
         return ResponseEntity(
-            categoryService.getCategoryByMemberIdAndDefaults(memberId)
+            categoryService.getCategoryByMemberIdOrDefaults(memberId)
                 .map { CategoryRespDto.fromEntity(it) }
             , HttpStatus.OK
         )
