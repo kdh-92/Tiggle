@@ -27,8 +27,9 @@ class CategoryService(
         return categoryRepository.findAll()
     }
 
-    fun getCategoryByMemberIdAndDefaults(memberId: Long): List<Category> {
-        return categoryRepository.findCategoryByMemberIdAndDefaults(memberId, true)
+    fun getCategoryByMemberIdOrDefaults(memberId: Long): List<Category> {
+        //기본 카테코리 = true , memberId가 일치하는 카테고리 = false라서 or로 설정했습니다.
+        return categoryRepository.findCategoryByMemberIdOrDefaults(memberId, true)
     }
 
     fun updateCategory(id: Long, dto: CategoryDto): Category {
