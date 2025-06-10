@@ -86,7 +86,7 @@ const MyPage = ({ profile }: MyPageProps) => {
           {/*    <span>자산 관리</span> <ChevronRight />*/}
           {/*  </button>*/}
           {/*</a>*/}
-          <a href="/mypage/setting/outcome-category">
+          <a href="/mypage/setting/category">
             <button className="setting-cell">
               <span>카테고리 관리</span> <ChevronRight />
             </button>

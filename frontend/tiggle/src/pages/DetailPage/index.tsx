@@ -6,6 +6,7 @@ import { QueryClient, useQuery } from "@tanstack/react-query";
 
 // import { HashTag } from "@/components/atoms";
 import {
+  CategoryDto,
   ReactionApiService,
   TransactionApiControllerService,
 } from "@/generated";
@@ -65,6 +66,7 @@ const DetailPage = () => {
           }}
           // asset={transactionData.asset!.name!}
           // category={transactionData.category!.name!}
+          category={transactionData.category as CategoryDto}
         />
 
         <DetailPageContentStyle>
