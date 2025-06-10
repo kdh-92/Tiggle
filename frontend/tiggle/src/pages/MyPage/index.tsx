@@ -81,21 +81,21 @@ const MyPage = ({ profile }: MyPageProps) => {
       <div className="user-setting">
         <p className="setting-title">설정</p>
         <div className="setting-cells">
-          <a href="/mypage/setting/asset">
+          {/*<a href="/mypage/setting/asset">*/}
+          {/*  <button className="setting-cell">*/}
+          {/*    <span>자산 관리</span> <ChevronRight />*/}
+          {/*  </button>*/}
+          {/*</a>*/}
+          <a href="/mypage/setting/category">
             <button className="setting-cell">
-              <span>자산 관리</span> <ChevronRight />
+              <span>카테고리 관리</span> <ChevronRight />
             </button>
           </a>
-          <a href="/mypage/setting/outcome-category">
-            <button className="setting-cell">
-              <span>지출 카테고리 관리</span> <ChevronRight />
-            </button>
-          </a>
-          <a href="/mypage/setting/income-category">
-            <button className="setting-cell">
-              <span>수입 카테고리 관리</span> <ChevronRight />
-            </button>
-          </a>
+          {/*<a href="/mypage/setting/income-category">*/}
+          {/*  <button className="setting-cell">*/}
+          {/*    <span>수입 카테고리 관리</span> <ChevronRight />*/}
+          {/*  </button>*/}
+          {/*</a>*/}
         </div>
       </div>
       <button onClick={() => logOut()} className="logout-button">

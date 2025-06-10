@@ -44,6 +44,7 @@ class TransactionApiControllerTest(
     val category = Category(
         name = "asdfasdf",
         defaults = true,
+        member = member
     ).apply {
         id = 1L
     }

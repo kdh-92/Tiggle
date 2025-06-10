@@ -5,7 +5,7 @@ import dayjs from "dayjs";
 
 import { Menu, MenuItem } from "@/components/atoms";
 import TypeTag from "@/components/atoms/TypeTag/TypeTag";
-import { MemberDto, TransactionRespDto } from "@/generated";
+import { CategoryRespDto, MemberDto, TransactionRespDto } from "@/generated";
 import {
   PostHeaderStyle,
   StyledPostHeaderDetail,
@@ -18,7 +18,7 @@ export interface PostHeaderProps
   extends Pick<TransactionRespDto, "id" | "content" | "amount" | "date"> {
   // TODO: api response 변경된 후, TransactionDto 에서 Pick 하는 것으로 수정
   sender: MemberDto;
-  // category: string;
+  category: CategoryRespDto;
   // asset: string;
 }
 
@@ -28,7 +28,7 @@ export default function PostHeader({
   amount,
   date,
   sender,
-  // category,
+  category,
   // asset,
 }: PostHeaderProps) {
   const txType = useSelector((state: RootState) => state.detailPage.txType);
@@ -62,10 +62,10 @@ export default function PostHeader({
           {/*  <p className="item-title">자산</p>*/}
           {/*  <p className="item-data">{asset}</p>*/}
           {/*</div>*/}
-          {/*<div className="item">*/}
-          {/*  <p className="item-title">카테고리</p>*/}
-          {/*  <p className="item-data">{category}</p>*/}
-          {/*</div>*/}
+          <div className="item">
+            <p className="item-title">카테고리</p>
+            <p className="item-data">{category.name}</p>
+          </div>
         </div>
       </StyledPostHeaderDetail>
 

@@ -120,7 +120,7 @@ class TransactionService(
     }
 
     fun getAllUndeletedTransaction(): List<Transaction> {
-        return transactionRepository.findAll()
+        return transactionRepository.findAll(Sort.by(Sort.Direction.DESC, "createdAt"))
     }
 
     @Transactional
