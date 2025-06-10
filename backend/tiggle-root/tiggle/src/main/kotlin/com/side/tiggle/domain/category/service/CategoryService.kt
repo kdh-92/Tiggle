@@ -1,5 +1,6 @@
 package com.side.tiggle.domain.category.service
 
+import com.side.tiggle.domain.category.dto.CategoryCreateDto
 import com.side.tiggle.domain.category.dto.CategoryDto
 import com.side.tiggle.domain.category.model.Category
 import com.side.tiggle.domain.category.repository.CategoryRepository
@@ -13,8 +14,8 @@ class CategoryService(
     private val categoryRepository: CategoryRepository,
     private val memberService: MemberService
 ) {
-    fun createCategory(dto: CategoryDto): Category {
-        val member = memberService.getMember(dto.memberId);
+    fun createCategory(dto: CategoryCreateDto, memberId: Long): Category {
+        val member = memberService.getMember(memberId);
         return categoryRepository.save(dto.toEntity(member))
     }
 

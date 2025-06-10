@@ -1,5 +1,6 @@
 package com.side.tiggle.domain.category.api
 
+import com.side.tiggle.domain.category.dto.CategoryCreateDto
 import com.side.tiggle.domain.category.dto.CategoryDto
 import com.side.tiggle.domain.category.dto.resp.CategoryRespDto
 import com.side.tiggle.domain.category.service.CategoryService
@@ -16,16 +17,13 @@ class CategoryApiController(
 
     @PostMapping
     fun createCategory(
-        @RequestBody categoryDto: CategoryDto,
+        @RequestBody categoryCreateDto: CategoryCreateDto,
         @RequestHeader(name = HttpHeaders.MEMBER_ID) memberId: Long
     ): ResponseEntity<CategoryRespDto> {
-        val categoryDtoWithMemberId = categoryDto.copy(
-            memberId = memberId,
-            defaults = false // 기본값은 false로 설정
-        )
         return ResponseEntity(
             CategoryRespDto.fromEntity(
-                categoryService.createCategory(categoryDtoWithMemberId)
+                categoryService.createCategory(categoryCreateDto, memberId
+                )
             ), HttpStatus.CREATED
         )
     }
@@ -40,7 +38,7 @@ class CategoryApiController(
     }
 
     @GetMapping()
-    fun getCategory(
+    fun getCategoryByMemberIdOrDefaults(
         @RequestHeader(name = HttpHeaders.MEMBER_ID) memberId: Long
     ): ResponseEntity<List<CategoryRespDto>> {
         return ResponseEntity(
