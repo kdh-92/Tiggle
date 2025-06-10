@@ -9,6 +9,7 @@ import com.side.tiggle.domain.member.repository.MemberRepository
 import com.side.tiggle.util.MockMvcSupport
 import com.side.tiggle.util.toJson
 import io.kotest.core.spec.style.BehaviorSpec
+import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
 import org.springframework.beans.factory.annotation.Autowired
@@ -40,11 +41,11 @@ class CategoryApiControllerTest(
     given("카테고리 생성 요청") {
         val request = CategoryDto(
             name = "asdfasdf",
-            defaults = true,
+            defaults = false,
             memberId = testMember.id
         )
 
-        `when`("GET /api/v1/category") {
+        `when`("POST /api/v1/category") {
             val url = "/api/v1/category"
             val result = mockMvcSupport.postAndReturn(
                 url = url,
@@ -55,10 +56,13 @@ class CategoryApiControllerTest(
                 result.status shouldBe 201
                 val body = result.contentAsString.toJson<CategoryRespDto>()
 
+                body.shouldNotBeNull()
                 body.name shouldBe request.name
 
-                val entity = categoryRepository.findById(body.id).get()
-                entity shouldNotBe null
+                val responseId = requireNotNull(body.id)
+
+                val entity = categoryRepository.findById(responseId).orElse(null)
+                entity.shouldNotBeNull()
                 entity.name shouldBe request.name
             }
         }
