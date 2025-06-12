@@ -1,7 +1,7 @@
 plugins {
     id 'java'
-    id 'org.springframework.boot' version '2.7.18'
-    id 'io.spring.dependency-management' version '1.0.15.RELEASE'
+    id 'org.springframework.boot' version '3.0.13'
+//    id 'io.spring.dependency-management' version '1.1.4'
 //    id 'org.jetbrains.kotlin.jvm' version '1.6.10'
 //    id 'org.jetbrains.kotlin.kapt' version '1.7.20'
 //    id 'org.jetbrains.kotlin.plugin.jpa' version '1.6.21'
@@ -17,7 +17,7 @@ repositories {
 subprojects {
     apply plugin: 'java'
     apply plugin: 'org.springframework.boot'
-    apply plugin: 'io.spring.dependency-management'
+//    apply plugin: 'io.spring.dependency-management'
 //    apply plugin: 'org.jetbrains.kotlin.jvm'
 //    apply plugin: 'org.jetbrains.kotlin.kapt'
 //    apply plugin: 'org.jetbrains.kotlin.plugin.jpa'
@@ -28,8 +28,8 @@ subprojects {
         }
     }
 
-    sourceCompatibility = 11
-    targetCompatibility = 11
+    sourceCompatibility = 17
+    targetCompatibility = 17
 
     dependencies {
         implementation 'org.springframework.boot:spring-boot-starter'
