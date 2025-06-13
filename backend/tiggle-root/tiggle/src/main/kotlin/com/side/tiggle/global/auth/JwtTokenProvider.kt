@@ -10,8 +10,8 @@ import java.nio.charset.StandardCharsets
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.util.*
+import jakarta.servlet.http.HttpServletRequest
 import javax.crypto.SecretKey
-import javax.servlet.http.HttpServletRequest
 
 @Component
 class JwtTokenProvider(

@@ -6,7 +6,7 @@ import com.side.tiggle.domain.reaction.model.Reaction
 import com.side.tiggle.domain.transaction.model.Transaction
 import com.side.tiggle.global.common.model.BaseEntity
 import java.time.LocalDate
-import javax.persistence.*
+import jakarta.persistence.*
 
 @Entity
 @Table(name = "members")

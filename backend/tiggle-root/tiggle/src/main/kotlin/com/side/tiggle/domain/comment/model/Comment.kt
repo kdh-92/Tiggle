@@ -6,7 +6,7 @@ import com.side.tiggle.domain.transaction.model.Transaction
 import com.side.tiggle.global.common.model.BaseEntity
 import org.hibernate.annotations.SQLDelete
 import org.hibernate.annotations.Where
-import javax.persistence.*
+import jakarta.persistence.*
 
 @Entity
 @Where(clause = "deleted = false")

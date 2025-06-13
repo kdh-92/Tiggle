@@ -8,7 +8,7 @@ import com.side.tiggle.global.common.model.BaseEntity
 import org.hibernate.annotations.SQLDelete
 import org.hibernate.annotations.Where
 import java.time.LocalDate
-import javax.persistence.*
+import jakarta.persistence.*
 
 
 @Entity

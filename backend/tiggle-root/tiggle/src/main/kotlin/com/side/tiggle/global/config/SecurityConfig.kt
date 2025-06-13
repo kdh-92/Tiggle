@@ -27,8 +27,9 @@ class SecurityConfig(
             .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             .and()
             .addFilterBefore(JwtRequestFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter::class.java)
-            .authorizeRequests()
-            .antMatchers("/**").permitAll()
+            .authorizeHttpRequests()
+            .requestMatchers("/**").permitAll()
+
         http.oauth2Login()
             .successHandler(successHandler)
         return http.build()

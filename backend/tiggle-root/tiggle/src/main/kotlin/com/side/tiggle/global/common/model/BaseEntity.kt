@@ -4,9 +4,9 @@ import org.springframework.data.annotation.CreatedDate
 import org.springframework.data.annotation.LastModifiedDate
 import org.springframework.data.jpa.domain.support.AuditingEntityListener
 import java.time.LocalDateTime
-import javax.persistence.Column
-import javax.persistence.EntityListeners
-import javax.persistence.MappedSuperclass
+import jakarta.persistence.Column
+import jakarta.persistence.EntityListeners
+import jakarta.persistence.MappedSuperclass
 
 /**
  * '@MappedSuperclass' : JPA Entity 클래스들이 BaseEntity를 상속할 경우 필드들(created_at, updated_at)도 칼럼으로 인식하도록 합니다.

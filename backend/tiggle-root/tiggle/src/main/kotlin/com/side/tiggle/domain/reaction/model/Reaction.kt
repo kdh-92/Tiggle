@@ -6,7 +6,7 @@ import com.side.tiggle.domain.transaction.model.Transaction
 import org.springframework.data.annotation.CreatedDate
 import org.springframework.data.jpa.domain.support.AuditingEntityListener
 import java.time.LocalDateTime
-import javax.persistence.*
+import jakarta.persistence.*
 
 @Entity
 @EntityListeners(AuditingEntityListener::class)

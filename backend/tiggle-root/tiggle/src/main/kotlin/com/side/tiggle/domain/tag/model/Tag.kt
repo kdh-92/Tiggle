@@ -1,7 +1,7 @@
 package com.side.tiggle.domain.tag.model
 
 import com.side.tiggle.domain.member.model.Member
-import javax.persistence.*
+import jakarta.persistence.*
 
 @Entity
 @Table(name = "tags")

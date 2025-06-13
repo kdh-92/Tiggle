@@ -1,7 +1,7 @@
 package com.side.tiggle.tigglenotification.notification.model
 
 import java.time.LocalDateTime
-import javax.persistence.*
+import jakarta.persistence.*
 
 @Entity
 @Table(name = "notifications")
