@@ -10,6 +10,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.web.SecurityFilterChain
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher
 import org.springframework.web.cors.CorsConfiguration
 import org.springframework.web.cors.CorsConfigurationSource
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource
@@ -27,8 +28,9 @@ class SecurityConfig(
             .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             .and()
             .addFilterBefore(JwtRequestFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter::class.java)
-            .authorizeHttpRequests()
-            .requestMatchers("/**").permitAll()
+            .authorizeHttpRequests {
+                it.requestMatchers(AntPathRequestMatcher("/**")).permitAll()
+            }
 
         http.oauth2Login()
             .successHandler(successHandler)
