@@ -233,13 +233,6 @@ function CreateForm({
         <Controller
           name="tags"
           control={control}
-          rules={{
-            required: "해시태그를 1개 이상 선택해 주세요.",
-            max: {
-              value: 5,
-              message: "해시태그는 최대 5개까지 선택 가능합니다.",
-            },
-          }}
           render={({ field }) => (
             <MultiSelect
               placeholder="해시태그 선택"
