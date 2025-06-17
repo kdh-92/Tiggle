@@ -34,14 +34,13 @@ class JwtTokenProvider(
     ): String {
         val issued = Date.from(LocalDateTime.now().atZone(zone).toInstant())
         val expiry = Date.from(LocalDateTime.now().plusSeconds(validFor).atZone(zone).toInstant())
-        val claims = Jwts.claims().setSubject(memberId.toString())
-        claims.put("roles", roles)
 
         return Jwts.builder()
-            .setIssuer("tiggle")
-            .setClaims(claims)
-            .setIssuedAt(issued)
-            .setExpiration(expiry)
+            .issuer("tiggle")
+            .subject(memberId.toString())
+            .claim("roles", roles)
+            .issuedAt(issued)
+            .expiration(expiry)
             .signWith(secretKey)
             .compact()
     }
@@ -73,19 +72,24 @@ class JwtTokenProvider(
     }
 
     fun isTokenValid(token: String): Boolean {
-        val expiry: Date = extractClaims(token).expiration
-        return expiry.after(Date())
+        return try {
+            val expiry: Date = extractClaims(token).expiration
+            expiry.after(Date())
+        } catch (e: Exception) {
+            println("토큰 검증 실패: ${e.message}")
+            false
+        }
     }
 
     private fun extractClaims(
         jwtToken: String
     ): Claims {
         try {
-            return Jwts.parserBuilder()
-                .setSigningKey(secretKey)
+            return Jwts.parser()
+                .verifyWith(secretKey)
                 .build()
-                .parseClaimsJws(jwtToken)
-                .body
+                .parseSignedClaims(jwtToken)
+                .payload
         } catch (e: JwtException) {
             throw IllegalStateException()
         }
