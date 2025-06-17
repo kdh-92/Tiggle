@@ -1,9 +1,9 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-	id 'org.jetbrains.kotlin.jvm' version '1.8.22'
-	id 'org.jetbrains.kotlin.plugin.spring' version '1.8.22'
-	id 'org.jetbrains.kotlin.plugin.jpa' version '1.8.22'
+	id 'org.jetbrains.kotlin.jvm' version '1.9.25'
+	id 'org.jetbrains.kotlin.plugin.spring' version '1.9.25'
+	id 'org.jetbrains.kotlin.plugin.jpa' version '1.9.25'
 }
 
 repositories {
@@ -13,7 +13,7 @@ repositories {
 }
 
 dependencies {
-	implementation 'org.jetbrains.kotlin:kotlin-reflect:1.8.22'
+	implementation 'org.jetbrains.kotlin:kotlin-reflect:1.9.25'
 	implementation 'com.fasterxml.jackson.module:jackson-module-kotlin'
 	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
@@ -60,7 +60,7 @@ tasks.named('test') {
 tasks.withType(KotlinCompile) {
 	kotlinOptions {
 		freeCompilerArgs += '-Xjsr305=strict'
-		jvmTarget = '17'
+		jvmTarget = '21'
 	}
 }
 
