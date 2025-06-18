@@ -1,0 +1,26 @@
+name: ✨ Feature
+description: 새로운 기능 추가 요청
+title: "[FEAT] "
+labels: ["feature"]
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: 기능 설명
+      placeholder: 어떤 기능인지 명확히 설명해주세요
+    validations:
+      required: true
+
+  - type: textarea
+    id: goal
+    attributes:
+      label: 기능 도입 목적
+      placeholder: 왜 이 기능이 필요한지
+    validations:
+      required: true
+
+  - type: textarea
+    id: spec
+    attributes:
+      label: 상세 스펙
+      placeholder: API 스펙, UI, 비즈니스 로직 등
