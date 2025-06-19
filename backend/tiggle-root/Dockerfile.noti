@@ -1,4 +1,4 @@
-FROM openjdk:11
+FROM eclipse-temurin:21-jdk
 EXPOSE 8080
 
 ARG HOME_DIR=/usr/app
