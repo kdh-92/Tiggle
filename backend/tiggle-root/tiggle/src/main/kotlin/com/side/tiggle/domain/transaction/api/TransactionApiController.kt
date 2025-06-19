@@ -15,6 +15,7 @@ import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
+import jakarta.validation.Valid
 import org.springframework.data.domain.Page
 import org.springframework.format.annotation.DateTimeFormat
 import org.springframework.http.HttpStatus
@@ -38,7 +39,7 @@ class TransactionApiController(
     fun createTransaction(
         @Parameter(hidden = true)
         @RequestHeader(name = HttpHeaders.MEMBER_ID) memberId: Long,
-        @RequestPart dto: TransactionDto,
+        @Valid @RequestPart dto: TransactionDto,
         @RequestPart(value = "multipartFile", required = false) file: MultipartFile?
     ): ResponseEntity<TransactionRespDto> {
         val tx = transactionService.createTransaction(memberId, dto, file)
@@ -134,7 +135,7 @@ class TransactionApiController(
         @Parameter(hidden = true)
         @RequestHeader(name = HttpHeaders.MEMBER_ID) memberId: Long,
         @PathVariable("id") transactionId: Long,
-        @RequestBody dto: TransactionUpdateReqDto
+        @Valid @RequestBody dto: TransactionUpdateReqDto
     ): ResponseEntity<TransactionRespDto> {
         val tx = transactionService.updateTransaction(memberId, transactionId, dto)
         return ResponseEntity<TransactionRespDto>(
