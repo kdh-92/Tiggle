@@ -7,6 +7,9 @@ import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestControllerAdvice
 import java.time.LocalDateTime
 import jakarta.servlet.http.HttpServletRequest
+import jakarta.validation.ConstraintViolationException
+import org.springframework.validation.BindException
+import org.springframework.web.bind.MethodArgumentNotValidException
 
 @RestControllerAdvice
 class GlobalExceptionHandler {
@@ -38,6 +41,66 @@ class GlobalExceptionHandler {
     fun handleNotAuthorizedException(e: NotAuthorizedException, request: HttpServletRequest): ErrorResponse {
         logger.error(e.message, e)
         return ErrorResponse(e, HttpStatus.UNAUTHORIZED, request)
+    }
+
+    @ExceptionHandler(value = [MethodArgumentNotValidException::class])
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    fun handleMethodArgumentNotValidException(
+        e: MethodArgumentNotValidException,
+        request: HttpServletRequest
+    ): ErrorResponse {
+        logger.error("Validation failed: ${getValidationErrorMessage(e)}", e)
+        return ErrorResponse(
+            timestamp = LocalDateTime.now(),
+            status = HttpStatus.BAD_REQUEST.value(),
+            error = "ValidationError",
+            message = getValidationErrorMessage(e),
+            trace = staceTraceToString(e.stackTrace),
+            path = request.requestURI
+        )
+    }
+
+    @ExceptionHandler(value = [BindException::class])
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    fun handleBindException(
+        e: BindException,
+        request: HttpServletRequest
+    ): ErrorResponse {
+        logger.error("Bind validation failed: ${getValidationErrorMessage(e)}", e)
+        return ErrorResponse(
+            timestamp = LocalDateTime.now(),
+            status = HttpStatus.BAD_REQUEST.value(),
+            error = "BindValidationError",
+            message = getValidationErrorMessage(e),
+            trace = staceTraceToString(e.stackTrace),
+            path = request.requestURI
+        )
+    }
+
+    @ExceptionHandler(value = [ConstraintViolationException::class])
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    fun handleConstraintViolationException(
+        e: ConstraintViolationException,
+        request: HttpServletRequest
+    ): ErrorResponse {
+        val errorMessage = e.constraintViolations.joinToString(", ") { violation ->
+            "${violation.propertyPath}: ${violation.message}"
+        }
+        logger.error("Constraint validation failed: $errorMessage", e)
+        return ErrorResponse(
+            timestamp = LocalDateTime.now(),
+            status = HttpStatus.BAD_REQUEST.value(),
+            error = "ConstraintViolationError",
+            message = errorMessage,
+            trace = staceTraceToString(e.stackTrace),
+            path = request.requestURI
+        )
+    }
+
+    private fun getValidationErrorMessage(e: BindException): String {
+        return e.bindingResult.fieldErrors.joinToString(", ") { fieldError ->
+            "${fieldError.field}: ${fieldError.defaultMessage}"
+        }
     }
 
     data class ErrorResponse(
