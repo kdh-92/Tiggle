@@ -2,8 +2,10 @@ package com.side.tiggle.domain.transaction.model
 
 import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import javax.persistence.AttributeConverter
+import jakarta.persistence.AttributeConverter
+import jakarta.persistence.Converter
 
+@Converter
 class TagNamesConverter: AttributeConverter<List<String>, String> {
     private val objectMapper = jacksonObjectMapper()
 

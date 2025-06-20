@@ -3,7 +3,7 @@ package com.side.tiggle.domain.comment.dto
 import com.side.tiggle.domain.comment.model.Comment
 import com.side.tiggle.domain.member.model.Member
 import com.side.tiggle.domain.transaction.model.Transaction
-import javax.validation.constraints.Size
+import jakarta.validation.constraints.Size
 
 open class CommentDto(
     val txId: Long,

@@ -10,13 +10,15 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.http.MediaType
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter
 
+
 @Configuration
 class SwaggerConfig(
     converter: MappingJackson2HttpMessageConverter
 ) {
 
     init {
-        val supportedMediaTypes = ArrayList(converter.supportedMediaTypes)
+        // application/octet-stream 도 지원하도록 설정
+        val supportedMediaTypes = converter.supportedMediaTypes.toMutableList()
         supportedMediaTypes.add(MediaType("application", "octet-stream"))
         converter.supportedMediaTypes = supportedMediaTypes
     }
@@ -24,14 +26,25 @@ class SwaggerConfig(
     @Bean
     fun openAPI(): OpenAPI {
         return OpenAPI()
-        .servers(
+            .info(
+                Info()
+                    .title("Tiggle API")
+                    .version("1.0.0")
+                    .description("Tiggle 백엔드 API 문서")
+            )
+            .servers(
                 listOf(
                     Server().url("https://tiggle.duckdns.org:8180")
-                            )
-                        )
-            .components(Components()
-                .addSecuritySchemes("bearer-key", SecurityScheme().type(SecurityScheme.Type.HTTP).scheme("bearer").bearerFormat("JWT"))
+                        .description("배포 서버")
+                )
             )
-            .info(Info().title("Tiggle").version("1.0.0"))
+            .components(
+                Components().addSecuritySchemes(
+                    "bearer-key", SecurityScheme()
+                        .type(SecurityScheme.Type.HTTP)
+                        .scheme("bearer")
+                        .bearerFormat("JWT")
+                )
+            )
     }
 }

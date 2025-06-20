@@ -1,7 +1,7 @@
 plugins {
     id 'java'
-    id 'org.springframework.boot' version '2.7.18'
-    id 'io.spring.dependency-management' version '1.0.15.RELEASE'
+    id 'org.springframework.boot' version '3.5.0'
+    id 'io.spring.dependency-management' version '1.1.7'
 //    id 'org.jetbrains.kotlin.jvm' version '1.6.10'
 //    id 'org.jetbrains.kotlin.kapt' version '1.7.20'
 //    id 'org.jetbrains.kotlin.plugin.jpa' version '1.6.21'
@@ -28,8 +28,8 @@ subprojects {
         }
     }
 
-    sourceCompatibility = 11
-    targetCompatibility = 11
+    sourceCompatibility = 21
+    targetCompatibility = 21
 
     dependencies {
         implementation 'org.springframework.boot:spring-boot-starter'
@@ -40,7 +40,7 @@ subprojects {
         annotationProcessor 'org.projectlombok:lombok'
 
         // Swagger
-        implementation 'org.springdoc:springdoc-openapi-ui:1.6.15'
+        implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0'
     }
 }
 
