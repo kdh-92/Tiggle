@@ -5,11 +5,11 @@ import com.side.tiggle.domain.member.model.Member
 import com.side.tiggle.domain.transaction.model.Transaction
 import com.side.tiggle.global.common.model.BaseEntity
 import org.hibernate.annotations.SQLDelete
-import org.hibernate.annotations.Where
 import jakarta.persistence.*
+import org.hibernate.annotations.SQLRestriction
 
 @Entity
-@Where(clause = "deleted = false")
+@SQLRestriction("deleted = false")
 @SQLDelete(sql = "UPDATE comments SET deleted_at = CURRENT_TIMESTAMP, deleted = true where id = ?")
 @Table(name = "comments")
 class Comment(

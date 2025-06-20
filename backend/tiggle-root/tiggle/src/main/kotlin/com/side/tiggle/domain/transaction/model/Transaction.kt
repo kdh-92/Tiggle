@@ -6,14 +6,14 @@ import com.side.tiggle.domain.member.model.Member
 import com.side.tiggle.domain.reaction.model.Reaction
 import com.side.tiggle.global.common.model.BaseEntity
 import org.hibernate.annotations.SQLDelete
-import org.hibernate.annotations.Where
 import java.time.LocalDate
 import jakarta.persistence.*
+import org.hibernate.annotations.SQLRestriction
 
 
 @Entity
 @SQLDelete(sql = "UPDATE transactions SET deleted_at = CURRENT_TIMESTAMP, deleted = true WHERE id = ?")
-@Where(clause = "deleted = false")
+@SQLRestriction("deleted = false")
 @Table(name = "transactions")
 class Transaction(
     @JsonIgnore
