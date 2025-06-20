@@ -91,7 +91,7 @@ class JwtTokenProvider(
                 .parseSignedClaims(jwtToken)
                 .payload
         } catch (e: JwtException) {
-            throw IllegalStateException()
+            throw IllegalStateException("Failed to extract claims from JWT token", e)
         }
     }
 
