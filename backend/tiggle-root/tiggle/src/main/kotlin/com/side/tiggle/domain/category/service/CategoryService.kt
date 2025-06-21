@@ -1,7 +1,9 @@
 package com.side.tiggle.domain.category.service
 
-import com.side.tiggle.domain.category.dto.CategoryCreateDto
-import com.side.tiggle.domain.category.dto.CategoryDto
+import com.side.tiggle.domain.category.dto.req.CategoryCreateReqDto
+import com.side.tiggle.domain.category.dto.req.CategoryUpdateReqDto
+import com.side.tiggle.domain.category.dto.resp.CategoryListRespDto
+import com.side.tiggle.domain.category.dto.resp.CategoryRespDto
 import com.side.tiggle.domain.category.model.Category
 import com.side.tiggle.domain.category.repository.CategoryRepository
 import com.side.tiggle.domain.member.service.MemberService
@@ -14,9 +16,10 @@ class CategoryService(
     private val categoryRepository: CategoryRepository,
     private val memberService: MemberService
 ) {
-    fun createCategory(dto: CategoryCreateDto, memberId: Long): Category {
-        val member = memberService.getMember(memberId);
-        return categoryRepository.save(dto.toEntity(member))
+    fun createCategory(dto: CategoryCreateReqDto, memberId: Long): CategoryRespDto {
+        val member = memberService.getMemberOrThrow(memberId)
+        val category = dto.toEntity(member)
+        return CategoryRespDto.fromEntity(categoryRepository.save(category))
     }
 
     fun getCategory(categoryId: Long): Category {
@@ -24,36 +27,32 @@ class CategoryService(
             .orElseThrow { NotFoundException() }
     }
 
-    fun getAllCategory(): List<Category> {
-        return categoryRepository.findAll()
+    fun getCategoryByMemberIdOrDefaults(memberId: Long): CategoryListRespDto {
+        val categories = categoryRepository.findCategoryByMemberIdOrDefaults(memberId, true)
+        val dtoList = categories.map { CategoryRespDto.fromEntity(it) }
+        return CategoryListRespDto(dtoList)
     }
 
-    fun getCategoryByMemberIdOrDefaults(memberId: Long): List<Category> {
-        //기본 카테코리 = true , memberId가 일치하는 카테고리 = false라서 or로 설정했습니다.
-        return categoryRepository.findCategoryByMemberIdOrDefaults(memberId, true)
-    }
-
-    fun updateCategory(id: Long, dto: CategoryDto): Category {
+    fun updateCategory(id: Long, dto: CategoryUpdateReqDto): CategoryRespDto {
         val category = categoryRepository.findById(id)
             .orElseThrow { NotFoundException() }
+
         category.apply {
             name = dto.name
-            defaults = dto.defaults
         }
-        return categoryRepository.save(category)
+
+        return CategoryRespDto.fromEntity(categoryRepository.save(category))
     }
 
-    fun deleteCategory(categoryId: Long): Category {
+    fun deleteCategory(categoryId: Long) {
         val category = categoryRepository.findById(categoryId)
             .orElseThrow { NotFoundException() }
+
         category.apply {
             deleted = true
             deletedAt = LocalDateTime.now()
         }
-        return categoryRepository.save(category)
-    }
-//    fun deleteCategory(categoryId: Long) {
 
-//        categoryRepository.deleteById(categoryId)
-//    }
+        categoryRepository.save(category)
+    }
 }

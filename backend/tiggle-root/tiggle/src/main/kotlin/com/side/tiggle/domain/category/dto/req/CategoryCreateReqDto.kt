@@ -1,9 +1,9 @@
-package com.side.tiggle.domain.category.dto
+package com.side.tiggle.domain.category.dto.req
 
 import com.side.tiggle.domain.category.model.Category
 import com.side.tiggle.domain.member.model.Member
 
-data class CategoryCreateDto (
+data class CategoryCreateReqDto (
     val name : String
 ) {
     fun toEntity(member: Member): Category {
