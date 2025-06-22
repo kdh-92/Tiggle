@@ -3,7 +3,6 @@ package com.side.tiggle.domain.transaction.dto.resp
 import com.side.tiggle.domain.category.dto.resp.CategoryRespDto
 import com.side.tiggle.domain.member.dto.controller.MemberResponseDto
 import com.side.tiggle.domain.member.dto.service.MemberDto
-import com.side.tiggle.domain.transaction.dto.TransactionDto
 import com.side.tiggle.domain.transaction.model.Transaction
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageImpl
@@ -23,7 +22,7 @@ data class TransactionRespDto(
     val content: String,
     val reason: String,
 ) {
-    var parentTx: TransactionDto? = null
+    var parentTx: TransactionRespDto? = null
     var txUpCount: Int? = null
     var txDownCount: Int? = null
     var txCommentCount: Int? = null
