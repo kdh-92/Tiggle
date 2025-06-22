@@ -1,7 +1,6 @@
 package com.side.tiggle.domain.transaction.api
 
 import com.side.tiggle.domain.comment.dto.resp.CommentRespDto
-import com.side.tiggle.domain.comment.dto.resp.CommentRespDto.Companion.fromEntityPage
 import com.side.tiggle.domain.comment.service.CommentService
 import com.side.tiggle.domain.reaction.model.ReactionType
 import com.side.tiggle.domain.reaction.service.ReactionService
@@ -131,17 +130,6 @@ class TransactionApiController(
     ): ResponseEntity<Nothing> {
         transactionService.deleteTransaction(memberId, transactionId)
         return ResponseEntity(null, HttpStatus.NO_CONTENT)
-    }
-
-    @GetMapping("/{id}/comments")
-    fun getAllCommentsByTx(
-        @PathVariable id: Long,
-        @RequestParam(name = "pageSize", defaultValue = DEFAULT_PAGE_SIZE) pageSize: Int,
-        @RequestParam(name = "index", defaultValue = DEFAULT_INDEX) index: Int
-    ): ResponseEntity<Page<CommentRespDto>> {
-        val pagedComments = commentService.getParentsByTxId(id, index, pageSize)
-        val pagedResult = fromEntityPage(pagedComments, commentService)
-        return ResponseEntity(pagedResult, HttpStatus.OK)
     }
 
     companion object {

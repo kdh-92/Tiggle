@@ -5,6 +5,7 @@ import com.side.tiggle.domain.comment.dto.req.CommentUpdateReqDto
 import com.side.tiggle.domain.comment.dto.resp.CommentPageRespDto
 import com.side.tiggle.domain.comment.dto.resp.CommentRespDto
 import com.side.tiggle.domain.comment.service.CommentService
+import com.side.tiggle.domain.transaction.dto.resp.TransactionRespDto.Companion.fromEntityPage
 import com.side.tiggle.global.common.constants.HttpHeaders
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
@@ -14,6 +15,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import jakarta.validation.Valid
+import org.springframework.data.domain.Page
 
 @Tag(name = "Comment API")
 @RestController
@@ -59,5 +61,20 @@ class CommentApiController(
         @PathVariable("id") commentId: Long): ResponseEntity<Any> {
         commentService.deleteComment(memberId, commentId)
         return ResponseEntity(null, HttpStatus.NO_CONTENT)
+    }
+
+    @GetMapping("/{id}/comments")
+    fun getAllCommentsByTx(
+        @PathVariable id: Long,
+        @RequestParam(name = "pageSize", defaultValue = DEFAULT_PAGE_SIZE) pageSize: Int,
+        @RequestParam(name = "index", defaultValue = DEFAULT_INDEX) index: Int
+    ): ResponseEntity<CommentPageRespDto> {
+        val pagedResult = commentService.getParentsByTxId(id, index, pageSize)
+        return ResponseEntity(pagedResult, HttpStatus.OK)
+    }
+
+    companion object {
+        private const val DEFAULT_INDEX = "0"
+        private const val DEFAULT_PAGE_SIZE = "5"
     }
 }
