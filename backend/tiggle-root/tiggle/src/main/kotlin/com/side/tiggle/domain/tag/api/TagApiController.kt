@@ -1,6 +1,8 @@
 package com.side.tiggle.domain.tag.api
 
-import com.side.tiggle.domain.tag.dto.TagDto
+import com.side.tiggle.domain.tag.dto.req.TagCreateReqDto
+import com.side.tiggle.domain.tag.dto.req.TagUpdateReqDto
+import com.side.tiggle.domain.tag.dto.resp.TagRespDto
 import com.side.tiggle.domain.tag.service.TagService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -14,30 +16,28 @@ class TagApiController(
 
     @PostMapping
     fun createTag(
-        @RequestBody tagDto: TagDto
-    ): ResponseEntity<TagDto> {
-        return ResponseEntity(tagService.createTag(tagDto), HttpStatus.CREATED)
+        @RequestBody createReqDto: TagCreateReqDto
+    ): ResponseEntity<TagRespDto> {
+        return ResponseEntity(tagService.createTag(createReqDto), HttpStatus.CREATED)
     }
 
     @GetMapping("/{id}")
     fun getTag(
         @PathVariable("id") tagId: Long
-    ): ResponseEntity<TagDto> {
+    ): ResponseEntity<TagRespDto> {
         return ResponseEntity(tagService.getTag(tagId), HttpStatus.OK)
     }
 
     @GetMapping("/all")
-    fun getAllDefaultTag(): ResponseEntity<List<TagDto>> {
-        return ResponseEntity(
-            tagService.getAllDefaultTag().map { TagDto.fromEntity(it) }, HttpStatus.OK
-        )
+    fun getAllDefaultTag(): ResponseEntity<List<TagRespDto>> {
+        return ResponseEntity(tagService.getAllDefaultTag(), HttpStatus.OK)
     }
 
     @PutMapping("/{id}")
     fun updateTag(
         @PathVariable("id") tagId: Long,
-        @RequestBody tagDto: TagDto
-    ): ResponseEntity<TagDto> {
-        return ResponseEntity(tagService.updateTag(tagId, tagDto), HttpStatus.OK)
+        @RequestBody updateReqDto: TagUpdateReqDto
+    ): ResponseEntity<TagRespDto> {
+        return ResponseEntity(tagService.updateTag(tagId, updateReqDto), HttpStatus.OK)
     }
 }
