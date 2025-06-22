@@ -1,7 +1,8 @@
 package com.side.tiggle.domain.reaction.service
 
 import com.side.tiggle.domain.member.service.MemberService
-import com.side.tiggle.domain.reaction.dto.ReactionCreateDto
+import com.side.tiggle.domain.reaction.dto.req.ReactionCreateReqDto
+import com.side.tiggle.domain.reaction.dto.resp.ReactionRespDto
 import com.side.tiggle.domain.reaction.model.Reaction
 import com.side.tiggle.domain.reaction.model.ReactionType
 import com.side.tiggle.domain.reaction.repository.ReactionRepository
@@ -16,27 +17,28 @@ class ReactionService(
     val memberService: MemberService
 ) {
 
-    fun getReaction(txId: Long, senderId: Long): Reaction? {
-        return reactionRepository.findByTxIdAndSenderId(txId, senderId)
+    fun getReaction(txId: Long, senderId: Long): ReactionRespDto? {
+        val reaction = reactionRepository.findByTxIdAndSenderId(txId, senderId)
+        return reaction?.let { ReactionRespDto.fromEntity(it) }
     }
 
     fun getReactionCount(txId: Long, type: ReactionType): Int {
         return reactionRepository.countAllByTxIdAndType(txId, type)
     }
 
-    fun upsertReaction(txId: Long, senderId: Long, reactionDto: ReactionCreateDto): Reaction {
+    fun upsertReaction(txId: Long, senderId: Long, createReqDto: ReactionCreateReqDto): ReactionRespDto {
         val tx = transactionService.getTransaction(txId)
         val reaction = (reactionRepository.findByTxIdAndSenderId(txId, senderId)
             ?: Reaction(
                 tx = tx,
                 receiver = tx.member,
                 sender = memberService.getMember(senderId),
-                type = reactionDto.type,
+                type = createReqDto.type,
             )
-        ).apply {
-            type = reactionDto.type
-        }
-        return reactionRepository.save(reaction)
+                ).apply {
+                type = createReqDto.type
+            }
+        return ReactionRespDto.fromEntity(reactionRepository.save(reaction))
     }
 
     @Transactional
