@@ -4,7 +4,6 @@ import com.side.tiggle.domain.category.model.Category
 import com.side.tiggle.domain.category.repository.CategoryRepository
 import com.side.tiggle.domain.member.model.Member
 import com.side.tiggle.domain.member.repository.MemberRepository
-import com.side.tiggle.domain.transaction.dto.TransactionDto
 import com.side.tiggle.domain.transaction.dto.resp.TransactionRespDto
 import com.side.tiggle.domain.transaction.model.Transaction
 import com.side.tiggle.domain.transaction.repository.TransactionRepository
