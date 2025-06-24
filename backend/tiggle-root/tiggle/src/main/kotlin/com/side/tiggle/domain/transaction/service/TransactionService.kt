@@ -1,6 +1,6 @@
 package com.side.tiggle.domain.transaction.service
 
-import TransactionRespDto
+import com.side.tiggle.domain.transaction.dto.resp.TransactionRespDto
 import com.side.tiggle.domain.category.service.CategoryService
 import com.side.tiggle.domain.comment.service.CommentService
 import com.side.tiggle.domain.member.service.MemberService
@@ -18,8 +18,6 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.multipart.MultipartFile
 import java.io.File
-import java.nio.file.Files
-import java.nio.file.Path
 import java.nio.file.Paths
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -95,7 +93,7 @@ class TransactionService(
      * @author 양병학
      */
     fun getTransactionDetail(id: Long): TransactionRespDto {
-        val transaction = getTransaction(id)
+        val transaction = getTransactionOrThrow(id)
         return TransactionRespDto.fromEntity(transaction)
     }
 
@@ -104,7 +102,7 @@ class TransactionService(
      * @since 2025-06-22
      * @author 양병학
      */
-    fun getTransaction(transactionId: Long): Transaction {
+    fun getTransactionOrThrow(transactionId: Long): Transaction {
         return transactionRepository.findById(transactionId)
             .orElseThrow{ NotFoundException() }
     }

@@ -1,5 +1,6 @@
-import com.side.tiggle.domain.member.dto.resp.MemberRespDto
+package com.side.tiggle.domain.transaction.dto.resp
 
+import com.side.tiggle.domain.member.dto.resp.MemberRespDto
 import com.side.tiggle.domain.category.dto.resp.CategoryRespDto
 import com.side.tiggle.domain.transaction.model.Transaction
 import org.springframework.data.domain.Page

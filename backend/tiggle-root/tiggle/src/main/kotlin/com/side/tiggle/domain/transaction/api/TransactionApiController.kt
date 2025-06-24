@@ -1,6 +1,6 @@
 package com.side.tiggle.domain.transaction.api
 
-import TransactionRespDto
+import com.side.tiggle.domain.transaction.dto.resp.TransactionRespDto
 import com.side.tiggle.domain.comment.dto.resp.CommentPageRespDto
 import com.side.tiggle.domain.comment.service.CommentService
 import com.side.tiggle.domain.reaction.service.ReactionService
@@ -28,7 +28,6 @@ class TransactionApiController(
     private val commentService: CommentService,
     private val reactionService: ReactionService
 ) {
-
     // TODO: Request Header 방식으로 변경한다
     @Operation(description = "tx 생성", security = [SecurityRequirement(name = "bearer-key")])
     @PostMapping(consumes = [MediaType.MULTIPART_FORM_DATA_VALUE], produces = [MediaType.APPLICATION_JSON_VALUE])
