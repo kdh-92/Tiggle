@@ -32,7 +32,7 @@ class ReactionService(
             ?: Reaction(
                 tx = tx,
                 receiver = tx.member,
-                sender = memberService.getMember(senderId),
+                sender = memberService.getMemberOrThrow(senderId),
                 type = createReqDto.type,
             )
                 ).apply {

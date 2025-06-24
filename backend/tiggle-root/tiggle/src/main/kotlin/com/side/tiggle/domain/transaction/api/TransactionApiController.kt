@@ -1,13 +1,11 @@
 package com.side.tiggle.domain.transaction.api
 
-import com.side.tiggle.domain.comment.dto.resp.CommentRespDto
+import TransactionRespDto
+import com.side.tiggle.domain.comment.dto.resp.CommentPageRespDto
 import com.side.tiggle.domain.comment.service.CommentService
-import com.side.tiggle.domain.reaction.model.ReactionType
 import com.side.tiggle.domain.reaction.service.ReactionService
 import com.side.tiggle.domain.transaction.dto.req.TransactionCreateReqDto
 import com.side.tiggle.domain.transaction.dto.req.TransactionUpdateReqDto
-import com.side.tiggle.domain.transaction.dto.resp.TransactionRespDto
-import com.side.tiggle.domain.transaction.model.Transaction
 import com.side.tiggle.domain.transaction.service.TransactionService
 import com.side.tiggle.global.common.constants.HttpHeaders
 import io.swagger.v3.oas.annotations.Operation
@@ -130,6 +128,16 @@ class TransactionApiController(
     ): ResponseEntity<Nothing> {
         transactionService.deleteTransaction(memberId, transactionId)
         return ResponseEntity(null, HttpStatus.NO_CONTENT)
+    }
+
+    @GetMapping("/{id}/comments")
+    fun getAllCommentsByTx(
+        @PathVariable id: Long,
+        @RequestParam(name = "pageSize", defaultValue = DEFAULT_PAGE_SIZE) pageSize: Int,
+        @RequestParam(name = "index", defaultValue = DEFAULT_INDEX) index: Int
+    ): ResponseEntity<CommentPageRespDto> {
+        val pagedCommentsRespDto = commentService.getParentsByTxId(id, index, pageSize)
+        return ResponseEntity(pagedCommentsRespDto, HttpStatus.OK)
     }
 
     companion object {

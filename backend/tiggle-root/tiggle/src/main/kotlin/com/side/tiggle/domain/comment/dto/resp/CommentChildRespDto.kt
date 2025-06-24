@@ -1,7 +1,7 @@
 package com.side.tiggle.domain.comment.dto.resp
 
 import com.side.tiggle.domain.comment.model.Comment
-import com.side.tiggle.domain.member.dto.MemberDto
+import com.side.tiggle.domain.member.dto.resp.MemberRespDto
 import java.time.LocalDateTime
 
 class CommentChildRespDto(
@@ -10,8 +10,8 @@ class CommentChildRespDto(
     val parentId: Long?,
     val content: String,
     val createdAt: LocalDateTime,
-    val sender: MemberDto,
-    val receiver: MemberDto,
+    val sender: MemberRespDto,
+    val receiver: MemberRespDto,
     val childCommentCount: Int,
 ) {
     companion object {
@@ -19,8 +19,8 @@ class CommentChildRespDto(
             return CommentChildRespDto(
                 content = comment.content,
                 parentId = comment.parentId,
-                sender = MemberDto.fromEntity(comment.sender),
-                receiver = MemberDto.fromEntity(comment.receiver),
+                sender = MemberRespDto.fromEntity(comment.sender),
+                receiver = MemberRespDto.fromEntity(comment.receiver),
                 txId = comment.tx.id!!,
                 id = comment.id,
                 createdAt = comment.createdAt!!,

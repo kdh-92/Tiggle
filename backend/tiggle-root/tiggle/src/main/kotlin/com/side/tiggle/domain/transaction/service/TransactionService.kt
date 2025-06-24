@@ -1,5 +1,6 @@
 package com.side.tiggle.domain.transaction.service
 
+import TransactionRespDto
 import com.side.tiggle.domain.category.service.CategoryService
 import com.side.tiggle.domain.comment.service.CommentService
 import com.side.tiggle.domain.member.service.MemberService
@@ -7,7 +8,6 @@ import com.side.tiggle.domain.reaction.model.ReactionType
 import com.side.tiggle.domain.reaction.service.ReactionService
 import com.side.tiggle.domain.transaction.dto.req.TransactionCreateReqDto
 import com.side.tiggle.domain.transaction.dto.req.TransactionUpdateReqDto
-import com.side.tiggle.domain.transaction.dto.resp.TransactionRespDto
 import com.side.tiggle.domain.transaction.model.Transaction
 import com.side.tiggle.domain.transaction.repository.TransactionRepository
 import com.side.tiggle.global.exception.NotFoundException
@@ -38,13 +38,13 @@ class TransactionService(
 
     @Transactional
     fun createTransaction(memberId: Long, dto: TransactionCreateReqDto, file: MultipartFile?): TransactionRespDto {
-        var savePath: Path? = null
+//        var savePath: Path? = null
         try {
 //            val uploadedFilePath = uploadFileToFolder(file)
 //            savePath = Paths.get(uploadedFilePath)
 //            dto.imageUrl = uploadedFilePath
 
-            val member = memberService.getMember(memberId)
+            val member = memberService.getMemberOrThrow(memberId)
             val category = categoryService.getCategory(dto.categoryId)
             val tx = transactionRepository.save(
                 dto.toEntity(member, category)
@@ -52,10 +52,10 @@ class TransactionService(
 
             return TransactionRespDto.fromEntity(tx)
         } catch (e: Exception) {
-            if (savePath != null) {
-                Files.deleteIfExists(savePath)
-            }
-            deleteFolder()
+//            if (savePath != null) {
+//                Files.deleteIfExists(savePath)
+//            }
+//            deleteFolder()
             throw e
         }
     }
