@@ -2,6 +2,7 @@ package com.side.tiggle.domain.notification.service
 
 import com.side.tiggle.domain.comment.dto.resp.CommentRespDto
 import com.side.tiggle.domain.comment.model.Comment
+import com.side.tiggle.domain.member.dto.resp.MemberRespDto
 import com.side.tiggle.domain.member.model.Member
 import com.side.tiggle.domain.member.service.MemberService
 import com.side.tiggle.domain.notification.NotificationProducer

@@ -27,7 +27,7 @@ class ReactionService(
     }
 
     fun upsertReaction(txId: Long, senderId: Long, createReqDto: ReactionCreateReqDto): ReactionRespDto {
-        val tx = transactionService.getTransaction(txId)
+        val tx = transactionService.getTransactionOrThrow(txId)
         val reaction = (reactionRepository.findByTxIdAndSenderId(txId, senderId)
             ?: Reaction(
                 tx = tx,
