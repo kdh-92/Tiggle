@@ -13,10 +13,10 @@ interface TransactionRepository: JpaRepository<Transaction, Long> {
 
     @Query("""
         SELECT t FROM Transaction t 
-        WHERE t.member.id = :memberId
+        WHERE t.memberId = :memberId
         AND (:startDate IS NULL OR t.date >= :startDate)
         AND (:endDate IS NULL OR t.date <= :endDate) 
-        AND (:categoryIds IS NULL OR t.category.id IN :categoryIds)
+        AND (:categoryIds IS NULL OR t.categoryId IN :categoryIds)
         AND (:tagNames IS NULL OR EXISTS (
             SELECT 1 FROM t.tagNames tag WHERE tag IN :tagNames
         ))

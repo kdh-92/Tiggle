@@ -18,7 +18,7 @@ class CategoryService(
 ) {
     fun createCategory(dto: CategoryCreateReqDto, memberId: Long): CategoryRespDto {
         val member = memberService.getMemberOrThrow(memberId)
-        val category = dto.toEntity(member)
+        val category = dto.toEntity(memberId)
         return CategoryRespDto.fromEntity(categoryRepository.save(category))
     }
 

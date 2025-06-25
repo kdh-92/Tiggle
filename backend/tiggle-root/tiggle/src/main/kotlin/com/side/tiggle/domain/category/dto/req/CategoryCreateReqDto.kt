@@ -6,11 +6,11 @@ import com.side.tiggle.domain.member.model.Member
 data class CategoryCreateReqDto (
     val name : String
 ) {
-    fun toEntity(member: Member): Category {
+    fun toEntity(memberId: Long): Category {
         return Category(
             name = this.name,
             defaults = false,
-            member = member
+            memberId = memberId
         )
     }
 }

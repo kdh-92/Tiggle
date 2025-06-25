@@ -10,17 +10,17 @@ class CommentRespDto(
     val parentId: Long?,
     val content: String,
     val createdAt: LocalDateTime,
-    val sender: MemberRespDto,
-    val receiver: MemberRespDto,
+    val senderId: Long,
+    val receiverId: Long
 ) {
     companion object {
         fun fromEntity(comment: Comment): CommentRespDto {
             return CommentRespDto(
                 content = comment.content,
                 parentId = comment.parentId,
-                sender = MemberRespDto.fromEntity(comment.sender),
-                receiver = MemberRespDto.fromEntity(comment.receiver),
-                txId = comment.tx.id!!,
+                senderId = comment.senderId,
+                receiverId = comment.receiverId,
+                txId = comment.txId,
                 id = comment.id,
                 createdAt = comment.createdAt!!
             )

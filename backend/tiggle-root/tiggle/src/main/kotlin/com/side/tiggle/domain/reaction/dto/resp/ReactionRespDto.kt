@@ -12,9 +12,9 @@ data class ReactionRespDto(
     companion object {
         fun fromEntity(reaction: Reaction): ReactionRespDto {
             return ReactionRespDto(
-                txId = reaction.tx.id!!,
-                senderId = reaction.sender.id,
-                receiverId = reaction.receiver.id,
+                txId = reaction.txId,
+                senderId = reaction.senderId,
+                receiverId = reaction.receiverId,
                 type = reaction.type
             )
         }
