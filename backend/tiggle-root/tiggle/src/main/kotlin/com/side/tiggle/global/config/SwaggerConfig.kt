@@ -10,7 +10,6 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.http.MediaType
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter
 
-
 @Configuration
 class SwaggerConfig(
     converter: MappingJackson2HttpMessageConverter
