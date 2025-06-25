@@ -1,6 +1,5 @@
-package com.side.tiggle.domain.member.dto.controller
+package com.side.tiggle.domain.member.dto.req
 
-import com.side.tiggle.domain.member.dto.service.MemberDto
 import java.time.LocalDate
 
 data class MemberUpdateReqDto(

@@ -2,6 +2,7 @@ package com.side.tiggle.domain.comment.api
 
 import com.side.tiggle.domain.comment.dto.req.CommentCreateReqDto
 import com.side.tiggle.domain.comment.dto.req.CommentUpdateReqDto
+import com.side.tiggle.domain.comment.dto.resp.CommentPageRespDto
 import com.side.tiggle.domain.comment.dto.resp.CommentRespDto
 import com.side.tiggle.domain.comment.service.CommentService
 import com.side.tiggle.global.common.constants.HttpHeaders
@@ -9,7 +10,6 @@ import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import io.swagger.v3.oas.annotations.tags.Tag
-import org.springframework.data.domain.Page
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -27,10 +27,9 @@ class CommentApiController(
         @PathVariable id: Long?,
         @RequestParam(name = "index", defaultValue = "0") page: Int,
         @RequestParam(name = "pageSize", defaultValue = "5") size: Int
-    ): ResponseEntity<Page<CommentRespDto>> {
+    ): ResponseEntity<CommentPageRespDto> {
         val pagedComments = commentService.getChildrenByParentId(id, page, size)
-        val pagedResult = CommentRespDto.fromEntityPage(pagedComments, commentService)
-        return ResponseEntity(pagedResult, HttpStatus.OK)
+        return ResponseEntity(pagedComments, HttpStatus.OK)
     }
 
     @PostMapping
@@ -38,8 +37,8 @@ class CommentApiController(
     fun createComment(
         @Parameter(hidden = true) @RequestHeader(name = HttpHeaders.MEMBER_ID) memberId: Long,
         @RequestBody commentDto: @Valid CommentCreateReqDto): ResponseEntity<CommentRespDto> {
-        val respDto = CommentRespDto.fromEntity(commentService.createComment(memberId, commentDto))
-        return ResponseEntity(respDto, HttpStatus.CREATED)
+        val createComment = commentService.createComment(memberId, commentDto)
+        return ResponseEntity(createComment, HttpStatus.CREATED)
     }
 
     @PutMapping("/{id}")
@@ -49,7 +48,7 @@ class CommentApiController(
         @RequestHeader(name = HttpHeaders.MEMBER_ID) memberId: Long,
         @PathVariable("id") commentId: Long,
         @RequestBody dto: CommentUpdateReqDto): ResponseEntity<CommentRespDto> {
-        val respDto = CommentRespDto.fromEntity(commentService.updateComment(memberId, commentId, dto.content))
+        val respDto = commentService.updateComment(memberId, commentId, dto)
         return ResponseEntity(respDto, HttpStatus.OK)
     }
 
@@ -60,5 +59,20 @@ class CommentApiController(
         @PathVariable("id") commentId: Long): ResponseEntity<Any> {
         commentService.deleteComment(memberId, commentId)
         return ResponseEntity(null, HttpStatus.NO_CONTENT)
+    }
+
+    @GetMapping("/{id}/comments")
+    fun getAllCommentsByTx(
+        @PathVariable id: Long,
+        @RequestParam(name = "pageSize", defaultValue = DEFAULT_PAGE_SIZE) pageSize: Int,
+        @RequestParam(name = "index", defaultValue = DEFAULT_INDEX) index: Int
+    ): ResponseEntity<CommentPageRespDto> {
+        val pagedResult = commentService.getParentsByTxId(id, index, pageSize)
+        return ResponseEntity(pagedResult, HttpStatus.OK)
+    }
+
+    companion object {
+        private const val DEFAULT_INDEX = "0"
+        private const val DEFAULT_PAGE_SIZE = "5"
     }
 }

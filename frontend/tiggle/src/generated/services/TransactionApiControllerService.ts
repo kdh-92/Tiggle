@@ -159,7 +159,7 @@ export class TransactionApiControllerService {
     ): CancelablePromise<PageCommentRespDto> {
         return __request(OpenAPI, {
             method: 'GET',
-            url: '/api/v1/transaction/{id}/comments',
+            url: '/api/v1/comments/{id}/comments',
             path: {
                 'id': id,
             },

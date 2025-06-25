@@ -9,25 +9,17 @@ data class CategoryRespDto(
 ) {
     companion object {
         fun fromEntity(category: Category?): CategoryRespDto {
-            return try {
-                if (category != null) {
-                    CategoryRespDto(
-                        id = category.id!!,
-                        name = category.name,
-                        defaults = category.defaults
-                    )
-                } else {
-                    CategoryRespDto(
-                        id = null,
-                        name = "카테고리 없음",
-                        defaults = false
-                    )
-                }
-            } catch (e: Exception) {
-                CategoryRespDto(
+            return when {
+                category == null -> CategoryRespDto(
                     id = null,
-                    name = "삭제된 카테고리",
+                    name = "카테고리 없음",
                     defaults = false
+                )
+
+                else -> CategoryRespDto(
+                    id = category.id,
+                    name = category.name,
+                    defaults = category.defaults
                 )
             }
         }

@@ -1,9 +1,7 @@
 package com.side.tiggle.domain.transaction.dto.resp
 
+import com.side.tiggle.domain.member.dto.resp.MemberRespDto
 import com.side.tiggle.domain.category.dto.resp.CategoryRespDto
-import com.side.tiggle.domain.member.dto.controller.MemberResponseDto
-import com.side.tiggle.domain.member.dto.service.MemberDto
-import com.side.tiggle.domain.transaction.dto.TransactionDto
 import com.side.tiggle.domain.transaction.model.Transaction
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageImpl
@@ -12,7 +10,7 @@ import java.time.LocalDateTime
 
 data class TransactionRespDto(
     val id: Long,
-    val member: MemberResponseDto,
+    val member: MemberRespDto,
     val category: CategoryRespDto,
     val tagNames: List<String>?,
     val createdAt: LocalDateTime,
@@ -23,7 +21,7 @@ data class TransactionRespDto(
     val content: String,
     val reason: String,
 ) {
-    var parentTx: TransactionDto? = null
+    var parentTx: TransactionRespDto? = null
     var txUpCount: Int? = null
     var txDownCount: Int? = null
     var txCommentCount: Int? = null
@@ -32,7 +30,7 @@ data class TransactionRespDto(
         fun fromEntity(tx: Transaction): TransactionRespDto {
             return TransactionRespDto(
                 id = tx.id!!,
-                member = MemberDto.fromEntityToMemberResponseDto(tx.member),
+                member = MemberRespDto.fromEntity(tx.member),
                 category = CategoryRespDto.fromEntity(tx.category),
                 imageUrl = tx.imageUrl,
                 amount = tx.amount,

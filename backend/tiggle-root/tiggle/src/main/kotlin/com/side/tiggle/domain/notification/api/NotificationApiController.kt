@@ -1,12 +1,11 @@
 package com.side.tiggle.domain.notification.api
 
-import com.side.tiggle.domain.notification.dto.NotificationDto
+import com.side.tiggle.domain.notification.dto.resp.NotificationRespDto
 import com.side.tiggle.domain.notification.service.NotificationService
 import com.side.tiggle.global.common.constants.HttpHeaders
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
-import org.apache.coyote.Response
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
@@ -28,7 +27,7 @@ class NotificationApiController(
         @Parameter(hidden = true)
         @RequestHeader(name = HttpHeaders.MEMBER_ID) memberId: Long,
         @RequestHeader(name = "member-id") overrideMemberId: Long?,
-    ): ResponseEntity<List<NotificationDto>>{
+    ): ResponseEntity<List<NotificationRespDto>>{
         val result = notificationService.getAllByMemberId(overrideMemberId ?: memberId)
         return ResponseEntity(result, HttpStatus.OK)
     }

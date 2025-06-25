@@ -1,9 +1,9 @@
 package com.side.tiggle.domain.member.api
 
-import com.side.tiggle.domain.member.dto.controller.MemberRequestDto
-import com.side.tiggle.domain.member.dto.controller.MemberResponseDto
-import com.side.tiggle.domain.member.dto.controller.MemberUpdateReqDto
-import com.side.tiggle.domain.member.dto.service.MemberDto
+import com.side.tiggle.domain.member.dto.req.MemberCreateReqDto
+import com.side.tiggle.domain.member.dto.req.MemberUpdateReqDto
+import com.side.tiggle.domain.member.dto.resp.MemberListRespDto
+import com.side.tiggle.domain.member.dto.resp.MemberRespDto
 import com.side.tiggle.domain.member.service.MemberService
 import com.side.tiggle.global.common.constants.HttpHeaders
 import io.swagger.v3.oas.annotations.Operation
@@ -23,32 +23,25 @@ class MemberApiController(
 
     @PostMapping
     fun createMember(
-        @RequestBody memberRequestDto: MemberRequestDto
-    ): ResponseEntity<MemberResponseDto> {
-        return ResponseEntity(
-            MemberDto.fromEntityToMemberResponseDto(memberService.createMember(MemberRequestDto.fromMemberRequestDtoToMemberDto(memberRequestDto))),
-            HttpStatus.CREATED
-        )
+        @RequestBody memberCreateReqDto: MemberCreateReqDto
+    ): ResponseEntity<MemberRespDto> {
+        val respDto = memberService.createMember(memberCreateReqDto)
+        return ResponseEntity(respDto, HttpStatus.CREATED)
     }
 
     @GetMapping("/{id}")
     fun getMember(
         @PathVariable("id") memberId: Long
-    ): ResponseEntity<MemberResponseDto> {
-        return ResponseEntity(
-            MemberDto.fromEntityToMemberResponseDto(memberService.getMember(memberId)),
-            HttpStatus.OK
-        )
+    ): ResponseEntity<MemberRespDto> {
+        val memberDto = memberService.getMember(memberId)
+        return ResponseEntity(memberDto, HttpStatus.OK)
     }
 
     // 관리자 roles이 있는지 확인 필요
     @GetMapping("/all")
-    fun getAllMember(): ResponseEntity<List<MemberResponseDto>> {
-        return ResponseEntity(
-            memberService.getAllMember()
-                .map { MemberDto.fromEntityToMemberResponseDto(it) },
-            HttpStatus.OK
-        )
+    fun getAllMember(): ResponseEntity<MemberListRespDto> {
+        val members = memberService.getAllMember()
+        return ResponseEntity(members, HttpStatus.OK)
     }
 
     // token에 id 값 있는지 확인 필요
@@ -57,11 +50,9 @@ class MemberApiController(
     fun getMe(
         @Parameter(hidden = true)
         @RequestHeader(name = HttpHeaders.MEMBER_ID) memberId: Long
-    ): ResponseEntity<MemberResponseDto> {
-        return ResponseEntity(
-            MemberDto.fromEntityToMemberResponseDto(memberService.getMember(memberId)),
-            HttpStatus.OK
-        )
+    ): ResponseEntity<MemberRespDto> {
+        val memberDto = memberService.getMember(memberId)
+        return ResponseEntity(memberDto, HttpStatus.OK)
     }
 
     @PutMapping("/me", consumes = [MediaType.MULTIPART_FORM_DATA_VALUE], produces = [MediaType.APPLICATION_JSON_VALUE])
@@ -69,13 +60,11 @@ class MemberApiController(
     fun updateMe(
         @Parameter(hidden = true)
         @RequestHeader(name = HttpHeaders.MEMBER_ID) memberId: Long,
-        @RequestPart(required = false) memberRequestDto: MemberUpdateReqDto?,
+        @RequestPart(required = false) dto: MemberUpdateReqDto,
         @RequestPart("multipartFile", required = false) file: MultipartFile?
-    ): ResponseEntity<MemberResponseDto> {
-        return ResponseEntity(
-            MemberDto.fromEntityToMemberResponseDto(memberService.updateMember(memberId, memberRequestDto, file)),
-            HttpStatus.OK
-        )
+    ): ResponseEntity<MemberRespDto> {
+        val updatedMember = memberService.updateMember(memberId, dto, file)
+        return ResponseEntity(updatedMember, HttpStatus.OK)
     }
 
 //    @DeleteMapping("/{id}")
