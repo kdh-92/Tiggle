@@ -126,7 +126,7 @@ class TransactionServiceImpl(
         )
     }
 
-    override fun uploadFileToFolder(uploadFile: MultipartFile): String {
+    fun uploadFileToFolder(uploadFile: MultipartFile): String {
         val originalName: String = uploadFile.originalFilename!!
         val fileName = originalName.substring(originalName.lastIndexOf("//") + 1)
         val folderPath: String = makeFolder()

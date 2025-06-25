@@ -70,7 +70,7 @@ class MemberServiceImpl(
         return MemberRespDto.fromEntity(updatedMember)
     }
 
-    override fun uploadProfile(memberId: Long, file: MultipartFile): String {
+    fun uploadProfile(memberId: Long, file: MultipartFile): String {
         val uploadFolder = File(FOLDER_PATH, memberId.toString())
         if (!uploadFolder.exists()) {
             uploadFolder.mkdirs()
