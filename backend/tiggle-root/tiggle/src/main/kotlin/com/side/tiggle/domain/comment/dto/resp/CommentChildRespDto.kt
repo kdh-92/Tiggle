@@ -4,7 +4,7 @@ import com.side.tiggle.domain.comment.model.Comment
 import com.side.tiggle.domain.member.dto.resp.MemberRespDto
 import java.time.LocalDateTime
 
-class CommentChildRespDto(
+data class CommentChildRespDto(
     val id: Long,
     val txId: Long,
     val parentId: Long?,

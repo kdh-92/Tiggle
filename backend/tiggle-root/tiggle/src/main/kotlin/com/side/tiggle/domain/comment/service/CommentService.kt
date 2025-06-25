@@ -10,8 +10,6 @@ import com.side.tiggle.domain.comment.repository.CommentRepository
 import com.side.tiggle.domain.member.model.Member
 import com.side.tiggle.domain.member.service.MemberService
 import com.side.tiggle.domain.transaction.service.TransactionService
-import com.side.tiggle.domain.notification.NotificationProducer
-import com.side.tiggle.domain.notification.dto.NotificationProduceDto
 import com.side.tiggle.domain.notification.service.NotificationService
 import com.side.tiggle.global.exception.NotAuthorizedException
 import com.side.tiggle.global.exception.NotFoundException

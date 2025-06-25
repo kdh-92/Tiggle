@@ -117,7 +117,7 @@ class TransactionService(
         val txId = tx.id!!
         val txDownCount = reactionService.getReactionCount(txId, ReactionType.DOWN)
         val txUpCount = reactionService.getReactionCount(txId, ReactionType.UP)
-        val txCommentCount =commentService.getParentCount(txId)
+        val txCommentCount = commentService.getParentCount(txId)
         return TransactionRespDto.fromEntityWithCount(
             tx = tx,
             txUpCount = txUpCount,

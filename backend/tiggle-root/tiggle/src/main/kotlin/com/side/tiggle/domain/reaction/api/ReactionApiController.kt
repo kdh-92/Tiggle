@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestHeader
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
@@ -59,7 +60,7 @@ class ReactionApiController(
     fun upsertReaction(
         @Parameter(hidden = true) @RequestHeader(name = HttpHeaders.MEMBER_ID) senderId: Long,
         @PathVariable(name = "id") txId: Long,
-        createReqDto: ReactionCreateReqDto
+        @RequestBody createReqDto: ReactionCreateReqDto
     ): ResponseEntity<ReactionRespDto> {
         val reaction = reactionService.upsertReaction(txId, senderId, createReqDto)
         return ResponseEntity(reaction, HttpStatus.CREATED)
