@@ -67,6 +67,14 @@ part:
 app:
   client-redirect-uri: https://tiggle.duckdns.org/login/success
 
+log:
+  rolling:
+    directory: logs
+    file-name: tiggle-backend.log
+    pattern: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - [TraceId: %X{traceId:-no-trace}] - %msg%n"
+    max-history: 30
+    total-size-cap: 10MB
+
 ---
 spring:
   config:
