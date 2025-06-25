@@ -26,6 +26,11 @@ class MemberService(
         return MemberRespDto.fromEntity(savedMember)
     }
 
+    fun getMember(memberId: Long): MemberRespDto {
+        val member = memberRepository.findById(memberId).orElseThrow{ NotFoundException() }
+        return MemberRespDto.fromEntity(member)
+    }
+
     // Todo 조회용으로 반환 타입 MemberInfo 수정 예정
     fun getMemberOrThrow(memberId: Long): Member {
         val member = memberRepository.findById(memberId).orElseThrow{ NotFoundException() }

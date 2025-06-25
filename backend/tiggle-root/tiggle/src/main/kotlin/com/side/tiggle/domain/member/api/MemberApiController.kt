@@ -33,10 +33,8 @@ class MemberApiController(
     fun getMember(
         @PathVariable("id") memberId: Long
     ): ResponseEntity<MemberRespDto> {
-        return ResponseEntity(
-            MemberRespDto.fromEntity(memberService.getMemberOrThrow(memberId)),
-            HttpStatus.OK
-        )
+        val memberDto = memberService.getMember(memberId)
+        return ResponseEntity(memberDto, HttpStatus.OK)
     }
 
     // 관리자 roles이 있는지 확인 필요
@@ -53,10 +51,8 @@ class MemberApiController(
         @Parameter(hidden = true)
         @RequestHeader(name = HttpHeaders.MEMBER_ID) memberId: Long
     ): ResponseEntity<MemberRespDto> {
-        return ResponseEntity(
-            MemberRespDto.fromEntity(memberService.getMemberOrThrow(memberId)),
-            HttpStatus.OK
-        )
+        val memberDto = memberService.getMember(memberId)
+        return ResponseEntity(memberDto, HttpStatus.OK)
     }
 
     @PutMapping("/me", consumes = [MediaType.MULTIPART_FORM_DATA_VALUE], produces = [MediaType.APPLICATION_JSON_VALUE])
