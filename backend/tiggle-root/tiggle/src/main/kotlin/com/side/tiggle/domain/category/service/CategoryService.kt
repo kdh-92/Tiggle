@@ -6,7 +6,6 @@ import com.side.tiggle.domain.category.dto.resp.CategoryListRespDto
 import com.side.tiggle.domain.category.dto.resp.CategoryRespDto
 import com.side.tiggle.domain.category.model.Category
 import com.side.tiggle.domain.category.repository.CategoryRepository
-import com.side.tiggle.domain.member.service.MemberService
 import com.side.tiggle.global.exception.NotFoundException
 import org.springframework.stereotype.Service
 import java.time.LocalDateTime
@@ -14,10 +13,8 @@ import java.time.LocalDateTime
 @Service
 class CategoryService(
     private val categoryRepository: CategoryRepository,
-    private val memberService: MemberService
 ) {
     fun createCategory(dto: CategoryCreateReqDto, memberId: Long): CategoryRespDto {
-        val member = memberService.getMemberOrThrow(memberId)
         val category = dto.toEntity(memberId)
         return CategoryRespDto.fromEntity(categoryRepository.save(category))
     }

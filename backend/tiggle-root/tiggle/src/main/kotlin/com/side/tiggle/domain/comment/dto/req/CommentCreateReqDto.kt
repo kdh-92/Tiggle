@@ -10,8 +10,8 @@ data class CommentCreateReqDto(
     fun toEntity(senderId: Long, receiverId: Long): Comment {
         return Comment(
             txId = txId,
-            receiverId = senderId,
-            senderId =  receiverId,
+            receiverId = receiverId,
+            senderId =  senderId,
             content = content
         )
     }
