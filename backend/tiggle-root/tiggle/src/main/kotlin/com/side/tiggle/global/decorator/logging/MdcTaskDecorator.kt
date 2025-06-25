@@ -16,7 +16,7 @@ class MdcTaskDecorator : TaskDecorator {
             try {
                 runnable.run()
             } finally {
-                MDC.clear()
+                MDC.remove("traceId")
             }
         }
     }

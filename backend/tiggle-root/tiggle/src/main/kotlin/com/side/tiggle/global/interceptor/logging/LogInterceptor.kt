@@ -18,10 +18,18 @@ class LogInterceptor : HandlerInterceptor {
         response: HttpServletResponse,
         handler: Any
     ): Boolean {
+        try {
+            initializeTraceId(request)
+        } catch (e: Exception) {
+            log.error("TraceId 생성 중 오류 발생", e)
+        }
+        return true
+    }
+
+    private fun initializeTraceId(request: HttpServletRequest) {
         val traceId = generateTraceId(request)
         setTraceId(traceId)
         log.info("TraceId 생성 성공 - $traceId")
-        return true
     }
 
     override fun afterCompletion(
@@ -35,10 +43,10 @@ class LogInterceptor : HandlerInterceptor {
 
     private fun generateTraceId(request: HttpServletRequest): String {
         val method = request.method
-        val uri = request.requestURI.replace("/", "-")
-        val timestamp = System.currentTimeMillis().toString().takeLast(6)
+        val uri = request.requestURI.removePrefix("/").replace("/", "_")
+        val uuid = UUID.randomUUID().toString().replace("-", "")
 
-        return "${method}${uri}-${timestamp}"
+        return "${method}_${uri}_${uuid}"
     }
 
     private fun setTraceId(traceId: String) {

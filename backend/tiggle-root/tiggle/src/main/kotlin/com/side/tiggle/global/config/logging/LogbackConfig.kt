@@ -5,7 +5,7 @@ import ch.qos.logback.classic.LoggerContext
 import ch.qos.logback.classic.encoder.PatternLayoutEncoder
 import ch.qos.logback.classic.spi.ILoggingEvent
 import ch.qos.logback.core.ConsoleAppender
-import ch.qos.logback.core.FileAppender
+import ch.qos.logback.core.rolling.RollingFileAppender
 import ch.qos.logback.core.rolling.TimeBasedRollingPolicy
 import ch.qos.logback.core.util.FileSize
 import jakarta.annotation.PostConstruct
@@ -46,9 +46,14 @@ class LogbackConfig {
     }
 
     private fun initializeLoggerContext(): LoggerContext {
-        val context = LoggerFactory.getILoggerFactory() as LoggerContext
-        context.reset()
-        return context
+        val factory = LoggerFactory.getILoggerFactory()
+        if (factory !is LoggerContext) {
+            throw IllegalStateException(
+                "LoggerFactory는 LoggerContext여야 합니다. 현재 타입: ${factory::class.java.name}"
+            )
+        }
+
+        return factory
     }
 
     private fun createLogDirectory() {
@@ -70,14 +75,15 @@ class LogbackConfig {
         return appender
     }
 
-    private fun createFileAppender(context: LoggerContext): FileAppender<ILoggingEvent> {
-        val appender = FileAppender<ILoggingEvent>()
+    private fun createFileAppender(context: LoggerContext): RollingFileAppender<ILoggingEvent> {
+        val appender = RollingFileAppender<ILoggingEvent>()
         appender.context = context
         appender.file = "$logDirectory/$logFileName"
         appender.isAppend = true
         appender.encoder = createEncoder(context)
 
         val rollingPolicy = createRollingPolicy(context, appender)
+        appender.rollingPolicy = rollingPolicy
         rollingPolicy.start()
 
         appender.start()
@@ -94,21 +100,30 @@ class LogbackConfig {
 
     private fun createRollingPolicy(
         context: LoggerContext,
-        parent: FileAppender<ILoggingEvent>
+        parent: RollingFileAppender<ILoggingEvent>
     ): TimeBasedRollingPolicy<ILoggingEvent> {
         val policy = TimeBasedRollingPolicy<ILoggingEvent>()
         policy.context = context
         policy.setParent(parent)
-        policy.fileNamePattern = "$logDirectory/${logFileName.replace(".log", ".%d{yyyy-MM-dd}.log")}"
+        policy.fileNamePattern = createRollingFileNamePattern()
         policy.maxHistory = maxHistory
         policy.setTotalSizeCap(FileSize.valueOf(totalSizeCap))
         return policy
     }
 
+    private fun createRollingFileNamePattern(): String {
+        val baseName = if (logFileName.endsWith(".log")) {
+            logFileName.removeSuffix(".log")
+        } else {
+            logFileName
+        }
+        return "$logDirectory/${baseName}.%d{yyyy-MM-dd}.log"
+    }
+
     private fun configureRootLogger(
         context: LoggerContext,
         consoleAppender: ConsoleAppender<ILoggingEvent>,
-        fileAppender: FileAppender<ILoggingEvent>
+        fileAppender: RollingFileAppender<ILoggingEvent>
     ) {
         val logger = LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME)
         if (logger is ch.qos.logback.classic.Logger) {
