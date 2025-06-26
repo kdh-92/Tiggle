@@ -29,7 +29,7 @@ class LogbackConfig {
     private lateinit var logPattern: String
 
     @Value("\${log.rolling.max-history}")
-    private var maxHistory: Int = 0
+    private var maxHistory: Int = 30
 
     @Value("\${log.rolling.total-size-cap}")
     private lateinit var totalSizeCap: String
