@@ -26,6 +26,11 @@ class MemberServiceImpl(
         return MemberRespDto.fromEntity(savedMember)
     }
 
+    override fun getMember(memberId: Long): MemberRespDto {
+        val member = getMemberOrThrow(memberId)
+        return MemberRespDto.fromEntity(member)
+    }
+
     override fun getMemberOrThrow(memberId: Long): Member {
         val member = memberRepository.findById(memberId).orElseThrow{ NotFoundException() }
         return member
@@ -83,3 +88,4 @@ class MemberServiceImpl(
         return savePath.toString()
     }
 }
+
