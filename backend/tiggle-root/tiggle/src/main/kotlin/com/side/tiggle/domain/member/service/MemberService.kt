@@ -11,6 +11,8 @@ interface MemberService {
 
     fun createMember(dto: MemberCreateReqDto): MemberRespDto
 
+    fun getMember(memberId: Long): MemberRespDto
+
     fun getMemberOrThrow(memberId: Long): Member
 
     fun getAllMember(): MemberListRespDto
