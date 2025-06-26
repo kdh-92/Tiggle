@@ -49,9 +49,9 @@ class CommentServiceImpl(
         return toCommentPageRespDto(pageComment)
     }
 
-    override fun getChildrenByParentId(parentId: Long?, page: Int, size: Int): CommentPageRespDto {
+    override fun getChildrenByParentId(parentId: Long, page: Int, size: Int): CommentPageRespDto {
         val pageable: Pageable = PageRequest.of(page, size, Sort.Direction.DESC, "id")
-        val pageComment = commentRepository.findAllByParentId(parentId!!, pageable)
+        val pageComment = commentRepository.findAllByParentId(parentId, pageable)
         return toCommentPageRespDto(pageComment)
     }
 
@@ -71,7 +71,7 @@ class CommentServiceImpl(
         )
     }
 
-    private fun findParentCommentOrThrow(parentId: Long): Comment? {
+    private fun findParentCommentOrThrow(parentId: Long): Comment {
         return commentRepository.findById(parentId).orElseThrow { NotFoundException() }
     }
 

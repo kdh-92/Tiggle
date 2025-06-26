@@ -11,7 +11,7 @@ interface CommentService {
 
     fun getParentsByTxId(txId: Long, page: Int, size: Int): CommentPageRespDto
 
-    fun getChildrenByParentId(parentId: Long?, page: Int, size: Int): CommentPageRespDto
+    fun getChildrenByParentId(parentId: Long, page: Int, size: Int): CommentPageRespDto
 
     fun createComment(memberId: Long, commentDto: CommentCreateReqDto): CommentRespDto
 
