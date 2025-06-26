@@ -19,3 +19,4 @@ class WebConfig(
             .addPathPatterns(ALL_PATTERN)
     }
 }
+
