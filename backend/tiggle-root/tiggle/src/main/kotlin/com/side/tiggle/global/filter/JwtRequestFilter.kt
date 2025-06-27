@@ -1,7 +1,8 @@
 package com.side.tiggle.global.filter
 
 import com.side.tiggle.global.auth.JwtTokenProvider
-import com.side.tiggle.global.exception.NotAuthenticatedException
+import com.side.tiggle.global.exception.AuthException
+import com.side.tiggle.global.exception.error.GlobalErrorCode
 import org.slf4j.LoggerFactory
 import org.springframework.core.annotation.Order
 import org.springframework.http.HttpHeaders
@@ -35,7 +36,7 @@ class JwtRequestFilter(
         if (authHeader.isNullOrEmpty().not()) {
             val accessToken = authHeader.replace("Bearer ", "")
             if (jwtTokenProvider.isTokenValid(accessToken).not()) {
-                throw NotAuthenticatedException("Invalid Token")
+                throw AuthException(GlobalErrorCode.INVALID_TOKEN)
             }
 
             val memberId = jwtTokenProvider.getUserId(accessToken)

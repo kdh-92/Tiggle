@@ -10,7 +10,6 @@ import com.side.tiggle.domain.notification.dto.resp.NotificationRespDto
 import com.side.tiggle.domain.notification.dto.NotificationProduceDto
 import com.side.tiggle.domain.notification.repository.NotificationRepository
 import com.side.tiggle.domain.transaction.model.Transaction
-import com.side.tiggle.global.exception.NotFoundException
 import org.springframework.stereotype.Service
 import java.time.LocalDateTime
 

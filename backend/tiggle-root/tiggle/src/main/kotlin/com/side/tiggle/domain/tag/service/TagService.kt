@@ -5,7 +5,6 @@ import com.side.tiggle.domain.tag.dto.req.TagUpdateReqDto
 import com.side.tiggle.domain.tag.dto.resp.TagRespDto
 import com.side.tiggle.domain.tag.model.Tag
 import com.side.tiggle.domain.tag.repository.TagRepository
-import com.side.tiggle.global.exception.NotFoundException
 import org.springframework.stereotype.Service
 
 @Service

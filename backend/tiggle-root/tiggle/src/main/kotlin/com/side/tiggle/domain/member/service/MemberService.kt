@@ -6,7 +6,6 @@ import com.side.tiggle.domain.member.dto.resp.MemberListRespDto
 import com.side.tiggle.domain.member.dto.resp.MemberRespDto
 import com.side.tiggle.domain.member.model.Member
 import com.side.tiggle.domain.member.repository.MemberRepository
-import com.side.tiggle.global.exception.NotFoundException
 import org.springframework.stereotype.Service
 import org.springframework.web.multipart.MultipartFile
 import java.io.File

@@ -10,7 +10,6 @@ import com.side.tiggle.domain.transaction.dto.req.TransactionCreateReqDto
 import com.side.tiggle.domain.transaction.dto.req.TransactionUpdateReqDto
 import com.side.tiggle.domain.transaction.model.Transaction
 import com.side.tiggle.domain.transaction.repository.TransactionRepository
-import com.side.tiggle.global.exception.NotFoundException
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort

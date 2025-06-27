@@ -7,7 +7,6 @@ import com.side.tiggle.domain.category.dto.resp.CategoryRespDto
 import com.side.tiggle.domain.category.model.Category
 import com.side.tiggle.domain.category.repository.CategoryRepository
 import com.side.tiggle.domain.member.service.MemberService
-import com.side.tiggle.global.exception.NotFoundException
 import org.springframework.stereotype.Service
 import java.time.LocalDateTime
 

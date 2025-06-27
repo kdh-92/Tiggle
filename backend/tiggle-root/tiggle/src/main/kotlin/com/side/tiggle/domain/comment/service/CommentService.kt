@@ -11,8 +11,6 @@ import com.side.tiggle.domain.member.model.Member
 import com.side.tiggle.domain.member.service.MemberService
 import com.side.tiggle.domain.transaction.service.TransactionService
 import com.side.tiggle.domain.notification.service.NotificationService
-import com.side.tiggle.global.exception.NotAuthorizedException
-import com.side.tiggle.global.exception.NotFoundException
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Pageable

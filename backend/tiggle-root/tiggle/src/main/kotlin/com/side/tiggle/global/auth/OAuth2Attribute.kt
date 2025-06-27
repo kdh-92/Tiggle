@@ -1,5 +1,8 @@
 package com.side.tiggle.global.auth
 
+import com.side.tiggle.global.exception.AuthException
+import com.side.tiggle.global.exception.error.GlobalErrorCode
+
 class OAuth2Attribute(
     val attributes: Map<String, Any>,
     val attributeKey: String,
@@ -30,7 +33,7 @@ class OAuth2Attribute(
                 "google" -> ofGoogle(attributeKey, attributes)
                 "naver" -> ofNaver(attributeKey, attributes)
                 "kakao" -> ofKakao(attributeKey, attributes)
-                else -> throw IllegalStateException()
+                else -> throw AuthException(GlobalErrorCode.OAUTH2_AUTHENTICATION_FAILED)
             }
         }
 
@@ -68,9 +71,9 @@ class OAuth2Attribute(
             attributes: Map<String, Any>
         ): OAuth2Attribute {
             val kakaoAccount = attributes["kakao_account"] as? Map<String, Any>
-                ?: throw IllegalArgumentException("Kakao account information not found")
+                ?: throw AuthException(GlobalErrorCode.OAUTH2_AUTHENTICATION_FAILED)
             val profile = kakaoAccount["profile"] as? Map<String, Any>
-                ?: throw IllegalArgumentException("Kakao profile information not found")
+                ?: throw AuthException(GlobalErrorCode.OAUTH2_AUTHENTICATION_FAILED)
             return OAuth2Attribute(
                 email = kakaoAccount["email"] as? String ?: "",
                 nickname = profile["nickname"] as? String ?: "Unknown User",
