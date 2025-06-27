@@ -4,6 +4,8 @@ import com.side.tiggle.domain.category.dto.req.CategoryCreateReqDto
 import com.side.tiggle.domain.category.dto.req.CategoryUpdateReqDto
 import com.side.tiggle.domain.category.dto.resp.CategoryListRespDto
 import com.side.tiggle.domain.category.dto.resp.CategoryRespDto
+import com.side.tiggle.domain.category.exception.CategoryException
+import com.side.tiggle.domain.category.exception.error.CategoryErrorCode
 import com.side.tiggle.domain.category.model.Category
 import com.side.tiggle.domain.category.repository.CategoryRepository
 import com.side.tiggle.domain.member.service.MemberService
@@ -23,7 +25,7 @@ class CategoryService(
 
     fun getCategory(categoryId: Long): Category {
         return categoryRepository.findById(categoryId)
-            .orElseThrow { NotFoundException() }
+            .orElseThrow { CategoryException(CategoryErrorCode.CATEGORY_NOT_FOUND) }
     }
 
     fun getCategoryByMemberIdOrDefaults(memberId: Long): CategoryListRespDto {
@@ -34,7 +36,7 @@ class CategoryService(
 
     fun updateCategory(id: Long, dto: CategoryUpdateReqDto): CategoryRespDto {
         val category = categoryRepository.findById(id)
-            .orElseThrow { NotFoundException() }
+            .orElseThrow { CategoryException(CategoryErrorCode.CATEGORY_NOT_FOUND) }
 
         category.apply {
             name = dto.name
