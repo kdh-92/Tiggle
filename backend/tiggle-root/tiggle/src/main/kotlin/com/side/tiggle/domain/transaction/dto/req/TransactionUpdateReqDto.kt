@@ -14,7 +14,6 @@ data class TransactionUpdateReqDto(
     val amount: Int,
 
     @field:NotNull(message = "날짜는 필수입니다")
-    @field:PastOrPresent(message = "지출 날짜는 오늘이거나 이전이어야 합니다")
     val date: LocalDate,
 
     @field:NotBlank(message = "내용은 필수입니다")
