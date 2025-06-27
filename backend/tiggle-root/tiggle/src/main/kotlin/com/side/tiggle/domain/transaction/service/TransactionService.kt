@@ -1,6 +1,5 @@
 package com.side.tiggle.domain.transaction.service
 
-import com.side.tiggle.domain.transaction.dto.resp.TransactionRespDto
 import com.side.tiggle.domain.category.service.CategoryService
 import com.side.tiggle.domain.comment.service.CommentService
 import com.side.tiggle.domain.member.service.MemberService
@@ -8,6 +7,9 @@ import com.side.tiggle.domain.reaction.model.ReactionType
 import com.side.tiggle.domain.reaction.service.ReactionService
 import com.side.tiggle.domain.transaction.dto.req.TransactionCreateReqDto
 import com.side.tiggle.domain.transaction.dto.req.TransactionUpdateReqDto
+import com.side.tiggle.domain.transaction.dto.resp.TransactionRespDto
+import com.side.tiggle.domain.transaction.exception.TransactionException
+import com.side.tiggle.domain.transaction.exception.error.TransactionErrorCode
 import com.side.tiggle.domain.transaction.model.Transaction
 import com.side.tiggle.domain.transaction.repository.TransactionRepository
 import org.springframework.data.domain.Page
@@ -63,7 +65,7 @@ class TransactionService(
     ): TransactionRespDto {
         val transaction = transactionRepository.findById(transactionId)
             .filter { it.member.id == memberId }
-            .orElseThrow { NotFoundException() }
+            .orElseThrow { TransactionException(TransactionErrorCode.TRANSACTION_ACCESS_DENIED) }
         transaction.apply {
             amount = dto.amount
             date = dto.date
@@ -81,7 +83,7 @@ class TransactionService(
             transactionRepository.findById(txId).filter {
                 it.member.id!! == memberId
             }.orElseThrow {
-                NotFoundException()
+                TransactionException(TransactionErrorCode.TRANSACTION_ACCESS_DENIED)
             }
         )
     }
@@ -103,7 +105,7 @@ class TransactionService(
      */
     fun getTransactionOrThrow(transactionId: Long): Transaction {
         return transactionRepository.findById(transactionId)
-            .orElseThrow{ NotFoundException() }
+            .orElseThrow{ TransactionException(TransactionErrorCode.TRANSACTION_NOT_FOUND) }
     }
 
     /**
@@ -167,9 +169,6 @@ class TransactionService(
         val txPage = transactionRepository.findAll(
             PageRequest.of(index, pageSize, Sort.by(Sort.Direction.DESC, "createdAt"))
         )
-        if (txPage.isEmpty) {
-            throw NotFoundException()
-        }
 
         return txPage.map { mapTxRespDto(it) }
     }
@@ -191,9 +190,6 @@ class TransactionService(
             tagNames = tagNames,
             PageRequest.of(offset, count, Sort.by(Sort.Direction.DESC, "createdAt"))
         )
-        if (memberTxPage.isEmpty) {
-            throw NotFoundException()
-        }
 
         return memberTxPage.map { mapTxRespDto(it) }
     }
