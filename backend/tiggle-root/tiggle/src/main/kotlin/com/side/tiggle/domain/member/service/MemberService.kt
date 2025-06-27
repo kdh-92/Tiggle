@@ -4,11 +4,14 @@ import com.side.tiggle.domain.member.dto.req.MemberCreateReqDto
 import com.side.tiggle.domain.member.dto.req.MemberUpdateReqDto
 import com.side.tiggle.domain.member.dto.resp.MemberListRespDto
 import com.side.tiggle.domain.member.dto.resp.MemberRespDto
+import com.side.tiggle.domain.member.exception.MemberException
+import com.side.tiggle.domain.member.exception.error.MemberErrorCode
 import com.side.tiggle.domain.member.model.Member
 import com.side.tiggle.domain.member.repository.MemberRepository
 import org.springframework.stereotype.Service
 import org.springframework.web.multipart.MultipartFile
 import java.io.File
+import java.io.IOException
 import java.nio.file.Path
 import java.nio.file.Paths
 
@@ -26,18 +29,21 @@ class MemberService(
     }
 
     fun getMember(memberId: Long): MemberRespDto {
-        val member = memberRepository.findById(memberId).orElseThrow{ NotFoundException() }
+        val member = memberRepository.findById(memberId)
+            .orElseThrow{ MemberException(MemberErrorCode.MEMBER_NOT_FOUND) }
         return MemberRespDto.fromEntity(member)
     }
 
     // Todo 조회용으로 반환 타입 MemberInfo 수정 예정
     fun getMemberOrThrow(memberId: Long): Member {
-        val member = memberRepository.findById(memberId).orElseThrow{ NotFoundException() }
+        val member = memberRepository.findById(memberId)
+            .orElseThrow{ MemberException(MemberErrorCode.MEMBER_NOT_FOUND) }
         return member
     }
 
     private fun getMemberEntityOrThrow(memberId: Long): Member {
-        val member = memberRepository.findById(memberId).orElseThrow{ NotFoundException() }
+        val member = memberRepository.findById(memberId)
+            .orElseThrow{ MemberException(MemberErrorCode.MEMBER_NOT_FOUND) }
         return member
     }
 
@@ -76,15 +82,18 @@ class MemberService(
     }
 
     fun uploadProfile(memberId: Long, file: MultipartFile): String {
-        val uploadFolder = File(FOLDER_PATH, memberId.toString())
-        if (!uploadFolder.exists()) {
-            uploadFolder.mkdirs()
+        try {
+            val uploadFolder = File(FOLDER_PATH, memberId.toString())
+            if (!uploadFolder.exists()) {
+                uploadFolder.mkdirs()
+            }
+            val folderPath: String = uploadFolder.absolutePath;
+            val savePath: Path = Paths.get(folderPath + File.separator + file.originalFilename);
+
+            file.transferTo(savePath);
+            return savePath.toString();
+        } catch (e: IOException) {
+            throw MemberException(MemberErrorCode.PROFILE_UPLOAD_FAILED, e)
         }
-        val folderPath: String = uploadFolder.absolutePath;
-        val savePath: Path = Paths.get(folderPath + File.separator + file.originalFilename);
-
-        file.transferTo(savePath);
-
-        return savePath.toString();
     }
 }
