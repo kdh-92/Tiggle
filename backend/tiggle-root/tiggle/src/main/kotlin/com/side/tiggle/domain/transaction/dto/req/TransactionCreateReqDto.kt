@@ -34,7 +34,7 @@ data class TransactionCreateReqDto(
     @field:Size(max = 300, message = "사유는 300자 이하여야 합니다")
     val reason: String,
 
-    @field:Size(max = 10, message = "태그는 최대 10개까지 가능합니다")
+    @field:Size(max = 50, message = "태그는 최대 10개까지 가능합니다")
     val tagNames: List<String>?
 ) {
 
