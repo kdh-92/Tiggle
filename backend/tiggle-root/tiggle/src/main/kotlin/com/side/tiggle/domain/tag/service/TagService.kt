@@ -3,8 +3,6 @@ package com.side.tiggle.domain.tag.service
 import com.side.tiggle.domain.tag.dto.req.TagCreateReqDto
 import com.side.tiggle.domain.tag.dto.req.TagUpdateReqDto
 import com.side.tiggle.domain.tag.dto.resp.TagRespDto
-import com.side.tiggle.domain.tag.exception.TagException
-import com.side.tiggle.domain.tag.exception.error.TagErrorCode
 import com.side.tiggle.domain.tag.model.Tag
 import com.side.tiggle.domain.tag.repository.TagRepository
 import org.springframework.stereotype.Service
@@ -20,8 +18,9 @@ class TagService(
     }
 
     fun getTag(tagId: Long): TagRespDto {
-        val tag = tagRepository.findById(tagId)
-            .orElseThrow { TagException(TagErrorCode.TAG_NOT_FOUND) }
+        val tag = tagRepository.findById(tagId).orElseThrow {
+            NotFoundException()
+        }
         return TagRespDto.fromEntity(tag)
     }
 
@@ -32,7 +31,7 @@ class TagService(
 
     fun updateTag(tagId: Long, updateReqDto: TagUpdateReqDto): TagRespDto {
         val tag = tagRepository.findById(tagId)
-            .orElseThrow { TagException(TagErrorCode.TAG_NOT_FOUND) }
+            .orElseThrow { NotFoundException() }
             .apply {
                 name = updateReqDto.name
             }
