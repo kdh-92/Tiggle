@@ -69,8 +69,8 @@ class CommentApiController(
     @GetMapping("/{id}/comments")
     fun getAllCommentsByTx(
         @PathVariable @Min(1) id: Long,
-        @RequestParam(name = "index", defaultValue = DEFAULT_INDEX) @Min(1) @Max(100) index: Int,
-        @RequestParam(name = "pageSize", defaultValue = DEFAULT_PAGE_SIZE) @Min(0) pageSize: Int
+        @RequestParam(name = "index", defaultValue = DEFAULT_INDEX) @Min(0) index: Int,
+        @RequestParam(name = "pageSize", defaultValue = DEFAULT_PAGE_SIZE) @Min(1) @Max(100) pageSize: Int
     ): ResponseEntity<CommentPageRespDto> {
         val pagedResult = commentService.getParentsByTxId(id, index, pageSize)
         return ResponseEntity(pagedResult, HttpStatus.OK)
