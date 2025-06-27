@@ -26,10 +26,19 @@ class Transaction(
     @ManyToOne(fetch = FetchType.LAZY)
     val category: Category,
 
+    @Column(length = 1000)
     val imageUrl: String? = null,
+
+    @Column(nullable = false)
     var amount: Int,
+
+    @Column(nullable = false)
     var date: LocalDate,
+
+    @Column(nullable = false, length = 20)
     var content: String,
+
+    @Column(nullable = false, length = 300)
     var reason: String,
 
     @Convert(converter = TagNamesConverter::class)

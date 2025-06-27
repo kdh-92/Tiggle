@@ -9,12 +9,16 @@ import com.side.tiggle.global.common.constants.HttpHeaders
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
+import jakarta.validation.Valid
+import jakarta.validation.constraints.Min
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
+import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.multipart.MultipartFile
 
+@Validated
 @RestController
 @RequestMapping("/api/v1/member")
 class MemberApiController(
@@ -23,7 +27,7 @@ class MemberApiController(
 
     @PostMapping
     fun createMember(
-        @RequestBody memberCreateReqDto: MemberCreateReqDto
+        @RequestBody @Valid memberCreateReqDto: MemberCreateReqDto
     ): ResponseEntity<MemberRespDto> {
         val respDto = memberService.createMember(memberCreateReqDto)
         return ResponseEntity(respDto, HttpStatus.CREATED)
@@ -31,7 +35,7 @@ class MemberApiController(
 
     @GetMapping("/{id}")
     fun getMember(
-        @PathVariable("id") memberId: Long
+        @PathVariable("id") @Min(1) memberId: Long
     ): ResponseEntity<MemberRespDto> {
         val memberDto = memberService.getMember(memberId)
         return ResponseEntity(memberDto, HttpStatus.OK)
@@ -60,7 +64,7 @@ class MemberApiController(
     fun updateMe(
         @Parameter(hidden = true)
         @RequestHeader(name = HttpHeaders.MEMBER_ID) memberId: Long,
-        @RequestPart(required = false) dto: MemberUpdateReqDto,
+        @RequestPart(required = false) @Valid dto: MemberUpdateReqDto,
         @RequestPart("multipartFile", required = false) file: MultipartFile?
     ): ResponseEntity<MemberRespDto> {
         val updatedMember = memberService.updateMember(memberId, dto, file)

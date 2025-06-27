@@ -48,9 +48,9 @@ class CommentService(
         return toCommentPageRespDto(pageComment)
     }
 
-    fun getChildrenByParentId(parentId: Long?, page: Int, size: Int): CommentPageRespDto {
+    fun getChildrenByParentId(parentId: Long, page: Int, size: Int): CommentPageRespDto {
         val pageable: Pageable = PageRequest.of(page, size, Sort.Direction.DESC, "id")
-        val pageComment = commentRepository.findAllByParentId(parentId!!, pageable)
+        val pageComment = commentRepository.findAllByParentId(parentId, pageable)
         return toCommentPageRespDto(pageComment)
     }
 
