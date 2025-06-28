@@ -1,9 +1,8 @@
 package com.side.tiggle.domain.notification.service
 
 import com.side.tiggle.domain.comment.model.Comment
-import com.side.tiggle.domain.member.model.Member
 import com.side.tiggle.domain.notification.dto.resp.NotificationRespDto
-import com.side.tiggle.domain.transaction.model.Transaction
+import com.side.tiggle.domain.transaction.dto.internal.TransactionInfo
 
 interface NotificationService {
 
@@ -12,8 +11,8 @@ interface NotificationService {
     fun sendCommentNotification(
         comment: Comment,
         parentComment: Comment?,
-        tx: Transaction,
-        sender: Member
+        tx: TransactionInfo,
+        senderId: Long
     )
 
     fun readNotificationById(memberId: Long, id: Long)

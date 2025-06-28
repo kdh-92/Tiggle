@@ -10,7 +10,12 @@ interface ReactionService {
 
     fun getReactionCount(txId: Long, type: ReactionType): Int
 
-    fun upsertReaction(txId: Long, senderId: Long, createReqDto: ReactionCreateReqDto): ReactionRespDto
+    fun upsertReaction(
+        txId: Long,
+        senderId: Long,
+        receiverId: Long,
+        dto: ReactionCreateReqDto
+    ): ReactionRespDto
 
     fun deleteReaction(txId: Long, senderId: Long)
 }

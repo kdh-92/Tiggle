@@ -1,5 +1,6 @@
 package com.side.tiggle.domain.member.service
 
+import com.side.tiggle.domain.member.dto.internal.MemberInfo
 import com.side.tiggle.domain.member.dto.req.MemberCreateReqDto
 import com.side.tiggle.domain.member.dto.req.MemberUpdateReqDto
 import com.side.tiggle.domain.member.dto.resp.MemberListRespDto
@@ -13,7 +14,7 @@ interface MemberService {
 
     fun getMember(memberId: Long): MemberRespDto
 
-    fun getMemberOrThrow(memberId: Long): Member
+    fun getMemberOrThrow(memberId: Long): MemberInfo
 
     fun getAllMember(): MemberListRespDto
 

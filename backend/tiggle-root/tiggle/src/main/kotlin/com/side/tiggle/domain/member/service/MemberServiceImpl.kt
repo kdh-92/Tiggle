@@ -1,5 +1,6 @@
 package com.side.tiggle.domain.member.service
 
+import com.side.tiggle.domain.member.dto.internal.MemberInfo
 import com.side.tiggle.domain.member.dto.req.MemberCreateReqDto
 import com.side.tiggle.domain.member.dto.req.MemberUpdateReqDto
 import com.side.tiggle.domain.member.dto.resp.MemberListRespDto
@@ -18,7 +19,7 @@ class MemberServiceImpl(
     private val memberRepository: MemberRepository
 ) : MemberService {
 
-    private val FOLDER_PATH: String = System.getProperty("user.dir") + "/upload/profile"
+    private val FOLDER_PATH: String = System.getProperty("user.dir") + "/upload/profile";
 
     override fun createMember(dto: MemberCreateReqDto): MemberRespDto {
         val member: Member = dto.toEntity()
@@ -27,18 +28,13 @@ class MemberServiceImpl(
     }
 
     override fun getMember(memberId: Long): MemberRespDto {
-        val member = getMemberOrThrow(memberId)
+        val member = memberRepository.findById(memberId).orElseThrow{ NotFoundException() }
         return MemberRespDto.fromEntity(member)
     }
 
-    override fun getMemberOrThrow(memberId: Long): Member {
+    override fun getMemberOrThrow(memberId: Long): MemberInfo {
         val member = memberRepository.findById(memberId).orElseThrow{ NotFoundException() }
-        return member
-    }
-
-    private fun getMemberEntityOrThrow(memberId: Long): Member {
-        val member = memberRepository.findById(memberId).orElseThrow{ NotFoundException() }
-        return member
+        return MemberInfo.fromEntity(member)
     }
 
     override fun getAllMember(): MemberListRespDto {
@@ -75,17 +71,22 @@ class MemberServiceImpl(
         return MemberRespDto.fromEntity(updatedMember)
     }
 
-    fun uploadProfile(memberId: Long, file: MultipartFile): String {
+    private fun getMemberEntityOrThrow(memberId: Long): Member {
+        val member = memberRepository.findById(memberId).orElseThrow{ NotFoundException() }
+        return member
+    }
+
+    private fun uploadProfile(memberId: Long, file: MultipartFile): String {
         val uploadFolder = File(FOLDER_PATH, memberId.toString())
         if (!uploadFolder.exists()) {
             uploadFolder.mkdirs()
         }
-        val folderPath: String = uploadFolder.absolutePath
-        val savePath: Path = Paths.get(folderPath + File.separator + file.originalFilename)
+        val folderPath: String = uploadFolder.absolutePath;
+        val savePath: Path = Paths.get(folderPath + File.separator + file.originalFilename);
 
-        file.transferTo(savePath)
+        file.transferTo(savePath);
 
-        return savePath.toString()
+        return savePath.toString();
     }
 }
 

@@ -1,17 +1,17 @@
 package com.side.tiggle.domain.transaction.service
 
-import com.side.tiggle.domain.transaction.dto.resp.TransactionRespDto
-import com.side.tiggle.domain.category.service.CategoryService
-import com.side.tiggle.domain.comment.service.CommentService
-import com.side.tiggle.domain.member.service.MemberService
-import com.side.tiggle.domain.reaction.model.ReactionType
-import com.side.tiggle.domain.reaction.service.ReactionService
+import com.side.tiggle.domain.transaction.dto.internal.TransactionInfo
 import com.side.tiggle.domain.transaction.dto.req.TransactionCreateReqDto
 import com.side.tiggle.domain.transaction.dto.req.TransactionUpdateReqDto
+import com.side.tiggle.domain.transaction.dto.resp.TransactionListRespDto
+import com.side.tiggle.domain.transaction.dto.resp.TransactionPageRespDto
+import com.side.tiggle.domain.transaction.dto.resp.TransactionRespDto
+import com.side.tiggle.domain.transaction.dto.view.TransactionDtoWithCount
+import com.side.tiggle.domain.transaction.mapper.TransactionMapper
 import com.side.tiggle.domain.transaction.model.Transaction
 import com.side.tiggle.domain.transaction.repository.TransactionRepository
+import com.side.tiggle.global.exception.NotAuthorizedException
 import com.side.tiggle.global.exception.NotFoundException
-import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort
 import org.springframework.stereotype.Service
@@ -25,11 +25,8 @@ import java.util.*
 
 @Service
 class TransactionServiceImpl(
-    private val memberService: MemberService,
-    private val categoryService: CategoryService,
     private val transactionRepository: TransactionRepository,
-    private val commentService: CommentService,
-    private val reactionService: ReactionService
+    private val transactionMapper: TransactionMapper
 ) : TransactionService {
 
     private val FOLDER_PATH = System.getProperty("user.dir") + "/upload/image"
@@ -42,10 +39,8 @@ class TransactionServiceImpl(
 //            savePath = Paths.get(uploadedFilePath)
 //            dto.imageUrl = uploadedFilePath
 
-            val member = memberService.getMemberOrThrow(memberId)
-            val category = categoryService.getCategory(dto.categoryId)
             val tx = transactionRepository.save(
-                dto.toEntity(member, category)
+                dto.toEntity(memberId, dto.categoryId)
             )
 
             return TransactionRespDto.fromEntity(tx)
@@ -63,8 +58,12 @@ class TransactionServiceImpl(
         memberId: Long, transactionId: Long, dto: TransactionUpdateReqDto
     ): TransactionRespDto {
         val transaction = transactionRepository.findById(transactionId)
-            .filter { it.member.id == memberId }
             .orElseThrow { NotFoundException() }
+
+        if (transaction.memberId != memberId) {
+            throw NotAuthorizedException()
+        }
+
         transaction.apply {
             amount = dto.amount
             date = dto.date
@@ -78,13 +77,14 @@ class TransactionServiceImpl(
 
     @Transactional
     override fun deleteTransaction(memberId: Long, txId: Long) {
-        transactionRepository.delete(
-            transactionRepository.findById(txId).filter {
-                it.member.id!! == memberId
-            }.orElseThrow {
-                NotFoundException()
-            }
-        )
+        val transaction = transactionRepository.findById(txId)
+            .orElseThrow { NotFoundException() }
+
+        if (transaction.memberId != memberId) {
+            throw NotAuthorizedException()
+        }
+
+        transactionRepository.delete(transaction)
     }
 
     /**
@@ -93,16 +93,21 @@ class TransactionServiceImpl(
      * @author 양병학
      */
     override fun getTransactionDetail(id: Long): TransactionRespDto {
-        val transaction = getTransactionOrThrow(id)
+        val transaction = getTransactionEntityOrThrow(id)
         return TransactionRespDto.fromEntity(transaction)
     }
 
     /**
-     * Transaction 내부 사용이 아닌 다른 엔티티 참조용이라 반환시 DTO 사용안함
-     * @since 2025-06-22
-     * @author 양병학
+     * Member와 동일하게 Transaction도 내부용, 외부용 메서드로 분리 & 내부 반환용 별도 DTO(/internal/TransactionInfo) 사용하도록 수정
+     * @since 2025-06-25
+     * @author 권동현
      */
-    override fun getTransactionOrThrow(transactionId: Long): Transaction {
+    override fun getTransactionOrThrow(transactionId: Long): TransactionInfo {
+        val transaction = getTransactionEntityOrThrow(transactionId)
+        return TransactionInfo.fromEntity(transaction)
+    }
+
+    private fun getTransactionEntityOrThrow(transactionId: Long): Transaction {
         return transactionRepository.findById(transactionId)
             .orElseThrow{ NotFoundException() }
     }
@@ -113,20 +118,11 @@ class TransactionServiceImpl(
      * @since 2025-06-22
      * @author 양병학
      */
-    private fun mapTxRespDto(tx: Transaction): TransactionRespDto {
-        val txId = tx.id!!
-        val txDownCount = reactionService.getReactionCount(txId, ReactionType.DOWN)
-        val txUpCount = reactionService.getReactionCount(txId, ReactionType.UP)
-        val txCommentCount = commentService.getParentCount(txId)
-        return TransactionRespDto.fromEntityWithCount(
-            tx = tx,
-            txUpCount = txUpCount,
-            txDownCount = txDownCount,
-            txCommentCount = txCommentCount
-        )
+    private fun mapTxRespDto(tx: Transaction): TransactionDtoWithCount {
+        return transactionMapper.toDtoWithCount(tx)
     }
 
-    fun uploadFileToFolder(uploadFile: MultipartFile): String {
+    private fun uploadFileToFolder(uploadFile: MultipartFile): String {
         val originalName: String = uploadFile.originalFilename!!
         val fileName = originalName.substring(originalName.lastIndexOf("//") + 1)
         val folderPath: String = makeFolder()
@@ -164,15 +160,15 @@ class TransactionServiceImpl(
     override fun getCountOffsetTransaction(
         pageSize: Int,
         index: Int
-    ): Page<TransactionRespDto> {
+    ): TransactionPageRespDto {
         val txPage = transactionRepository.findAll(
             PageRequest.of(index, pageSize, Sort.by(Sort.Direction.DESC, "createdAt"))
         )
         if (txPage.isEmpty) {
             throw NotFoundException()
         }
-
-        return txPage.map { mapTxRespDto(it) }
+        val dtoWithCountPage = txPage.map { mapTxRespDto(it) }
+        return TransactionPageRespDto.fromPage(dtoWithCountPage)
     }
 
     override fun getMemberCountOffsetTransaction(
@@ -183,7 +179,7 @@ class TransactionServiceImpl(
         endDate: LocalDate?,
         categoryIds: List<Long>?,
         tagNames: List<String>?
-    ): Page<TransactionRespDto> {
+    ): TransactionPageRespDto {
         val memberTxPage = transactionRepository.findByMemberIdWithFilters(
             memberId = memberId,
             startDate = startDate,
@@ -196,12 +192,13 @@ class TransactionServiceImpl(
             throw NotFoundException()
         }
 
-        return memberTxPage.map { mapTxRespDto(it) }
+        val dtoWithCountPage = memberTxPage.map { mapTxRespDto(it) }
+        return TransactionPageRespDto.fromPage(dtoWithCountPage)
     }
 
-    override fun getAllUndeletedTransaction(): List<TransactionRespDto> {
+    override fun getAllUndeletedTransaction(): TransactionListRespDto {
         val tx = transactionRepository.findAll(Sort.by(Sort.Direction.DESC, "createdAt"))
-
-        return tx.map { mapTxRespDto(it) }
+        val dtoList = tx.map { TransactionRespDto.fromEntity(it) }
+        return TransactionListRespDto(dtoList)
     }
 }
