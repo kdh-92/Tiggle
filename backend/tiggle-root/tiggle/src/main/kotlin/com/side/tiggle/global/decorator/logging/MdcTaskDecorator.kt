@@ -10,13 +10,18 @@ class MdcTaskDecorator : TaskDecorator {
     override fun decorate(runnable: Runnable): Runnable {
         val contextMap = MDC.getCopyOfContextMap()
         return Runnable {
+            val originalContext = MDC.getCopyOfContextMap()
             if (contextMap != null) {
                 MDC.setContextMap(contextMap)
             }
             try {
                 runnable.run()
             } finally {
-                MDC.remove("traceId")
+                if (originalContext != null) {
+                    MDC.setContextMap(originalContext)
+                    } else {
+                        MDC.clear()
+                    }
             }
         }
     }
