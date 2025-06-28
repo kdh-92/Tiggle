@@ -7,10 +7,8 @@ import com.side.tiggle.domain.comment.dto.resp.CommentPageRespDto
 import com.side.tiggle.domain.comment.dto.resp.CommentRespDto
 import com.side.tiggle.domain.comment.model.Comment
 import com.side.tiggle.domain.comment.repository.CommentRepository
-import com.side.tiggle.domain.member.model.Member
-import com.side.tiggle.domain.member.service.MemberService
-import com.side.tiggle.domain.transaction.service.TransactionService
 import com.side.tiggle.domain.notification.service.NotificationService
+import com.side.tiggle.domain.transaction.dto.internal.TransactionInfo
 import com.side.tiggle.global.exception.NotAuthorizedException
 import com.side.tiggle.global.exception.NotFoundException
 import org.springframework.data.domain.Page
@@ -22,29 +20,23 @@ import org.springframework.stereotype.Service
 @Service
 class CommentService(
     val commentRepository: CommentRepository,
-    val transactionService: TransactionService,
     val notificationService: NotificationService,
-    private val memberService: MemberService
 ) {
     fun getParentCount(txId: Long): Int {
-        val transaction = transactionService.getTransactionOrThrow(txId)
-        return commentRepository.countAllByTxAndParentId(transaction, null)
+        return commentRepository.countAllByTxIdAndParentId(txId, null)
     }
 
     fun getChildCommentCount(txId: Long, parentId: Long): Int {
-        val transaction = transactionService.getTransactionOrThrow(txId)
-        return commentRepository.countAllByTxAndParentId(transaction, parentId)
+        return commentRepository.countAllByTxIdAndParentId(txId, parentId)
     }
 
     fun getCommentCount(txId: Long): Int {
-        val transaction = transactionService.getTransactionOrThrow(txId)
-        return commentRepository.countAllByTx(transaction)
+        return commentRepository.countAllByTxId(txId)
     }
 
     fun getParentsByTxId(txId: Long, page: Int, size: Int): CommentPageRespDto {
-        val tx = transactionService.getTransactionOrThrow(txId)
         val pageable: Pageable = PageRequest.of(page, size, Sort.Direction.DESC, "id")
-        val pageComment = commentRepository.findAllByTxAndParentIdNull(tx, pageable)
+        val pageComment = commentRepository.findAllByTxIdAndParentIdNull(txId, pageable)
         return toCommentPageRespDto(pageComment)
     }
 
@@ -56,7 +48,7 @@ class CommentService(
 
     private fun toCommentPageRespDto(page: Page<Comment>): CommentPageRespDto {
         val commentListChildRespDto = page.content.map {
-            val childCount = getChildCommentCount(it.tx.id!!, it.id)
+            val childCount = getChildCommentCount(it.txId, it.id)
             CommentChildRespDto.fromEntity(it, childCount)
         }
 
@@ -74,14 +66,12 @@ class CommentService(
         return commentRepository.findById(parentId).orElseThrow { NotFoundException() }
     }
 
-    fun createComment(memberId: Long, commentDto: CommentCreateReqDto): CommentRespDto {
-        val tx = transactionService.getTransactionOrThrow(commentDto.txId)
-        val sender: Member = memberService.getMemberOrThrow(memberId)
+    fun createComment(memberId: Long, tx: TransactionInfo, commentDto: CommentCreateReqDto): CommentRespDto {
         val parentComment = commentDto.parentId?.let { findParentCommentOrThrow(commentDto.parentId) }
-        val comment: Comment = commentDto.toEntity(tx, sender)
+        val comment: Comment = commentDto.toEntity(memberId, tx.memberId)
         val savedComment = commentRepository.save(comment)
 
-        notificationService.sendCommentNotification(savedComment, parentComment, tx, sender)
+        notificationService.sendCommentNotification(savedComment, parentComment, tx, memberId)
 
         return CommentRespDto.fromEntity(savedComment)
     }
@@ -90,7 +80,7 @@ class CommentService(
         val comment = commentRepository.findById(commentId)
             .orElseThrow { NotFoundException() }
 
-        if (comment.sender.id != memberId) {
+        if (comment.senderId != memberId) {
             throw NotAuthorizedException()
         }
 
@@ -102,7 +92,7 @@ class CommentService(
 
     fun deleteComment(memberId: Long, commentId: Long) {
         val comment = commentRepository.findById(commentId)
-            .filter { it.sender.id == memberId }
+            .filter { it.senderId == memberId }
             .orElseThrow { NotFoundException() }
         commentRepository.delete(comment)
     }

@@ -7,8 +7,8 @@ import org.springframework.data.domain.Pageable
 import org.springframework.data.jpa.repository.JpaRepository
 
 interface CommentRepository: JpaRepository<Comment, Long> {
-    fun findAllByTxAndParentIdNull(tx: Transaction, pageable: Pageable): Page<Comment>
+    fun findAllByTxIdAndParentIdNull(txId: Long, pageable: Pageable): Page<Comment>
     fun findAllByParentId(parentId: Long, pageable: Pageable): Page<Comment>
-    fun countAllByTxAndParentId(tx: Transaction, parentId: Long?): Int
-    fun countAllByTx(tx: Transaction): Int
+    fun countAllByTxIdAndParentId(txId: Long, parentId: Long?): Int
+    fun countAllByTxId(txId: Long): Int
 }

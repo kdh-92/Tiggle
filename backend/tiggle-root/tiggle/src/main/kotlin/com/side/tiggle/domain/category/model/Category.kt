@@ -1,6 +1,5 @@
 package com.side.tiggle.domain.category.model
 
-import com.side.tiggle.domain.member.model.Member
 import com.side.tiggle.global.common.model.BaseEntity
 import jakarta.persistence.*
 import org.hibernate.annotations.SQLRestriction
@@ -11,9 +10,7 @@ import org.hibernate.annotations.SQLRestriction
 class Category(
     var name: String,
     var defaults: Boolean,
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
-    val member: Member
+    val memberId: Long
 ): BaseEntity() {
 
     @Id

@@ -1,7 +1,5 @@
 package com.side.tiggle.domain.transaction.dto.req
 
-import com.side.tiggle.domain.category.model.Category
-import com.side.tiggle.domain.member.model.Member
 import com.side.tiggle.domain.transaction.model.Transaction
 import java.time.LocalDate
 
@@ -16,12 +14,12 @@ data class TransactionCreateReqDto(
 ) {
 
     fun toEntity(
-        member: Member,
-        category: Category
+        memberId: Long,
+        categoryId: Long
     ): Transaction {
         return Transaction(
-            member = member,
-            category = category,
+            memberId = memberId,
+            categoryId = categoryId,
             imageUrl = this.imageUrl,
             amount = this.amount,
             date = this.date,
