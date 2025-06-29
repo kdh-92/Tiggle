@@ -5,6 +5,7 @@ import com.side.tiggle.domain.category.dto.req.CategoryUpdateReqDto
 import com.side.tiggle.domain.category.dto.resp.CategoryListRespDto
 import com.side.tiggle.domain.category.dto.resp.CategoryRespDto
 import com.side.tiggle.domain.category.service.CategoryService
+import com.side.tiggle.global.common.ApiResponse
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import com.side.tiggle.global.common.constants.HttpHeaders
@@ -20,33 +21,38 @@ class CategoryApiController(
     fun createCategory(
         @RequestBody categoryCreateReqDto: CategoryCreateReqDto,
         @RequestHeader(name = HttpHeaders.MEMBER_ID) memberId: Long
-    ): ResponseEntity<CategoryRespDto> {
+    ): ResponseEntity<ApiResponse<CategoryRespDto>> {
         val createdCategory = categoryService.createCategory(categoryCreateReqDto, memberId)
-        return ResponseEntity(createdCategory, HttpStatus.CREATED)
+        return ResponseEntity
+            .status(HttpStatus.CREATED)
+            .body(ApiResponse.success(createdCategory))
     }
 
     @GetMapping()
     fun getCategoryByMemberIdOrDefaults(
         @RequestHeader(name = HttpHeaders.MEMBER_ID) memberId: Long
-    ): ResponseEntity<CategoryListRespDto> {
+    ): ResponseEntity<ApiResponse<CategoryListRespDto>> {
         val categories = categoryService.getCategoryByMemberIdOrDefaults(memberId)
-        return ResponseEntity(categories, HttpStatus.OK)
+        return ResponseEntity
+            .ok(ApiResponse.success(categories))
     }
 
     @PutMapping("/{id}")
     fun updateCategory(
         @PathVariable("id") categoryId: Long,
         @RequestBody dto: CategoryUpdateReqDto
-    ): ResponseEntity<CategoryRespDto> {
+    ): ResponseEntity<ApiResponse<CategoryRespDto>> {
         val updatedCategory = categoryService.updateCategory(categoryId, dto)
-        return ResponseEntity(updatedCategory, HttpStatus.OK)
+        return ResponseEntity
+            .ok(ApiResponse.success(updatedCategory))
     }
 
     @DeleteMapping("/{id}")
     fun deleteCategory(
         @PathVariable("id") categoryId: Long
-    ): ResponseEntity<Void> {
+    ): ResponseEntity<ApiResponse<Nothing>> {
         categoryService.deleteCategory(categoryId)
-        return ResponseEntity(null, HttpStatus.OK)
+        return ResponseEntity
+            .ok(ApiResponse.success(null))
     }
 }

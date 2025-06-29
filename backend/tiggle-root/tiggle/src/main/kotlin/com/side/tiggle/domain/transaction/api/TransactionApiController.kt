@@ -3,7 +3,6 @@ package com.side.tiggle.domain.transaction.api
 import com.side.tiggle.domain.transaction.dto.resp.TransactionRespDto
 import com.side.tiggle.domain.comment.dto.resp.CommentPageRespDto
 import com.side.tiggle.domain.comment.service.CommentService
-import com.side.tiggle.domain.reaction.service.ReactionService
 import com.side.tiggle.domain.transaction.dto.req.TransactionCreateReqDto
 import com.side.tiggle.domain.transaction.dto.req.TransactionUpdateReqDto
 import com.side.tiggle.domain.transaction.dto.resp.TransactionListRespDto
@@ -12,7 +11,6 @@ import com.side.tiggle.domain.transaction.service.TransactionService
 import com.side.tiggle.global.common.constants.HttpHeaders
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
-import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import org.springframework.format.annotation.DateTimeFormat
 import org.springframework.http.HttpStatus
@@ -21,13 +19,14 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.multipart.MultipartFile
 import java.time.LocalDate
+import io.swagger.v3.oas.annotations.responses.ApiResponse as SwaggerApiResponse
+import com.side.tiggle.global.common.ApiResponse
 
 @RestController
 @RequestMapping("/api/v1/transaction")
 class TransactionApiController(
     private val transactionService: TransactionService,
     private val commentService: CommentService,
-    private val reactionService: ReactionService
 ) {
     // TODO: Request Header 방식으로 변경한다
     @Operation(description = "tx 생성", security = [SecurityRequirement(name = "bearer-key")])
@@ -37,34 +36,38 @@ class TransactionApiController(
         @RequestHeader(name = HttpHeaders.MEMBER_ID) memberId: Long,
         @RequestPart dto: TransactionCreateReqDto,
         @RequestPart(value = "multipartFile", required = false) file: MultipartFile?
-    ): ResponseEntity<TransactionRespDto> {
+    ): ResponseEntity<ApiResponse<TransactionRespDto>> {
         val tx = transactionService.createTransaction(memberId, dto, file)
-        return ResponseEntity(tx, HttpStatus.CREATED)
+        return ResponseEntity
+            .status(HttpStatus.CREATED)
+            .body(ApiResponse.success(tx, message = "거래가 생성되었습니다."))
     }
 
-    @Operation(summary = "tx 상세 조회", description = "tx의 id에 대한 상세 정보를 반환합니다.", responses = [ApiResponse(responseCode = "200", description = "tx 상세 조회 성공"), ApiResponse(responseCode = "400", description = "존재하지 않는 리소스 접근")])
+    @Operation(summary = "tx 상세 조회", description = "tx의 id에 대한 상세 정보를 반환합니다.", responses = [SwaggerApiResponse(responseCode = "200", description = "tx 상세 조회 성공"), SwaggerApiResponse(responseCode = "400", description = "존재하지 않는 리소스 접근")])
     @GetMapping("/{id}")
     fun getTransaction(
         @Parameter(name = "id", description = "tx의 id")
         @PathVariable("id") transactionId: Long
-    ): ResponseEntity<TransactionRespDto> {
+    ): ResponseEntity<ApiResponse<TransactionRespDto>> {
         val tx = transactionService.getTransactionDetail(transactionId)
-        return ResponseEntity(tx, HttpStatus.OK)
+        return ResponseEntity
+            .ok(ApiResponse.success(tx))
     }
 
-    @Operation(summary = "tx 페이지 조회 API", description = "페이지(index)에 해당하는 tx 개수(pageSize)의 정보를 반환합니다.", responses = [ApiResponse(responseCode = "200", description = "tx 페이지 조회 성공"), ApiResponse(responseCode = "400", description = "존재하지 않는 리소스 접근")])
+    @Operation(summary = "tx 페이지 조회 API", description = "페이지(index)에 해당하는 tx 개수(pageSize)의 정보를 반환합니다.", responses = [SwaggerApiResponse(responseCode = "200", description = "tx 페이지 조회 성공"), SwaggerApiResponse(responseCode = "400", description = "존재하지 않는 리소스 접근")])
     @GetMapping
     fun getCountOffsetTransaction(
         @Parameter(name = "index", description = "tx 페이지 번호")
         @RequestParam(defaultValue = DEFAULT_INDEX) index: Int,
         @Parameter(name = "pageSize", description = "페이지 내부 tx 개수")
         @RequestParam(defaultValue = DEFAULT_PAGE_SIZE) pageSize: Int
-    ): ResponseEntity<TransactionPageRespDto> {
+    ): ResponseEntity<ApiResponse<TransactionPageRespDto>> {
         val txPage = transactionService.getCountOffsetTransaction(pageSize, index)
-        return ResponseEntity(txPage, HttpStatus.OK)
+        return ResponseEntity
+            .ok(ApiResponse.success(txPage))
     }
 
-    @Operation(summary = "특정 유저 tx 페이지 조회 API", description = "memberId 유저의 페이지(index)에 해당하는 tx 개수(pageSize)의 정보를 반환합니다.", responses = [ApiResponse(responseCode = "200", description = "tx 페이지 조회 성공"), ApiResponse(responseCode = "400", description = "존재하지 않는 리소스 접근")])
+    @Operation(summary = "특정 유저 tx 페이지 조회 API", description = "memberId 유저의 페이지(index)에 해당하는 tx 개수(pageSize)의 정보를 반환합니다.", responses = [SwaggerApiResponse(responseCode = "200", description = "tx 페이지 조회 성공"), SwaggerApiResponse(responseCode = "400", description = "존재하지 않는 리소스 접근")])
     @GetMapping("/member")
     fun getMemberCountOffsetTransaction(
         @Parameter(name = "memberId", description = "유저 id")
@@ -86,7 +89,7 @@ class TransactionApiController(
         @RequestParam(required = false) asset: List<Long>?,
         @Parameter(description = "(필터링) 태그 이름 (복수)")
         @RequestParam(required = false) tagNames: List<String>?
-    ): ResponseEntity<TransactionPageRespDto> {
+    ): ResponseEntity<ApiResponse<TransactionPageRespDto>> {
         val txPage = transactionService.getMemberCountOffsetTransaction(
             memberId = memberId,
             count = pageSize,
@@ -97,13 +100,15 @@ class TransactionApiController(
             tagNames = tagNames
         )
 
-        return ResponseEntity(txPage, HttpStatus.OK)
+        return ResponseEntity
+            .ok(ApiResponse.success(txPage))
     }
 
     @GetMapping("/all")
-    fun getAllTransaction(): ResponseEntity<TransactionListRespDto> {
+    fun getAllTransaction(): ResponseEntity<ApiResponse<TransactionListRespDto>> {
         val transactions = transactionService.getAllUndeletedTransaction()
-        return ResponseEntity(transactions, HttpStatus.OK)
+        return ResponseEntity
+            .ok(ApiResponse.success(transactions))
     }
 
     @PutMapping("/{id}")
@@ -113,10 +118,11 @@ class TransactionApiController(
         @RequestHeader(name = HttpHeaders.MEMBER_ID) memberId: Long,
         @PathVariable("id") transactionId: Long,
         @RequestBody dto: TransactionUpdateReqDto
-    ): ResponseEntity<TransactionRespDto> {
+    ): ResponseEntity<ApiResponse<TransactionRespDto>> {
         val tx = transactionService.updateTransaction(memberId, transactionId, dto)
 
-        return ResponseEntity(tx, HttpStatus.OK)
+        return ResponseEntity
+            .ok(ApiResponse.success(tx))
     }
 
     @DeleteMapping("/{id}")
@@ -125,9 +131,10 @@ class TransactionApiController(
         @Parameter(hidden = true)
         @RequestHeader(name = HttpHeaders.MEMBER_ID) memberId: Long,
         @PathVariable("id") transactionId: Long
-    ): ResponseEntity<Nothing> {
+    ): ResponseEntity<ApiResponse<Nothing>> {
         transactionService.deleteTransaction(memberId, transactionId)
-        return ResponseEntity(null, HttpStatus.NO_CONTENT)
+        return ResponseEntity
+            .ok(ApiResponse.success(null))
     }
 
     @GetMapping("/{id}/comments")
@@ -135,9 +142,10 @@ class TransactionApiController(
         @PathVariable id: Long,
         @RequestParam(name = "pageSize", defaultValue = DEFAULT_PAGE_SIZE) pageSize: Int,
         @RequestParam(name = "index", defaultValue = DEFAULT_INDEX) index: Int
-    ): ResponseEntity<CommentPageRespDto> {
+    ): ResponseEntity<ApiResponse<CommentPageRespDto>> {
         val pagedCommentsRespDto = commentService.getParentsByTxId(id, index, pageSize)
-        return ResponseEntity(pagedCommentsRespDto, HttpStatus.OK)
+        return ResponseEntity
+            .ok(ApiResponse.success(pagedCommentsRespDto))
     }
 
     companion object {

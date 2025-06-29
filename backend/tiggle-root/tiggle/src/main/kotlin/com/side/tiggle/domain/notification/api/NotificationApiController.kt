@@ -2,6 +2,7 @@ package com.side.tiggle.domain.notification.api
 
 import com.side.tiggle.domain.notification.dto.resp.NotificationRespDto
 import com.side.tiggle.domain.notification.service.NotificationService
+import com.side.tiggle.global.common.ApiResponse
 import com.side.tiggle.global.common.constants.HttpHeaders
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
@@ -27,9 +28,10 @@ class NotificationApiController(
         @Parameter(hidden = true)
         @RequestHeader(name = HttpHeaders.MEMBER_ID) memberId: Long,
         @RequestHeader(name = "member-id") overrideMemberId: Long?,
-    ): ResponseEntity<List<NotificationRespDto>>{
+    ): ResponseEntity<ApiResponse<List<NotificationRespDto>>> {
         val result = notificationService.getAllByMemberId(overrideMemberId ?: memberId)
-        return ResponseEntity(result, HttpStatus.OK)
+        return ResponseEntity
+            .ok(ApiResponse.success(result))
     }
 
     @PutMapping("/{id}")
@@ -37,9 +39,9 @@ class NotificationApiController(
         @Parameter(hidden = true)
         @RequestHeader(name = HttpHeaders.MEMBER_ID) memberId: Long,
         @PathVariable(name = "id") id: Long
-    ): ResponseEntity<Nothing> {
+    ): ResponseEntity<ApiResponse<Nothing>> {
         notificationService.readNotificationById(memberId, id)
-        return ResponseEntity(null, HttpStatus.OK)
+        return ResponseEntity
+            .ok(ApiResponse.success(null))
     }
-
 }

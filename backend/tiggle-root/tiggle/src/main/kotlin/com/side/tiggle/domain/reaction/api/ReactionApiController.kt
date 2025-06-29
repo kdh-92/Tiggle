@@ -1,12 +1,11 @@
 package com.side.tiggle.domain.reaction.api
 
-import com.side.tiggle.domain.comment.service.CommentService
 import com.side.tiggle.domain.reaction.dto.req.ReactionCreateReqDto
 import com.side.tiggle.domain.reaction.dto.resp.ReactionRespDto
 import com.side.tiggle.domain.reaction.dto.resp.ReactionSummaryRespDto
-import com.side.tiggle.domain.reaction.model.ReactionType
 import com.side.tiggle.domain.reaction.service.ReactionService
 import com.side.tiggle.domain.transaction.service.TransactionService
+import com.side.tiggle.global.common.ApiResponse
 import com.side.tiggle.global.common.constants.HttpHeaders
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
@@ -28,33 +27,30 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("/api/v1/transaction/{id}/reaction")
 class ReactionApiController(
     private val reactionService: ReactionService,
-    private val commentService: CommentService,
     private val transactionService: TransactionService
 ) {
 
+    //TODO out Any? 필요한지 체크 후 반환 타입 수정
     @Operation(description = "해당 tx에 대한 나의 reaction을 조회", security = [SecurityRequirement(name = "bearer-key")])
     @GetMapping
     fun getReaction(
         @Parameter(hidden = true)
         @RequestHeader(name = HttpHeaders.MEMBER_ID) senderId: Long,
         @PathVariable(name = "id") txId: Long
-    ): ResponseEntity<ReactionRespDto> {
+    ): ResponseEntity<out Any?> {
         val reaction = reactionService.getReaction(txId, senderId) ?: return ResponseEntity.noContent().build()
-        return ResponseEntity(reaction, HttpStatus.OK)
+        return ResponseEntity
+            .ok(ApiResponse.success(reaction))
     }
 
     @Operation(description = "해당 tx의 전체 reaction과 comment의 수를 조회")
     @GetMapping("/summary")
     fun getReactionSummary(
         @PathVariable(name = "id") txId: Long
-    ): ResponseEntity<ReactionSummaryRespDto> {
-        return ResponseEntity<ReactionSummaryRespDto>(
-            ReactionSummaryRespDto(
-                upCount = reactionService.getReactionCount(txId, ReactionType.UP),
-                downCount = reactionService.getReactionCount(txId, ReactionType.DOWN),
-                commentCount = commentService.getParentCount(txId)
-            ), HttpStatus.OK
-        )
+    ): ResponseEntity<ApiResponse<ReactionSummaryRespDto>> {
+        val reactionSummary = reactionService.getReactionSummaryDto(txId)
+        return ResponseEntity
+            .ok(ApiResponse.success(reactionSummary, message = "반응 요약 조회 성공"))
     }
 
     @Operation(description = "리액션을 추가하거나 수정함", security = [SecurityRequirement(name = "bearer-key")])
@@ -63,10 +59,12 @@ class ReactionApiController(
         @Parameter(hidden = true) @RequestHeader(name = HttpHeaders.MEMBER_ID) senderId: Long,
         @PathVariable(name = "id") txId: Long,
         @RequestBody createReqDto: ReactionCreateReqDto
-    ): ResponseEntity<ReactionRespDto> {
+    ): ResponseEntity<ApiResponse<ReactionRespDto>> {
         val tx = transactionService.getTransactionOrThrow(txId)
         val reaction = reactionService.upsertReaction(txId, senderId, tx.memberId, createReqDto)
-        return ResponseEntity(reaction, HttpStatus.CREATED)
+        return ResponseEntity
+            .status(HttpStatus.CREATED)
+            .body(ApiResponse.success(reaction))
     }
 
     @Operation(description = "Reaction을 제거", security = [SecurityRequirement(name = "bearer-key")])
@@ -74,8 +72,9 @@ class ReactionApiController(
     fun deleteReaction(
         @Parameter(hidden = true) @RequestHeader(name = HttpHeaders.MEMBER_ID) senderId: Long,
         @PathVariable(name = "id") txId: Long
-    ): ResponseEntity<Long> {
+    ): ResponseEntity<ApiResponse<Nothing>> {
         reactionService.deleteReaction(txId, senderId)
-        return ResponseEntity.noContent().build()
+        return ResponseEntity
+            .ok(ApiResponse.success(null, message = "반응 삭제 성공"))
     }
 }
