@@ -28,7 +28,11 @@ class TransactionFileUploadUtil {
 
         val savePath = Paths.get(saveName)
 
-        file.transferTo(savePath)
+        try {
+            file.transferTo(savePath)
+        } catch (e: Exception) {
+            throw IllegalStateException("파일 저장 중 오류가 발생했습니다: ${e.message}", e)
+        }
 
         return saveName
     }
