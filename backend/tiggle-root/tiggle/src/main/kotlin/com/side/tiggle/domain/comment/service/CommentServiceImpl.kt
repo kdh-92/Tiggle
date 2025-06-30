@@ -22,8 +22,8 @@ import org.springframework.stereotype.Service
 
 @Service
 class CommentServiceImpl(
-    val commentRepository: CommentRepository,
-    val notificationService: NotificationService,
+    private val commentRepository: CommentRepository,
+    private val notificationService: NotificationService,
 ) : CommentService {
 
     override fun getParentCount(txId: Long): Int {

@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional
 
 @Service
 class ReactionServiceImpl(
-    val reactionRepository: ReactionRepository,
+    private val reactionRepository: ReactionRepository,
 ) : ReactionService {
 
     override fun getReaction(txId: Long, senderId: Long): ReactionRespDto? {
