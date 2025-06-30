@@ -84,8 +84,12 @@ class CommentServiceImpl(
 
     override fun deleteComment(memberId: Long, commentId: Long) {
         val comment = commentRepository.findById(commentId)
-            .filter { it.senderId == memberId }
             .orElseThrow { NotFoundException() }
+
+        if (comment.senderId != memberId) {
+            throw NotAuthorizedException()
+        }
+
         commentRepository.delete(comment)
     }
 
