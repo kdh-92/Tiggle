@@ -4,6 +4,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.stereotype.Component
 import org.springframework.web.multipart.MultipartFile
 import java.io.File
+import java.nio.file.Path
 import java.nio.file.Paths
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -18,28 +19,47 @@ class TransactionFileUploadUtil {
 
     fun uploadTransactionImage(file: MultipartFile): String {
         validateFile(file)
-
-        val originalName: String = file.originalFilename ?: "transaction"
-        val fileName = originalName.substringAfterLast('/').substringAfterLast('\\')
-        val safeFileName = if (fileName.isBlank()) "uploaded_file" else fileName
+        val extension = validateFileNameAndGetExtension(file)
 
         val folderPath: String = createDateFolder()
-        val uuid = UUID.randomUUID().toString()
-        val saveName = path + File.separator + folderPath + File.separator + uuid + "_" + safeFileName
+
+        val safeFilename = "${System.currentTimeMillis()}_${UUID.randomUUID()}.$extension"
+        val saveName = path + File.separator + folderPath + File.separator + safeFilename
 
         val savePath = Paths.get(saveName)
+
         file.transferTo(savePath)
 
         return saveName
     }
 
+    private fun validateFileNameAndGetExtension(file: MultipartFile): String {
+        val originalName: String = file.originalFilename ?: throw IllegalArgumentException("파일명이 없습니다")
+
+        val extension = originalName.substringAfterLast('.', "")
+        if (extension.isBlank()) {
+            throw IllegalArgumentException("파일 확장자가 없습니다")
+        }
+
+        val allowedExtensions = listOf("jpg", "jpeg", "png", "gif")
+        if (!allowedExtensions.contains(extension.lowercase())) {
+            throw IllegalArgumentException("허용되지 않은 파일 형식입니다: $extension")
+        }
+
+        return extension.lowercase()
+    }
+
     private fun validateFile(file: MultipartFile) {
         if (!allowedTypes.contains(file.contentType)) {
-            throw IllegalArgumentException("허용되지 않는 파일 형식입니다.")
+            throw IllegalArgumentException("허용되지 않는 MIME 타입입니다: ${file.contentType}")
         }
 
         if (file.size > maxSize) {
-            throw IllegalArgumentException("파일 크기가 너무 큽니다.")
+            throw IllegalArgumentException("파일 크기가 ${maxSize / 1024 / 1024}MB를 초과합니다")
+        }
+
+        if (file.isEmpty) {
+            throw IllegalArgumentException("빈 파일은 업로드할 수 없습니다")
         }
     }
 
