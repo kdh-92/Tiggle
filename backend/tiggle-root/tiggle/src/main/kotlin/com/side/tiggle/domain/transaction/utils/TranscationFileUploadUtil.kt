@@ -81,7 +81,7 @@ class TransactionFileUploadUtil {
         val uploadPathFolder = File(path, folderPath)
 
         if (uploadPathFolder.exists()) {
-            if (uploadPathFolder.list().isEmpty()) {
+            if (uploadPathFolder.list()?.isEmpty() == true) {
                 uploadPathFolder.delete()
             }
         }
