@@ -20,9 +20,11 @@ class CategoryServiceImpl(
         return CategoryRespDto.fromEntity(categoryRepository.save(category))
     }
 
-    override fun getCategory(categoryId: Long): Category {
-        return categoryRepository.findById(categoryId)
+    override fun getCategory(categoryId: Long): CategoryRespDto {
+        val category = categoryRepository.findById(categoryId)
             .orElseThrow { NotFoundException() }
+
+        return CategoryRespDto.fromEntity(category)
     }
 
     override fun getCategoryByMemberIdOrDefaults(memberId: Long): CategoryListRespDto {

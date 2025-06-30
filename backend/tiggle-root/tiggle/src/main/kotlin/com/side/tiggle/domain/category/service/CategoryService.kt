@@ -10,7 +10,7 @@ interface CategoryService {
 
     fun createCategory(dto: CategoryCreateReqDto, memberId: Long): CategoryRespDto
 
-    fun getCategory(categoryId: Long): Category
+    fun getCategory(categoryId: Long): CategoryRespDto
 
     fun getCategoryByMemberIdOrDefaults(memberId: Long): CategoryListRespDto
 
