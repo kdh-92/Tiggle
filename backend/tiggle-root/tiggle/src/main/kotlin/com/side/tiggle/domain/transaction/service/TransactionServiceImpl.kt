@@ -10,6 +10,7 @@ import com.side.tiggle.domain.transaction.dto.view.TransactionDtoWithCount
 import com.side.tiggle.domain.transaction.mapper.TransactionMapper
 import com.side.tiggle.domain.transaction.model.Transaction
 import com.side.tiggle.domain.transaction.repository.TransactionRepository
+import com.side.tiggle.domain.transaction.utils.TransactionFileUploadUtil
 import com.side.tiggle.global.exception.NotAuthorizedException
 import com.side.tiggle.global.exception.NotFoundException
 import org.springframework.data.domain.PageRequest
@@ -26,16 +27,15 @@ import java.util.*
 @Service
 class TransactionServiceImpl(
     private val transactionRepository: TransactionRepository,
-    private val transactionMapper: TransactionMapper
+    private val transactionMapper: TransactionMapper,
+    private val transactionFileUploadUtil: TransactionFileUploadUtil
 ) : TransactionService {
-
-    private val FOLDER_PATH = System.getProperty("user.dir") + "/upload/image"
 
     @Transactional
     override fun createTransaction(memberId: Long, dto: TransactionCreateReqDto, file: MultipartFile?): TransactionRespDto {
 //        var savePath: Path? = null
         try {
-//            val uploadedFilePath = uploadFileToFolder(file)
+//            val uploadedFilePath = transactionFileUploadUtil.uploadTransactionImage(file)
 //            savePath = Paths.get(uploadedFilePath)
 //            dto.imageUrl = uploadedFilePath
 
@@ -48,7 +48,7 @@ class TransactionServiceImpl(
 //            if (savePath != null) {
 //                Files.deleteIfExists(savePath)
 //            }
-//            deleteFolder()
+//            transactionFileUploadUtil.deleteEmptyDateFolder()
             throw e
         }
     }
@@ -120,57 +120,6 @@ class TransactionServiceImpl(
      */
     private fun mapTxRespDto(tx: Transaction): TransactionDtoWithCount {
         return transactionMapper.toDtoWithCount(tx)
-    }
-
-    private fun uploadFileToFolder(uploadFile: MultipartFile): String {
-        val originalName: String = uploadFile.originalFilename!!
-        val fileName = originalName.substringAfterLast('/').substringAfterLast('\\')
-
-        val safeFileName = if (fileName.isBlank()) "uploaded_file" else fileName
-
-        validateFile(uploadFile)
-
-        val folderPath: String = makeFolder()
-        val uuid = UUID.randomUUID().toString()
-        val saveName = FOLDER_PATH + File.separator + folderPath + File.separator + uuid + "_" + fileName
-
-        val savePath = Paths.get(saveName)
-
-        uploadFile.transferTo(savePath)
-        return saveName
-    }
-
-    private fun validateFile(file: MultipartFile) {
-        val allowedTypes = listOf("image/jpeg", "image/png", "image/gif")
-        if (!allowedTypes.contains(file.contentType)) {
-            throw IllegalArgumentException("허용되지 않는 파일 형식입니다.")
-        }
-
-        if (file.size > 10 * 1024 * 1024) { // 10MB
-            throw IllegalArgumentException("파일 크기가 너무 큽니다.")
-        }
-    }
-
-    private fun makeFolder(): String {
-        val str = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd"))
-        val folderPath = str.replace("/", File.separator)
-
-        val uploadPathFolder = File(FOLDER_PATH, folderPath)
-
-        if (!uploadPathFolder.exists()) uploadPathFolder.mkdirs()
-        return folderPath
-    }
-
-    private fun deleteFolder() {
-        val str = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd"))
-        val folderPath = str.replace("/", File.separator)
-        val uploadPathFolder = File(FOLDER_PATH, folderPath)
-
-        if (uploadPathFolder.exists()) {
-            if (uploadPathFolder.list().isEmpty()) {
-                uploadPathFolder.delete()
-            }
-        }
     }
 
     override fun getCountOffsetTransaction(
