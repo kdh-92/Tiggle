@@ -4,6 +4,7 @@ import com.side.tiggle.domain.tag.dto.req.TagCreateReqDto
 import com.side.tiggle.domain.tag.dto.req.TagUpdateReqDto
 import com.side.tiggle.domain.tag.dto.resp.TagRespDto
 import com.side.tiggle.domain.tag.service.TagService
+import com.side.tiggle.global.common.ApiResponse
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -17,27 +18,36 @@ class TagApiController(
     @PostMapping
     fun createTag(
         @RequestBody createReqDto: TagCreateReqDto
-    ): ResponseEntity<TagRespDto> {
-        return ResponseEntity(tagService.createTag(createReqDto), HttpStatus.CREATED)
+    ): ResponseEntity<ApiResponse<TagRespDto>> {
+        val tag = tagService.createTag(createReqDto)
+        return ResponseEntity
+            .status(HttpStatus.CREATED)
+            .body(ApiResponse.success(tag))
     }
 
     @GetMapping("/{id}")
     fun getTag(
         @PathVariable("id") tagId: Long
-    ): ResponseEntity<TagRespDto> {
-        return ResponseEntity(tagService.getTag(tagId), HttpStatus.OK)
+    ): ResponseEntity<ApiResponse<TagRespDto>> {
+        val tag = tagService.getTag(tagId)
+        return ResponseEntity
+            .ok(ApiResponse.success(tag))
     }
 
     @GetMapping("/all")
-    fun getAllDefaultTag(): ResponseEntity<List<TagRespDto>> {
-        return ResponseEntity(tagService.getAllDefaultTag(), HttpStatus.OK)
+    fun getAllDefaultTag(): ResponseEntity<ApiResponse<List<TagRespDto>>> {
+        val getTags = tagService.getAllDefaultTag()
+        return ResponseEntity
+            .ok(ApiResponse.success(getTags))
     }
 
     @PutMapping("/{id}")
     fun updateTag(
         @PathVariable("id") tagId: Long,
         @RequestBody updateReqDto: TagUpdateReqDto
-    ): ResponseEntity<TagRespDto> {
-        return ResponseEntity(tagService.updateTag(tagId, updateReqDto), HttpStatus.OK)
+    ): ResponseEntity<ApiResponse<TagRespDto>> {
+        val tag = tagService.updateTag(tagId, updateReqDto)
+        return ResponseEntity
+            .ok(ApiResponse.success(tag))
     }
 }
