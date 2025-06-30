@@ -97,7 +97,7 @@ class CommentServiceImpl(
         return commentRepository.countAllByTxIdAndParentId(txId, parentId)
     }
 
-    private fun findParentCommentOrThrow(parentId: Long): Comment? {
+    private fun findParentCommentOrThrow(parentId: Long): Comment {
         return commentRepository.findById(parentId).orElseThrow { NotFoundException() }
     }
 }
