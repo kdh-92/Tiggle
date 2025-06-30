@@ -4,7 +4,6 @@ import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.stereotype.Component
 import org.springframework.web.multipart.MultipartFile
 import java.io.File
-import java.nio.file.Path
 import java.nio.file.Paths
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -13,6 +12,7 @@ import java.util.*
 @Component
 @ConfigurationProperties(prefix = "part.upload.transaction")
 class TransactionFileUploadUtil {
+    //TODO: validation 검증필요, 프로퍼티 초기화 안전성 개선
     lateinit var path: String
     var maxSize: Long = 0
     lateinit var allowedTypes: List<String>
