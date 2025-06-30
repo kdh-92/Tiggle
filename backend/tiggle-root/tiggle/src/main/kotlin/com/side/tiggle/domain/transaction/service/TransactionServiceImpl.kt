@@ -124,7 +124,12 @@ class TransactionServiceImpl(
 
     private fun uploadFileToFolder(uploadFile: MultipartFile): String {
         val originalName: String = uploadFile.originalFilename!!
-        val fileName = originalName.substring(originalName.lastIndexOf("//") + 1)
+        val fileName = originalName.substringAfterLast('/').substringAfterLast('\\')
+
+        val safeFileName = if (fileName.isBlank()) "uploaded_file" else fileName
+
+        validateFile(uploadFile)
+
         val folderPath: String = makeFolder()
         val uuid = UUID.randomUUID().toString()
         val saveName = FOLDER_PATH + File.separator + folderPath + File.separator + uuid + "_" + fileName
@@ -133,6 +138,17 @@ class TransactionServiceImpl(
 
         uploadFile.transferTo(savePath)
         return saveName
+    }
+
+    private fun validateFile(file: MultipartFile) {
+        val allowedTypes = listOf("image/jpeg", "image/png", "image/gif")
+        if (!allowedTypes.contains(file.contentType)) {
+            throw IllegalArgumentException("허용되지 않는 파일 형식입니다.")
+        }
+
+        if (file.size > 10 * 1024 * 1024) { // 10MB
+            throw IllegalArgumentException("파일 크기가 너무 큽니다.")
+        }
     }
 
     private fun makeFolder(): String {
