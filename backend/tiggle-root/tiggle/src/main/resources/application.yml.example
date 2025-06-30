@@ -63,6 +63,13 @@ spring:
 part:
   upload:
     path: upload/image/
+    profile:
+      path: upload/profile/
+      max-size: 5242880  # 5MB
+      allowed-types:
+        - image/jpeg
+        - image/png
+        - image/gif
 
 app:
   client-redirect-uri: https://tiggle.duckdns.org/login/success

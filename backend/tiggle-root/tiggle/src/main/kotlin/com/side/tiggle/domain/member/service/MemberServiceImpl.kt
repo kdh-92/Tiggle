@@ -7,6 +7,7 @@ import com.side.tiggle.domain.member.dto.resp.MemberListRespDto
 import com.side.tiggle.domain.member.dto.resp.MemberRespDto
 import com.side.tiggle.domain.member.model.Member
 import com.side.tiggle.domain.member.repository.MemberRepository
+import com.side.tiggle.domain.member.utils.FileUploadUtil
 import com.side.tiggle.global.exception.NotFoundException
 import org.springframework.stereotype.Service
 import org.springframework.web.multipart.MultipartFile
@@ -16,10 +17,9 @@ import java.nio.file.Paths
 
 @Service
 class MemberServiceImpl(
-    private val memberRepository: MemberRepository
+    private val memberRepository: MemberRepository,
+    private val fileUploadUtil: FileUploadUtil
 ) : MemberService {
-
-    private val FOLDER_PATH: String = System.getProperty("user.dir") + "/upload/profile";
 
     override fun createMember(dto: MemberCreateReqDto): MemberRespDto {
         val member: Member = dto.toEntity()
@@ -48,7 +48,7 @@ class MemberServiceImpl(
         val member: Member = getMemberEntityOrThrow(memberId)
 
         if (file != null && !file.isEmpty) {
-            member.profileUrl = uploadProfile(memberId, file)
+            member.profileUrl = fileUploadUtil.uploadProfileImage(memberId, file)
             isModified = true
         }
 
@@ -74,19 +74,6 @@ class MemberServiceImpl(
     private fun getMemberEntityOrThrow(memberId: Long): Member {
         val member = memberRepository.findById(memberId).orElseThrow{ NotFoundException() }
         return member
-    }
-
-    private fun uploadProfile(memberId: Long, file: MultipartFile): String {
-        val uploadFolder = File(FOLDER_PATH, memberId.toString())
-        if (!uploadFolder.exists()) {
-            uploadFolder.mkdirs()
-        }
-        val folderPath: String = uploadFolder.absolutePath;
-        val savePath: Path = Paths.get(folderPath + File.separator + file.originalFilename);
-
-        file.transferTo(savePath);
-
-        return savePath.toString();
     }
 }
 
