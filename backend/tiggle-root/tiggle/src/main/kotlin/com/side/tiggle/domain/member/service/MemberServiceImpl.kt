@@ -1,0 +1,79 @@
+package com.side.tiggle.domain.member.service
+
+import com.side.tiggle.domain.member.dto.internal.MemberInfo
+import com.side.tiggle.domain.member.dto.req.MemberCreateReqDto
+import com.side.tiggle.domain.member.dto.req.MemberUpdateReqDto
+import com.side.tiggle.domain.member.dto.resp.MemberListRespDto
+import com.side.tiggle.domain.member.dto.resp.MemberRespDto
+import com.side.tiggle.domain.member.model.Member
+import com.side.tiggle.domain.member.repository.MemberRepository
+import com.side.tiggle.domain.member.utils.FileUploadUtil
+import com.side.tiggle.global.exception.NotFoundException
+import org.springframework.stereotype.Service
+import org.springframework.web.multipart.MultipartFile
+import java.io.File
+import java.nio.file.Path
+import java.nio.file.Paths
+
+@Service
+class MemberServiceImpl(
+    private val memberRepository: MemberRepository,
+    private val fileUploadUtil: FileUploadUtil
+) : MemberService {
+
+    override fun createMember(dto: MemberCreateReqDto): MemberRespDto {
+        val member: Member = dto.toEntity()
+        val savedMember = memberRepository.save(member)
+        return MemberRespDto.fromEntity(savedMember)
+    }
+
+    override fun getMember(memberId: Long): MemberRespDto {
+        val member = memberRepository.findById(memberId).orElseThrow{ NotFoundException() }
+        return MemberRespDto.fromEntity(member)
+    }
+
+    override fun getMemberOrThrow(memberId: Long): MemberInfo {
+        val member = memberRepository.findById(memberId).orElseThrow{ NotFoundException() }
+        return MemberInfo.fromEntity(member)
+    }
+
+    override fun getAllMember(): MemberListRespDto {
+        val members = memberRepository.findAll()
+        val dtoList = members.map { MemberRespDto.fromEntity(it) }
+        return MemberListRespDto(dtoList)
+    }
+
+    override fun updateMember(memberId: Long, memberUpdateReqDto: MemberUpdateReqDto, file: MultipartFile?): MemberRespDto {
+        var isModified = false
+        val member: Member = getMemberEntityOrThrow(memberId)
+
+        if (file != null && !file.isEmpty) {
+            member.profileUrl = fileUploadUtil.uploadProfileImage(memberId, file)
+            isModified = true
+        }
+
+        if (memberUpdateReqDto.nickname != null) {
+            member.nickname = memberUpdateReqDto.nickname
+            isModified = true
+        }
+
+        if (memberUpdateReqDto.birth != null) {
+            member.birth = memberUpdateReqDto.birth
+            isModified = true
+        }
+
+        val updatedMember = if (isModified) {
+            memberRepository.save(member)
+        } else {
+            member
+        }
+
+        return MemberRespDto.fromEntity(updatedMember)
+    }
+
+    private fun getMemberEntityOrThrow(memberId: Long): Member {
+        val member = memberRepository.findById(memberId).orElseThrow{ NotFoundException() }
+        return member
+    }
+}
+

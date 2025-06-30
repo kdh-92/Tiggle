@@ -27,7 +27,6 @@ import java.time.LocalDate
 class TransactionApiController(
     private val transactionService: TransactionService,
     private val commentService: CommentService,
-    private val reactionService: ReactionService
 ) {
     // TODO: Request Header 방식으로 변경한다
     @Operation(description = "tx 생성", security = [SecurityRequirement(name = "bearer-key")])
