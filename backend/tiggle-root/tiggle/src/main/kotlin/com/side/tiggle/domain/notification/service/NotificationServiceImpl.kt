@@ -23,19 +23,20 @@ class NotificationServiceImpl(
 
     override fun getAllByMemberId(memberId: Long): List<NotificationRespDto> {
         val notiList = notificationRepository.findAllByReceiverId(memberId)
-        return notiList.map {
-            val sender = if (it.sender != null) {
-                MemberRespDto.fromEntity(it.sender!!)
-            } else {
-                null
+        return notiList.map { notification ->
+            val sender = notification.sender?.let { MemberRespDto.fromEntity(it) }
+
+            val receiver = notification.receiver?.let { MemberRespDto.fromEntity(it) }
+                ?: throw IllegalStateException("Notification receiver cannot be null")
+
+            val comment = notification.comment?.let { CommentRespDto.fromEntity(it) }
+                ?: throw IllegalStateException("Notification comment cannot be null")
+
+            NotificationRespDto.fromEntity(notification).apply {
+                this.sender = sender
+                this.receiver = receiver
+                this.comment = comment
             }
-            val receiver = MemberRespDto.fromEntity(it.receiver!!)
-            NotificationRespDto.fromEntity(it)
-                .apply {
-                    this.sender = sender
-                    this.receiver = receiver
-                    this.comment = CommentRespDto.fromEntity(it.comment!!)
-                }
         }
     }
 
