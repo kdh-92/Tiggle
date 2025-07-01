@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice
 import org.springframework.web.servlet.NoHandlerFoundException
 import java.time.LocalDateTime
 import jakarta.servlet.http.HttpServletRequest
+import jakarta.validation.ConstraintViolationException
 
 /**
  * 전역 예외 처리 클래스
@@ -21,6 +22,26 @@ import jakarta.servlet.http.HttpServletRequest
 class GlobalExceptionHandler {
 
     private val logger = LoggerFactory.getLogger(this::class.java)
+    
+    /**
+     * ConstraintViolationException 처리
+     * Path Variable, Request Parameter 유효성 검사 실패 시 처리
+     */
+    @ExceptionHandler(ConstraintViolationException::class)
+    fun handleConstraintViolationException(
+        ex: ConstraintViolationException,
+        request: HttpServletRequest
+    ): ResponseEntity<ErrorResponse> {
+        val errorMessage = ex.constraintViolations
+            .joinToString(", ") { "${it.propertyPath}: ${it.message}" }
+        return buildErrorResponse(
+            HttpStatus.BAD_REQUEST,
+            400,
+            errorMessage,
+            ex,
+            request
+        )
+    }
 
     /**
      * CustomException 처리
@@ -147,6 +168,7 @@ class GlobalExceptionHandler {
         logger.error("{}: {}", ex.javaClass.simpleName, ex.message, ex)
 
         val errorResponse = ErrorResponse(
+
             timestamp = LocalDateTime.now(),
             status = status.value(),
             error = status.reasonPhrase,
