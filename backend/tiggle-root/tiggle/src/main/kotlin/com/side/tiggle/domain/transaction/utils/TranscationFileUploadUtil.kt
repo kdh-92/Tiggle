@@ -23,15 +23,15 @@ class TransactionFileUploadUtil {
     @PostConstruct
     fun validateConfiguration() {
         if (!::path.isInitialized || path.isBlank()) {
-            throw IllegalStateException("업로드 경로(part.upload.profile.path)가 설정되지 않았습니다")
+            throw IllegalStateException("업로드 경로(part.upload.transaction.path)가 설정되지 않았습니다")
         }
 
         if (maxSize <= 0) {
-            throw IllegalStateException("최대 파일 크기(part.upload.profile.max-size)가 올바르게 설정되지 않았습니다")
+            throw IllegalStateException("최대 파일 크기(part.upload.transaction.max-size)가 올바르게 설정되지 않았습니다")
         }
 
         if (!::allowedTypes.isInitialized || allowedTypes.isEmpty()) {
-            throw IllegalStateException("허용된 파일 타입(part.upload.profile.allowed-types)이 설정되지 않았습니다")
+            throw IllegalStateException("허용된 파일 타입(part.upload.transaction.allowed-types)이 설정되지 않았습니다")
         }
 
         val uploadDir = File(path)
