@@ -32,5 +32,5 @@ data class TransactionUpdateReqDto(
     val categoryId: Long,
 
     @field:Size(max = 50, message = "태그는 최대 50개까지 가능합니다")
-    val tagNames: List<String>
+    val tagNames: List<String>?
 )

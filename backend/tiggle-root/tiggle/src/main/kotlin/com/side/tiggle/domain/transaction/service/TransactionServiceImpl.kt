@@ -69,7 +69,7 @@ class TransactionServiceImpl(
             date = dto.date
             content = dto.content
             reason = dto.reason
-            tagNames = dto.tagNames
+            tagNames = dto.tagNames ?: emptyList()
         }
         val tx = transactionRepository.save(transaction)
         return TransactionRespDto.fromEntity(tx)
