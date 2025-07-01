@@ -23,7 +23,8 @@ import org.springframework.web.bind.annotation.*
 @RestController
 @RequestMapping("/api/v1/comments")
 class CommentApiController(
-    private val commentService: CommentService
+    private val commentService: CommentService,
+    private val transactionService: TransactionService
 ) {
     @Operation(summary = "대댓글 조회 API", description = "댓글의 id를 가지고 대댓글을 조회한다")
     @GetMapping("/{id}/replies")
@@ -42,7 +43,8 @@ class CommentApiController(
         @Parameter(hidden = true) @RequestHeader(name = HttpHeaders.MEMBER_ID) memberId: Long,
         @RequestBody @Valid commentDto: CommentCreateReqDto
     ): ResponseEntity<CommentRespDto> {
-        val createComment = commentService.createComment(memberId, commentDto)
+        val tx = transactionService.getTransactionOrThrow(commentDto.txId)
+        val createComment = commentService.createComment(memberId, tx, commentDto)
         return ResponseEntity(createComment, HttpStatus.CREATED)
     }
 

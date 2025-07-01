@@ -3,8 +3,11 @@ package com.side.tiggle.domain.transaction.api
 import com.side.tiggle.domain.transaction.dto.resp.TransactionRespDto
 import com.side.tiggle.domain.comment.dto.resp.CommentPageRespDto
 import com.side.tiggle.domain.comment.service.CommentService
+import com.side.tiggle.domain.reaction.service.ReactionService
 import com.side.tiggle.domain.transaction.dto.req.TransactionCreateReqDto
 import com.side.tiggle.domain.transaction.dto.req.TransactionUpdateReqDto
+import com.side.tiggle.domain.transaction.dto.resp.TransactionListRespDto
+import com.side.tiggle.domain.transaction.dto.resp.TransactionPageRespDto
 import com.side.tiggle.domain.transaction.service.TransactionService
 import com.side.tiggle.global.common.constants.HttpHeaders
 import io.swagger.v3.oas.annotations.Operation
@@ -61,7 +64,7 @@ class TransactionApiController(
         @RequestParam(defaultValue = DEFAULT_INDEX) @Min(0) index: Int,
         @Parameter(name = "pageSize", description = "페이지 내부 tx 개수")
         @RequestParam(defaultValue = DEFAULT_PAGE_SIZE) @Min(1) @Max(100) pageSize: Int
-    ): ResponseEntity<Page<TransactionRespDto>> {
+    ): ResponseEntity<TransactionPageRespDto> {
         val txPage = transactionService.getCountOffsetTransaction(pageSize, index)
         return ResponseEntity(txPage, HttpStatus.OK)
     }
@@ -88,7 +91,7 @@ class TransactionApiController(
         @RequestParam(required = false) asset: List<Long>?,
         @Parameter(description = "(필터링) 태그 이름 (복수)")
         @RequestParam(required = false) tagNames: List<String>?
-    ): ResponseEntity<Page<TransactionRespDto>> {
+    ): ResponseEntity<TransactionPageRespDto> {
         val txPage = transactionService.getMemberCountOffsetTransaction(
             memberId = memberId,
             count = pageSize,
@@ -103,7 +106,7 @@ class TransactionApiController(
     }
 
     @GetMapping("/all")
-    fun getAllTransaction(): ResponseEntity<List<TransactionRespDto>> {
+    fun getAllTransaction(): ResponseEntity<TransactionListRespDto> {
         val transactions = transactionService.getAllUndeletedTransaction()
         return ResponseEntity(transactions, HttpStatus.OK)
     }

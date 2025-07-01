@@ -10,11 +10,11 @@ data class CategoryCreateReqDto (
     @field:Size(max = 100, message = "카테고리명은 100자 이하여야 합니다")
     val name: String
 ) {
-    fun toEntity(member: Member): Category {
+    fun toEntity(memberId: Long): Category {
         return Category(
             name = this.name,
             defaults = false,
-            member = member
+            memberId = memberId
         )
     }
 }

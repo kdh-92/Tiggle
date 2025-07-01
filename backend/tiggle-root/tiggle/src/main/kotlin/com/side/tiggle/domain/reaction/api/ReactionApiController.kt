@@ -6,6 +6,7 @@ import com.side.tiggle.domain.reaction.dto.resp.ReactionRespDto
 import com.side.tiggle.domain.reaction.dto.resp.ReactionSummaryRespDto
 import com.side.tiggle.domain.reaction.model.ReactionType
 import com.side.tiggle.domain.reaction.service.ReactionService
+import com.side.tiggle.domain.transaction.service.TransactionService
 import com.side.tiggle.global.common.constants.HttpHeaders
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
@@ -30,8 +31,9 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping("/api/v1/transaction/{id}/reaction")
 class ReactionApiController(
-    val reactionService: ReactionService,
-    val commentService: CommentService
+    private val reactionService: ReactionService,
+    private val commentService: CommentService,
+    private val transactionService: TransactionService
 ) {
 
     @Operation(description = "해당 tx에 대한 나의 reaction을 조회", security = [SecurityRequirement(name = "bearer-key")])
@@ -66,7 +68,8 @@ class ReactionApiController(
         @PathVariable(name = "id") @Min(1) txId: Long,
         @RequestBody @Valid createReqDto: ReactionCreateReqDto
     ): ResponseEntity<ReactionRespDto> {
-        val reaction = reactionService.upsertReaction(txId, senderId, createReqDto)
+        val tx = transactionService.getTransactionOrThrow(txId)
+        val reaction = reactionService.upsertReaction(txId, senderId, tx.memberId, createReqDto)
         return ResponseEntity(reaction, HttpStatus.CREATED)
     }
 

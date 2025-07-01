@@ -8,7 +8,7 @@ data class MemberInfo(
     val profileUrl: String?
 ) {
     companion object {
-        fun from(member: Member): MemberInfo {
+        fun fromEntity(member: Member): MemberInfo {
             return MemberInfo(
                 id = member.id,
                 nickname = member.nickname,
