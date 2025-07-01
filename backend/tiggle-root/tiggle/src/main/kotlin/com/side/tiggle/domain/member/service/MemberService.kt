@@ -1,99 +1,22 @@
 package com.side.tiggle.domain.member.service
 
+import com.side.tiggle.domain.member.dto.internal.MemberInfo
 import com.side.tiggle.domain.member.dto.req.MemberCreateReqDto
 import com.side.tiggle.domain.member.dto.req.MemberUpdateReqDto
 import com.side.tiggle.domain.member.dto.resp.MemberListRespDto
 import com.side.tiggle.domain.member.dto.resp.MemberRespDto
-import com.side.tiggle.domain.member.exception.MemberException
-import com.side.tiggle.domain.member.exception.error.MemberErrorCode
 import com.side.tiggle.domain.member.model.Member
-import com.side.tiggle.domain.member.repository.MemberRepository
-import org.springframework.stereotype.Service
 import org.springframework.web.multipart.MultipartFile
-import java.io.File
-import java.io.IOException
-import java.nio.file.Path
-import java.nio.file.Paths
 
-@Service
-class MemberService(
-    private val memberRepository: MemberRepository
-) {
+interface MemberService {
 
-    private val FOLDER_PATH: String = System.getProperty("user.dir") + "/upload/profile";
+    fun createMember(dto: MemberCreateReqDto): MemberRespDto
 
-    fun createMember(dto: MemberCreateReqDto): MemberRespDto {
-        val member: Member = dto.toEntity()
-        val savedMember = memberRepository.save(member)
-        return MemberRespDto.fromEntity(savedMember)
-    }
+    fun getMember(memberId: Long): MemberRespDto
 
-    fun getMember(memberId: Long): MemberRespDto {
-        val member = memberRepository.findById(memberId)
-            .orElseThrow{ MemberException(MemberErrorCode.MEMBER_NOT_FOUND) }
-        return MemberRespDto.fromEntity(member)
-    }
+    fun getMemberOrThrow(memberId: Long): MemberInfo
 
-    // Todo 조회용으로 반환 타입 MemberInfo 수정 예정
-    fun getMemberOrThrow(memberId: Long): Member {
-        val member = memberRepository.findById(memberId)
-            .orElseThrow{ MemberException(MemberErrorCode.MEMBER_NOT_FOUND) }
-        return member
-    }
+    fun getAllMember(): MemberListRespDto
 
-    private fun getMemberEntityOrThrow(memberId: Long): Member {
-        val member = memberRepository.findById(memberId)
-            .orElseThrow{ MemberException(MemberErrorCode.MEMBER_NOT_FOUND) }
-        return member
-    }
-
-    fun getAllMember(): MemberListRespDto {
-        val members = memberRepository.findAll()
-        val dtoList = members.map { MemberRespDto.fromEntity(it) }
-        return MemberListRespDto(dtoList)
-    }
-
-    fun updateMember(memberId: Long, memberUpdateReqDto: MemberUpdateReqDto, file: MultipartFile?): MemberRespDto {
-        var isModified = false
-        val member: Member = getMemberEntityOrThrow(memberId)
-
-        if (file != null && !file.isEmpty) {
-            member.profileUrl = uploadProfile(memberId, file)
-            isModified = true
-        }
-
-        if (memberUpdateReqDto.nickname != null) {
-            member.nickname = memberUpdateReqDto.nickname
-            isModified = true
-        }
-
-        if (memberUpdateReqDto.birth != null) {
-            member.birth = memberUpdateReqDto.birth
-            isModified = true
-        }
-
-        val updatedMember = if (isModified) {
-            memberRepository.save(member)
-        } else {
-            member
-        }
-
-        return MemberRespDto.fromEntity(updatedMember)
-    }
-
-    fun uploadProfile(memberId: Long, file: MultipartFile): String {
-        try {
-            val uploadFolder = File(FOLDER_PATH, memberId.toString())
-            if (!uploadFolder.exists()) {
-                uploadFolder.mkdirs()
-            }
-            val folderPath: String = uploadFolder.absolutePath;
-            val savePath: Path = Paths.get(folderPath + File.separator + file.originalFilename);
-
-            file.transferTo(savePath);
-            return savePath.toString();
-        } catch (e: IOException) {
-            throw MemberException(MemberErrorCode.PROFILE_UPLOAD_FAILED, e)
-        }
-    }
+    fun updateMember(memberId: Long, memberUpdateReqDto: MemberUpdateReqDto, file: MultipartFile?): MemberRespDto
 }

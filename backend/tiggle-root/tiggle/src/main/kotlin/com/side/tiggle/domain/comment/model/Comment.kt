@@ -1,8 +1,5 @@
 package com.side.tiggle.domain.comment.model
 
-import com.fasterxml.jackson.annotation.JsonIgnore
-import com.side.tiggle.domain.member.model.Member
-import com.side.tiggle.domain.transaction.model.Transaction
 import com.side.tiggle.global.common.model.BaseEntity
 import org.hibernate.annotations.SQLDelete
 import jakarta.persistence.*
@@ -13,20 +10,14 @@ import org.hibernate.annotations.SQLRestriction
 @SQLDelete(sql = "UPDATE comments SET deleted_at = CURRENT_TIMESTAMP, deleted = true where id = ?")
 @Table(name = "comments")
 class Comment(
-    @JsonIgnore
-    @JoinColumn(name = "tx_id", nullable = false)
-    @ManyToOne(fetch = FetchType.LAZY)
-    val tx: Transaction,
+    @Column(name = "tx_id", nullable = false)
+    val txId: Long,
 
-    @JsonIgnore
-    @JoinColumn(name = "sender_id", nullable = false)
-    @ManyToOne(fetch = FetchType.LAZY)
-    val sender: Member,
+    @Column(name = "sender_id", nullable = false)
+    val senderId: Long,
 
-    @JsonIgnore
-    @JoinColumn(name = "receiver_id", nullable = false)
-    @ManyToOne(fetch = FetchType.LAZY)
-    val receiver: Member,
+    @Column(name = "receiver_id", nullable = false)
+    val receiverId: Long,
 
     @Column(name = "content", nullable = false)
     var content: String,
