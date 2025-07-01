@@ -26,7 +26,7 @@ class CommentApiController(
     @Operation(summary = "대댓글 조회 API", description = "댓글의 id를 가지고 대댓글을 조회한다")
     @GetMapping("/{id}/replies")
     fun getAllCommentsByCommentId(
-        @PathVariable id: Long?,
+        @PathVariable id: Long,
         @RequestParam(name = "index", defaultValue = "0") page: Int,
         @RequestParam(name = "pageSize", defaultValue = "5") size: Int
     ): ResponseEntity<CommentPageRespDto> {
