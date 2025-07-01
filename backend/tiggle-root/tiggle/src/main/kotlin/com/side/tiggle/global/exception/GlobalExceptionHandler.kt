@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestControllerAdvice
 import java.time.LocalDateTime
 import jakarta.servlet.http.HttpServletRequest
+import jakarta.validation.ConstraintViolationException
+import org.springframework.web.bind.MethodArgumentNotValidException
 
 @RestControllerAdvice
 class GlobalExceptionHandler {
@@ -38,6 +40,26 @@ class GlobalExceptionHandler {
     fun handleNotAuthorizedException(e: NotAuthorizedException, request: HttpServletRequest): ErrorResponse {
         logger.error(e.message, e)
         return ErrorResponse(e, HttpStatus.UNAUTHORIZED, request)
+    }
+
+    @ExceptionHandler(ConstraintViolationException::class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    fun handleConstraintViolationException(
+        e: ConstraintViolationException,
+        request: HttpServletRequest
+    ): ErrorResponse {
+        logger.error(e.message, e)
+        return ErrorResponse(e, HttpStatus.BAD_REQUEST, request)
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException::class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    fun handleMethodArgumentNotValidException(
+        e: MethodArgumentNotValidException,
+        request: HttpServletRequest
+    ): ErrorResponse {
+        logger.error(e.message, e)
+        return ErrorResponse(e, HttpStatus.BAD_REQUEST, request)
     }
 
     data class ErrorResponse(
