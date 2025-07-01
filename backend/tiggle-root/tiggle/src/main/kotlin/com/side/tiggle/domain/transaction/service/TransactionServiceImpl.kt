@@ -7,22 +7,18 @@ import com.side.tiggle.domain.transaction.dto.resp.TransactionListRespDto
 import com.side.tiggle.domain.transaction.dto.resp.TransactionPageRespDto
 import com.side.tiggle.domain.transaction.dto.resp.TransactionRespDto
 import com.side.tiggle.domain.transaction.dto.view.TransactionDtoWithCount
+import com.side.tiggle.domain.transaction.exception.TransactionException
+import com.side.tiggle.domain.transaction.exception.error.TransactionErrorCode
 import com.side.tiggle.domain.transaction.mapper.TransactionMapper
 import com.side.tiggle.domain.transaction.model.Transaction
 import com.side.tiggle.domain.transaction.repository.TransactionRepository
 import com.side.tiggle.domain.transaction.utils.TransactionFileUploadUtil
-import com.side.tiggle.global.exception.NotAuthorizedException
-import com.side.tiggle.global.exception.NotFoundException
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.multipart.MultipartFile
-import java.io.File
-import java.nio.file.Paths
 import java.time.LocalDate
-import java.time.format.DateTimeFormatter
-import java.util.*
 
 @Service
 class TransactionServiceImpl(
@@ -32,7 +28,11 @@ class TransactionServiceImpl(
 ) : TransactionService {
 
     @Transactional
-    override fun createTransaction(memberId: Long, dto: TransactionCreateReqDto, file: MultipartFile?): TransactionRespDto {
+    override fun createTransaction(
+        memberId: Long,
+        dto: TransactionCreateReqDto,
+        file: MultipartFile?
+    ): TransactionRespDto {
 //        var savePath: Path? = null
         try {
 //            val uploadedFilePath = transactionFileUploadUtil.uploadTransactionImage(file)
@@ -58,10 +58,10 @@ class TransactionServiceImpl(
         memberId: Long, transactionId: Long, dto: TransactionUpdateReqDto
     ): TransactionRespDto {
         val transaction = transactionRepository.findById(transactionId)
-            .orElseThrow { NotFoundException() }
+            .orElseThrow { TransactionException(TransactionErrorCode.TRANSACTION_NOT_FOUND) }
 
         if (transaction.memberId != memberId) {
-            throw NotAuthorizedException()
+            throw TransactionException(TransactionErrorCode.TRANSACTION_ACCESS_DENIED)
         }
 
         transaction.apply {
@@ -78,10 +78,10 @@ class TransactionServiceImpl(
     @Transactional
     override fun deleteTransaction(memberId: Long, txId: Long) {
         val transaction = transactionRepository.findById(txId)
-            .orElseThrow { NotFoundException() }
+            .orElseThrow { TransactionException(TransactionErrorCode.TRANSACTION_NOT_FOUND) }
 
         if (transaction.memberId != memberId) {
-            throw NotAuthorizedException()
+            throw TransactionException(TransactionErrorCode.TRANSACTION_ACCESS_DENIED)
         }
 
         transactionRepository.delete(transaction)
@@ -109,7 +109,7 @@ class TransactionServiceImpl(
 
     private fun getTransactionEntityOrThrow(transactionId: Long): Transaction {
         return transactionRepository.findById(transactionId)
-            .orElseThrow{ NotFoundException() }
+            .orElseThrow { TransactionException(TransactionErrorCode.TRANSACTION_NOT_FOUND) }
     }
 
     /**
@@ -130,7 +130,7 @@ class TransactionServiceImpl(
             PageRequest.of(index, pageSize, Sort.by(Sort.Direction.DESC, "createdAt"))
         )
         if (txPage.isEmpty) {
-            throw NotFoundException()
+            throw TransactionException(TransactionErrorCode.TRANSACTION_NOT_FOUND)
         }
         val dtoWithCountPage = txPage.map { mapTxRespDto(it) }
         return TransactionPageRespDto.fromPage(dtoWithCountPage)
@@ -154,7 +154,7 @@ class TransactionServiceImpl(
             PageRequest.of(offset, count, Sort.by(Sort.Direction.DESC, "createdAt"))
         )
         if (memberTxPage.isEmpty) {
-            throw NotFoundException()
+            throw TransactionException(TransactionErrorCode.TRANSACTION_NOT_FOUND)
         }
 
         val dtoWithCountPage = memberTxPage.map { mapTxRespDto(it) }

@@ -3,15 +3,13 @@ package com.side.tiggle.domain.notification.service
 import com.side.tiggle.domain.comment.dto.resp.CommentRespDto
 import com.side.tiggle.domain.comment.model.Comment
 import com.side.tiggle.domain.member.dto.resp.MemberRespDto
-import com.side.tiggle.domain.member.model.Member
-import com.side.tiggle.domain.member.service.MemberService
 import com.side.tiggle.domain.notification.NotificationProducer
-import com.side.tiggle.domain.notification.dto.resp.NotificationRespDto
 import com.side.tiggle.domain.notification.dto.NotificationProduceDto
+import com.side.tiggle.domain.notification.dto.resp.NotificationRespDto
+import com.side.tiggle.domain.notification.exception.NotificationException
+import com.side.tiggle.domain.notification.exception.error.NotificationErrorCode
 import com.side.tiggle.domain.notification.repository.NotificationRepository
 import com.side.tiggle.domain.transaction.dto.internal.TransactionInfo
-import com.side.tiggle.domain.transaction.model.Transaction
-import com.side.tiggle.global.exception.NotFoundException
 import org.springframework.stereotype.Service
 import java.time.LocalDateTime
 
@@ -65,10 +63,10 @@ class NotificationServiceImpl(
 
     override fun readNotificationById(memberId: Long, id: Long) {
         val noti = notificationRepository.findById(id).orElseThrow {
-            NotFoundException()
+            NotificationException(NotificationErrorCode.NOTIFICATION_NOT_FOUND)
         }
         if (noti.receiver!!.id != memberId) {
-            throw NotFoundException()
+            throw NotificationException(NotificationErrorCode.NOTIFICATION_ACCESS_DENIED)
         }
         noti.viewedAt = LocalDateTime.now()
         notificationRepository.save(noti)

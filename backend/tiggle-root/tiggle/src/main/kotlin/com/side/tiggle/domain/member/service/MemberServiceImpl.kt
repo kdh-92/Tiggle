@@ -5,15 +5,13 @@ import com.side.tiggle.domain.member.dto.req.MemberCreateReqDto
 import com.side.tiggle.domain.member.dto.req.MemberUpdateReqDto
 import com.side.tiggle.domain.member.dto.resp.MemberListRespDto
 import com.side.tiggle.domain.member.dto.resp.MemberRespDto
+import com.side.tiggle.domain.member.exception.MemberException
+import com.side.tiggle.domain.member.exception.error.MemberErrorCode
 import com.side.tiggle.domain.member.model.Member
 import com.side.tiggle.domain.member.repository.MemberRepository
 import com.side.tiggle.domain.member.utils.FileUploadUtil
-import com.side.tiggle.global.exception.NotFoundException
 import org.springframework.stereotype.Service
 import org.springframework.web.multipart.MultipartFile
-import java.io.File
-import java.nio.file.Path
-import java.nio.file.Paths
 
 @Service
 class MemberServiceImpl(
@@ -28,12 +26,14 @@ class MemberServiceImpl(
     }
 
     override fun getMember(memberId: Long): MemberRespDto {
-        val member = memberRepository.findById(memberId).orElseThrow{ NotFoundException() }
+        val member = memberRepository.findById(memberId)
+            .orElseThrow { MemberException(MemberErrorCode.MEMBER_NOT_FOUND) }
         return MemberRespDto.fromEntity(member)
     }
 
     override fun getMemberOrThrow(memberId: Long): MemberInfo {
-        val member = memberRepository.findById(memberId).orElseThrow{ NotFoundException() }
+        val member = memberRepository.findById(memberId)
+            .orElseThrow { MemberException(MemberErrorCode.MEMBER_NOT_FOUND) }
         return MemberInfo.fromEntity(member)
     }
 
@@ -43,7 +43,11 @@ class MemberServiceImpl(
         return MemberListRespDto(dtoList)
     }
 
-    override fun updateMember(memberId: Long, memberUpdateReqDto: MemberUpdateReqDto, file: MultipartFile?): MemberRespDto {
+    override fun updateMember(
+        memberId: Long,
+        memberUpdateReqDto: MemberUpdateReqDto,
+        file: MultipartFile?
+    ): MemberRespDto {
         var isModified = false
         val member: Member = getMemberEntityOrThrow(memberId)
 
@@ -72,7 +76,8 @@ class MemberServiceImpl(
     }
 
     private fun getMemberEntityOrThrow(memberId: Long): Member {
-        val member = memberRepository.findById(memberId).orElseThrow{ NotFoundException() }
+        val member = memberRepository.findById(memberId)
+            .orElseThrow { MemberException(MemberErrorCode.MEMBER_NOT_FOUND) }
         return member
     }
 }

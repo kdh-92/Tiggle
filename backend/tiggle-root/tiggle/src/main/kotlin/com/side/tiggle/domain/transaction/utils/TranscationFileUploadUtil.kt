@@ -1,5 +1,8 @@
 package com.side.tiggle.domain.transaction.utils
 
+import com.side.tiggle.domain.transaction.exception.TransactionException
+import com.side.tiggle.domain.transaction.exception.error.TransactionErrorCode
+import jakarta.annotation.PostConstruct
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.stereotype.Component
 import org.springframework.web.multipart.MultipartFile
@@ -16,6 +19,26 @@ class TransactionFileUploadUtil {
     lateinit var path: String
     var maxSize: Long = 0
     lateinit var allowedTypes: List<String>
+
+    @PostConstruct
+    fun validateConfiguration() {
+        if (!::path.isInitialized || path.isBlank()) {
+            throw IllegalStateException("업로드 경로(part.upload.transaction.path)가 설정되지 않았습니다")
+        }
+
+        if (maxSize <= 0) {
+            throw IllegalStateException("최대 파일 크기(part.upload.transaction.max-size)가 올바르게 설정되지 않았습니다")
+        }
+
+        if (!::allowedTypes.isInitialized || allowedTypes.isEmpty()) {
+            throw IllegalStateException("허용된 파일 타입(part.upload.transaction.allowed-types)이 설정되지 않았습니다")
+        }
+
+        val uploadDir = File(path)
+        if (!uploadDir.exists() && !uploadDir.mkdirs()) {
+            throw IllegalStateException("업로드 디렉토리를 생성할 수 없습니다: $path")
+        }
+    }
 
     fun uploadTransactionImage(file: MultipartFile): String {
         validateFile(file)
@@ -47,7 +70,7 @@ class TransactionFileUploadUtil {
 
         val allowedExtensions = listOf("jpg", "jpeg", "png", "gif")
         if (!allowedExtensions.contains(extension.lowercase())) {
-            throw IllegalArgumentException("허용되지 않은 파일 형식입니다: $extension")
+            throw TransactionException(TransactionErrorCode.INVALID_FILE_TYPE)
         }
 
         return extension.lowercase()
@@ -55,15 +78,15 @@ class TransactionFileUploadUtil {
 
     private fun validateFile(file: MultipartFile) {
         if (!allowedTypes.contains(file.contentType)) {
-            throw IllegalArgumentException("허용되지 않는 MIME 타입입니다: ${file.contentType}")
+            throw TransactionException(TransactionErrorCode.INVALID_FILE_TYPE)
         }
 
         if (file.size > maxSize) {
-            throw IllegalArgumentException("파일 크기가 ${maxSize / 1024 / 1024}MB를 초과합니다")
+            throw TransactionException(TransactionErrorCode.FILE_SIZE_EXCEEDED)
         }
 
         if (file.isEmpty) {
-            throw IllegalArgumentException("빈 파일은 업로드할 수 없습니다")
+            throw TransactionException(TransactionErrorCode.EMPTY_FILE)
         }
     }
 

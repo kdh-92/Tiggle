@@ -1,6 +1,8 @@
 package com.side.tiggle.global.auth
 
 import com.side.tiggle.domain.member.repository.MemberRepository
+import com.side.tiggle.global.exception.AuthException
+import com.side.tiggle.global.exception.error.GlobalErrorCode
 import io.jsonwebtoken.Claims
 import io.jsonwebtoken.JwtException
 import io.jsonwebtoken.Jwts
@@ -60,7 +62,14 @@ class JwtTokenProvider(
     }
 
     fun resolveAccessToken(request: HttpServletRequest): String {
-        return request.getHeader("Authorization").substring("Bearer ".length)
+        val authHeader = request.getHeader("Authorization")
+            ?: throw AuthException(GlobalErrorCode.NOT_AUTHENTICATED)
+
+        if (!authHeader.startsWith("Bearer ")) {
+            throw AuthException(GlobalErrorCode.INVALID_TOKEN)
+        }
+
+        return authHeader.substring("Bearer ".length)
     }
 
     fun resolveRefreshToken(request: HttpServletRequest): String {
@@ -76,7 +85,6 @@ class JwtTokenProvider(
             val expiry: Date = extractClaims(token).expiration
             expiry.after(Date())
         } catch (e: Exception) {
-            println("토큰 검증 실패: ${e.message}")
             false
         }
     }
@@ -91,7 +99,7 @@ class JwtTokenProvider(
                 .parseSignedClaims(jwtToken)
                 .payload
         } catch (e: JwtException) {
-            throw IllegalStateException("Failed to extract claims from JWT token", e)
+            throw AuthException(GlobalErrorCode.INVALID_TOKEN, e)
         }
     }
 

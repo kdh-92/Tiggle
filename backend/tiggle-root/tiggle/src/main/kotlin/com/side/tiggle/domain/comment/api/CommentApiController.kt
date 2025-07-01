@@ -5,6 +5,7 @@ import com.side.tiggle.domain.comment.dto.req.CommentUpdateReqDto
 import com.side.tiggle.domain.comment.dto.resp.CommentPageRespDto
 import com.side.tiggle.domain.comment.dto.resp.CommentRespDto
 import com.side.tiggle.domain.comment.service.CommentService
+import com.side.tiggle.domain.transaction.service.TransactionService
 import com.side.tiggle.global.common.constants.HttpHeaders
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter

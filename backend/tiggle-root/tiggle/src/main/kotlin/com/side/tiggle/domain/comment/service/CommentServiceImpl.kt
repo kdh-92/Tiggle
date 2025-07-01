@@ -5,15 +5,12 @@ import com.side.tiggle.domain.comment.dto.req.CommentUpdateReqDto
 import com.side.tiggle.domain.comment.dto.resp.CommentChildRespDto
 import com.side.tiggle.domain.comment.dto.resp.CommentPageRespDto
 import com.side.tiggle.domain.comment.dto.resp.CommentRespDto
+import com.side.tiggle.domain.comment.exception.CommentException
+import com.side.tiggle.domain.comment.exception.error.CommentErrorCode
 import com.side.tiggle.domain.comment.model.Comment
 import com.side.tiggle.domain.comment.repository.CommentRepository
-import com.side.tiggle.domain.member.model.Member
-import com.side.tiggle.domain.member.service.MemberService
-import com.side.tiggle.domain.transaction.service.TransactionService
 import com.side.tiggle.domain.notification.service.NotificationService
 import com.side.tiggle.domain.transaction.dto.internal.TransactionInfo
-import com.side.tiggle.global.exception.NotAuthorizedException
-import com.side.tiggle.global.exception.NotFoundException
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Pageable
@@ -70,10 +67,10 @@ class CommentServiceImpl(
 
     override fun updateComment(memberId: Long, commentId: Long, dto: CommentUpdateReqDto): CommentRespDto {
         val comment = commentRepository.findById(commentId)
-            .orElseThrow { NotFoundException() }
+            .orElseThrow { CommentException(CommentErrorCode.COMMENT_NOT_FOUND) }
 
         if (comment.senderId != memberId) {
-            throw NotAuthorizedException()
+            throw CommentException(CommentErrorCode.COMMENT_ACCESS_DENIED)
         }
 
         comment.content = dto.content
@@ -84,10 +81,10 @@ class CommentServiceImpl(
 
     override fun deleteComment(memberId: Long, commentId: Long) {
         val comment = commentRepository.findById(commentId)
-            .orElseThrow { NotFoundException() }
+            .orElseThrow { CommentException(CommentErrorCode.COMMENT_NOT_FOUND) }
 
         if (comment.senderId != memberId) {
-            throw NotAuthorizedException()
+            throw CommentException(CommentErrorCode.COMMENT_ACCESS_DENIED)
         }
 
         commentRepository.delete(comment)
@@ -98,6 +95,7 @@ class CommentServiceImpl(
     }
 
     private fun findParentCommentOrThrow(parentId: Long): Comment {
-        return commentRepository.findById(parentId).orElseThrow { NotFoundException() }
+        return commentRepository.findById(parentId)
+            .orElseThrow { CommentException(CommentErrorCode.COMMENT_NOT_FOUND) }
     }
 }
