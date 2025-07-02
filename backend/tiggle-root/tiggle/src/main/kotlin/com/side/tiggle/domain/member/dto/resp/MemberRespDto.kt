@@ -22,4 +22,13 @@ data class MemberRespDto(
             )
         }
     }
+
+    fun toEntity(): Member {
+        return Member(
+            email = this.email,
+            profileUrl = this.profileUrl,
+            nickname = this.nickname,
+            birth = this.birth
+        ).apply { id = this.id }
+    }
 }

@@ -1,5 +1,6 @@
 package com.side.tiggle.domain.transaction.service
 
+import com.side.tiggle.domain.member.service.MemberService
 import com.side.tiggle.domain.transaction.dto.internal.TransactionInfo
 import com.side.tiggle.domain.transaction.dto.req.TransactionCreateReqDto
 import com.side.tiggle.domain.transaction.dto.req.TransactionUpdateReqDto
@@ -23,6 +24,7 @@ import java.time.LocalDate
 @Service
 class TransactionServiceImpl(
     private val transactionRepository: TransactionRepository,
+    private val memberService: MemberService,
     private val transactionMapper: TransactionMapper,
     private val transactionFileUploadUtil: TransactionFileUploadUtil
 ) : TransactionService {
@@ -39,11 +41,14 @@ class TransactionServiceImpl(
 //            savePath = Paths.get(uploadedFilePath)
 //            dto.imageUrl = uploadedFilePath
 
+            val memberDto = memberService.getMember(memberId)
+            val member = memberDto.toEntity()
+
             val tx = transactionRepository.save(
-                dto.toEntity(memberId, dto.categoryId)
+                dto.toEntity(member, dto.categoryId)
             )
 
-            return TransactionRespDto.fromEntity(tx)
+            return TransactionRespDto.fromEntity(tx, memberDto)
         } catch (e: Exception) {
 //            if (savePath != null) {
 //                Files.deleteIfExists(savePath)
@@ -60,7 +65,7 @@ class TransactionServiceImpl(
         val transaction = transactionRepository.findById(transactionId)
             .orElseThrow { TransactionException(TransactionErrorCode.TRANSACTION_NOT_FOUND) }
 
-        if (transaction.memberId != memberId) {
+        if (transaction.member.id != memberId) {
             throw TransactionException(TransactionErrorCode.TRANSACTION_ACCESS_DENIED)
         }
 
@@ -72,7 +77,9 @@ class TransactionServiceImpl(
             tagNames = dto.tagNames ?: emptyList()
         }
         val tx = transactionRepository.save(transaction)
-        return TransactionRespDto.fromEntity(tx)
+        val member = memberService.getMember(memberId)
+
+        return TransactionRespDto.fromEntity(tx, member)
     }
 
     @Transactional
@@ -80,7 +87,7 @@ class TransactionServiceImpl(
         val transaction = transactionRepository.findById(txId)
             .orElseThrow { TransactionException(TransactionErrorCode.TRANSACTION_NOT_FOUND) }
 
-        if (transaction.memberId != memberId) {
+        if (transaction.member.id != memberId) {
             throw TransactionException(TransactionErrorCode.TRANSACTION_ACCESS_DENIED)
         }
 
@@ -93,8 +100,10 @@ class TransactionServiceImpl(
      * @author 양병학
      */
     override fun getTransactionDetail(id: Long): TransactionRespDto {
-        val transaction = getTransactionEntityOrThrow(id)
-        return TransactionRespDto.fromEntity(transaction)
+        val tx = getTransactionEntityOrThrow(id)
+        val member = memberService.getMember(tx.member.id)
+
+        return TransactionRespDto.fromEntity(tx, member)
     }
 
     /**
@@ -126,7 +135,7 @@ class TransactionServiceImpl(
         pageSize: Int,
         index: Int
     ): TransactionPageRespDto {
-        val txPage = transactionRepository.findAll(
+        val txPage = transactionRepository.findAllWithMemberPaged(
             PageRequest.of(index, pageSize, Sort.by(Sort.Direction.DESC, "createdAt"))
         )
         if (txPage.isEmpty) {
@@ -162,7 +171,7 @@ class TransactionServiceImpl(
     }
 
     override fun getAllUndeletedTransaction(): TransactionListRespDto {
-        val tx = transactionRepository.findAll(Sort.by(Sort.Direction.DESC, "createdAt"))
+        val tx = transactionRepository.findAllWithMember()
         val dtoList = tx.map { TransactionRespDto.fromEntity(it) }
         return TransactionListRespDto(dtoList)
     }
