@@ -3,11 +3,7 @@
 /* tslint:disable */
 /* eslint-disable */
 
-export type MemberResponseDto = {
-    id?: number;
-    email?: string;
-    profileUrl?: string;
+export type MemberUpdateReqDto = {
     nickname?: string;
     birth?: string;
 };
-

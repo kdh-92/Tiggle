@@ -13,7 +13,7 @@
     "build-storybook": "storybook build",
     "transform-token": "node transform-token.js",
     "chromatic": "npx chromatic --project-token=chpt_bf3f5c4ddba9975",
-    "generate": "node --trace-warnings generate-openapi.js"
+    "generate": "node --trace-warnings generate-openapi.cjs"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^1.9.5",
@@ -24,6 +24,7 @@
     "antd": "^5.11.1",
     "classnames": "^2.3.2",
     "dayjs": "^1.11.9",
+    "dotenv": "^17.0.1",
     "react": "^18.2.0",
     "react-cookie": "^6.1.1",
     "react-dom": "^18.2.0",

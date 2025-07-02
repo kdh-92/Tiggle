@@ -3,8 +3,13 @@
 /* tslint:disable */
 /* eslint-disable */
 
-export type CommentCreateReqDto = {
+export type CommentChildRespDto = {
+    id: number;
     txId: number;
     parentId?: number;
     content: string;
+    createdAt: string;
+    senderId: number;
+    receiverId: number;
+    childCommentCount: number;
 };

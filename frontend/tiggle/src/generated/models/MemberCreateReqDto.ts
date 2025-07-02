@@ -3,8 +3,9 @@
 /* tslint:disable */
 /* eslint-disable */
 
-export type TagDto = {
-    id?: number;
-    name?: string;
+export type MemberCreateReqDto = {
+    email: string;
+    profileUrl: string;
+    nickname: string;
+    birth: string;
 };
-

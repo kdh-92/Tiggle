@@ -3,10 +3,6 @@
 /* tslint:disable */
 /* eslint-disable */
 
-export type GradeDto = {
-    id?: number;
-    name?: string;
-    imageUrl?: string;
-    description?: string;
+export type TagCreateReqDto = {
+    name: string;
 };
-

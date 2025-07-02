@@ -3,4 +3,6 @@
 /* tslint:disable */
 /* eslint-disable */
 
-export type Unit = Record<string, any>;
+export type TagUpdateReqDto = {
+    name: string;
+};

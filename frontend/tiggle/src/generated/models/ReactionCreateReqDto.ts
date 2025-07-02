@@ -3,9 +3,6 @@
 /* tslint:disable */
 /* eslint-disable */
 
-export type AssetRespDto = {
-    id?: number;
-    name?: string;
-    defaults?: boolean;
+export type ReactionCreateReqDto = {
+    type: 'UP' | 'DOWN';
 };
-

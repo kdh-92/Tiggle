@@ -3,16 +3,12 @@
 /* tslint:disable */
 /* eslint-disable */
 
-export type TransactionRespDto = {
-    id: number;
-    memberId: number;
+export type TransactionCreateReqDto = {
     categoryId: number;
-    tagNames?: Array<string>;
-    createdAt: string;
-    parentId?: number;
     imageUrl?: string;
     amount: number;
     date: string;
     content: string;
     reason: string;
+    tagNames?: Array<string>;
 };

@@ -3,8 +3,8 @@
 /* tslint:disable */
 /* eslint-disable */
 
-export type CommentCreateReqDto = {
-    txId: number;
-    parentId?: number;
-    content: string;
+import type { CategoryRespDto } from './CategoryRespDto';
+
+export type CategoryListRespDto = {
+    categories: Array<CategoryRespDto>;
 };

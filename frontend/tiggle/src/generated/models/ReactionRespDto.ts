@@ -3,9 +3,9 @@
 /* tslint:disable */
 /* eslint-disable */
 
-export type SortObject = {
-    empty?: boolean;
-    sorted?: boolean;
-    unsorted?: boolean;
+export type ReactionRespDto = {
+    txId: number;
+    senderId: number;
+    receiverId: number;
+    type: 'UP' | 'DOWN';
 };
-

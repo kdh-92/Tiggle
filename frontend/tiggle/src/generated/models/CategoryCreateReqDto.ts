@@ -3,9 +3,6 @@
 /* tslint:disable */
 /* eslint-disable */
 
-export type ReactionSummaryDto = {
-    upCount?: number;
-    downCount?: number;
-    commentCount?: number;
+export type CategoryCreateReqDto = {
+    name: string;
 };
-

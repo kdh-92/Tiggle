@@ -3,7 +3,8 @@
 /* tslint:disable */
 /* eslint-disable */
 
-export type ReactionCreateDto = {
-    type?: 'UP' | 'DOWN';
+export type ReactionSummaryRespDto = {
+    upCount: number;
+    downCount: number;
+    commentCount: number;
 };
-

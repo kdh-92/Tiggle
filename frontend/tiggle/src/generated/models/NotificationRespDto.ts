@@ -4,16 +4,15 @@
 /* eslint-disable */
 
 import type { CommentRespDto } from './CommentRespDto';
-import type { MemberResponseDto } from './MemberResponseDto';
+import type { MemberRespDto } from './MemberRespDto';
 
-export type NotificationDto = {
-    id?: number;
+export type NotificationRespDto = {
+    id: number;
     title?: string;
     content?: string;
-    createdAt?: string;
+    createdAt: string;
     viewedAt?: string;
-    sender?: MemberResponseDto;
-    receiver?: MemberResponseDto;
+    sender?: MemberRespDto;
+    receiver?: MemberRespDto;
     comment?: CommentRespDto;
 };
-
