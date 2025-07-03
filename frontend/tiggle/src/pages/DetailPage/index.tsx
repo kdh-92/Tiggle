@@ -98,7 +98,7 @@ const DetailPage = () => {
         </div>
 
         <div className="comment-cards">
-          {commentsData?.content?.map(comment => (
+          {commentsData?.comments?.map(comment => (
             <CommentCell {...comment} key={`comment-cell-${comment.id}`} />
           ))}
         </div>
