@@ -43,17 +43,14 @@ class TransactionServiceImpl(
 //            savePath = Paths.get(uploadedFilePath)
 //            dto.imageUrl = uploadedFilePath
 
-            val memberDto = memberService.getMember(memberId)
-            val member = memberDto.toEntity()
-
-            val categoryDto = categoryService.getCategory(dto.categoryId)
-            val category = categoryDto.toEntity()
+            val member = memberService.getMemberReference(memberId)
+            val category = categoryService.getCategoryReference(dto.categoryId)
 
             val tx = transactionRepository.save(
                 dto.toEntity(member, category)
             )
 
-            return TransactionRespDto.fromEntity(tx, memberDto, categoryDto)
+            return TransactionRespDto.fromEntity(tx)
         } catch (e: Exception) {
 //            if (savePath != null) {
 //                Files.deleteIfExists(savePath)

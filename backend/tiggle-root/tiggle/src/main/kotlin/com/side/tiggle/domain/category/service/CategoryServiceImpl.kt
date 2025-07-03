@@ -61,4 +61,17 @@ class CategoryServiceImpl(
 
         categoryRepository.save(category)
     }
+
+    /**
+     * 거래(transaction) 생성 시 연관관계 설정을 위한
+     * Category 프록시 객체를 반환합니다.
+     *
+     * @param categoryId 카테고리 ID
+     * @return Category 프록시 객체 (실제 DB 조회 없이 연관관계 설정용)
+     * @since 2025-07-04
+     * @author 양병학
+     */
+    override fun getCategoryReference(categoryId: Long): Category {
+        return categoryRepository.getReferenceById(categoryId)
+    }
 }

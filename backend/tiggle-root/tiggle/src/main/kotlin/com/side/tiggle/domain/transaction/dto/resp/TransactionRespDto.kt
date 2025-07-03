@@ -20,21 +20,6 @@ data class TransactionRespDto(
     val reason: String,
 ) {
     companion object {
-        fun fromEntity(tx: Transaction, member: MemberRespDto, category: CategoryRespDto): TransactionRespDto {
-            return TransactionRespDto(
-                id = tx.id!!,
-                member = member,
-                category = category,
-                imageUrl = tx.imageUrl,
-                amount = tx.amount,
-                date = tx.date,
-                content = tx.content,
-                reason = tx.reason,
-                createdAt = tx.createdAt!!,
-                tagNames = tx.tagNames
-            )
-        }
-
         fun fromEntity(tx: Transaction): TransactionRespDto {
             return TransactionRespDto(
                 id = tx.id!!,

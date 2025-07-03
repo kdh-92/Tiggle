@@ -19,4 +19,6 @@ interface CategoryService {
     fun updateCategory(id: Long, dto: CategoryUpdateReqDto): CategoryRespDto
 
     fun deleteCategory(categoryId: Long)
+
+    fun getCategoryReference(categoryId: Long): Category
 }
