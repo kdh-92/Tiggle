@@ -37,7 +37,7 @@ export default function TransactionCells({ data }: TransactionCellsProps) {
             [...Array(4)].map((_, i) => <TransactionCellSkeleton key={i} />)}
           {!isLoading &&
             !isError &&
-            data?.map(el => {
+            data?.transactions?.map(el => {
               return <TransactionCell key={el.id} {...el} />;
             })}
           {isError && <p>An error occurred.</p>}

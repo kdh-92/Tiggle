@@ -105,7 +105,7 @@ const CategorySettingPage = ({}: CategorySettingPageProps) => {
       {isLoading && <Loading />}
       {!isLoading && categoriesData && (
         <SettingForm
-          data={categoriesData.map(({ id, name }) => ({
+          data={categoriesData.categories?.map(({ id, name }) => ({
             sid: id!,
             name: name!,
           }))}

@@ -78,7 +78,11 @@ function CreateForm({
   //   [assetsData],
   // );
   const categories = useMemo(
-    () => categoriesData?.map(({ name, id }) => ({ value: id, label: name })),
+    () =>
+      categoriesData?.categories?.map(({ name, id }) => ({
+        value: id,
+        label: name,
+      })),
     [categoriesData],
   );
   const tags = useMemo(
