@@ -9,6 +9,7 @@ import com.side.tiggle.domain.comment.exception.CommentException
 import com.side.tiggle.domain.comment.exception.error.CommentErrorCode
 import com.side.tiggle.domain.comment.model.Comment
 import com.side.tiggle.domain.comment.repository.CommentRepository
+import com.side.tiggle.domain.member.service.MemberService
 import com.side.tiggle.domain.notification.service.NotificationService
 import com.side.tiggle.domain.transaction.dto.internal.TransactionInfo
 import org.springframework.data.domain.Page
@@ -21,6 +22,7 @@ import org.springframework.stereotype.Service
 class CommentServiceImpl(
     private val commentRepository: CommentRepository,
     private val notificationService: NotificationService,
+    private val memberService: MemberService
 ) : CommentService {
 
     override fun getParentCount(txId: Long): Int {
@@ -59,7 +61,11 @@ class CommentServiceImpl(
 
     override fun createComment(memberId: Long, tx: TransactionInfo, commentDto: CommentCreateReqDto): CommentRespDto {
         val parentComment = commentDto.parentId?.let { findParentCommentOrThrow(commentDto.parentId) }
-        val comment: Comment = commentDto.toEntity(memberId, tx.memberId)
+
+        val sender = memberService.getMemberReference(memberId)
+        val receiver = memberService.getMemberReference(tx.memberId)
+
+        val comment: Comment = commentDto.toEntity(sender, receiver)
         val savedComment = commentRepository.save(comment)
 
         notificationService.sendCommentNotification(savedComment, parentComment, tx, memberId)

@@ -80,5 +80,20 @@ class MemberServiceImpl(
             .orElseThrow { MemberException(MemberErrorCode.MEMBER_NOT_FOUND) }
         return member
     }
+
+    /**
+     * 댓글 생성 시 연관관계 설정을 위한 Member 프록시 객체를 반환합니다.
+     *
+     * 실제 Member 엔티티를 조회하지 않고 JPA 프록시 객체만 생성하여
+     * 연관관계 설정 시 성능을 최적화합니다.
+     *
+     * @param memberId 회원 ID
+     * @return Member 프록시 객체 (실제 DB 조회 없이 연관관계 설정용)
+     * @since 2025-07-04
+     * @author 양병학
+     */
+    override fun getMemberReference(memberId: Long): Member {
+        return memberRepository.getReferenceById(memberId)
+    }
 }
 

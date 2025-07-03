@@ -19,4 +19,6 @@ interface MemberService {
     fun getAllMember(): MemberListRespDto
 
     fun updateMember(memberId: Long, memberUpdateReqDto: MemberUpdateReqDto, file: MultipartFile?): MemberRespDto
+
+    fun getMemberReference(memberId: Long): Member
 }

@@ -1,6 +1,7 @@
 package com.side.tiggle.domain.comment.dto.req
 
 import com.side.tiggle.domain.comment.model.Comment
+import com.side.tiggle.domain.member.model.Member
 import jakarta.validation.constraints.Min
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.NotNull
@@ -18,12 +19,13 @@ data class CommentCreateReqDto(
     @field:Size(max = 255, message = "댓글 내용은 255자 이하여야 합니다")
     val content: String
 ) {
-    fun toEntity(senderId: Long, receiverId: Long): Comment {
+    fun toEntity(sender: Member, receiver: Member): Comment {
         return Comment(
             txId = txId,
-            receiverId = receiverId,
-            senderId = senderId,
-            content = content
+            sender = sender,
+            receiver = receiver,
+            content = content,
+            parentId = parentId
         )
     }
 }
