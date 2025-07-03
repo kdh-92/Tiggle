@@ -20,6 +20,9 @@ import org.springframework.data.domain.Sort
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.multipart.MultipartFile
+import java.nio.file.Files
+import java.nio.file.Path
+import java.nio.file.Paths
 import java.time.LocalDate
 
 @Service
@@ -37,11 +40,11 @@ class TransactionServiceImpl(
         dto: TransactionCreateReqDto,
         file: MultipartFile?
     ): TransactionRespDto {
-//        var savePath: Path? = null
+        var savePath: Path? = null
         try {
-//            val uploadedFilePath = transactionFileUploadUtil.uploadTransactionImage(file)
-//            savePath = Paths.get(uploadedFilePath)
-//            dto.imageUrl = uploadedFilePath
+            val uploadedFilePath = transactionFileUploadUtil.uploadTransactionImage(file)
+            savePath = Paths.get(uploadedFilePath)
+            dto.imageUrl = uploadedFilePath
 
             val member = memberService.getMemberReference(memberId)
             val category = categoryService.getCategoryReference(dto.categoryId)
@@ -52,10 +55,10 @@ class TransactionServiceImpl(
 
             return TransactionRespDto.fromEntity(tx)
         } catch (e: Exception) {
-//            if (savePath != null) {
-//                Files.deleteIfExists(savePath)
-//            }
-//            transactionFileUploadUtil.deleteEmptyDateFolder()
+            if (savePath != null) {
+                Files.deleteIfExists(savePath)
+            }
+            transactionFileUploadUtil.deleteEmptyDateFolder()
             throw e
         }
     }

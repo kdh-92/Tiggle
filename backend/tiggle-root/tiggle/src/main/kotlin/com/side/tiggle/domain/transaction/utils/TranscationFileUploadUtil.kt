@@ -40,7 +40,7 @@ class TransactionFileUploadUtil {
         }
     }
 
-    fun uploadTransactionImage(file: MultipartFile): String {
+    fun uploadTransactionImage(file: MultipartFile?): String {
         validateFile(file)
         val extension = validateFileNameAndGetExtension(file)
 
@@ -52,7 +52,7 @@ class TransactionFileUploadUtil {
         val savePath = Paths.get(saveName)
 
         try {
-            file.transferTo(savePath)
+            file?.transferTo(savePath)
         } catch (e: Exception) {
             throw IllegalStateException("파일 저장 중 오류가 발생했습니다: ${e.message}", e)
         }
@@ -60,7 +60,11 @@ class TransactionFileUploadUtil {
         return saveName
     }
 
-    private fun validateFileNameAndGetExtension(file: MultipartFile): String {
+    private fun validateFileNameAndGetExtension(file: MultipartFile?): String {
+        if (file == null) {
+            throw IllegalArgumentException("파일이 없습니다")
+        }
+
         val originalName: String = file.originalFilename ?: throw IllegalArgumentException("파일명이 없습니다")
 
         val extension = originalName.substringAfterLast('.', "")
@@ -76,7 +80,11 @@ class TransactionFileUploadUtil {
         return extension.lowercase()
     }
 
-    private fun validateFile(file: MultipartFile) {
+    private fun validateFile(file: MultipartFile?) {
+        if (file == null) {
+            throw IllegalArgumentException("파일이 없습니다")
+        }
+
         if (!allowedTypes.contains(file.contentType)) {
             throw TransactionException(TransactionErrorCode.INVALID_FILE_TYPE)
         }
