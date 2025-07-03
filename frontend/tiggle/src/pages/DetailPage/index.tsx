@@ -72,7 +72,11 @@ const DetailPage = () => {
         <DetailPageContentStyle>
           <div className="image">
             <img
-              src={transactionData.imageUrl ?? "/assets/img-placeholder.png"}
+              src={
+                transactionData.imageUrl
+                  ? `${import.meta.env.VITE_API_URL}${transactionData.imageUrl}`
+                  : "/assets/img-placeholder.png"
+              }
               alt={transactionData.content}
             />
           </div>
