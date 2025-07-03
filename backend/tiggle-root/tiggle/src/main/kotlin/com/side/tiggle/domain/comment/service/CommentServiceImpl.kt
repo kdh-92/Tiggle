@@ -29,13 +29,15 @@ class CommentServiceImpl(
 
     override fun getParentsByTxId(txId: Long, page: Int, size: Int): CommentPageRespDto {
         val pageable: Pageable = PageRequest.of(page, size, Sort.Direction.DESC, "id")
-        val pageComment = commentRepository.findAllByTxIdAndParentIdNull(txId, pageable)
+        val pageComment = commentRepository.findByTxIdAndParentIdNullWithSender(txId, pageable)
+
         return toCommentPageRespDto(pageComment)
     }
 
     override fun getChildrenByParentId(parentId: Long, page: Int, size: Int): CommentPageRespDto {
         val pageable: Pageable = PageRequest.of(page, size, Sort.Direction.DESC, "id")
-        val pageComment = commentRepository.findAllByParentId(parentId, pageable)
+        val pageComment = commentRepository.findByParentIdWithSender(parentId, pageable)
+
         return toCommentPageRespDto(pageComment)
     }
 
@@ -66,10 +68,10 @@ class CommentServiceImpl(
     }
 
     override fun updateComment(memberId: Long, commentId: Long, dto: CommentUpdateReqDto): CommentRespDto {
-        val comment = commentRepository.findById(commentId)
-            .orElseThrow { CommentException(CommentErrorCode.COMMENT_NOT_FOUND) }
+        val comment = commentRepository.findByIdWithSender(commentId)
+            ?: throw CommentException(CommentErrorCode.COMMENT_NOT_FOUND)
 
-        if (comment.senderId != memberId) {
+        if (comment.sender.id != memberId) {
             throw CommentException(CommentErrorCode.COMMENT_ACCESS_DENIED)
         }
 
@@ -80,10 +82,10 @@ class CommentServiceImpl(
     }
 
     override fun deleteComment(memberId: Long, commentId: Long) {
-        val comment = commentRepository.findById(commentId)
-            .orElseThrow { CommentException(CommentErrorCode.COMMENT_NOT_FOUND) }
+        val comment = commentRepository.findByIdWithSender(commentId)
+            ?: throw CommentException(CommentErrorCode.COMMENT_NOT_FOUND)
 
-        if (comment.senderId != memberId) {
+        if (comment.sender.id != memberId) {
             throw CommentException(CommentErrorCode.COMMENT_ACCESS_DENIED)
         }
 
@@ -95,7 +97,7 @@ class CommentServiceImpl(
     }
 
     private fun findParentCommentOrThrow(parentId: Long): Comment {
-        return commentRepository.findById(parentId)
-            .orElseThrow { CommentException(CommentErrorCode.COMMENT_NOT_FOUND) }
+        return commentRepository.findByIdWithSender(parentId)
+            ?: throw CommentException(CommentErrorCode.COMMENT_NOT_FOUND)
     }
 }
