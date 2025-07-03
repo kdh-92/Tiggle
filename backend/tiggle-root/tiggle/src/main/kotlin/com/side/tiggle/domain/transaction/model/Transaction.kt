@@ -1,5 +1,6 @@
 package com.side.tiggle.domain.transaction.model
 
+import com.side.tiggle.domain.category.model.Category
 import com.side.tiggle.domain.member.model.Member
 import com.side.tiggle.global.common.model.BaseEntity
 import jakarta.persistence.*
@@ -17,7 +18,9 @@ class Transaction(
     @JoinColumn(name = "member_id")
     val member: Member,
 
-    val categoryId: Long,
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id")
+    val category: Category,
 
     @Column(length = 1000)
     val imageUrl: String? = null,

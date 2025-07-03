@@ -19,7 +19,7 @@ data class TransactionInfo(
             return TransactionInfo(
                 id = transaction.id!!,
                 memberId = transaction.member.id!!,
-                categoryId = transaction.categoryId,
+                categoryId = transaction.category.id!!,
                 imageUrl = transaction.imageUrl,
                 amount = transaction.amount,
                 date = transaction.date,

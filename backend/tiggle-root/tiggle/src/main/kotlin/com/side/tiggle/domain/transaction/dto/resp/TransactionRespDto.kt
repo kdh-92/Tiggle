@@ -1,5 +1,6 @@
 package com.side.tiggle.domain.transaction.dto.resp
 
+import com.side.tiggle.domain.category.dto.resp.CategoryRespDto
 import com.side.tiggle.domain.member.dto.resp.MemberRespDto
 import com.side.tiggle.domain.transaction.model.Transaction
 import java.time.LocalDate
@@ -8,7 +9,7 @@ import java.time.LocalDateTime
 data class TransactionRespDto(
     val id: Long,
     val member: MemberRespDto,
-    val categoryId: Long,
+    val category: CategoryRespDto,
     val tagNames: List<String>?,
     val createdAt: LocalDateTime,
     val parentId: Long? = null,
@@ -19,11 +20,11 @@ data class TransactionRespDto(
     val reason: String,
 ) {
     companion object {
-        fun fromEntity(tx: Transaction, member: MemberRespDto): TransactionRespDto {
+        fun fromEntity(tx: Transaction, member: MemberRespDto, category: CategoryRespDto): TransactionRespDto {
             return TransactionRespDto(
                 id = tx.id!!,
                 member = member,
-                categoryId = tx.categoryId,
+                category = category,
                 imageUrl = tx.imageUrl,
                 amount = tx.amount,
                 date = tx.date,
@@ -38,7 +39,7 @@ data class TransactionRespDto(
             return TransactionRespDto(
                 id = tx.id!!,
                 member = MemberRespDto.fromEntity(tx.member),
-                categoryId = tx.categoryId,
+                category = CategoryRespDto.fromEntity(tx.category),
                 imageUrl = tx.imageUrl,
                 amount = tx.amount,
                 date = tx.date,

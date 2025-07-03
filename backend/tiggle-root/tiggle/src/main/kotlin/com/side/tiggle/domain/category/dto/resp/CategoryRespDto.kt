@@ -24,4 +24,12 @@ data class CategoryRespDto(
             }
         }
     }
+
+    fun toEntity(): Category {
+        return Category(
+            name = this.name,
+            defaults = this.defaults,
+            memberId = 0
+        ).apply { id = this@CategoryRespDto.id }
+    }
 }

@@ -12,6 +12,8 @@ interface CategoryService {
 
     fun getCategory(categoryId: Long): CategoryRespDto
 
+    fun getCategoryEntity(categoryId: Long): Category
+
     fun getCategoryByMemberIdOrDefaults(memberId: Long): CategoryListRespDto
 
     fun updateCategory(id: Long, dto: CategoryUpdateReqDto): CategoryRespDto
