@@ -3,10 +3,13 @@
 /* tslint:disable */
 /* eslint-disable */
 
+import type { CategoryRespDto } from './CategoryRespDto';
+import type { MemberRespDto } from './MemberRespDto';
+
 export type TransactionRespDto = {
     id: number;
-    memberId: number;
-    categoryId: number;
+    member: MemberRespDto;
+    category: CategoryRespDto;
     tagNames?: Array<string>;
     createdAt: string;
     parentId?: number;

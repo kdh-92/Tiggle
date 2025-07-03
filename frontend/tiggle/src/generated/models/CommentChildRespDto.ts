@@ -3,13 +3,15 @@
 /* tslint:disable */
 /* eslint-disable */
 
+import type { MemberInfo } from './MemberInfo';
+
 export type CommentChildRespDto = {
     id: number;
     txId: number;
     parentId?: number;
     content: string;
     createdAt: string;
-    senderId: number;
-    receiverId: number;
     childCommentCount: number;
+    sender: MemberInfo;
+    receiver: MemberInfo;
 };

@@ -17,6 +17,7 @@ export type { CommentPageRespDto } from './models/CommentPageRespDto';
 export type { CommentRespDto } from './models/CommentRespDto';
 export type { CommentUpdateReqDto } from './models/CommentUpdateReqDto';
 export type { MemberCreateReqDto } from './models/MemberCreateReqDto';
+export type { MemberInfo } from './models/MemberInfo';
 export type { MemberListRespDto } from './models/MemberListRespDto';
 export type { MemberRespDto } from './models/MemberRespDto';
 export type { MemberUpdateReqDto } from './models/MemberUpdateReqDto';
