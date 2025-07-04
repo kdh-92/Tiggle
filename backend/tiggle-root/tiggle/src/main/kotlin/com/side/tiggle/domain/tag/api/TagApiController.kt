@@ -5,10 +5,14 @@ import com.side.tiggle.domain.tag.dto.req.TagUpdateReqDto
 import com.side.tiggle.domain.tag.dto.resp.TagRespDto
 import com.side.tiggle.domain.tag.service.TagService
 import com.side.tiggle.global.common.ApiResponse
+import jakarta.validation.Valid
+import jakarta.validation.constraints.Min
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
 
+@Validated
 @RestController
 @RequestMapping("/api/v1/tag")
 class TagApiController(
@@ -17,7 +21,7 @@ class TagApiController(
 
     @PostMapping
     fun createTag(
-        @RequestBody createReqDto: TagCreateReqDto
+        @RequestBody @Valid createReqDto: TagCreateReqDto
     ): ResponseEntity<ApiResponse<TagRespDto>> {
         val tag = tagService.createTag(createReqDto)
         return ResponseEntity
@@ -27,7 +31,7 @@ class TagApiController(
 
     @GetMapping("/{id}")
     fun getTag(
-        @PathVariable("id") tagId: Long
+        @PathVariable("id") @Min(1) tagId: Long
     ): ResponseEntity<ApiResponse<TagRespDto>> {
         val tag = tagService.getTag(tagId)
         return ResponseEntity
@@ -43,8 +47,8 @@ class TagApiController(
 
     @PutMapping("/{id}")
     fun updateTag(
-        @PathVariable("id") tagId: Long,
-        @RequestBody updateReqDto: TagUpdateReqDto
+        @PathVariable("id") @Min(1) tagId: Long,
+        @RequestBody @Valid updateReqDto: TagUpdateReqDto
     ): ResponseEntity<ApiResponse<TagRespDto>> {
         val tag = tagService.updateTag(tagId, updateReqDto)
         return ResponseEntity

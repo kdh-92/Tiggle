@@ -1,10 +1,10 @@
 package com.side.tiggle.domain.transaction.model
 
 import com.side.tiggle.global.common.model.BaseEntity
-import org.hibernate.annotations.SQLDelete
-import java.time.LocalDate
 import jakarta.persistence.*
+import org.hibernate.annotations.SQLDelete
 import org.hibernate.annotations.SQLRestriction
+import java.time.LocalDate
 
 
 @Entity
@@ -14,10 +14,20 @@ import org.hibernate.annotations.SQLRestriction
 class Transaction(
     val memberId: Long,
     val categoryId: Long,
+
+    @Column(length = 1000)
     val imageUrl: String? = null,
+
+    @Column(nullable = false)
     var amount: Int,
+
+    @Column(nullable = false)
     var date: LocalDate,
+
+    @Column(nullable = false, length = 20)
     var content: String,
+
+    @Column(nullable = false, length = 300)
     var reason: String,
 
     @Convert(converter = TagNamesConverter::class)

@@ -11,8 +11,11 @@ import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import io.swagger.v3.oas.annotations.tags.Tag
+import jakarta.validation.Valid
+import jakarta.validation.constraints.Min
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -22,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestHeader
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
+@Validated
 @Tag(name = "Reaction API")
 @RestController
 @RequestMapping("/api/v1/transaction/{id}/reaction")
@@ -36,7 +40,8 @@ class ReactionApiController(
     fun getReaction(
         @Parameter(hidden = true)
         @RequestHeader(name = HttpHeaders.MEMBER_ID) senderId: Long,
-        @PathVariable(name = "id") txId: Long
+        @PathVariable(name = "id") @Min(1) txId: Long
+//    ): ResponseEntity<ReactionRespDto> {
     ): ResponseEntity<out Any?> {
         val reaction = reactionService.getReaction(txId, senderId) ?: return ResponseEntity.noContent().build()
         return ResponseEntity
@@ -46,7 +51,7 @@ class ReactionApiController(
     @Operation(description = "해당 tx의 전체 reaction과 comment의 수를 조회")
     @GetMapping("/summary")
     fun getReactionSummary(
-        @PathVariable(name = "id") txId: Long
+        @PathVariable(name = "id") @Min(1) txId: Long
     ): ResponseEntity<ApiResponse<ReactionSummaryRespDto>> {
         val reactionSummary = reactionService.getReactionSummaryDto(txId)
         return ResponseEntity
@@ -57,8 +62,8 @@ class ReactionApiController(
     @PostMapping
     fun upsertReaction(
         @Parameter(hidden = true) @RequestHeader(name = HttpHeaders.MEMBER_ID) senderId: Long,
-        @PathVariable(name = "id") txId: Long,
-        @RequestBody createReqDto: ReactionCreateReqDto
+        @PathVariable(name = "id") @Min(1) txId: Long,
+        @RequestBody @Valid createReqDto: ReactionCreateReqDto
     ): ResponseEntity<ApiResponse<ReactionRespDto>> {
         val tx = transactionService.getTransactionOrThrow(txId)
         val reaction = reactionService.upsertReaction(txId, senderId, tx.memberId, createReqDto)
@@ -71,7 +76,7 @@ class ReactionApiController(
     @DeleteMapping
     fun deleteReaction(
         @Parameter(hidden = true) @RequestHeader(name = HttpHeaders.MEMBER_ID) senderId: Long,
-        @PathVariable(name = "id") txId: Long
+        @PathVariable(name = "id") @Min(1) txId: Long
     ): ResponseEntity<ApiResponse<Nothing>> {
         reactionService.deleteReaction(txId, senderId)
         return ResponseEntity
