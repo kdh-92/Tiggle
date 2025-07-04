@@ -15,11 +15,11 @@ class Comment(
     val txId: Long,
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "sender_id", insertable = false, updatable = false)
+    @JoinColumn(name = "sender_id")
     val sender: Member,
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "receiver_id", insertable = false, updatable = false)
+    @JoinColumn(name = "receiver_id")
     val receiver: Member,
 
     @Column(name = "content", nullable = false)
