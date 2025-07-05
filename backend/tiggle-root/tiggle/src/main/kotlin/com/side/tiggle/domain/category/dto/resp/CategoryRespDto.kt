@@ -7,6 +7,7 @@ data class CategoryRespDto(
     val name: String,
     val defaults: Boolean
 ) {
+
     companion object {
         fun fromEntity(category: Category?): CategoryRespDto {
             return when {

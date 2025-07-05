@@ -3,7 +3,6 @@ package com.side.tiggle.domain.category.api
 import com.side.tiggle.domain.category.dto.req.CategoryCreateReqDto
 import com.side.tiggle.domain.category.dto.req.CategoryUpdateReqDto
 import com.side.tiggle.domain.category.dto.resp.CategoryListRespDto
-import com.side.tiggle.domain.category.dto.resp.CategoryRespDto
 import com.side.tiggle.domain.category.service.CategoryService
 import com.side.tiggle.global.common.ApiResponse
 import org.springframework.http.HttpStatus
@@ -25,11 +24,11 @@ class CategoryApiController(
     fun createCategory(
         @RequestBody @Valid categoryCreateReqDto: CategoryCreateReqDto,
         @RequestHeader(name = HttpHeaders.MEMBER_ID) memberId: Long
-    ): ResponseEntity<ApiResponse<CategoryRespDto>> {
-        val createdCategory = categoryService.createCategory(categoryCreateReqDto, memberId)
+    ): ResponseEntity<ApiResponse<Nothing>> {
+        categoryService.createCategory(categoryCreateReqDto, memberId)
         return ResponseEntity
             .status(HttpStatus.CREATED)
-            .body(ApiResponse.success(createdCategory))
+            .body(ApiResponse.success(null, message = "카테고리가 생성되었습니다."))
     }
 
     @GetMapping()
@@ -45,10 +44,10 @@ class CategoryApiController(
     fun updateCategory(
         @PathVariable("id") @Min(1) categoryId: Long,
         @RequestBody @Valid dto: CategoryUpdateReqDto
-    ): ResponseEntity<ApiResponse<CategoryRespDto>> {
-        val updatedCategory = categoryService.updateCategory(categoryId, dto)
+    ): ResponseEntity<ApiResponse<Nothing>> {
+        categoryService.updateCategory(categoryId, dto)
         return ResponseEntity
-            .ok(ApiResponse.success(updatedCategory))
+            .ok(ApiResponse.success(null, message = "카테고리가 수정되었습니다."))
     }
 
     @DeleteMapping("/{id}")
@@ -57,6 +56,6 @@ class CategoryApiController(
     ): ResponseEntity<ApiResponse<Nothing>> {
         categoryService.deleteCategory(categoryId)
         return ResponseEntity
-            .ok(ApiResponse.success(null))
+            .ok(ApiResponse.success(null, message = "카테고리가 삭제되었습니다."))
     }
 }

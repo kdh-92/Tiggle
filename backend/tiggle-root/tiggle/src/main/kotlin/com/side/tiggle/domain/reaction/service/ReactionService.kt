@@ -8,17 +8,13 @@ import com.side.tiggle.domain.reaction.model.ReactionType
 interface ReactionService {
 
     fun getReaction(txId: Long, senderId: Long): ReactionRespDto?
-
     fun getReactionCount(txId: Long, type: ReactionType): Int
-
     fun upsertReaction(
         txId: Long,
         senderId: Long,
         receiverId: Long,
         dto: ReactionCreateReqDto
-    ): ReactionRespDto
-
+    )
     fun deleteReaction(txId: Long, senderId: Long)
-
     fun getReactionSummaryDto(txId: Long): ReactionSummaryRespDto
 }

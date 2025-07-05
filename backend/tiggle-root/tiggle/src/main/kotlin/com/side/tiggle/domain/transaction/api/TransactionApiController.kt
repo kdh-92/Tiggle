@@ -41,11 +41,11 @@ class TransactionApiController(
         @RequestHeader(name = HttpHeaders.MEMBER_ID) memberId: Long,
         @RequestPart @Valid dto: TransactionCreateReqDto,
         @RequestPart(value = "multipartFile", required = false) file: MultipartFile?
-    ): ResponseEntity<ApiResponse<TransactionRespDto>> {
-        val tx = transactionService.createTransaction(memberId, dto, file)
+    ): ResponseEntity<ApiResponse<Nothing>> {
+        transactionService.createTransaction(memberId, dto, file)
         return ResponseEntity
             .status(HttpStatus.CREATED)
-            .body(ApiResponse.success(tx, message = "거래가 생성되었습니다."))
+            .body(ApiResponse.success(null, message = "거래가 생성되었습니다."))
     }
 
     @Operation(summary = "tx 상세 조회", description = "tx의 id에 대한 상세 정보를 반환합니다.", responses = [SwaggerApiResponse(responseCode = "200", description = "tx 상세 조회 성공"), SwaggerApiResponse(responseCode = "400", description = "존재하지 않는 리소스 접근")])
@@ -123,11 +123,11 @@ class TransactionApiController(
         @RequestHeader(name = HttpHeaders.MEMBER_ID) memberId: Long,
         @PathVariable("id") @Min(1) transactionId: Long,
         @RequestBody @Valid dto: TransactionUpdateReqDto
-    ): ResponseEntity<ApiResponse<TransactionRespDto>> {
-        val tx = transactionService.updateTransaction(memberId, transactionId, dto)
+    ): ResponseEntity<ApiResponse<Nothing>> {
+        transactionService.updateTransaction(memberId, transactionId, dto)
 
         return ResponseEntity
-            .ok(ApiResponse.success(tx))
+            .ok(ApiResponse.success(null, message = "거래가 수정되었습니다."))
     }
 
     @DeleteMapping("/{id}")

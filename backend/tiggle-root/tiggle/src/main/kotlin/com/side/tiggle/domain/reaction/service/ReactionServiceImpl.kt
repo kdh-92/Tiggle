@@ -30,7 +30,7 @@ class ReactionServiceImpl(
         senderId: Long,
         receiverId: Long,
         dto: ReactionCreateReqDto
-    ): ReactionRespDto {
+    ) {
         val reaction = (reactionRepository.findByTxIdAndSenderId(txId, senderId)
             ?: Reaction(
                 txId = txId,
@@ -41,7 +41,8 @@ class ReactionServiceImpl(
                 ).apply {
                 type = dto.type
             }
-        return ReactionRespDto.fromEntity(reactionRepository.save(reaction))
+
+        reactionRepository.save(reaction)
     }
 
     @Transactional

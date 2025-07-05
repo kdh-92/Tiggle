@@ -64,12 +64,12 @@ class ReactionApiController(
         @Parameter(hidden = true) @RequestHeader(name = HttpHeaders.MEMBER_ID) senderId: Long,
         @PathVariable(name = "id") @Min(1) txId: Long,
         @RequestBody @Valid createReqDto: ReactionCreateReqDto
-    ): ResponseEntity<ApiResponse<ReactionRespDto>> {
+    ): ResponseEntity<ApiResponse<Nothing>> {
         val tx = transactionService.getTransactionOrThrow(txId)
-        val reaction = reactionService.upsertReaction(txId, senderId, tx.memberId, createReqDto)
+        reactionService.upsertReaction(txId, senderId, tx.memberId, createReqDto)
         return ResponseEntity
             .status(HttpStatus.CREATED)
-            .body(ApiResponse.success(reaction))
+            .body(ApiResponse.success(null, message = "반응이 생성/수정되었습니다."))
     }
 
     @Operation(description = "Reaction을 제거", security = [SecurityRequirement(name = "bearer-key")])
@@ -80,6 +80,6 @@ class ReactionApiController(
     ): ResponseEntity<ApiResponse<Nothing>> {
         reactionService.deleteReaction(txId, senderId)
         return ResponseEntity
-            .ok(ApiResponse.success(null, message = "반응 삭제 성공"))
+            .ok(ApiResponse.success(null, message = "반응이 삭제되었습니다."))
     }
 }

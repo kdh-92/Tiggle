@@ -22,11 +22,11 @@ class TagApiController(
     @PostMapping
     fun createTag(
         @RequestBody @Valid createReqDto: TagCreateReqDto
-    ): ResponseEntity<ApiResponse<TagRespDto>> {
-        val tag = tagService.createTag(createReqDto)
+    ): ResponseEntity<ApiResponse<Nothing>> {
+        tagService.createTag(createReqDto)
         return ResponseEntity
             .status(HttpStatus.CREATED)
-            .body(ApiResponse.success(tag))
+            .body(ApiResponse.success(null, message = "태그가 생성되었습니다."))
     }
 
     @GetMapping("/{id}")
@@ -49,9 +49,9 @@ class TagApiController(
     fun updateTag(
         @PathVariable("id") @Min(1) tagId: Long,
         @RequestBody @Valid updateReqDto: TagUpdateReqDto
-    ): ResponseEntity<ApiResponse<TagRespDto>> {
-        val tag = tagService.updateTag(tagId, updateReqDto)
+    ): ResponseEntity<ApiResponse<Nothing>> {
+        tagService.updateTag(tagId, updateReqDto)
         return ResponseEntity
-            .ok(ApiResponse.success(tag))
+            .ok(ApiResponse.success(null, message = "태그가 수정되었습니다."))
     }
 }

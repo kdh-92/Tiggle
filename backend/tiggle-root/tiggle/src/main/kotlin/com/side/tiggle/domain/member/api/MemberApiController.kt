@@ -29,11 +29,11 @@ class MemberApiController(
     @PostMapping
     fun createMember(
         @RequestBody @Valid memberCreateReqDto: MemberCreateReqDto
-    ): ResponseEntity<ApiResponse<MemberRespDto>> {
-        val respDto = memberService.createMember(memberCreateReqDto)
+    ): ResponseEntity<ApiResponse<Nothing>> {
+        memberService.createMember(memberCreateReqDto)
         return ResponseEntity
             .status(HttpStatus.CREATED)
-            .body(ApiResponse.success(respDto))
+            .body(ApiResponse.success(null, message = "멤버가 생성되었습니다."))
     }
 
     @GetMapping("/{id}")
@@ -72,10 +72,10 @@ class MemberApiController(
         @RequestHeader(name = HttpHeaders.MEMBER_ID) memberId: Long,
         @RequestPart(required = false) @Valid dto: MemberUpdateReqDto,
         @RequestPart("multipartFile", required = false) file: MultipartFile?
-    ): ResponseEntity<ApiResponse<MemberRespDto>> {
-        val updatedMember = memberService.updateMember(memberId, dto, file)
+    ): ResponseEntity<ApiResponse<Nothing>> {
+        memberService.updateMember(memberId, dto, file)
         return ResponseEntity
-            .ok(ApiResponse.success(updatedMember))
+            .ok(ApiResponse.success(null, message = "멤버 정보가 수정되었습니다."))
     }
 
 //    @DeleteMapping("/{id}")

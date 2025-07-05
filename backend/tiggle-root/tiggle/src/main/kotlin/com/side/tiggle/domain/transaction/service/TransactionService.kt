@@ -11,18 +11,12 @@ import java.time.LocalDate
 
 interface TransactionService {
 
-    fun createTransaction(memberId: Long, dto: TransactionCreateReqDto, file: MultipartFile?): TransactionRespDto
-
-    fun updateTransaction(memberId: Long, transactionId: Long, dto: TransactionUpdateReqDto): TransactionRespDto
-
+    fun createTransaction(memberId: Long, dto: TransactionCreateReqDto, file: MultipartFile?)
+    fun updateTransaction(memberId: Long, transactionId: Long, dto: TransactionUpdateReqDto)
     fun deleteTransaction(memberId: Long, txId: Long)
-
     fun getTransactionDetail(id: Long): TransactionRespDto
-
     fun getTransactionOrThrow(transactionId: Long): TransactionInfo
-
     fun getCountOffsetTransaction(pageSize: Int, index: Int): TransactionPageRespDto
-
     fun getMemberCountOffsetTransaction(
         memberId: Long,
         count: Int,
@@ -32,6 +26,5 @@ interface TransactionService {
         categoryIds: List<Long>?,
         tagNames: List<String>?
     ): TransactionPageRespDto
-
     fun getAllUndeletedTransaction(): TransactionListRespDto
 }

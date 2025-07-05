@@ -45,12 +45,12 @@ class CommentApiController(
     fun createComment(
         @Parameter(hidden = true) @RequestHeader(name = HttpHeaders.MEMBER_ID) memberId: Long,
         @RequestBody @Valid commentDto: CommentCreateReqDto
-    ): ResponseEntity<ApiResponse<CommentRespDto>> {
+    ): ResponseEntity<ApiResponse<Nothing>> {
         val tx = transactionService.getTransactionOrThrow(commentDto.txId)
-        val createComment = commentService.createComment(memberId, tx, commentDto)
+        commentService.createComment(memberId, tx, commentDto)
         return ResponseEntity
             .status(HttpStatus.CREATED)
-            .body(ApiResponse.success(createComment))
+            .body(ApiResponse.success(null, message = "댓글이 생성되었습니다."))
     }
 
     @PutMapping("/{id}")
@@ -60,10 +60,10 @@ class CommentApiController(
         @RequestHeader(name = HttpHeaders.MEMBER_ID) memberId: Long,
         @PathVariable("id") @Min(1) commentId: Long,
         @RequestBody @Valid dto: CommentUpdateReqDto
-    ): ResponseEntity<ApiResponse<CommentRespDto>> {
-        val respDto = commentService.updateComment(memberId, commentId, dto)
+    ): ResponseEntity<ApiResponse<Nothing>> {
+        commentService.updateComment(memberId, commentId, dto)
         return ResponseEntity
-            .ok(ApiResponse.success(respDto))
+            .ok(ApiResponse.success(null, message = "댓글이 수정되었습니다."))
     }
 
     @DeleteMapping("/{id}")
@@ -74,7 +74,7 @@ class CommentApiController(
     ): ResponseEntity<ApiResponse<Nothing>> {
         commentService.deleteComment(memberId, commentId)
         return ResponseEntity
-            .ok(ApiResponse.success(null))
+            .ok(ApiResponse.success(null, message = "댓글이 삭제되었습니다."))
     }
 
     @GetMapping("/{id}/comments")
