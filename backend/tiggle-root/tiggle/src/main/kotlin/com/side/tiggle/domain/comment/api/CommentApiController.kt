@@ -6,6 +6,7 @@ import com.side.tiggle.domain.comment.dto.resp.CommentPageRespDto
 import com.side.tiggle.domain.comment.dto.resp.CommentRespDto
 import com.side.tiggle.domain.comment.service.CommentService
 import com.side.tiggle.domain.transaction.service.TransactionService
+import com.side.tiggle.global.common.ApiResponse
 import com.side.tiggle.global.common.constants.HttpHeaders
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
@@ -33,9 +34,10 @@ class CommentApiController(
         @PathVariable @Min(1) id: Long,
         @RequestParam(name = "index", defaultValue = "0") @Min(0) page: Int,
         @RequestParam(name = "pageSize", defaultValue = "5") @Min(1) @Max(100) size: Int
-    ): ResponseEntity<CommentPageRespDto> {
+    ): ResponseEntity<ApiResponse<CommentPageRespDto>> {
         val pagedComments = commentService.getChildrenByParentId(id, page, size)
-        return ResponseEntity(pagedComments, HttpStatus.OK)
+        return ResponseEntity
+            .ok(ApiResponse.success(pagedComments))
     }
 
     @PostMapping
@@ -43,10 +45,12 @@ class CommentApiController(
     fun createComment(
         @Parameter(hidden = true) @RequestHeader(name = HttpHeaders.MEMBER_ID) memberId: Long,
         @RequestBody @Valid commentDto: CommentCreateReqDto
-    ): ResponseEntity<CommentRespDto> {
+    ): ResponseEntity<ApiResponse<Nothing>> {
         val tx = transactionService.getTransactionOrThrow(commentDto.txId)
-        val createComment = commentService.createComment(memberId, tx, commentDto)
-        return ResponseEntity(createComment, HttpStatus.CREATED)
+        commentService.createComment(memberId, tx, commentDto)
+        return ResponseEntity
+            .status(HttpStatus.CREATED)
+            .body(ApiResponse.success(null, message = "댓글이 생성되었습니다."))
     }
 
     @PutMapping("/{id}")
@@ -55,18 +59,22 @@ class CommentApiController(
         @Parameter(hidden = true)
         @RequestHeader(name = HttpHeaders.MEMBER_ID) memberId: Long,
         @PathVariable("id") @Min(1) commentId: Long,
-        @RequestBody @Valid dto: CommentUpdateReqDto): ResponseEntity<CommentRespDto> {
-        val respDto = commentService.updateComment(memberId, commentId, dto)
-        return ResponseEntity(respDto, HttpStatus.OK)
+        @RequestBody @Valid dto: CommentUpdateReqDto
+    ): ResponseEntity<ApiResponse<Nothing>> {
+        commentService.updateComment(memberId, commentId, dto)
+        return ResponseEntity
+            .ok(ApiResponse.success(null, message = "댓글이 수정되었습니다."))
     }
 
     @DeleteMapping("/{id}")
     @Operation(summary = "코멘트 삭제", security = [SecurityRequirement(name = "bearer-key")])
     fun deleteComment(
         @Parameter(hidden = true) @RequestHeader(name = HttpHeaders.MEMBER_ID) memberId: Long,
-        @PathVariable("id") @Min(1) commentId: Long): ResponseEntity<Any> {
+        @PathVariable("id") @Min(1) commentId: Long
+    ): ResponseEntity<ApiResponse<Nothing>> {
         commentService.deleteComment(memberId, commentId)
-        return ResponseEntity(null, HttpStatus.NO_CONTENT)
+        return ResponseEntity
+            .ok(ApiResponse.success(null, message = "댓글이 삭제되었습니다."))
     }
 
     @GetMapping("/{id}/comments")
@@ -74,9 +82,10 @@ class CommentApiController(
         @PathVariable @Min(1) id: Long,
         @RequestParam(name = "index", defaultValue = DEFAULT_INDEX) @Min(0) index: Int,
         @RequestParam(name = "pageSize", defaultValue = DEFAULT_PAGE_SIZE) @Min(1) @Max(100) pageSize: Int
-    ): ResponseEntity<CommentPageRespDto> {
+    ): ResponseEntity<ApiResponse<CommentPageRespDto>> {
         val pagedResult = commentService.getParentsByTxId(id, index, pageSize)
-        return ResponseEntity(pagedResult, HttpStatus.OK)
+        return ResponseEntity
+            .ok(ApiResponse.success(pagedResult))
     }
 
     companion object {

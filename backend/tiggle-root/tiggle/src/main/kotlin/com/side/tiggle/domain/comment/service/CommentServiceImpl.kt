@@ -55,17 +55,15 @@ class CommentServiceImpl(
         )
     }
 
-    override fun createComment(memberId: Long, tx: TransactionInfo, commentDto: CommentCreateReqDto): CommentRespDto {
+    override fun createComment(memberId: Long, tx: TransactionInfo, commentDto: CommentCreateReqDto) {
         val parentComment = commentDto.parentId?.let { findParentCommentOrThrow(commentDto.parentId) }
         val comment: Comment = commentDto.toEntity(memberId, tx.memberId)
         val savedComment = commentRepository.save(comment)
 
         notificationService.sendCommentNotification(savedComment, parentComment, tx, memberId)
-
-        return CommentRespDto.fromEntity(savedComment)
     }
 
-    override fun updateComment(memberId: Long, commentId: Long, dto: CommentUpdateReqDto): CommentRespDto {
+    override fun updateComment(memberId: Long, commentId: Long, dto: CommentUpdateReqDto) {
         val comment = commentRepository.findById(commentId)
             .orElseThrow { CommentException(CommentErrorCode.COMMENT_NOT_FOUND) }
 
@@ -74,9 +72,7 @@ class CommentServiceImpl(
         }
 
         comment.content = dto.content
-        val updated = commentRepository.save(comment)
-
-        return CommentRespDto.fromEntity(updated)
+        commentRepository.save(comment)
     }
 
     override fun deleteComment(memberId: Long, commentId: Long) {

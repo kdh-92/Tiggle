@@ -14,9 +14,9 @@ class TagServiceImpl(
     private val tagRepository: TagRepository
 ) : TagService {
 
-    override fun createTag(createReqDto: TagCreateReqDto): TagRespDto {
+    override fun createTag(createReqDto: TagCreateReqDto) {
         val tag = Tag(createReqDto.name)
-        return TagRespDto.fromEntity(tagRepository.save(tag))
+        tagRepository.save(tag)
     }
 
     override fun getTag(tagId: Long): TagRespDto {
@@ -30,12 +30,13 @@ class TagServiceImpl(
             .map { TagRespDto.fromEntity(it) }
     }
 
-    override fun updateTag(tagId: Long, updateReqDto: TagUpdateReqDto): TagRespDto {
+    override fun updateTag(tagId: Long, updateReqDto: TagUpdateReqDto) {
         val tag = tagRepository.findById(tagId)
             .orElseThrow { TagException(TagErrorCode.TAG_NOT_FOUND) }
             .apply {
                 name = updateReqDto.name
             }
-        return TagRespDto.fromEntity(tagRepository.save(tag))
+
+        tagRepository.save(tag)
     }
 }

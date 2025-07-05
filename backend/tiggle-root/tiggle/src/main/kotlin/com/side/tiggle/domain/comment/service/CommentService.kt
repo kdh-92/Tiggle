@@ -9,14 +9,9 @@ import com.side.tiggle.domain.transaction.dto.internal.TransactionInfo
 interface CommentService {
 
     fun getParentCount(txId: Long): Int
-
     fun getParentsByTxId(txId: Long, page: Int, size: Int): CommentPageRespDto
-
     fun getChildrenByParentId(parentId: Long, page: Int, size: Int): CommentPageRespDto
-
-    fun createComment(memberId: Long, tx: TransactionInfo, commentDto: CommentCreateReqDto): CommentRespDto
-
-    fun updateComment(memberId: Long, commentId: Long, dto: CommentUpdateReqDto): CommentRespDto
-
+    fun createComment(memberId: Long, tx: TransactionInfo, commentDto: CommentCreateReqDto)
+    fun updateComment(memberId: Long, commentId: Long, dto: CommentUpdateReqDto)
     fun deleteComment(memberId: Long, commentId: Long)
 }

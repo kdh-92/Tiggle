@@ -19,10 +19,9 @@ class MemberServiceImpl(
     private val fileUploadUtil: FileUploadUtil
 ) : MemberService {
 
-    override fun createMember(dto: MemberCreateReqDto): MemberRespDto {
+    override fun createMember(dto: MemberCreateReqDto) {
         val member: Member = dto.toEntity()
-        val savedMember = memberRepository.save(member)
-        return MemberRespDto.fromEntity(savedMember)
+        memberRepository.save(member)
     }
 
     override fun getMember(memberId: Long): MemberRespDto {
@@ -47,7 +46,7 @@ class MemberServiceImpl(
         memberId: Long,
         memberUpdateReqDto: MemberUpdateReqDto,
         file: MultipartFile?
-    ): MemberRespDto {
+    ) {
         var isModified = false
         val member: Member = getMemberEntityOrThrow(memberId)
 
@@ -66,13 +65,9 @@ class MemberServiceImpl(
             isModified = true
         }
 
-        val updatedMember = if (isModified) {
+        if (isModified) {
             memberRepository.save(member)
-        } else {
-            member
         }
-
-        return MemberRespDto.fromEntity(updatedMember)
     }
 
     private fun getMemberEntityOrThrow(memberId: Long): Member {
@@ -81,4 +76,3 @@ class MemberServiceImpl(
         return member
     }
 }
-

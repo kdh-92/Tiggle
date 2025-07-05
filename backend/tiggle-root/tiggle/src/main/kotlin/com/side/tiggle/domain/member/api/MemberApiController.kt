@@ -5,6 +5,7 @@ import com.side.tiggle.domain.member.dto.req.MemberUpdateReqDto
 import com.side.tiggle.domain.member.dto.resp.MemberListRespDto
 import com.side.tiggle.domain.member.dto.resp.MemberRespDto
 import com.side.tiggle.domain.member.service.MemberService
+import com.side.tiggle.global.common.ApiResponse
 import com.side.tiggle.global.common.constants.HttpHeaders
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
@@ -28,24 +29,28 @@ class MemberApiController(
     @PostMapping
     fun createMember(
         @RequestBody @Valid memberCreateReqDto: MemberCreateReqDto
-    ): ResponseEntity<MemberRespDto> {
-        val respDto = memberService.createMember(memberCreateReqDto)
-        return ResponseEntity(respDto, HttpStatus.CREATED)
+    ): ResponseEntity<ApiResponse<Nothing>> {
+        memberService.createMember(memberCreateReqDto)
+        return ResponseEntity
+            .status(HttpStatus.CREATED)
+            .body(ApiResponse.success(null, message = "멤버가 생성되었습니다."))
     }
 
     @GetMapping("/{id}")
     fun getMember(
         @PathVariable("id") @Min(1) memberId: Long
-    ): ResponseEntity<MemberRespDto> {
+    ): ResponseEntity<ApiResponse<MemberRespDto>> {
         val memberDto = memberService.getMember(memberId)
-        return ResponseEntity(memberDto, HttpStatus.OK)
+        return ResponseEntity
+            .ok(ApiResponse.success(memberDto))
     }
 
     // 관리자 roles이 있는지 확인 필요
     @GetMapping("/all")
-    fun getAllMember(): ResponseEntity<MemberListRespDto> {
+    fun getAllMember(): ResponseEntity<ApiResponse<MemberListRespDto>> {
         val members = memberService.getAllMember()
-        return ResponseEntity(members, HttpStatus.OK)
+        return ResponseEntity
+            .ok(ApiResponse.success(members))
     }
 
     // token에 id 값 있는지 확인 필요
@@ -54,9 +59,10 @@ class MemberApiController(
     fun getMe(
         @Parameter(hidden = true)
         @RequestHeader(name = HttpHeaders.MEMBER_ID) memberId: Long
-    ): ResponseEntity<MemberRespDto> {
+    ): ResponseEntity<ApiResponse<MemberRespDto>> {
         val memberDto = memberService.getMember(memberId)
-        return ResponseEntity(memberDto, HttpStatus.OK)
+        return ResponseEntity
+            .ok(ApiResponse.success(memberDto))
     }
 
     @PutMapping("/me", consumes = [MediaType.MULTIPART_FORM_DATA_VALUE], produces = [MediaType.APPLICATION_JSON_VALUE])
@@ -66,9 +72,10 @@ class MemberApiController(
         @RequestHeader(name = HttpHeaders.MEMBER_ID) memberId: Long,
         @RequestPart(required = false) @Valid dto: MemberUpdateReqDto,
         @RequestPart("multipartFile", required = false) file: MultipartFile?
-    ): ResponseEntity<MemberRespDto> {
-        val updatedMember = memberService.updateMember(memberId, dto, file)
-        return ResponseEntity(updatedMember, HttpStatus.OK)
+    ): ResponseEntity<ApiResponse<Nothing>> {
+        memberService.updateMember(memberId, dto, file)
+        return ResponseEntity
+            .ok(ApiResponse.success(null, message = "멤버 정보가 수정되었습니다."))
     }
 
 //    @DeleteMapping("/{id}")
