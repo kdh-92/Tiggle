@@ -3,7 +3,6 @@ package com.side.tiggle.domain.category.service
 import com.side.tiggle.domain.category.dto.req.CategoryCreateReqDto
 import com.side.tiggle.domain.category.dto.req.CategoryUpdateReqDto
 import com.side.tiggle.domain.category.dto.resp.CategoryListRespDto
-import com.side.tiggle.domain.category.dto.resp.CategoryRespDto
 import com.side.tiggle.domain.category.model.Category
 
 interface CategoryService {
