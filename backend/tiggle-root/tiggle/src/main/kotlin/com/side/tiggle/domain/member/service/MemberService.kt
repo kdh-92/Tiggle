@@ -10,7 +10,7 @@ import org.springframework.web.multipart.MultipartFile
 
 interface MemberService {
 
-    fun createMember(dto: MemberCreateReqDto): MemberRespDto
+    fun createMember(dto: MemberCreateReqDto)
 
     fun getMember(memberId: Long): MemberRespDto
 
@@ -18,7 +18,7 @@ interface MemberService {
 
     fun getAllMember(): MemberListRespDto
 
-    fun updateMember(memberId: Long, memberUpdateReqDto: MemberUpdateReqDto, file: MultipartFile?): MemberRespDto
+    fun updateMember(memberId: Long, memberUpdateReqDto: MemberUpdateReqDto, file: MultipartFile?)
 
     fun getMemberReference(memberId: Long): Member
 }

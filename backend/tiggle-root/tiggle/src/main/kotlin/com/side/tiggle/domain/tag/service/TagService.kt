@@ -6,11 +6,8 @@ import com.side.tiggle.domain.tag.dto.resp.TagRespDto
 
 interface TagService {
 
-    fun createTag(createReqDto: TagCreateReqDto): TagRespDto
-
+    fun createTag(createReqDto: TagCreateReqDto)
     fun getTag(tagId: Long): TagRespDto
-
     fun getAllDefaultTag(): List<TagRespDto>
-
-    fun updateTag(tagId: Long, updateReqDto: TagUpdateReqDto): TagRespDto
+    fun updateTag(tagId: Long, updateReqDto: TagUpdateReqDto)
 }

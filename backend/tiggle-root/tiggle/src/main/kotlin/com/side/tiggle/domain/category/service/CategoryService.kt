@@ -8,15 +8,13 @@ import com.side.tiggle.domain.category.model.Category
 
 interface CategoryService {
 
-    fun createCategory(dto: CategoryCreateReqDto, memberId: Long): CategoryRespDto
-
-    fun getCategory(categoryId: Long): CategoryRespDto
+    fun createCategory(dto: CategoryCreateReqDto, memberId: Long)
 
     fun getCategoryEntity(categoryId: Long): Category
 
     fun getCategoryByMemberIdOrDefaults(memberId: Long): CategoryListRespDto
 
-    fun updateCategory(id: Long, dto: CategoryUpdateReqDto): CategoryRespDto
+    fun updateCategory(id: Long, dto: CategoryUpdateReqDto)
 
     fun deleteCategory(categoryId: Long)
 
