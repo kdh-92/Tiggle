@@ -8,12 +8,14 @@ import com.side.tiggle.domain.tag.exception.error.TagErrorCode
 import com.side.tiggle.domain.tag.model.Tag
 import com.side.tiggle.domain.tag.repository.TagRepository
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 @Service
 class TagServiceImpl(
     private val tagRepository: TagRepository
 ) : TagService {
 
+    @Transactional
     override fun createTag(createReqDto: TagCreateReqDto) {
         val tag = Tag(createReqDto.name)
         tagRepository.save(tag)
@@ -30,6 +32,7 @@ class TagServiceImpl(
             .map { TagRespDto.fromEntity(it) }
     }
 
+    @Transactional
     override fun updateTag(tagId: Long, updateReqDto: TagUpdateReqDto) {
         val tag = tagRepository.findById(tagId)
             .orElseThrow { TagException(TagErrorCode.TAG_NOT_FOUND) }

@@ -11,6 +11,7 @@ import com.side.tiggle.domain.member.model.Member
 import com.side.tiggle.domain.member.repository.MemberRepository
 import com.side.tiggle.domain.member.utils.FileUploadUtil
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.multipart.MultipartFile
 
 @Service
@@ -19,6 +20,7 @@ class MemberServiceImpl(
     private val fileUploadUtil: FileUploadUtil
 ) : MemberService {
 
+    @Transactional
     override fun createMember(dto: MemberCreateReqDto) {
         val member: Member = dto.toEntity()
         memberRepository.save(member)
@@ -42,6 +44,7 @@ class MemberServiceImpl(
         return MemberListRespDto(dtoList)
     }
 
+    @Transactional
     override fun updateMember(
         memberId: Long,
         memberUpdateReqDto: MemberUpdateReqDto,

@@ -8,6 +8,7 @@ import com.side.tiggle.domain.category.exception.CategoryException
 import com.side.tiggle.domain.category.exception.error.CategoryErrorCode
 import com.side.tiggle.domain.category.repository.CategoryRepository
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDateTime
 
 @Service
@@ -15,6 +16,7 @@ class CategoryServiceImpl(
     private val categoryRepository: CategoryRepository,
 ) : CategoryService {
 
+    @Transactional
     override fun createCategory(dto: CategoryCreateReqDto, memberId: Long) {
         val category = dto.toEntity(memberId)
         categoryRepository.save(category)
@@ -26,6 +28,7 @@ class CategoryServiceImpl(
         return CategoryListRespDto(dtoList)
     }
 
+    @Transactional
     override fun updateCategory(id: Long, dto: CategoryUpdateReqDto) {
         val category = categoryRepository.findById(id)
             .orElseThrow { CategoryException(CategoryErrorCode.CATEGORY_NOT_FOUND) }
@@ -37,6 +40,7 @@ class CategoryServiceImpl(
         categoryRepository.save(category)
     }
 
+    @Transactional
     override fun deleteCategory(categoryId: Long) {
         val category = categoryRepository.findById(categoryId)
             .orElseThrow { CategoryException(CategoryErrorCode.CATEGORY_NOT_FOUND) }

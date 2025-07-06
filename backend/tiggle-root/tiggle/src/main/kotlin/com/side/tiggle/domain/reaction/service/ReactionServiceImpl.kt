@@ -25,6 +25,7 @@ class ReactionServiceImpl(
         return reactionRepository.countAllByTxIdAndType(txId, type)
     }
 
+    @Transactional
     override fun upsertReaction(
         txId: Long,
         senderId: Long,
