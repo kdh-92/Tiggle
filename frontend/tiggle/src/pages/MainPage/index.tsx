@@ -18,7 +18,7 @@ const MainPage = () => {
     <>
       <MainPageStyle>
         <Banner />
-        <TransactionCells data={data!} />
+        <TransactionCells data={data?.data} />
         <BottomTab />
       </MainPageStyle>
     </>

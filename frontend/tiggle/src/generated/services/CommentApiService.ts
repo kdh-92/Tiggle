@@ -2,9 +2,9 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+import type { ApiResponse } from '../models/ApiResponse';
+import type { ApiResponseCommentPageRespDto } from '../models/ApiResponseCommentPageRespDto';
 import type { CommentCreateReqDto } from '../models/CommentCreateReqDto';
-import type { CommentPageRespDto } from '../models/CommentPageRespDto';
-import type { CommentRespDto } from '../models/CommentRespDto';
 import type { CommentUpdateReqDto } from '../models/CommentUpdateReqDto';
 
 import type { CancelablePromise } from '../core/CancelablePromise';
@@ -17,13 +17,13 @@ export class CommentApiService {
      * 코멘트 수정
      * @param id 
      * @param requestBody 
-     * @returns CommentRespDto OK
+     * @returns ApiResponse OK
      * @throws ApiError
      */
     public static updateComment(
 id: number,
 requestBody: CommentUpdateReqDto,
-): CancelablePromise<CommentRespDto> {
+): CancelablePromise<ApiResponse> {
         return __request(OpenAPI, {
             method: 'PUT',
             url: '/api/v1/comments/{id}',
@@ -38,12 +38,12 @@ requestBody: CommentUpdateReqDto,
     /**
      * 코멘트 삭제
      * @param id 
-     * @returns any OK
+     * @returns ApiResponse OK
      * @throws ApiError
      */
     public static deleteComment(
 id: number,
-): CancelablePromise<Record<string, any>> {
+): CancelablePromise<ApiResponse> {
         return __request(OpenAPI, {
             method: 'DELETE',
             url: '/api/v1/comments/{id}',
@@ -56,12 +56,12 @@ id: number,
     /**
      * 코멘트 작성
      * @param requestBody 
-     * @returns CommentRespDto OK
+     * @returns ApiResponse OK
      * @throws ApiError
      */
     public static createComment(
 requestBody: CommentCreateReqDto,
-): CancelablePromise<CommentRespDto> {
+): CancelablePromise<ApiResponse> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/api/v1/comments',
@@ -76,14 +76,14 @@ requestBody: CommentCreateReqDto,
      * @param id 
      * @param index 
      * @param pageSize 
-     * @returns CommentPageRespDto OK
+     * @returns ApiResponseCommentPageRespDto OK
      * @throws ApiError
      */
     public static getAllCommentsByCommentId(
 id: number,
 index?: number,
 pageSize: number = 5,
-): CancelablePromise<CommentPageRespDto> {
+): CancelablePromise<ApiResponseCommentPageRespDto> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/v1/comments/{id}/replies',
@@ -101,14 +101,14 @@ pageSize: number = 5,
      * @param id 
      * @param index 
      * @param pageSize 
-     * @returns CommentPageRespDto OK
+     * @returns ApiResponseCommentPageRespDto OK
      * @throws ApiError
      */
     public static getAllCommentsByTx1(
 id: number,
 index?: number,
 pageSize: number = 5,
-): CancelablePromise<CommentPageRespDto> {
+): CancelablePromise<ApiResponseCommentPageRespDto> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/v1/comments/{id}/comments',

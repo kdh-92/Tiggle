@@ -99,7 +99,7 @@ export default function CommentCell({
         <CommentRepliesStyle>
           {childCount! > 0 && <div className="divider" />}
 
-          {repliesData?.comments?.map(reply => (
+          {repliesData?.data?.comments?.map(reply => (
             <ReplyCell key={`comment-reply-${reply.id}`} {...reply} />
           ))}
 

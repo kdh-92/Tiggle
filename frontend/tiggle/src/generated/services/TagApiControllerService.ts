@@ -2,8 +2,10 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+import type { ApiResponse } from '../models/ApiResponse';
+import type { ApiResponseListTagRespDto } from '../models/ApiResponseListTagRespDto';
+import type { ApiResponseTagRespDto } from '../models/ApiResponseTagRespDto';
 import type { TagCreateReqDto } from '../models/TagCreateReqDto';
-import type { TagRespDto } from '../models/TagRespDto';
 import type { TagUpdateReqDto } from '../models/TagUpdateReqDto';
 
 import type { CancelablePromise } from '../core/CancelablePromise';
@@ -14,12 +16,12 @@ export class TagApiControllerService {
 
     /**
      * @param id 
-     * @returns TagRespDto OK
+     * @returns ApiResponseTagRespDto OK
      * @throws ApiError
      */
     public static getTag(
 id: number,
-): CancelablePromise<TagRespDto> {
+): CancelablePromise<ApiResponseTagRespDto> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/v1/tag/{id}',
@@ -32,13 +34,13 @@ id: number,
     /**
      * @param id 
      * @param requestBody 
-     * @returns TagRespDto OK
+     * @returns ApiResponse OK
      * @throws ApiError
      */
     public static updateTag(
 id: number,
 requestBody: TagUpdateReqDto,
-): CancelablePromise<TagRespDto> {
+): CancelablePromise<ApiResponse> {
         return __request(OpenAPI, {
             method: 'PUT',
             url: '/api/v1/tag/{id}',
@@ -52,12 +54,12 @@ requestBody: TagUpdateReqDto,
 
     /**
      * @param requestBody 
-     * @returns TagRespDto OK
+     * @returns ApiResponse OK
      * @throws ApiError
      */
     public static createTag(
 requestBody: TagCreateReqDto,
-): CancelablePromise<TagRespDto> {
+): CancelablePromise<ApiResponse> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/api/v1/tag',
@@ -67,10 +69,10 @@ requestBody: TagCreateReqDto,
     }
 
     /**
-     * @returns TagRespDto OK
+     * @returns ApiResponseListTagRespDto OK
      * @throws ApiError
      */
-    public static getAllDefaultTag(): CancelablePromise<Array<TagRespDto>> {
+    public static getAllDefaultTag(): CancelablePromise<ApiResponseListTagRespDto> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/v1/tag/all',

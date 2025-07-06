@@ -25,9 +25,9 @@ const CategorySettingPage = ({}: CategorySettingPageProps) => {
     queryKey: categoryKeys.list(),
     queryFn: async () =>
       CategoryApiControllerService.getCategoryByMemberIdOrDefaults(
-        profile?.id || 0,
+        profile?.data?.id || 0,
       ),
-    enabled: !!profile?.id,
+    enabled: !!profile?.data?.id,
   });
   // const { mutate: createMutate } = useMutation(async (name: string) =>
   //   CategoryApiControllerService.createCategory({ name }),
@@ -111,7 +111,7 @@ const CategorySettingPage = ({}: CategorySettingPageProps) => {
       {isLoading && <Loading />}
       {!isLoading && categoriesData && (
         <SettingForm
-          data={categoriesData.categories?.map(({ id, name }) => ({
+          data={categoriesData.data?.categories?.map(({ id, name }) => ({
             sid: id!,
             name: name!,
           }))}

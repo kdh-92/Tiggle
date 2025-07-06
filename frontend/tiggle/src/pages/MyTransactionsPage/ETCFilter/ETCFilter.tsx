@@ -10,6 +10,7 @@ import {
   CategoryApiControllerService,
   TagApiControllerService,
 } from "@/generated";
+import useAuth from "@/hooks/useAuth";
 import { categoryKeys, tagKeys } from "@/query/queryKeys";
 
 import {
@@ -26,17 +27,23 @@ interface ETCFilterProps {
 
 const ETCFilter = ({}: ETCFilterProps) => {
   const { control, watch } = useFormContext<FilterInputs>();
+  const { profile } = useAuth();
   const [isAccordionOpen, setIsAccordionOpen] = useState<boolean>(false);
   const accordionRef = useRef<HTMLDivElement | null>(null);
 
   const { data: categoriesData } = useQuery({
     queryKey: categoryKeys.lists(),
-    queryFn: async () => CategoryApiControllerService.getAllCategory(),
+    queryFn: async () =>
+      CategoryApiControllerService.getCategoryByMemberIdOrDefaults(),
+    enabled: !!profile?.data?.id,
   });
+
   const categoryOptions = useMemo(
     () =>
-      categoriesData?.map(({ id, name }) => ({ label: name!, value: id! })) ??
-      [],
+      categoriesData?.data?.categories?.map(({ id, name }) => ({
+        label: name!,
+        value: id!,
+      })) ?? [],
     [categoriesData],
   );
 
@@ -45,7 +52,8 @@ const ETCFilter = ({}: ETCFilterProps) => {
     queryFn: async () => TagApiControllerService.getAllDefaultTag(),
   });
   const tagOptions = useMemo(
-    () => tagsData?.map(({ name }) => ({ label: name!, value: name! })) ?? [],
+    () =>
+      tagsData?.data?.map(({ name }) => ({ label: name!, value: name! })) ?? [],
     [tagsData],
   );
 
@@ -66,7 +74,9 @@ const ETCFilter = ({}: ETCFilterProps) => {
     const [categoryIds, tagNames] = watchSelected;
 
     const categoryTags = categoryIds
-      ?.map(id => categoriesData?.find(data => data.id === id))
+      ?.map(id =>
+        categoriesData?.data?.categories?.find(data => data.id === id),
+      )
       .map(category => ({
         label: `${category!.name}`,
         value: category!.id,
@@ -74,7 +84,7 @@ const ETCFilter = ({}: ETCFilterProps) => {
       }));
 
     const tagTags = tagNames
-      ?.map(name => tagsData?.find(data => data.name === name))
+      ?.map(name => tagsData?.data?.find(data => data.name === name))
       .map(tag => ({
         label: `#${tag!.name}`,
         value: name,

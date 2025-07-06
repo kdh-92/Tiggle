@@ -61,8 +61,8 @@ export default function CommentForm({ txId, ...props }: CommentFormProps) {
       <CommentSenderStyle>
         {isLogin && profile ? (
           <>
-            <Avatar size={32} src={profile.profileUrl} />
-            <p className="name">{profile.nickname}</p>
+            <Avatar size={32} src={profile.data?.profileUrl} />
+            <p className="name">{profile.data?.nickname}</p>
           </>
         ) : (
           <>

@@ -2,9 +2,9 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+import type { ApiResponse } from '../models/ApiResponse';
+import type { ApiResponseReactionSummaryRespDto } from '../models/ApiResponseReactionSummaryRespDto';
 import type { ReactionCreateReqDto } from '../models/ReactionCreateReqDto';
-import type { ReactionRespDto } from '../models/ReactionRespDto';
-import type { ReactionSummaryRespDto } from '../models/ReactionSummaryRespDto';
 
 import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
@@ -15,12 +15,12 @@ export class ReactionApiService {
     /**
      * 해당 tx에 대한 나의 reaction을 조회
      * @param id 
-     * @returns ReactionRespDto OK
+     * @returns any OK
      * @throws ApiError
      */
     public static getReaction(
 id: number,
-): CancelablePromise<ReactionRespDto> {
+): CancelablePromise<Record<string, any>> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/v1/transaction/{id}/reaction',
@@ -34,13 +34,13 @@ id: number,
      * 리액션을 추가하거나 수정함
      * @param id 
      * @param requestBody 
-     * @returns ReactionRespDto OK
+     * @returns ApiResponse OK
      * @throws ApiError
      */
     public static upsertReaction(
 id: number,
 requestBody: ReactionCreateReqDto,
-): CancelablePromise<ReactionRespDto> {
+): CancelablePromise<ApiResponse> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/api/v1/transaction/{id}/reaction',
@@ -55,12 +55,12 @@ requestBody: ReactionCreateReqDto,
     /**
      * Reaction을 제거
      * @param id 
-     * @returns number OK
+     * @returns ApiResponse OK
      * @throws ApiError
      */
     public static deleteReaction(
 id: number,
-): CancelablePromise<number> {
+): CancelablePromise<ApiResponse> {
         return __request(OpenAPI, {
             method: 'DELETE',
             url: '/api/v1/transaction/{id}/reaction',
@@ -73,12 +73,12 @@ id: number,
     /**
      * 해당 tx의 전체 reaction과 comment의 수를 조회
      * @param id 
-     * @returns ReactionSummaryRespDto OK
+     * @returns ApiResponseReactionSummaryRespDto OK
      * @throws ApiError
      */
     public static getReactionSummary(
 id: number,
-): CancelablePromise<ReactionSummaryRespDto> {
+): CancelablePromise<ApiResponseReactionSummaryRespDto> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/v1/transaction/{id}/reaction/summary',

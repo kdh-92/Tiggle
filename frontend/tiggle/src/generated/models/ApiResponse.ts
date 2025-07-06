@@ -3,9 +3,9 @@
 /* tslint:disable */
 /* eslint-disable */
 
-export type ReactionRespDto = {
-    txId: number;
-    senderId: number;
-    receiverId: number;
-    type: 'UP' | 'DOWN';
+export type ApiResponse = {
+    success: boolean;
+    code: string;
+    message: string;
+    data?: any;
 };

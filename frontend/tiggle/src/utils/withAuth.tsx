@@ -29,7 +29,7 @@ const withAuth =
       recordContinueUrl();
       return <Navigate to={LOGIN_PATH} replace />;
     } else {
-      return <Component {...(props as Props)} profile={profile} />;
+      return <Component {...(props as Props)} profile={profile.data} />;
     }
   };
 

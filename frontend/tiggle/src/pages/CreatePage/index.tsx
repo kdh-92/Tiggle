@@ -70,9 +70,9 @@ const CreatePage = ({ type, profile }: CreatePageProps) => {
     };
 
     mutate(formData, {
-      onSuccess: ({ id }) => {
+      onSuccess: () => {
         messageApi.open({ type: "success", content: "거래가 등록되었습니다." });
-        navigate(`/detail/${id}`);
+        navigate(`/`);
       },
       onError: error => {
         messageApi.open({
@@ -91,7 +91,7 @@ const CreatePage = ({ type, profile }: CreatePageProps) => {
   return (
     <CreatePageStyle>
       <p className="title">{convertTxTypeToWord(type)} 기록하기</p>
-      {parentTxData && <TransactionPreviewCell {...parentTxData} />}
+      {parentTxData?.data && <TransactionPreviewCell {...parentTxData.data} />}
       <CreateForm
         type={type}
         onSubmit={handleOnSubmit}

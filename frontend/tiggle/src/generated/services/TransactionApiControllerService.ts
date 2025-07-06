@@ -2,11 +2,12 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { CommentPageRespDto } from '../models/CommentPageRespDto';
+import type { ApiResponse } from '../models/ApiResponse';
+import type { ApiResponseCommentPageRespDto } from '../models/ApiResponseCommentPageRespDto';
+import type { ApiResponseTransactionListRespDto } from '../models/ApiResponseTransactionListRespDto';
+import type { ApiResponseTransactionPageRespDto } from '../models/ApiResponseTransactionPageRespDto';
+import type { ApiResponseTransactionRespDto } from '../models/ApiResponseTransactionRespDto';
 import type { TransactionCreateReqDto } from '../models/TransactionCreateReqDto';
-import type { TransactionListRespDto } from '../models/TransactionListRespDto';
-import type { TransactionPageRespDto } from '../models/TransactionPageRespDto';
-import type { TransactionRespDto } from '../models/TransactionRespDto';
 import type { TransactionUpdateReqDto } from '../models/TransactionUpdateReqDto';
 
 import type { CancelablePromise } from '../core/CancelablePromise';
@@ -19,12 +20,12 @@ export class TransactionApiControllerService {
      * tx 상세 조회
      * tx의 id에 대한 상세 정보를 반환합니다.
      * @param id tx의 id
-     * @returns TransactionRespDto tx 상세 조회 성공
+     * @returns ApiResponseTransactionRespDto tx 상세 조회 성공
      * @throws ApiError
      */
     public static getTransaction(
 id: number,
-): CancelablePromise<TransactionRespDto> {
+): CancelablePromise<ApiResponseTransactionRespDto> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/v1/transaction/{id}',
@@ -41,13 +42,13 @@ id: number,
      * 트랜잭션 수정
      * @param id 
      * @param requestBody 
-     * @returns TransactionRespDto OK
+     * @returns ApiResponse OK
      * @throws ApiError
      */
     public static updateTransaction(
 id: number,
 requestBody: TransactionUpdateReqDto,
-): CancelablePromise<TransactionRespDto> {
+): CancelablePromise<ApiResponse> {
         return __request(OpenAPI, {
             method: 'PUT',
             url: '/api/v1/transaction/{id}',
@@ -62,12 +63,12 @@ requestBody: TransactionUpdateReqDto,
     /**
      * 트랜잭션 삭제
      * @param id 
-     * @returns string OK
+     * @returns ApiResponse OK
      * @throws ApiError
      */
     public static deleteTransaction(
 id: number,
-): CancelablePromise<string> {
+): CancelablePromise<ApiResponse> {
         return __request(OpenAPI, {
             method: 'DELETE',
             url: '/api/v1/transaction/{id}',
@@ -82,13 +83,13 @@ id: number,
      * 페이지(index)에 해당하는 tx 개수(pageSize)의 정보를 반환합니다.
      * @param index tx 페이지 번호
      * @param pageSize 페이지 내부 tx 개수
-     * @returns TransactionPageRespDto tx 페이지 조회 성공
+     * @returns ApiResponseTransactionPageRespDto tx 페이지 조회 성공
      * @throws ApiError
      */
     public static getCountOffsetTransaction(
 index?: number,
 pageSize: number = 5,
-): CancelablePromise<TransactionPageRespDto> {
+): CancelablePromise<ApiResponseTransactionPageRespDto> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/v1/transaction',
@@ -105,7 +106,7 @@ pageSize: number = 5,
     /**
      * tx 생성
      * @param formData 
-     * @returns TransactionRespDto OK
+     * @returns ApiResponse OK
      * @throws ApiError
      */
     public static createTransaction(
@@ -113,7 +114,7 @@ formData?: {
 dto: TransactionCreateReqDto;
 multipartFile?: Blob;
 },
-): CancelablePromise<TransactionRespDto> {
+): CancelablePromise<ApiResponse> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/api/v1/transaction',
@@ -126,14 +127,14 @@ multipartFile?: Blob;
      * @param id 
      * @param pageSize 
      * @param index 
-     * @returns CommentPageRespDto OK
+     * @returns ApiResponseCommentPageRespDto OK
      * @throws ApiError
      */
     public static getAllCommentsByTx(
 id: number,
 pageSize: number = 5,
 index?: number,
-): CancelablePromise<CommentPageRespDto> {
+): CancelablePromise<ApiResponseCommentPageRespDto> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/v1/transaction/{id}/comments',
@@ -158,7 +159,7 @@ index?: number,
      * @param category (필터링) 카테고리 종류 (복수)
      * @param asset (필터링) 자산 종류 (복수)
      * @param tagNames (필터링) 태그 이름 (복수)
-     * @returns TransactionPageRespDto tx 페이지 조회 성공
+     * @returns ApiResponseTransactionPageRespDto tx 페이지 조회 성공
      * @throws ApiError
      */
     public static getMemberCountOffsetTransaction(
@@ -170,7 +171,7 @@ end?: string,
 category?: Array<number>,
 asset?: Array<number>,
 tagNames?: Array<string>,
-): CancelablePromise<TransactionPageRespDto> {
+): CancelablePromise<ApiResponseTransactionPageRespDto> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/v1/transaction/member',
@@ -191,10 +192,10 @@ tagNames?: Array<string>,
     }
 
     /**
-     * @returns TransactionListRespDto OK
+     * @returns ApiResponseTransactionListRespDto OK
      * @throws ApiError
      */
-    public static getAllTransaction(): CancelablePromise<TransactionListRespDto> {
+    public static getAllTransaction(): CancelablePromise<ApiResponseTransactionListRespDto> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/v1/transaction/all',

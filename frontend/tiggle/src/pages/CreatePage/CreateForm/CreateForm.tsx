@@ -64,9 +64,9 @@ function CreateForm({
     queryKey: categoryKeys.lists(),
     queryFn: async () =>
       CategoryApiControllerService.getCategoryByMemberIdOrDefaults(
-        profile?.id || 0,
+        profile?.data?.id || 0,
       ),
-    enabled: !!profile?.id,
+    enabled: !!profile?.data?.id,
   });
   const { data: tagsData, isLoading: isTagsLoading } = useQuery({
     queryKey: tagKeys.lists(),
@@ -75,14 +75,15 @@ function CreateForm({
 
   const categories = useMemo(
     () =>
-      categoriesData?.categories?.map(({ name, id }) => ({
+      categoriesData?.data?.categories?.map(({ name, id }) => ({
         value: id,
         label: name,
       })),
     [categoriesData],
   );
   const tags = useMemo(
-    () => tagsData?.map(({ name }) => ({ value: name, label: `#${name}` })),
+    () =>
+      tagsData?.data?.map(({ name }) => ({ value: name, label: `#${name}` })),
     [tagsData],
   );
 

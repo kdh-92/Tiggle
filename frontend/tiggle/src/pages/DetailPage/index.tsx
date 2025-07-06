@@ -53,35 +53,35 @@ const DetailPage = () => {
 
   const dispatch = useDispatch();
   useLayoutEffect(() => {
-    dispatch(store.actions.setType(transactionData.type!));
+    dispatch(store.actions.setType(transactionData.data.type!));
   }, [transactionData]);
 
   return (
     <DetailPageStyle className="page-container">
       <section className="content">
         <PostHeader
-          {...transactionData}
+          {...transactionData.data}
           sender={{
             nickname: "사용자1",
           }}
           // asset={transactionData.asset!.name!}
           // category={transactionData.category!.name!}
-          category={transactionData.category as CategoryDto}
+          category={transactionData.data.category as CategoryDto}
         />
 
         <DetailPageContentStyle>
           <div className="image">
             <img
               src={
-                transactionData.imageUrl
-                  ? `${import.meta.env.VITE_API_URL}${transactionData.imageUrl}`
+                transactionData.data.imageUrl
+                  ? `${import.meta.env.VITE_API_URL}${transactionData.data.imageUrl}`
                   : "/assets/img-placeholder.png"
               }
-              alt={transactionData.content}
+              alt={transactionData.data.content}
             />
           </div>
           <div className="content">
-            <p className="content-reason">{transactionData.reason}</p>
+            <p className="content-reason">{transactionData.data.reason}</p>
             <ul className="content-tags">
               {/*{transactionData.txTagNames*/}
               {/*  ?.split(",")*/}
@@ -90,19 +90,23 @@ const DetailPage = () => {
           </div>
         </DetailPageContentStyle>
 
-        {reactionData && (
-          <ReactionSection {...reactionData} txId={id} className="reaction" />
+        {reactionData?.data && (
+          <ReactionSection
+            {...reactionData.data}
+            txId={id}
+            className="reaction"
+          />
         )}
       </section>
 
       <DetailPageCommentSectionStyle className="comment">
         <div className="title">
           <p className="main">댓글</p>
-          <p className="sub">{reactionData?.commentCount}개</p>
+          <p className="sub">{reactionData?.data?.commentCount}개</p>
         </div>
 
         <div className="comment-cards">
-          {commentsData?.comments?.map(comment => (
+          {commentsData?.data?.comments?.map(comment => (
             <CommentCell {...comment} key={`comment-cell-${comment.id}`} />
           ))}
         </div>

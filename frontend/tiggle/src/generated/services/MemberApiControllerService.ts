@@ -2,9 +2,10 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+import type { ApiResponse } from '../models/ApiResponse';
+import type { ApiResponseMemberListRespDto } from '../models/ApiResponseMemberListRespDto';
+import type { ApiResponseMemberRespDto } from '../models/ApiResponseMemberRespDto';
 import type { MemberCreateReqDto } from '../models/MemberCreateReqDto';
-import type { MemberListRespDto } from '../models/MemberListRespDto';
-import type { MemberRespDto } from '../models/MemberRespDto';
 import type { MemberUpdateReqDto } from '../models/MemberUpdateReqDto';
 
 import type { CancelablePromise } from '../core/CancelablePromise';
@@ -15,10 +16,10 @@ export class MemberApiControllerService {
 
     /**
      * 내 정보 조회
-     * @returns MemberRespDto OK
+     * @returns ApiResponseMemberRespDto OK
      * @throws ApiError
      */
-    public static getMe(): CancelablePromise<MemberRespDto> {
+    public static getMe(): CancelablePromise<ApiResponseMemberRespDto> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/v1/member/me',
@@ -28,7 +29,7 @@ export class MemberApiControllerService {
     /**
      * 프로필 업데이트
      * @param formData 
-     * @returns MemberRespDto OK
+     * @returns ApiResponse OK
      * @throws ApiError
      */
     public static updateMe(
@@ -36,7 +37,7 @@ formData?: {
 dto?: MemberUpdateReqDto;
 multipartFile?: Blob;
 },
-): CancelablePromise<MemberRespDto> {
+): CancelablePromise<ApiResponse> {
         return __request(OpenAPI, {
             method: 'PUT',
             url: '/api/v1/member/me',
@@ -47,12 +48,12 @@ multipartFile?: Blob;
 
     /**
      * @param requestBody 
-     * @returns MemberRespDto OK
+     * @returns ApiResponse OK
      * @throws ApiError
      */
     public static createMember(
 requestBody: MemberCreateReqDto,
-): CancelablePromise<MemberRespDto> {
+): CancelablePromise<ApiResponse> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/api/v1/member',
@@ -63,12 +64,12 @@ requestBody: MemberCreateReqDto,
 
     /**
      * @param id 
-     * @returns MemberRespDto OK
+     * @returns ApiResponseMemberRespDto OK
      * @throws ApiError
      */
     public static getMember(
 id: number,
-): CancelablePromise<MemberRespDto> {
+): CancelablePromise<ApiResponseMemberRespDto> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/v1/member/{id}',
@@ -79,10 +80,10 @@ id: number,
     }
 
     /**
-     * @returns MemberListRespDto OK
+     * @returns ApiResponseMemberListRespDto OK
      * @throws ApiError
      */
-    public static getAllMember(): CancelablePromise<MemberListRespDto> {
+    public static getAllMember(): CancelablePromise<ApiResponseMemberListRespDto> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/v1/member/all',
