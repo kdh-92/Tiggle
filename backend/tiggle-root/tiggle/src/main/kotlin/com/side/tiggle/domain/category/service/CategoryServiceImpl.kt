@@ -8,6 +8,7 @@ import com.side.tiggle.domain.category.exception.CategoryException
 import com.side.tiggle.domain.category.exception.error.CategoryErrorCode
 import com.side.tiggle.domain.category.repository.CategoryRepository
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDateTime
 
 @Service
@@ -15,16 +16,10 @@ class CategoryServiceImpl(
     private val categoryRepository: CategoryRepository,
 ) : CategoryService {
 
-    override fun createCategory(dto: CategoryCreateReqDto, memberId: Long): CategoryRespDto {
+    @Transactional
+    override fun createCategory(dto: CategoryCreateReqDto, memberId: Long) {
         val category = dto.toEntity(memberId)
-        return CategoryRespDto.fromEntity(categoryRepository.save(category))
-    }
-
-    override fun getCategory(categoryId: Long): CategoryRespDto {
-        val category = categoryRepository.findById(categoryId)
-            .orElseThrow { CategoryException(CategoryErrorCode.CATEGORY_NOT_FOUND) }
-
-        return CategoryRespDto.fromEntity(category)
+        categoryRepository.save(category)
     }
 
     override fun getCategoryByMemberIdOrDefaults(memberId: Long): CategoryListRespDto {
@@ -33,7 +28,8 @@ class CategoryServiceImpl(
         return CategoryListRespDto(dtoList)
     }
 
-    override fun updateCategory(id: Long, dto: CategoryUpdateReqDto): CategoryRespDto {
+    @Transactional
+    override fun updateCategory(id: Long, dto: CategoryUpdateReqDto) {
         val category = categoryRepository.findById(id)
             .orElseThrow { CategoryException(CategoryErrorCode.CATEGORY_NOT_FOUND) }
 
@@ -41,9 +37,10 @@ class CategoryServiceImpl(
             name = dto.name
         }
 
-        return CategoryRespDto.fromEntity(categoryRepository.save(category))
+        categoryRepository.save(category)
     }
 
+    @Transactional
     override fun deleteCategory(categoryId: Long) {
         val category = categoryRepository.findById(categoryId)
             .orElseThrow { CategoryException(CategoryErrorCode.CATEGORY_NOT_FOUND) }

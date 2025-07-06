@@ -32,18 +32,16 @@ class TransactionServiceImpl(
         memberId: Long,
         dto: TransactionCreateReqDto,
         file: MultipartFile?
-    ): TransactionRespDto {
+    ) {
 //        var savePath: Path? = null
         try {
 //            val uploadedFilePath = transactionFileUploadUtil.uploadTransactionImage(file)
 //            savePath = Paths.get(uploadedFilePath)
 //            dto.imageUrl = uploadedFilePath
 
-            val tx = transactionRepository.save(
+            transactionRepository.save(
                 dto.toEntity(memberId, dto.categoryId)
             )
-
-            return TransactionRespDto.fromEntity(tx)
         } catch (e: Exception) {
 //            if (savePath != null) {
 //                Files.deleteIfExists(savePath)
@@ -56,7 +54,7 @@ class TransactionServiceImpl(
     @Transactional
     override fun updateTransaction(
         memberId: Long, transactionId: Long, dto: TransactionUpdateReqDto
-    ): TransactionRespDto {
+    ) {
         val transaction = transactionRepository.findById(transactionId)
             .orElseThrow { TransactionException(TransactionErrorCode.TRANSACTION_NOT_FOUND) }
 
@@ -71,8 +69,8 @@ class TransactionServiceImpl(
             reason = dto.reason
             tagNames = dto.tagNames ?: emptyList()
         }
-        val tx = transactionRepository.save(transaction)
-        return TransactionRespDto.fromEntity(tx)
+
+        transactionRepository.save(transaction)
     }
 
     @Transactional

@@ -4,6 +4,7 @@ import com.side.tiggle.domain.tag.dto.req.TagCreateReqDto
 import com.side.tiggle.domain.tag.dto.req.TagUpdateReqDto
 import com.side.tiggle.domain.tag.dto.resp.TagRespDto
 import com.side.tiggle.domain.tag.service.TagService
+import com.side.tiggle.global.common.ApiResponse
 import jakarta.validation.Valid
 import jakarta.validation.constraints.Min
 import org.springframework.http.HttpStatus
@@ -21,27 +22,36 @@ class TagApiController(
     @PostMapping
     fun createTag(
         @RequestBody @Valid createReqDto: TagCreateReqDto
-    ): ResponseEntity<TagRespDto> {
-        return ResponseEntity(tagService.createTag(createReqDto), HttpStatus.CREATED)
+    ): ResponseEntity<ApiResponse<Nothing>> {
+        tagService.createTag(createReqDto)
+        return ResponseEntity
+            .status(HttpStatus.CREATED)
+            .body(ApiResponse.success(null, message = "태그가 생성되었습니다."))
     }
 
     @GetMapping("/{id}")
     fun getTag(
         @PathVariable("id") @Min(1) tagId: Long
-    ): ResponseEntity<TagRespDto> {
-        return ResponseEntity(tagService.getTag(tagId), HttpStatus.OK)
+    ): ResponseEntity<ApiResponse<TagRespDto>> {
+        val tag = tagService.getTag(tagId)
+        return ResponseEntity
+            .ok(ApiResponse.success(tag))
     }
 
     @GetMapping("/all")
-    fun getAllDefaultTag(): ResponseEntity<List<TagRespDto>> {
-        return ResponseEntity(tagService.getAllDefaultTag(), HttpStatus.OK)
+    fun getAllDefaultTag(): ResponseEntity<ApiResponse<List<TagRespDto>>> {
+        val getTags = tagService.getAllDefaultTag()
+        return ResponseEntity
+            .ok(ApiResponse.success(getTags))
     }
 
     @PutMapping("/{id}")
     fun updateTag(
         @PathVariable("id") @Min(1) tagId: Long,
         @RequestBody @Valid updateReqDto: TagUpdateReqDto
-    ): ResponseEntity<TagRespDto> {
-        return ResponseEntity(tagService.updateTag(tagId, updateReqDto), HttpStatus.OK)
+    ): ResponseEntity<ApiResponse<Nothing>> {
+        tagService.updateTag(tagId, updateReqDto)
+        return ResponseEntity
+            .ok(ApiResponse.success(null, message = "태그가 수정되었습니다."))
     }
 }

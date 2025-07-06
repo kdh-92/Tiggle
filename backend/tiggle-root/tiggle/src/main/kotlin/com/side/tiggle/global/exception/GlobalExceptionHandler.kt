@@ -1,6 +1,6 @@
 package com.side.tiggle.global.exception
 
-import com.side.tiggle.global.exception.error.ErrorCode
+import com.side.tiggle.global.common.ApiResponse
 import com.side.tiggle.global.exception.error.GlobalErrorCode
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
@@ -31,7 +31,7 @@ class GlobalExceptionHandler {
     fun handleConstraintViolationException(
         ex: ConstraintViolationException,
         request: HttpServletRequest
-    ): ResponseEntity<ErrorResponse> {
+    ): ResponseEntity<ApiResponse<Void>> {
         val errorMessage = ex.constraintViolations
             .joinToString(", ") { "${it.propertyPath}: ${it.message}" }
         return buildErrorResponse(
@@ -51,7 +51,7 @@ class GlobalExceptionHandler {
     fun handleCustomException(
         ex: CustomException,
         request: HttpServletRequest
-    ): ResponseEntity<ErrorResponse> {
+    ): ResponseEntity<ApiResponse<Void>> {
         val errorCode = ex.getErrorCode()
         return buildErrorResponse(
             errorCode.httpStatus(),
@@ -70,7 +70,7 @@ class GlobalExceptionHandler {
     fun handleIllegalArgumentException(
         ex: IllegalArgumentException,
         request: HttpServletRequest
-    ): ResponseEntity<ErrorResponse> {
+    ): ResponseEntity<ApiResponse<Void>> {
         return buildErrorResponse(
             GlobalErrorCode.ILLEGAL_ARGUMENT.httpStatus(),
             GlobalErrorCode.ILLEGAL_ARGUMENT.codeNumber(),
@@ -88,7 +88,7 @@ class GlobalExceptionHandler {
     fun handleMethodArgumentNotValidException(
         ex: MethodArgumentNotValidException,
         request: HttpServletRequest
-    ): ResponseEntity<ErrorResponse> {
+    ): ResponseEntity<ApiResponse<Void>> {
         val errorMessage = getValidationErrorMessage(ex)
         return buildErrorResponse(
             GlobalErrorCode.METHOD_ARGUMENT_NOT_VALID.httpStatus(),
@@ -107,7 +107,7 @@ class GlobalExceptionHandler {
     fun handleBindException(
         ex: BindException,
         request: HttpServletRequest
-    ): ResponseEntity<ErrorResponse> {
+    ): ResponseEntity<ApiResponse<Void>> {
         val errorMessage = getValidationErrorMessage(ex)
         return buildErrorResponse(
             GlobalErrorCode.BIND_EXCEPTION.httpStatus(),
@@ -126,7 +126,7 @@ class GlobalExceptionHandler {
     fun handleNoHandlerFoundException(
         ex: NoHandlerFoundException,
         request: HttpServletRequest
-    ): ResponseEntity<ErrorResponse> {
+    ): ResponseEntity<ApiResponse<Void>> {
         return buildErrorResponse(
             GlobalErrorCode.NOT_FOUND_ENDPOINT.httpStatus(),
             GlobalErrorCode.NOT_FOUND_ENDPOINT.codeNumber(),
@@ -144,7 +144,7 @@ class GlobalExceptionHandler {
     fun handleAllExceptions(
         ex: Exception,
         request: HttpServletRequest
-    ): ResponseEntity<ErrorResponse> {
+    ): ResponseEntity<ApiResponse<Void>> {
         return buildErrorResponse(
             GlobalErrorCode.INTERNAL_SERVER_ERROR.httpStatus(),
             GlobalErrorCode.INTERNAL_SERVER_ERROR.codeNumber(),
@@ -156,7 +156,7 @@ class GlobalExceptionHandler {
 
     /**
      * 공통 에러 응답 생성 메서드
-     * 예외 로깅 후 ErrorResponse를 통해 표준화된 에러 응답을 생성한다.
+     * 예외 로깅 후 ApiResponse.failure 통해 표준화된 에러 응답을 생성한다.
      */
     private fun buildErrorResponse(
         status: HttpStatus,
@@ -164,20 +164,12 @@ class GlobalExceptionHandler {
         message: String,
         ex: Throwable,
         request: HttpServletRequest
-    ): ResponseEntity<ErrorResponse> {
-        logger.error("{}: {}", ex.javaClass.simpleName, ex.message, ex)
+    ): ResponseEntity<ApiResponse<Void>> {
+        logger.error("[{} - {}] {}: {}", LocalDateTime.now(), request.requestURI, ex.javaClass.simpleName, ex.message, ex)
 
-        val errorResponse = ErrorResponse(
+        val apiResponse = ApiResponse.failure(errorCode.toString(), message)
 
-            timestamp = LocalDateTime.now(),
-            status = status.value(),
-            error = status.reasonPhrase,
-            errorCode = errorCode,
-            message = message,
-            path = request.requestURI
-        )
-
-        return ResponseEntity(errorResponse, status)
+        return ResponseEntity(apiResponse, status)
     }
 
     /**
@@ -187,16 +179,4 @@ class GlobalExceptionHandler {
         return ex.bindingResult.fieldErrors
             .joinToString(", ") { "${it.field}: ${it.defaultMessage}" }
     }
-
-    /**
-     * 표준화된 에러 응답 형식
-     */
-    data class ErrorResponse(
-        val timestamp: LocalDateTime,
-        val status: Int,
-        val error: String,
-        val errorCode: Int,
-        val message: String,
-        val path: String
-    )
 }
