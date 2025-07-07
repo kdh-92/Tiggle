@@ -132,7 +132,7 @@ const CreatePage = ({ type, profile }: CreatePageProps) => {
           ...rest,
         },
         multipartFile: imageUrl.item(0)!,
-      };
+      } as TransactionFormData;
 
       mutate(formData, {
         onSuccess: () => {
