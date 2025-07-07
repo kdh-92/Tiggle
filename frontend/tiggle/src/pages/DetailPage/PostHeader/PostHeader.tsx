@@ -1,11 +1,21 @@
 import { useSelector } from "react-redux";
 
+import { useNavigate } from "react-router-dom";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+
 import cn from "classnames";
 import dayjs from "dayjs";
 
 import { Menu, MenuItem } from "@/components/atoms";
 import TypeTag from "@/components/atoms/TypeTag/TypeTag";
-import { CategoryRespDto, MemberDto, TransactionRespDto } from "@/generated";
+import {
+  CategoryRespDto,
+  MemberDto,
+  TransactionRespDto,
+  TransactionApiControllerService,
+} from "@/generated";
+import useAuth from "@/hooks/useAuth";
+import useMessage from "@/hooks/useMessage";
 import {
   PostHeaderStyle,
   StyledPostHeaderDetail,
@@ -32,6 +42,46 @@ export default function PostHeader({
   // asset,
 }: PostHeaderProps) {
   const txType = useSelector((state: RootState) => state.detailPage.txType);
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
+  const messageApi = useMessage();
+  const { profile } = useAuth();
+
+  const isOwner = profile?.data?.id === sender.id;
+
+  const deleteTransactionMutation = useMutation({
+    mutationFn: (transactionId: number) =>
+      TransactionApiControllerService.deleteTransaction(transactionId),
+    onSuccess: () => {
+      messageApi.open({
+        type: "success",
+        content: "거래가 삭제되었습니다.",
+      });
+      queryClient.invalidateQueries({ queryKey: ["transactions"] });
+      navigate("/");
+    },
+    onError: error => {
+      console.error("거래 삭제 실패:", error);
+      messageApi.open({
+        type: "error",
+        content: "거래 삭제에 실패했습니다.",
+      });
+    },
+  });
+
+  const handleEdit = () => {
+    navigate(`/create/edit/${id}`);
+  };
+
+  const handleDelete = () => {
+    const isConfirmed = window.confirm(
+      "정말로 이 거래를 삭제하시겠습니까?\n삭제된 거래는 복구할 수 없습니다.",
+    );
+
+    if (isConfirmed) {
+      deleteTransactionMutation.mutate(id);
+    }
+  };
 
   return (
     <PostHeaderStyle id={`post-header-${id}`}>
@@ -69,11 +119,20 @@ export default function PostHeader({
         </div>
       </StyledPostHeaderDetail>
 
-      <Menu className="post-header-menu">
-        <MenuItem label="수정하기" />
-        <MenuItem label="환불하기" />
-        <MenuItem label="삭제하기" />
-      </Menu>
+      {isOwner && (
+        <Menu className="post-header-menu">
+          <MenuItem
+            label="수정하기"
+            onClick={handleEdit}
+            disabled={deleteTransactionMutation.isPending}
+          />
+          <MenuItem
+            label="삭제하기"
+            onClick={handleDelete}
+            disabled={deleteTransactionMutation.isPending}
+          />
+        </Menu>
+      )}
     </PostHeaderStyle>
   );
 }

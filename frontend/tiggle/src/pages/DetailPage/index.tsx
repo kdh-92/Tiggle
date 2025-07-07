@@ -61,9 +61,7 @@ const DetailPage = () => {
       <section className="content">
         <PostHeader
           {...transactionData.data}
-          sender={{
-            nickname: "사용자1",
-          }}
+          sender={transactionData.data.member}
           // asset={transactionData.asset!.name!}
           // category={transactionData.category!.name!}
           category={transactionData.data.category as CategoryDto}
