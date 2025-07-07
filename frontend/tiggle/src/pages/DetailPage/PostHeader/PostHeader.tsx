@@ -1,8 +1,7 @@
 import { useSelector } from "react-redux";
-
 import { useNavigate } from "react-router-dom";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import cn from "classnames";
 import dayjs from "dayjs";
 
@@ -10,7 +9,7 @@ import { Menu, MenuItem } from "@/components/atoms";
 import TypeTag from "@/components/atoms/TypeTag/TypeTag";
 import {
   CategoryRespDto,
-  MemberDto,
+  MemberRespDto,
   TransactionRespDto,
   TransactionApiControllerService,
 } from "@/generated";
@@ -27,7 +26,7 @@ import { convertTxTypeToWord } from "@/utils/txType";
 export interface PostHeaderProps
   extends Pick<TransactionRespDto, "id" | "content" | "amount" | "date"> {
   // TODO: api response 변경된 후, TransactionDto 에서 Pick 하는 것으로 수정
-  sender: MemberDto;
+  sender: MemberRespDto;
   category: CategoryRespDto;
   // asset: string;
 }
@@ -124,12 +123,12 @@ export default function PostHeader({
           <MenuItem
             label="수정하기"
             onClick={handleEdit}
-            disabled={deleteTransactionMutation.isPending}
+            disabled={deleteTransactionMutation.isLoading}
           />
           <MenuItem
             label="삭제하기"
             onClick={handleDelete}
-            disabled={deleteTransactionMutation.isPending}
+            disabled={deleteTransactionMutation.isLoading}
           />
         </Menu>
       )}
