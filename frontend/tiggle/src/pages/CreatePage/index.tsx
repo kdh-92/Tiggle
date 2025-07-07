@@ -7,7 +7,12 @@ import {
   useLocation,
 } from "react-router-dom";
 
-import { QueryClient, useMutation, useQuery } from "@tanstack/react-query";
+import {
+  QueryClient,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
 import dayjs from "dayjs";
 
 import { TransactionApiControllerService } from "@/generated";
@@ -53,6 +58,7 @@ const CreatePage = ({ type, profile }: CreatePageProps) => {
   const messageApi = useMessage();
   const location = useLocation();
   const parentId = Number(useParams().id);
+  const queryClient = useQueryClient();
 
   const isEditMode = location.pathname.includes("/edit/");
   const transactionId = isEditMode ? parentId : null;
@@ -95,6 +101,17 @@ const CreatePage = ({ type, profile }: CreatePageProps) => {
             type: "success",
             content: "거래가 수정되었습니다.",
           });
+
+          queryClient.invalidateQueries({
+            queryKey: transactionKeys.detail(transactionId!),
+          });
+          queryClient.invalidateQueries({
+            queryKey: transactionKeys.lists(),
+          });
+          queryClient.invalidateQueries({
+            queryKey: ["transactions"],
+          });
+
           navigate(`/detail/${transactionId}`);
         },
         onError: error => {
@@ -110,7 +127,7 @@ const CreatePage = ({ type, profile }: CreatePageProps) => {
         dto: {
           type,
           memberId: profile.id,
-          // tagNames: tags?.join(", "),
+          tagNames: data.tags,
           date: dayjs(date).toISOString(),
           ...rest,
         },
@@ -123,6 +140,14 @@ const CreatePage = ({ type, profile }: CreatePageProps) => {
             type: "success",
             content: "거래가 등록되었습니다.",
           });
+
+          queryClient.invalidateQueries({
+            queryKey: transactionKeys.lists(),
+          });
+          queryClient.invalidateQueries({
+            queryKey: ["transactions"],
+          });
+
           navigate(`/`);
         },
         onError: error => {
@@ -152,11 +177,6 @@ const CreatePage = ({ type, profile }: CreatePageProps) => {
         date: dayjs(transaction.date),
       };
 
-      // (디버깅 추가) - 실제 데이터 확인
-      console.log("🔍 Edit Mode - Transaction Data:", transaction);
-      console.log("🔍 Default Values:", defaultValues);
-      console.log("🔍 TagNames from backend:", transaction.tagNames);
-
       return defaultValues;
     }
 
@@ -174,7 +194,7 @@ const CreatePage = ({ type, profile }: CreatePageProps) => {
       </p>
       {parentTxData?.data && <TransactionPreviewCell {...parentTxData.data} />}
       <CreateForm
-        key={isEditMode ? `edit-${transactionId}` : "create"} // (수정됨) - key 추가
+        key={isEditMode ? `edit-${transactionId}` : "create"}
         type={type}
         onSubmit={handleOnSubmit}
         onCancel={handleOnCancel}

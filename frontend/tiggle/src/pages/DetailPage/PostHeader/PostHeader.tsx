@@ -20,6 +20,7 @@ import {
   StyledPostHeaderDetail,
   StyledPostHeaderTitle,
 } from "@/pages/DetailPage/PostHeader/PostHeaderStyle";
+import { transactionKeys } from "@/query/queryKeys";
 import { RootState } from "@/store";
 import { convertTxTypeToWord } from "@/utils/txType";
 
@@ -56,7 +57,17 @@ export default function PostHeader({
         type: "success",
         content: "거래가 삭제되었습니다.",
       });
-      queryClient.invalidateQueries({ queryKey: ["transactions"] });
+
+      queryClient.invalidateQueries({
+        queryKey: transactionKeys.lists(),
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["transactions"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: transactionKeys.detail(id),
+      });
+
       navigate("/");
     },
     onError: error => {
