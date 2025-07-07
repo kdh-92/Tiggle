@@ -2,6 +2,7 @@ package com.side.tiggle.domain.transaction.dto.req
 
 import com.side.tiggle.domain.category.model.Category
 import com.side.tiggle.domain.member.model.Member
+import com.side.tiggle.domain.transaction.enum.TransactionType
 import com.side.tiggle.domain.transaction.model.Transaction
 import jakarta.validation.constraints.Min
 import jakarta.validation.constraints.NotBlank
@@ -14,6 +15,9 @@ data class TransactionCreateReqDto(
     @field:NotNull(message = "카테고리 ID는 필수입니다")
     @field:Min(value = 1, message = "올바른 카테고리 ID를 입력해주세요")
     val categoryId:Long,
+
+    @field:NotNull(message = "거래 타입은 필수입니다")
+    val type: TransactionType,
 
     @field:Size(max = 1000, message = "이미지 URL은 1000자 이하여야 합니다")
     var imageUrl: String?,
@@ -44,6 +48,7 @@ data class TransactionCreateReqDto(
         return Transaction(
             member = member,
             category = category,
+            type = this.type,
             imageUrl = this.imageUrl,
             amount = this.amount,
             date = this.date,
