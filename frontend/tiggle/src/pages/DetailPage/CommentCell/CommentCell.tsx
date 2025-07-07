@@ -125,8 +125,8 @@ function ReplyCell({ id, content, createdAt, sender }: ReplyCellProps) {
   return (
     <ReplyCellStyle id={`comment-reply-${id}`}>
       <CommentSenderStyle className="user">
-        <img
-          className="profile"
+        <Avatar
+          size={32}
           src={sender!.profileUrl ?? "/assets/user-placeholder.png"}
           alt={`${sender!.nickname} profile`}
         />
