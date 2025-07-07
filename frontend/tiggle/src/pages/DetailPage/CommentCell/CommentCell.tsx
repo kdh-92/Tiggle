@@ -7,7 +7,7 @@ import { Avatar } from "antd";
 
 import CTAButton from "@/components/atoms/CTAButton/CTAButton";
 import TextArea from "@/components/atoms/TextArea/TextArea";
-import { CommentApiService, CommentRespDto } from "@/generated";
+import { CommentApiService, CommentChildRespDto } from "@/generated";
 import useMessage from "@/hooks/useMessage";
 import {
   CommentCellStyle,
@@ -24,8 +24,8 @@ import { convertTxTypeToColor } from "@/utils/txType";
 import ReplyToggleButton from "../ReplyToggleButton/ReplyToggleButton";
 
 export type CommentCellProps = Pick<
-  CommentRespDto,
-  "id" | "txId" | "content" | "createdAt" | "childCount" | "sender"
+  CommentChildRespDto,
+  "id" | "txId" | "content" | "createdAt" | "childCommentCount" | "sender"
 >;
 
 export default function CommentCell({
@@ -33,7 +33,7 @@ export default function CommentCell({
   txId,
   content,
   createdAt,
-  childCount,
+  childCommentCount,
   sender,
 }: CommentCellProps) {
   const queryClient = useQueryClient();
@@ -99,13 +99,13 @@ export default function CommentCell({
 
       <ReplyToggleButton
         open={replyOpen}
-        repliesCount={childCount!}
+        repliesCount={childCommentCount!}
         onClick={toggleReplySection}
       />
 
       {replyOpen && (
         <CommentRepliesStyle>
-          {childCount! > 0 && <div className="divider" />}
+          {childCommentCount! > 0 && <div className="divider" />}
 
           {repliesData?.data?.comments?.map(reply => (
             <ReplyCell key={`comment-reply-${reply.id}`} {...reply} />
@@ -119,7 +119,10 @@ export default function CommentCell({
 }
 
 interface ReplyCellProps
-  extends Pick<CommentRespDto, "id" | "content" | "createdAt" | "sender"> {}
+  extends Pick<
+    CommentChildRespDto,
+    "id" | "content" | "createdAt" | "sender"
+  > {}
 
 function ReplyCell({ id, content, createdAt, sender }: ReplyCellProps) {
   return (
