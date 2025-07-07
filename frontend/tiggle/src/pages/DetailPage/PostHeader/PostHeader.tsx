@@ -99,7 +99,9 @@ export default function PostHeader({
         <TypeTag className="tag" txType={txType} size={"md"} />
         <div className={cn("amount", txType)}>
           <span className="amount-unit">₩</span>
-          <span className="amount-number">{amount}</span>
+          <span className="amount-number">
+            {amount.toLocaleString("ko-KR")}
+          </span>
         </div>
         <p className="title">{content}</p>
       </StyledPostHeaderTitle>
