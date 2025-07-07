@@ -32,7 +32,6 @@ import { TxType } from "@/types";
 import { convertTxTypeToWord } from "@/utils/txType";
 
 export interface FormInputs {
-  // assetId: number;
   categoryId: number;
   amount: number;
   content: string;

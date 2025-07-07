@@ -10,6 +10,7 @@ export type TransactionRespDto = {
     id: number;
     member: MemberRespDto;
     category: CategoryRespDto;
+    type: string;
     tagNames?: Array<string>;
     createdAt: string;
     parentId?: number;
