@@ -2,7 +2,7 @@ import { FormHTMLAttributes } from "react";
 import { SubmitHandler, useForm, Controller } from "react-hook-form";
 import { useSelector } from "react-redux";
 
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Avatar } from "antd";
 
 import CTAButton from "@/components/atoms/CTAButton/CTAButton";
@@ -11,7 +11,7 @@ import useAuth from "@/hooks/useAuth";
 import useMessage from "@/hooks/useMessage";
 import { CommentSenderStyle } from "@/pages/DetailPage/CommentCell/CommentCellStyle";
 import { CommentFormStyle } from "@/pages/DetailPage/CommentForm/CommentFormStyle";
-import queryClient from "@/query/queryClient";
+import { commentKeys, reactionKeys } from "@/query/queryKeys";
 import { RootState } from "@/store";
 import { convertTxTypeToColor } from "@/utils/txType";
 
@@ -24,6 +24,7 @@ interface CommentFormInputs {
 }
 
 export default function CommentForm({ txId, ...props }: CommentFormProps) {
+  const queryClient = useQueryClient();
   const { isLogin, profile, checkIsLogin } = useAuth();
   const txType = useSelector((state: RootState) => state.detailPage.txType);
   const messageApi = useMessage();
@@ -47,7 +48,12 @@ export default function CommentForm({ txId, ...props }: CommentFormProps) {
       onSuccess: () => {
         messageApi.open({ type: "success", content: "댓글이 등록되었습니다." });
         reset({ comment: "" });
-        queryClient.invalidateQueries(["transaction", "comments", txId]);
+        queryClient.invalidateQueries({
+          queryKey: commentKeys.list(txId),
+        });
+        queryClient.invalidateQueries({
+          queryKey: reactionKeys.detail(txId),
+        });
       },
     });
   };

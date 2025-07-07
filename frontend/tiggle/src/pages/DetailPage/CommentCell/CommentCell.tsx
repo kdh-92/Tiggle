@@ -2,7 +2,7 @@ import { useState } from "react";
 import { SubmitHandler, useForm, Controller } from "react-hook-form";
 import { useSelector } from "react-redux";
 
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Avatar } from "antd";
 
 import CTAButton from "@/components/atoms/CTAButton/CTAButton";
@@ -16,8 +16,7 @@ import {
   CommentSenderStyle,
   ReplyFormStyle,
 } from "@/pages/DetailPage/CommentCell/CommentCellStyle";
-import queryClient from "@/query/queryClient";
-import { commentKeys } from "@/query/queryKeys";
+import { commentKeys, reactionKeys } from "@/query/queryKeys";
 import { RootState } from "@/store";
 import { calculateDateTimeDiff } from "@/utils/date";
 import { convertTxTypeToColor } from "@/utils/txType";
@@ -37,6 +36,7 @@ export default function CommentCell({
   childCount,
   sender,
 }: CommentCellProps) {
+  const queryClient = useQueryClient();
   const messageApi = useMessage();
   const [replyOpen, setReplyOpen] = useState(false);
 
@@ -68,7 +68,15 @@ export default function CommentCell({
           type: "success",
           content: "답댓글이 등록되었습니다.",
         });
-        queryClient.invalidateQueries(["comment", "replies", id]);
+        queryClient.invalidateQueries({
+          queryKey: commentKeys.reply(id!),
+        });
+        queryClient.invalidateQueries({
+          queryKey: commentKeys.list(txId!),
+        });
+        queryClient.invalidateQueries({
+          queryKey: reactionKeys.detail(txId!),
+        });
       },
     });
   };
