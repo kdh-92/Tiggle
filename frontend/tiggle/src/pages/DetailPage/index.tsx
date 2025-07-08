@@ -47,6 +47,9 @@ const DetailPage = () => {
     queryKey: commentKeys.list(id),
     queryFn: async () => TransactionApiControllerService.getAllCommentsByTx(id),
   });
+  const handleImageError = (e: React.SyntheticEvent<HTMLImageElement>) => {
+    e.currentTarget.src = "/src/assets/tiggle.png";
+  };
 
   if (!transactionData?.data) {
     return <div>Loading...</div>;
@@ -69,9 +72,10 @@ const DetailPage = () => {
               src={
                 transactionData.data.imageUrl
                   ? `${import.meta.env.VITE_API_URL}${transactionData.data.imageUrl}`
-                  : "/assets/img-placeholder.png"
+                  : "/src/assets/tiggle.png"
               }
               alt={transactionData.data.content}
+              onError={handleImageError}
             />
           </div>
           <div className="content">
