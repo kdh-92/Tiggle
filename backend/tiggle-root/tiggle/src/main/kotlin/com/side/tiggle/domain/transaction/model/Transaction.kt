@@ -2,7 +2,6 @@ package com.side.tiggle.domain.transaction.model
 
 import com.side.tiggle.domain.category.model.Category
 import com.side.tiggle.domain.member.model.Member
-import com.side.tiggle.domain.transaction.enum.TransactionType
 import com.side.tiggle.global.common.model.BaseEntity
 import jakarta.persistence.*
 import org.hibernate.annotations.SQLDelete
@@ -22,10 +21,6 @@ class Transaction(
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
     val category: Category,
-
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    var type: TransactionType,
 
     @Column(length = 1000)
     val imageUrl: String? = null,

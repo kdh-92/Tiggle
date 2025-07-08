@@ -1,6 +1,5 @@
 package com.side.tiggle.domain.transaction.dto.internal
 
-import com.side.tiggle.domain.transaction.enum.TransactionType
 import com.side.tiggle.domain.transaction.model.Transaction
 import java.time.LocalDate
 
@@ -8,7 +7,6 @@ data class TransactionInfo(
     val id: Long,
     val memberId: Long,
     val categoryId: Long,
-    val type: TransactionType,
     val imageUrl: String? = null,
     var amount: Int,
     var date: LocalDate,
@@ -22,7 +20,6 @@ data class TransactionInfo(
                 id = transaction.id!!,
                 memberId = transaction.member.id!!,
                 categoryId = transaction.category.id!!,
-                type = transaction.type,
                 imageUrl = transaction.imageUrl,
                 amount = transaction.amount,
                 date = transaction.date,
