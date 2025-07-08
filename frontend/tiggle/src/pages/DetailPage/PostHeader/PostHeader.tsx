@@ -1,4 +1,3 @@
-import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -21,7 +20,6 @@ import {
   StyledPostHeaderTitle,
 } from "@/pages/DetailPage/PostHeader/PostHeaderStyle";
 import { transactionKeys } from "@/query/queryKeys";
-import { RootState } from "@/store";
 import { convertTxTypeToWord } from "@/utils/txType";
 
 export interface PostHeaderProps
@@ -41,7 +39,7 @@ export default function PostHeader({
   category,
   // asset,
 }: PostHeaderProps) {
-  const txType = useSelector((state: RootState) => state.detailPage.txType);
+  const txType = "OUTCOME";
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const messageApi = useMessage();

@@ -3,7 +3,6 @@ import {
   useNavigate,
   useParams,
   LoaderFunctionArgs,
-  useLoaderData,
   useLocation,
 } from "react-router-dom";
 
@@ -22,11 +21,8 @@ import CreateForm, {
 } from "@/pages/CreatePage/CreateForm/CreateForm";
 import { CreatePageStyle } from "@/pages/CreatePage/CreatePageStyle";
 import { transactionKeys } from "@/query/queryKeys";
-import { TxType } from "@/types";
-import { convertTxTypeToWord } from "@/utils/txType";
 import withAuth, { AuthProps } from "@/utils/withAuth";
 
-import TransactionPreviewCell from "./TransactionPreviewCell/TransactionPreviewCell";
 import {
   createTransaction,
   updateTransaction,
@@ -49,11 +45,9 @@ export const createPageLoader =
     return null;
   };
 
-interface CreatePageProps extends AuthProps {
-  type: TxType;
-}
+interface CreatePageProps extends AuthProps {}
 
-const CreatePage = ({ type, profile }: CreatePageProps) => {
+const CreatePage = ({ profile }: CreatePageProps) => {
   const navigate = useNavigate();
   const messageApi = useMessage();
   const location = useLocation();
@@ -63,19 +57,9 @@ const CreatePage = ({ type, profile }: CreatePageProps) => {
   const isEditMode = location.pathname.includes("/edit/");
   const transactionId = isEditMode ? parentId : null;
 
-  const initialData = useLoaderData() as Awaited<
-    ReturnType<ReturnType<typeof createPageLoader>>
-  >;
-
   const { data: editTransactionData } = useQuery({
     ...transactionQuery(transactionId!),
     enabled: isEditMode && !!transactionId,
-  });
-
-  const { data: parentTxData } = useQuery({
-    ...transactionQuery(parentId),
-    initialData,
-    enabled: type === "REFUND" && !isEditMode,
   });
 
   const { mutate } = useMutation(createTransaction);
@@ -125,7 +109,6 @@ const CreatePage = ({ type, profile }: CreatePageProps) => {
     } else {
       const formData: TransactionFormData = {
         dto: {
-          type,
           memberId: profile.id,
           tagNames: data.tags,
           date: dayjs(date).toISOString(),
@@ -180,22 +163,14 @@ const CreatePage = ({ type, profile }: CreatePageProps) => {
       return defaultValues;
     }
 
-    if (parentTxData?.data) {
-      return {};
-    }
-
     return undefined;
   };
 
   return (
     <CreatePageStyle>
-      <p className="title">
-        {isEditMode ? "거래 수정하기" : `${convertTxTypeToWord(type)} 기록하기`}
-      </p>
-      {parentTxData?.data && <TransactionPreviewCell {...parentTxData.data} />}
+      <p className="title">{isEditMode ? "거래 수정하기" : "지출 기록하기"}</p>
       <CreateForm
         key={isEditMode ? `edit-${transactionId}` : "create"}
-        type={type}
         onSubmit={handleOnSubmit}
         onCancel={handleOnCancel}
         defaultValues={getDefaultValues()}

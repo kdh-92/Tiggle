@@ -1,5 +1,3 @@
-import { useLayoutEffect } from "react";
-import { useDispatch } from "react-redux";
 import { LoaderFunctionArgs, useLoaderData, useParams } from "react-router-dom";
 
 import { QueryClient, useQuery } from "@tanstack/react-query";
@@ -20,8 +18,6 @@ import {
 import PostHeader from "@/pages/DetailPage/PostHeader/PostHeader";
 import ReactionSection from "@/pages/DetailPage/ReactionSection/ReactionSection";
 import { commentKeys, reactionKeys, transactionKeys } from "@/query/queryKeys";
-import store from "@/store/detailPage";
-import { TxType } from "@/types";
 
 const transactionQuery = (id: number) => ({
   queryKey: transactionKeys.detail(id),
@@ -51,17 +47,6 @@ const DetailPage = () => {
     queryKey: commentKeys.list(id),
     queryFn: async () => TransactionApiControllerService.getAllCommentsByTx(id),
   });
-
-  const dispatch = useDispatch();
-  useLayoutEffect(() => {
-    if (transactionData?.data?.type) {
-      dispatch(store.actions.setType(transactionData.data.type as TxType));
-    }
-  }, [transactionData, dispatch]); // (수정됨) - dispatch 의존성 추가
-
-  if (!transactionData?.data) {
-    return <div>Loading...</div>;
-  }
 
   if (!transactionData?.data) {
     return <div>Loading...</div>;

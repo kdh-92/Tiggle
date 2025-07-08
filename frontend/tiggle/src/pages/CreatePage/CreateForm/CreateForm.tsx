@@ -28,7 +28,6 @@ import useAuth from "@/hooks/useAuth";
 import { CreateFormStyle } from "@/pages/CreatePage/CreateForm/CreateFormStyle";
 // import { tagKeys } from "@/query/queryKeys";
 import { categoryKeys, tagKeys } from "@/query/queryKeys";
-import { TxType } from "@/types";
 import { convertTxTypeToWord } from "@/utils/txType";
 
 export interface FormInputs {
@@ -44,7 +43,6 @@ export interface FormInputs {
 type FormInputsKey = keyof FormInputs;
 
 interface CreateFormProps {
-  type: TxType;
   onSubmit: SubmitHandler<FormInputs>;
   onCancel: () => void;
   defaultValues?: Partial<FormInputs>;
@@ -52,12 +50,12 @@ interface CreateFormProps {
 }
 
 function CreateForm({
-  type,
   onSubmit,
   onCancel,
   defaultValues,
   disabledInputs,
 }: CreateFormProps) {
+  const type = "OUTCOME";
   const { profile } = useAuth();
   const { data: categoriesData, isLoading: isCategoriesLoading } = useQuery({
     queryKey: categoryKeys.lists(),
