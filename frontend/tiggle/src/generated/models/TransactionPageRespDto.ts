@@ -3,10 +3,10 @@
 /* tslint:disable */
 /* eslint-disable */
 
-import type { TransactionRespDto } from './TransactionRespDto';
+import type { TransactionDtoWithCount } from './TransactionDtoWithCount';
 
 export type TransactionPageRespDto = {
-    transactions: Array<TransactionRespDto>;
+    transactions: Array<TransactionDtoWithCount>;
     pageNumber: number;
     pageSize: number;
     totalElements: number;

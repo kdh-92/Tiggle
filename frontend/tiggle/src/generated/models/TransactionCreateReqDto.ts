@@ -5,7 +5,6 @@
 
 export type TransactionCreateReqDto = {
     categoryId: number;
-    type: 'INCOME' | 'OUTCOME' | 'REFUND';
     imageUrl?: string;
     amount: number;
     date: string;

@@ -40,6 +40,7 @@ export type { TagCreateReqDto } from './models/TagCreateReqDto';
 export type { TagRespDto } from './models/TagRespDto';
 export type { TagUpdateReqDto } from './models/TagUpdateReqDto';
 export type { TransactionCreateReqDto } from './models/TransactionCreateReqDto';
+export type { TransactionDtoWithCount } from './models/TransactionDtoWithCount';
 export type { TransactionListRespDto } from './models/TransactionListRespDto';
 export type { TransactionPageRespDto } from './models/TransactionPageRespDto';
 export type { TransactionRespDto } from './models/TransactionRespDto';
