@@ -14,7 +14,7 @@ export const MyTransactionCellStyle = styled.div`
   }
 
   &.OUTCOME:hover {
-    background-color: ${({ theme }) => theme.color.peach[50].value};
+    background-color: ${({ theme }) => theme.color.blue[50].value};
   }
 
   &.REFUND:hover {

@@ -39,7 +39,7 @@ export const TypeTagStyle = styled.div`
   }
 
   &.OUTCOME {
-    background: ${({ theme: { color } }) => color.peach[500].value};
+    background: ${({ theme: { color } }) => color.blue[500].value};
   }
 
   &.REFUND {
