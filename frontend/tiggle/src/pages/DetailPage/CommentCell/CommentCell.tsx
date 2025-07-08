@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { SubmitHandler, useForm, Controller } from "react-hook-form";
-import { useSelector } from "react-redux";
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Avatar } from "antd";
@@ -17,7 +16,6 @@ import {
   ReplyFormStyle,
 } from "@/pages/DetailPage/CommentCell/CommentCellStyle";
 import { commentKeys, reactionKeys } from "@/query/queryKeys";
-import { RootState } from "@/store";
 import { calculateDateTimeDiff } from "@/utils/date";
 import { convertTxTypeToColor } from "@/utils/txType";
 
@@ -153,7 +151,7 @@ interface ReplyFormProps {
 }
 
 function ReplyForm({ onSubmit }: ReplyFormProps) {
-  const txType = useSelector((state: RootState) => state.detailPage.txType);
+  const txType = "OUTCOME";
   const { control, handleSubmit, reset } = useForm<ReplyInputs>();
 
   const handleOnSubmit: SubmitHandler<ReplyInputs> = ({ reply }) => {
