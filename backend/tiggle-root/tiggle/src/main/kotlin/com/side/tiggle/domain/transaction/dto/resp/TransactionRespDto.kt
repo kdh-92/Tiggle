@@ -10,7 +10,6 @@ data class TransactionRespDto(
     val id: Long,
     val member: MemberRespDto,
     val category: CategoryRespDto,
-    val type: String = "OUTCOME",
     val tagNames: List<String>?,
     val createdAt: LocalDateTime,
     val parentId: Long? = null,
