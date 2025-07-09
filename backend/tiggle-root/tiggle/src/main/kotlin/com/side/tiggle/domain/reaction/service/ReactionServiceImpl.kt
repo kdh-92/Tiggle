@@ -30,17 +30,18 @@ class ReactionServiceImpl(
     }
 
     /**
-     * 사용자의 반응을 생성하거나 수정합니다.
+     * 사용자의 반응을 생성합니다.
      *
-     * 1. 기존 반응이 있는지 조회
-     * 2. 있으면 타입 수정, 없으면 새로 생성
-     * 3. 동시성으로 인한 중복 생성 시 기존 데이터 업데이트 처리
+     * 1. 새로운 반응 생성 시도
+     * 2. 이미 존재하면 무시 (동시성 처리)
+     *
+     * 주의: 기존 반응 타입 변경은 불가능 (예: UP→DOWN)
+     * 타입 변경이 필요하면 DELETE 후 재생성 필요
      *
      * @param txId 거래 ID
      * @param senderId 반응을 보내는 사용자 ID
      * @param receiverId 반응을 받는 사용자 ID
      * @param dto 반응 생성 요청 데이터 (타입 포함)
-     * @throws IllegalStateException 동시성 처리 중 기존 반응을 찾지 못한 경우 발생
      * @author 양병학
      * @since 2025-07-09 최초 작성
      * @modify 2025-07-09 동시성 문제 해결을 위한 예외 처리 추가
@@ -53,29 +54,15 @@ class ReactionServiceImpl(
         dto: ReactionCreateReqDto
     ) {
         try {
-            val reaction = (reactionRepository.findByTxIdAndSenderId(txId, senderId)
-                ?: Reaction(
-                    txId = txId,
-                    receiverId = receiverId,
-                    senderId = senderId,
-                    type = dto.type,
-                )
-                    ).apply {
-                    type = dto.type
-                }
-
-            reactionRepository.save(reaction)
-
+            val newReaction = Reaction(
+                type = dto.type,
+                txId = txId,
+                senderId = senderId,
+                receiverId = receiverId
+            )
+            reactionRepository.save(newReaction)
         } catch (e: DataIntegrityViolationException) {
-            log.debug("동시성으로 인한 중복 반응 생성 감지: txId=$txId, senderId=$senderId. 기존 반응을 업데이트합니다.", e)
-
-            val existingReaction = reactionRepository.findByTxIdAndSenderId(txId, senderId)
-                ?: throw IllegalStateException("Reaction 데이터를 찾을 수 없습니다. txId=$txId, senderId=$senderId")
-
-            existingReaction.type = dto.type
-            reactionRepository.save(existingReaction)
-
-            log.debug("Reaction 업데이트 완료: txId=$txId, senderId=$senderId, newType=${dto.type}")
+            log.debug("이미 반응이 존재합니다: txId=$txId, senderId=$senderId")
         }
     }
 
