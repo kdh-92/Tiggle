@@ -38,7 +38,7 @@ class TransactionServiceImpl(
     override fun createTransaction(
         memberId: Long,
         dto: TransactionCreateReqDto,
-        file: MultipartFile?
+        file: MultipartFile
     ) {
         var savePath: Path? = null
         try {
@@ -168,11 +168,5 @@ class TransactionServiceImpl(
 
         val dtoWithCountPage = memberTxPage.map { mapTxRespDto(it) }
         return TransactionPageRespDto.fromPage(dtoWithCountPage)
-    }
-
-    override fun getAllUndeletedTransaction(): TransactionListRespDto {
-        val tx = transactionRepository.findAllWithMemberAndCategory()
-        val dtoList = tx.map { TransactionRespDto.fromEntity(it) }
-        return TransactionListRespDto(dtoList)
     }
 }

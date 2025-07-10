@@ -34,9 +34,6 @@ interface TransactionRepository: JpaRepository<Transaction, Long> {
     ): Page<Transaction>
 
     @Query("SELECT t FROM Transaction t JOIN FETCH t.member JOIN FETCH t.category ORDER BY t.createdAt DESC")
-    fun findAllWithMemberAndCategory(): List<Transaction>
-
-    @Query("SELECT t FROM Transaction t JOIN FETCH t.member JOIN FETCH t.category ORDER BY t.createdAt DESC")
     fun findAllWithMemberAndCategoryPaged(pageable: Pageable): Page<Transaction>
 
     @Query("SELECT t FROM Transaction t JOIN FETCH t.member JOIN FETCH t.category WHERE t.id = :id")

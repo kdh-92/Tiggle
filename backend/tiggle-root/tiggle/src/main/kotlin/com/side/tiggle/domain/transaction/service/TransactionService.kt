@@ -26,5 +26,4 @@ interface TransactionService {
         categoryIds: List<Long>?,
         tagNames: List<String>?
     ): TransactionPageRespDto
-    fun getAllUndeletedTransaction(): TransactionListRespDto
 }
