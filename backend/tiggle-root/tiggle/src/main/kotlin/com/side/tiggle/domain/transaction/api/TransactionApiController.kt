@@ -40,7 +40,7 @@ class TransactionApiController(
         @Parameter(hidden = true)
         @RequestHeader(name = HttpHeaders.MEMBER_ID) memberId: Long,
         @RequestPart @Valid dto: TransactionCreateReqDto,
-        @RequestPart(value = "multipartFile", required = false) file: MultipartFile?
+        @RequestPart(value = "multipartFile", required = false) file: MultipartFile
     ): ResponseEntity<ApiResponse<Nothing>> {
         transactionService.createTransaction(memberId, dto, file)
         return ResponseEntity
@@ -107,13 +107,6 @@ class TransactionApiController(
 
         return ResponseEntity
             .ok(ApiResponse.success(txPage))
-    }
-
-    @GetMapping("/all")
-    fun getAllTransaction(): ResponseEntity<ApiResponse<TransactionListRespDto>> {
-        val transactions = transactionService.getAllUndeletedTransaction()
-        return ResponseEntity
-            .ok(ApiResponse.success(transactions))
     }
 
     @PutMapping("/{id}")
