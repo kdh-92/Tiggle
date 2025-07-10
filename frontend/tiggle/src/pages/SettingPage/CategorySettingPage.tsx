@@ -34,7 +34,7 @@ const CategorySettingPage = ({}: CategorySettingPageProps) => {
   // );
 
   const { mutate: createMutate } = useMutation(async (name: string) =>
-    CategoryApiControllerService.createCategory(profile?.id || 0, {
+    CategoryApiControllerService.createCategory(profile?.data?.id || 0, {
       name,
       // type: Tx.OUTCOME,
       defaults: true,
