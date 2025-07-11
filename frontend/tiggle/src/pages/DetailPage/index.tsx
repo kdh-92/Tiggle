@@ -107,7 +107,7 @@ const DetailPage = () => {
           {commentsData?.data?.comments?.map(comment => (
             <CommentCell
               {...comment}
-              childCount={comment.childCommentCount}
+              childCommentCount={comment.childCommentCount}
               key={`comment-cell-${comment.id}`}
             />
           ))}
