@@ -9,28 +9,6 @@ import { ReactionSectionStyle } from "@/pages/DetailPage/ReactionSection/Reactio
 import queryClient from "@/query/queryClient";
 import { Reaction, ReactionType } from "@/types";
 
-function useDebounce<T extends (...args: any[]) => void>(
-  callback: T,
-  delay: number,
-): T {
-  const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null);
-
-  return useCallback(
-    ((...args: Parameters<T>) => {
-      if (timeoutId) {
-        clearTimeout(timeoutId);
-      }
-
-      const newTimeoutId = setTimeout(() => {
-        callback(...args);
-      }, delay);
-
-      setTimeoutId(newTimeoutId);
-    }) as T,
-    [callback, delay, timeoutId],
-  );
-}
-
 interface ReactionSectionProps
   extends Omit<ReactionSummaryRespDto, "commentCount"> {
   txId: number;
@@ -44,6 +22,7 @@ export default function ReactionSection({
   className,
 }: ReactionSectionProps) {
   const { checkIsLogin } = useAuth();
+  const [isDisabled, setIsDisabled] = useState(false);
   const [selectedReaction, setSelectedReaction] = useState<
     ReactionType | undefined
   >(undefined);
@@ -58,7 +37,7 @@ export default function ReactionSection({
     queryFn: async () => {
       try {
         const response = await ReactionApiService.getReaction(txId);
-        return response.data;
+        return response.data || null;
       } catch (error) {
         return null;
       }
@@ -104,19 +83,6 @@ export default function ReactionSection({
     },
   );
 
-  const executeReactionChange = useCallback(
-    (inputReaction: ReactionType) => {
-      if (selectedReaction === inputReaction) {
-        deleteReaction();
-      } else {
-        upsertReaction(inputReaction);
-      }
-    },
-    [selectedReaction, deleteReaction, upsertReaction],
-  );
-
-  const debouncedExecuteReaction = useDebounce(executeReactionChange, 500);
-
   const updateOptimisticUI = useCallback(
     (inputReaction: ReactionType) => {
       if (selectedReaction === inputReaction) {
@@ -147,10 +113,27 @@ export default function ReactionSection({
 
   const handleReactionButtonClick = useCallback(
     (inputReaction: ReactionType) => {
+      if (isDisabled) return;
+
+      setIsDisabled(true);
+
       updateOptimisticUI(inputReaction);
-      debouncedExecuteReaction(inputReaction);
+
+      if (selectedReaction === inputReaction) {
+        deleteReaction();
+      } else {
+        upsertReaction(inputReaction);
+      }
+
+      setTimeout(() => setIsDisabled(false), 1000);
     },
-    [updateOptimisticUI, debouncedExecuteReaction],
+    [
+      isDisabled,
+      selectedReaction,
+      updateOptimisticUI,
+      deleteReaction,
+      upsertReaction,
+    ],
   );
 
   return (
@@ -167,6 +150,7 @@ export default function ReactionSection({
             checkIsLogin(() => handleReactionButtonClick(Reaction.Up))
           }
           checked={selectedReaction === Reaction.Up}
+          disabled={isDisabled}
         />
         <ReactionButton
           reaction={Reaction.Down}
@@ -175,6 +159,7 @@ export default function ReactionSection({
             checkIsLogin(() => handleReactionButtonClick(Reaction.Down))
           }
           checked={selectedReaction === Reaction.Down}
+          disabled={isDisabled}
         />
       </div>
     </ReactionSectionStyle>

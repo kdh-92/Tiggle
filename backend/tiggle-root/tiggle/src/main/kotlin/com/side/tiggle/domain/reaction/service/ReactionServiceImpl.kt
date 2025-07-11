@@ -30,21 +30,19 @@ class ReactionServiceImpl(
     }
 
     /**
-     * 사용자의 반응을 생성합니다.
+     * 사용자의 반응을 생성하거나 수정합니다.
      *
-     * 1. 새로운 반응 생성 시도
-     * 2. 이미 존재하면 무시 (동시성 처리)
-     *
-     * 주의: 기존 반응 타입 변경은 불가능 (예: UP→DOWN)
-     * 타입 변경이 필요하면 DELETE 후 재생성 필요
+     * 1. 기존 반응이 있으면 타입 업데이트
+     * 2. 기존 반응이 없으면 새로 생성
+     * 3. 동시성 문제 대응 (중복 생성 방지)
      *
      * @param txId 거래 ID
      * @param senderId 반응을 보내는 사용자 ID
      * @param receiverId 반응을 받는 사용자 ID
-     * @param dto 반응 생성 요청 데이터 (타입 포함)
+     * @param dto 반응 생성/수정 요청 데이터 (타입 포함)
      * @author 양병학
      * @since 2025-07-09 최초 작성
-     * @modify 2025-07-09 동시성 문제 해결을 위한 예외 처리 추가
+     * @modify 2025-07-11 타입 변경 지원 추가
      */
     @Transactional
     override fun upsertReaction(
@@ -54,13 +52,22 @@ class ReactionServiceImpl(
         dto: ReactionCreateReqDto
     ) {
         try {
-            val newReaction = Reaction(
-                type = dto.type,
-                txId = txId,
-                senderId = senderId,
-                receiverId = receiverId
-            )
-            reactionRepository.save(newReaction)
+            val existingReaction = reactionRepository.findByTxIdAndSenderId(txId, senderId)
+
+            if (existingReaction != null) {
+                existingReaction.type = dto.type
+                reactionRepository.save(existingReaction)
+                log.debug("반응 타입 업데이트: txId=$txId, senderId=$senderId, type=${dto.type}")
+            } else {
+                val newReaction = Reaction(
+                    type = dto.type,
+                    txId = txId,
+                    senderId = senderId,
+                    receiverId = receiverId
+                )
+                reactionRepository.save(newReaction)
+                log.debug("새 반응 생성: txId=$txId, senderId=$senderId, type=${dto.type}")
+            }
         } catch (e: DataIntegrityViolationException) {
             log.debug("이미 반응이 존재합니다: txId=$txId, senderId=$senderId")
         }
