@@ -105,9 +105,10 @@ export default function CommentCell({
         <CommentRepliesStyle>
           {childCommentCount! > 0 && <div className="divider" />}
 
-          {repliesData?.data?.comments?.map(reply => (
-            <ReplyCell key={`comment-reply-${reply.id}`} {...reply} />
-          ))}
+          {repliesData?.data &&
+            repliesData.data.comments.map(reply => (
+              <ReplyCell key={`comment-reply-${reply.id}`} {...reply} />
+            ))}
 
           <ReplyForm onSubmit={onSubmitReply} />
         </CommentRepliesStyle>
