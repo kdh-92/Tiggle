@@ -40,7 +40,7 @@ class TransactionApiController(
         @Parameter(hidden = true)
         @RequestHeader(name = HttpHeaders.MEMBER_ID) memberId: Long,
         @RequestPart @Valid dto: TransactionCreateReqDto,
-        @RequestPart(value = "multipartFile", required = false) file: MultipartFile
+        @RequestPart(value = "multipartFile", required = true) file: MultipartFile
     ): ResponseEntity<ApiResponse<Nothing>> {
         transactionService.createTransaction(memberId, dto, file)
         return ResponseEntity
