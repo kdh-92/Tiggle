@@ -21,7 +21,7 @@ import CreateForm, {
 } from "@/pages/CreatePage/CreateForm/CreateForm";
 import { CreatePageStyle } from "@/pages/CreatePage/CreatePageStyle";
 import { transactionKeys } from "@/query/queryKeys";
-import withAuth, { AuthProps } from "@/utils/withAuth";
+import withAuth from "@/utils/withAuth";
 
 import {
   createTransaction,
@@ -45,9 +45,7 @@ export const createPageLoader =
     return null;
   };
 
-interface CreatePageProps extends AuthProps {}
-
-const CreatePage = ({ profile }: CreatePageProps) => {
+const CreatePage = () => {
   const navigate = useNavigate();
   const messageApi = useMessage();
   const location = useLocation();
