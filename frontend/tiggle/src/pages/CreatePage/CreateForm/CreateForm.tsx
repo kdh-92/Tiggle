@@ -55,7 +55,6 @@ function CreateForm({
   defaultValues,
   disabledInputs,
 }: CreateFormProps) {
-  const type = "OUTCOME";
   const { profile } = useAuth();
   const { data: categoriesData, isLoading: isCategoriesLoading } = useQuery({
     queryKey: categoryKeys.lists(),
@@ -167,7 +166,7 @@ function CreateForm({
       </div>
 
       <div className="form-item">
-        <label>{convertTxTypeToWord(type)}일자</label>
+        <label>{convertTxTypeToWord()}일자</label>
         <Controller
           name="date"
           control={control}
@@ -194,7 +193,7 @@ function CreateForm({
           }}
           render={({ field }) => (
             <TextArea
-              placeholder={`${convertTxTypeToWord(type)} 이유를 입력하세요.`}
+              placeholder={`${convertTxTypeToWord()} 이유를 입력하세요.`}
               count={{ show: true, max: 300 }}
               disabled={disabledInputs?.includes("reason")}
               error={errors.reason}
@@ -236,7 +235,7 @@ function CreateForm({
         <div className="form-item-caption">
           <Info size={12} />
           <p>
-            {convertTxTypeToWord(type)}을 증빙할 수 있는 사진을 업로드 해주세요.
+            {convertTxTypeToWord()}을 증빙할 수 있는 사진을 업로드 해주세요.
           </p>
         </div>
       </div>

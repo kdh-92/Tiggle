@@ -115,7 +115,7 @@ export default function PostHeader({
         </div>
         <div className="item-wrapper">
           <div className="item date">
-            <p className="item-title">{convertTxTypeToWord(txType)}일자</p>
+            <p className="item-title">{convertTxTypeToWord()}일자</p>
             <p className="item-data">{dayjs(date).format("YYYY.MM.DD")}</p>
           </div>
           {/*<div className="item">*/}
