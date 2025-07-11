@@ -18,7 +18,7 @@ data class TransactionInfo(
         fun fromEntity(transaction: Transaction): TransactionInfo {
             return TransactionInfo(
                 id = transaction.id!!,
-                memberId = transaction.member.id!!,
+                memberId = transaction.member.id,
                 categoryId = transaction.category.id!!,
                 imageUrl = transaction.imageUrl,
                 amount = transaction.amount,
