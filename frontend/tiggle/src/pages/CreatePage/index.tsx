@@ -54,7 +54,7 @@ const CreatePage = ({ profile }: CreatePageProps) => {
   const parentId = Number(useParams().id);
   const queryClient = useQueryClient();
 
-  const isEditMode = location.pathname.includes("/edit/");
+  const isEditMode = /^\/create\/edit\/\d+\/?$/.test(location.pathname);
   const transactionId = isEditMode ? parentId : null;
 
   const { data: editTransactionData } = useQuery({
