@@ -152,7 +152,6 @@ interface ReplyFormProps {
 }
 
 function ReplyForm({ onSubmit }: ReplyFormProps) {
-  const txType = "OUTCOME";
   const { control, handleSubmit, reset } = useForm<ReplyInputs>();
 
   const handleOnSubmit: SubmitHandler<ReplyInputs> = ({ reply }) => {

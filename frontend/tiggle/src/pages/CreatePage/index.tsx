@@ -92,9 +92,6 @@ const CreatePage = ({ profile }: CreatePageProps) => {
           queryClient.invalidateQueries({
             queryKey: transactionKeys.lists(),
           });
-          queryClient.invalidateQueries({
-            queryKey: ["transactions"],
-          });
 
           navigate(`/detail/${transactionId}`);
         },
@@ -126,9 +123,6 @@ const CreatePage = ({ profile }: CreatePageProps) => {
 
           queryClient.invalidateQueries({
             queryKey: transactionKeys.lists(),
-          });
-          queryClient.invalidateQueries({
-            queryKey: ["transactions"],
           });
 
           navigate(`/`);
