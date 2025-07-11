@@ -1,4 +1,4 @@
-package com.side.tiggle.global.auth
+package com.side.tiggle.global.auth.jwt
 
 import com.side.tiggle.domain.member.repository.MemberRepository
 import com.side.tiggle.global.exception.AuthException
@@ -25,7 +25,7 @@ class JwtTokenProvider(
     private val secretKey: SecretKey = Keys.hmacShaKeyFor(secret.toByteArray(StandardCharsets.UTF_8))
 
     private val tokenExpiry = 60L * 30L
-    private val refreshTokenExpiry = 60L * 60L * 24L
+    private val refreshTokenExpiry = 60L * 60L * 24L * 7L
 
     private val zone = ZoneId.systemDefault()
 
@@ -72,11 +72,15 @@ class JwtTokenProvider(
         return authHeader.substring("Bearer ".length)
     }
 
-    fun resolveRefreshToken(request: HttpServletRequest): String {
-        return request.getHeader("Refresh")
+    fun resolveRefreshToken(request: HttpServletRequest): String? {
+        return request.getHeader("Refresh-Token")
     }
 
     fun getUserId(token: String): Long {
+        return extractClaims(token).subject.toLong()
+    }
+
+    fun getUserIdFromRefreshToken(token: String): Long {
         return extractClaims(token).subject.toLong()
     }
 
@@ -84,6 +88,22 @@ class JwtTokenProvider(
         return try {
             val expiry: Date = extractClaims(token).expiration
             expiry.after(Date())
+        } catch (e: Exception) {
+            false
+        }
+    }
+
+    fun validateRefreshToken(token: String): Boolean {
+        return try {
+            if (!isTokenValid(token)) {
+                return false
+            }
+
+            val member = memberRepository.findByRefreshToken(token)
+                ?: return false
+
+            val now = LocalDateTime.now()
+            member.refreshTokenExpiresAt?.isAfter(now) == true
         } catch (e: Exception) {
             false
         }
@@ -102,5 +122,4 @@ class JwtTokenProvider(
             throw AuthException(GlobalErrorCode.INVALID_TOKEN, e)
         }
     }
-
 }

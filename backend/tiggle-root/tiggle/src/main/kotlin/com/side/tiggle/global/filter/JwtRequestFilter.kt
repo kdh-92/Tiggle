@@ -1,6 +1,6 @@
 package com.side.tiggle.global.filter
 
-import com.side.tiggle.global.auth.JwtTokenProvider
+import com.side.tiggle.global.auth.jwt.JwtTokenProvider
 import com.side.tiggle.global.exception.AuthException
 import com.side.tiggle.global.exception.error.GlobalErrorCode
 import org.slf4j.LoggerFactory
