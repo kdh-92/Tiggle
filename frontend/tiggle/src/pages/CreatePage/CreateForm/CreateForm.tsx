@@ -60,7 +60,7 @@ function CreateForm({
     queryKey: categoryKeys.lists(),
     queryFn: async () =>
       CategoryApiControllerService.getCategoryByMemberIdOrDefaults(
-        profile?.data?.id || 0,
+        profile?.data?.id!,
       ),
     enabled: !!profile?.data?.id,
   });
