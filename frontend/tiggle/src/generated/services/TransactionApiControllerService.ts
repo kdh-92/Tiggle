@@ -4,7 +4,6 @@
 /* eslint-disable */
 import type { ApiResponse } from '../models/ApiResponse';
 import type { ApiResponseCommentPageRespDto } from '../models/ApiResponseCommentPageRespDto';
-import type { ApiResponseTransactionListRespDto } from '../models/ApiResponseTransactionListRespDto';
 import type { ApiResponseTransactionPageRespDto } from '../models/ApiResponseTransactionPageRespDto';
 import type { ApiResponseTransactionRespDto } from '../models/ApiResponseTransactionRespDto';
 import type { TransactionCreateReqDto } from '../models/TransactionCreateReqDto';
@@ -112,7 +111,7 @@ pageSize: number = 5,
     public static createTransaction(
 formData?: {
 dto: TransactionCreateReqDto;
-multipartFile?: Blob;
+multipartFile: Blob;
 },
 ): CancelablePromise<ApiResponse> {
         return __request(OpenAPI, {
@@ -188,17 +187,6 @@ tagNames?: Array<string>,
             errors: {
                 400: `존재하지 않는 리소스 접근`,
             },
-        });
-    }
-
-    /**
-     * @returns ApiResponseTransactionListRespDto OK
-     * @throws ApiError
-     */
-    public static getAllTransaction(): CancelablePromise<ApiResponseTransactionListRespDto> {
-        return __request(OpenAPI, {
-            method: 'GET',
-            url: '/api/v1/transaction/all',
         });
     }
 
