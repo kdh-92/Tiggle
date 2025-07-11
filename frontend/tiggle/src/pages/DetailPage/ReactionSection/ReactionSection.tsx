@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect, useRef } from "react";
 
 import { useMutation, useQuery } from "@tanstack/react-query";
 
@@ -23,6 +23,7 @@ export default function ReactionSection({
 }: ReactionSectionProps) {
   const { checkIsLogin } = useAuth();
   const [isDisabled, setIsDisabled] = useState(false);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const [selectedReaction, setSelectedReaction] = useState<
     ReactionType | undefined
   >(undefined);
@@ -51,6 +52,19 @@ export default function ReactionSection({
       setSelectedReaction(undefined);
     }
   }, [myReactionData]);
+
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    setOptimisticUpCount(upCount || 0);
+    setOptimisticDownCount(downCount || 0);
+  }, [upCount, downCount]);
 
   const { mutate: upsertReaction } = useMutation(
     async (type: ReactionType) =>
@@ -125,7 +139,11 @@ export default function ReactionSection({
         upsertReaction(inputReaction);
       }
 
-      setTimeout(() => setIsDisabled(false), 1000);
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+
+      timeoutRef.current = setTimeout(() => setIsDisabled(false), 1000);
     },
     [
       isDisabled,
