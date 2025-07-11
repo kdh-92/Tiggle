@@ -68,6 +68,15 @@ const CreatePage = ({ profile }: CreatePageProps) => {
 
   const handleOnSubmit: SubmitHandler<FormInputs> = data => {
     const { date, imageUrl, ...rest } = data;
+    const selectedFile = imageUrl.item(0);
+
+    if (!selectedFile) {
+      messageApi.open({
+        type: "error",
+        content: "파일을 선택해주세요.",
+      });
+      return;
+    }
 
     if (isEditMode) {
       const updateData: TransactionUpdateData = {
@@ -106,13 +115,12 @@ const CreatePage = ({ profile }: CreatePageProps) => {
     } else {
       const formData: TransactionFormData = {
         dto: {
-          memberId: profile.id,
           tagNames: data.tags,
           date: dayjs(date).toISOString(),
           ...rest,
         },
-        multipartFile: imageUrl.item(0)!,
-      } as TransactionFormData;
+        multipartFile: selectedFile,
+      };
 
       mutate(formData, {
         onSuccess: () => {
