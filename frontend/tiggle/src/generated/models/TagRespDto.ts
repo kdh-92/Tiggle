@@ -3,10 +3,7 @@
 /* tslint:disable */
 /* eslint-disable */
 
-export type ReactionDto = {
-    txId?: number;
-    senderId?: number;
-    receiverId?: number;
-    type?: 'UP' | 'DOWN';
+export type TagRespDto = {
+    id: number;
+    name: string;
 };
-

@@ -4,7 +4,7 @@ import com.side.tiggle.domain.transaction.dto.view.TransactionDtoWithCount
 import org.springframework.data.domain.Page
 
 data class TransactionPageRespDto(
-    val transactions: List<TransactionRespDto>,
+    val transactions: List<TransactionDtoWithCount>,
     val pageNumber: Int,
     val pageSize: Int,
     val totalElements: Long,
@@ -14,7 +14,7 @@ data class TransactionPageRespDto(
     companion object {
         fun fromPage(page: Page<TransactionDtoWithCount>): TransactionPageRespDto {
             return TransactionPageRespDto(
-                transactions = page.content.map { it.dto },
+                transactions = page.content,
                 pageNumber = page.number,
                 pageSize = page.size,
                 totalElements = page.totalElements,

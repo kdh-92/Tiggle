@@ -5,8 +5,6 @@
 
 export type CategoryRespDto = {
     id?: number;
-    name?: string;
-    defaults?: boolean;
-    // type?: 'INCOME' | 'OUTCOME';
+    name: string;
+    defaults: boolean;
 };
-

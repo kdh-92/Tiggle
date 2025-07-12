@@ -38,7 +38,7 @@ export default function MainHeader() {
                     <Bell size={20} />
                   </button>
                   <Link to={"/mypage"} className="right-bar-btn">
-                    <Avatar size={24} src={profile?.profileUrl} />
+                    <Avatar size={24} src={profile?.data?.profileUrl} />
                   </Link>
                 </>
               ) : (

@@ -1,5 +1,7 @@
 package com.side.tiggle.domain.transaction.dto.req
 
+import com.side.tiggle.domain.category.model.Category
+import com.side.tiggle.domain.member.model.Member
 import com.side.tiggle.domain.transaction.model.Transaction
 import jakarta.validation.constraints.Min
 import jakarta.validation.constraints.NotBlank
@@ -36,12 +38,12 @@ data class TransactionCreateReqDto(
 ) {
 
     fun toEntity(
-        memberId: Long,
-        categoryId: Long
+        member: Member,
+        category: Category
     ): Transaction {
         return Transaction(
-            memberId = memberId,
-            categoryId = categoryId,
+            member = member,
+            category = category,
             imageUrl = this.imageUrl,
             amount = this.amount,
             date = this.date,

@@ -29,7 +29,7 @@ export const MyTransactionDetailCellStyle = styled.div`
         Object.values(Tx).map(
           type => css`
             &.${type} {
-              color: ${theme.color[convertTxTypeToColor(type)][500].value};
+              color: ${theme.color[convertTxTypeToColor()][500].value};
             }
           `,
         )}

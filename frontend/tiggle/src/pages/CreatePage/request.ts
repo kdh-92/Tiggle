@@ -1,6 +1,7 @@
 import {
   TransactionApiControllerService,
   TransactionRespDto,
+  TransactionUpdateReqDto,
 } from "@/generated";
 import { getAxiosInstance } from "@/query/openapi-request";
 
@@ -8,6 +9,11 @@ export type TransactionFormData = Exclude<
   Parameters<typeof TransactionApiControllerService.createTransaction>[0],
   undefined
 >;
+
+export type TransactionUpdateData = {
+  transactionId: number;
+  dto: TransactionUpdateReqDto;
+};
 
 export const createTransaction = async ({
   dto,
@@ -26,5 +32,14 @@ export const createTransaction = async ({
         "Content-Type": "multipart/form-data",
       },
     })
+    .then(({ data }) => data);
+};
+
+export const updateTransaction = async ({
+  transactionId,
+  dto,
+}: TransactionUpdateData) => {
+  return getAxiosInstance()
+    .put(`/api/v1/transaction/${transactionId}`, dto)
     .then(({ data }) => data);
 };

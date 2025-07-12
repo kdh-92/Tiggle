@@ -1,5 +1,7 @@
 package com.side.tiggle.domain.transaction.service
 
+import com.side.tiggle.domain.category.service.CategoryService
+import com.side.tiggle.domain.member.service.MemberService
 import com.side.tiggle.domain.transaction.dto.internal.TransactionInfo
 import com.side.tiggle.domain.transaction.dto.req.TransactionCreateReqDto
 import com.side.tiggle.domain.transaction.dto.req.TransactionUpdateReqDto
@@ -18,11 +20,16 @@ import org.springframework.data.domain.Sort
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.multipart.MultipartFile
+import java.nio.file.Files
+import java.nio.file.Path
+import java.nio.file.Paths
 import java.time.LocalDate
 
 @Service
 class TransactionServiceImpl(
     private val transactionRepository: TransactionRepository,
+    private val memberService: MemberService,
+    private val categoryService: CategoryService,
     private val transactionMapper: TransactionMapper,
     private val transactionFileUploadUtil: TransactionFileUploadUtil
 ) : TransactionService {
@@ -31,22 +38,25 @@ class TransactionServiceImpl(
     override fun createTransaction(
         memberId: Long,
         dto: TransactionCreateReqDto,
-        file: MultipartFile?
+        file: MultipartFile
     ) {
-//        var savePath: Path? = null
+        var savePath: Path? = null
         try {
-//            val uploadedFilePath = transactionFileUploadUtil.uploadTransactionImage(file)
-//            savePath = Paths.get(uploadedFilePath)
-//            dto.imageUrl = uploadedFilePath
+            val uploadedFilePath = transactionFileUploadUtil.uploadTransactionImage(file)
+            savePath = Paths.get(uploadedFilePath)
+            dto.imageUrl = uploadedFilePath
+
+            val member = memberService.getMemberReference(memberId)
+            val category = categoryService.getCategoryReference(dto.categoryId)
 
             transactionRepository.save(
-                dto.toEntity(memberId, dto.categoryId)
+                dto.toEntity(member, category)
             )
         } catch (e: Exception) {
-//            if (savePath != null) {
-//                Files.deleteIfExists(savePath)
-//            }
-//            transactionFileUploadUtil.deleteEmptyDateFolder()
+            if (savePath != null) {
+                Files.deleteIfExists(savePath)
+            }
+            transactionFileUploadUtil.deleteEmptyDateFolder()
             throw e
         }
     }
@@ -55,10 +65,10 @@ class TransactionServiceImpl(
     override fun updateTransaction(
         memberId: Long, transactionId: Long, dto: TransactionUpdateReqDto
     ) {
-        val transaction = transactionRepository.findById(transactionId)
-            .orElseThrow { TransactionException(TransactionErrorCode.TRANSACTION_NOT_FOUND) }
+        val transaction = transactionRepository.findByIdWithMemberAndCategory(transactionId)
+            ?: throw TransactionException(TransactionErrorCode.TRANSACTION_NOT_FOUND)
 
-        if (transaction.memberId != memberId) {
+        if (transaction.member.id != memberId) {
             throw TransactionException(TransactionErrorCode.TRANSACTION_ACCESS_DENIED)
         }
 
@@ -78,7 +88,7 @@ class TransactionServiceImpl(
         val transaction = transactionRepository.findById(txId)
             .orElseThrow { TransactionException(TransactionErrorCode.TRANSACTION_NOT_FOUND) }
 
-        if (transaction.memberId != memberId) {
+        if (transaction.member.id != memberId) {
             throw TransactionException(TransactionErrorCode.TRANSACTION_ACCESS_DENIED)
         }
 
@@ -91,8 +101,9 @@ class TransactionServiceImpl(
      * @author 양병학
      */
     override fun getTransactionDetail(id: Long): TransactionRespDto {
-        val transaction = getTransactionEntityOrThrow(id)
-        return TransactionRespDto.fromEntity(transaction)
+        val tx = getTransactionEntityOrThrow(id)
+
+        return TransactionRespDto.fromEntity(tx)
     }
 
     /**
@@ -106,8 +117,8 @@ class TransactionServiceImpl(
     }
 
     private fun getTransactionEntityOrThrow(transactionId: Long): Transaction {
-        return transactionRepository.findById(transactionId)
-            .orElseThrow { TransactionException(TransactionErrorCode.TRANSACTION_NOT_FOUND) }
+        return transactionRepository.findByIdWithMemberAndCategory(transactionId)
+            ?: throw TransactionException(TransactionErrorCode.TRANSACTION_NOT_FOUND)
     }
 
     /**
@@ -124,7 +135,7 @@ class TransactionServiceImpl(
         pageSize: Int,
         index: Int
     ): TransactionPageRespDto {
-        val txPage = transactionRepository.findAll(
+        val txPage = transactionRepository.findAllWithMemberAndCategoryPaged(
             PageRequest.of(index, pageSize, Sort.by(Sort.Direction.DESC, "createdAt"))
         )
         if (txPage.isEmpty) {
@@ -157,11 +168,5 @@ class TransactionServiceImpl(
 
         val dtoWithCountPage = memberTxPage.map { mapTxRespDto(it) }
         return TransactionPageRespDto.fromPage(dtoWithCountPage)
-    }
-
-    override fun getAllUndeletedTransaction(): TransactionListRespDto {
-        val tx = transactionRepository.findAll(Sort.by(Sort.Direction.DESC, "createdAt"))
-        val dtoList = tx.map { TransactionRespDto.fromEntity(it) }
-        return TransactionListRespDto(dtoList)
     }
 }

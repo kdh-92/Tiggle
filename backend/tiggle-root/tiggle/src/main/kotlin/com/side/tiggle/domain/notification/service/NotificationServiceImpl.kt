@@ -44,7 +44,7 @@ class NotificationServiceImpl(
         tx: TransactionInfo,
         senderId: Long
     ) {
-        val receiverId = parentComment?.senderId ?: tx.memberId
+        val receiverId = parentComment?.sender?.id ?: tx.memberId
         val type = if (parentComment != null) NotificationProduceDto.Type.REPLY else NotificationProduceDto.Type.COMMENT
 
         notificationProducer.send(

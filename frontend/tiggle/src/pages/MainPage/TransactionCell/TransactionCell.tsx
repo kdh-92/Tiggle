@@ -6,69 +6,67 @@ import { Avatar } from "antd";
 import cn from "classnames";
 
 import TypeTag from "@/components/atoms/TypeTag/TypeTag";
-import { TransactionRespDto } from "@/generated/models/TransactionRespDto";
+import { TransactionDtoWithCount } from "@/generated/models/TransactionDtoWithCount";
 import { TransactionCellStyle } from "@/pages/MainPage/TransactionCell/TransactionCellStyle";
 import timeDiff from "@/utils/timeDIff";
 
 export default function TransactionCell({
-  id,
-  type,
-  amount,
-  content,
-  reason,
-  member,
-  createdAt,
-  txUpCount,
-  txDownCount,
-  txCommentCount,
-}: TransactionRespDto) {
+  dto,
+  upCount,
+  downCount,
+  commentCount,
+}: TransactionDtoWithCount) {
   const navigate = useNavigate();
+  const type = "OUTCOME";
 
   const handleGoDetail: React.MouseEventHandler<HTMLDivElement> = () => {
-    navigate(`/detail/${id}`);
+    navigate(`/detail/${dto.id}`);
   };
 
   return (
     <div onClick={handleGoDetail}>
-      <TransactionCellStyle className={cn(type, id)}>
-        <TypeTag className="tag" txType={type!} size={"md"} />
+      <TransactionCellStyle className={cn(type, dto.id)}>
+        <TypeTag className="tag" txType={type} size={"md"} />
         <div className={cn("amount", type)}>
-          <span className="amount-unit">₩ {amount}</span>
+          <span className="amount-unit">₩</span>
+          <span className="amount-number">
+            {dto.amount.toLocaleString("ko-KR")}
+          </span>
         </div>
         <div className="transaction-cell-section">
-          <p className="content">{content}</p>
-          <p className="reason">{reason}</p>
+          <p className="content">{dto.content}</p>
+          <p className="reason">{dto.reason}</p>
         </div>
         <div className="transaction-cell-footer">
           <div className="user">
-            {member!.profileUrl ? (
+            {dto.member!.profileUrl ? (
               <img
                 className="user-profile"
                 alt="member profile"
-                src={member!.profileUrl}
+                src={dto.member!.profileUrl}
               />
             ) : (
               <Avatar />
             )}
             <div>
-              <p className="user-name">{member!.nickname}</p>
-              <p className="user-createdAt">{timeDiff(createdAt!)}</p>
+              <p className="user-name">{dto.member!.nickname}</p>
+              <p className="user-createdAt">{timeDiff(dto.createdAt!)}</p>
             </div>
           </div>
           <div className="icon-unit">
             <div className="reaction">
               <div className="reaction-up">
                 <ThumbsUp className="label-icon" />
-                <span>{txUpCount}</span>
+                <span>{upCount}</span>
               </div>
               <div className="reaction-down">
                 <ThumbsDown className="label-icon" />
-                <span>{txDownCount}</span>
+                <span>{downCount}</span>
               </div>
             </div>
             <div className="comment">
               <MessageSquare className="label-icon" />
-              <span>{txCommentCount}</span>
+              <span>{commentCount}</span>
             </div>
           </div>
         </div>

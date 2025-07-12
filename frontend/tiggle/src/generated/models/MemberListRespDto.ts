@@ -3,9 +3,8 @@
 /* tslint:disable */
 /* eslint-disable */
 
-export type CategoryDto = {
-    name?: string;
-    // type?: 'INCOME' | 'OUTCOME';
-    defaults?: boolean;
-};
+import type { MemberRespDto } from './MemberRespDto';
 
+export type MemberListRespDto = {
+    members: Array<MemberRespDto>;
+};

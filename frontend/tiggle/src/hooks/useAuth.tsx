@@ -49,7 +49,7 @@ export default function useAuth() {
 
     // token이 있는 경우,
     // query 로딩 종료, error 없음, data 존재하면 true
-    return !isLoginLoading && !isLoginError && !!profile;
+    return !isLoginLoading && !isLoginError && !!profile?.data;
   }, [token, isLoginLoading, isLoginError, profile]);
 
   const requireAuth = () => {

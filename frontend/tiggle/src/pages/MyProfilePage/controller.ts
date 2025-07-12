@@ -43,9 +43,9 @@ export const useProfilePage = () => {
     formState: { isDirty: _isDirty, dirtyFields },
   } = useForm<ProfileInputs>({
     defaultValues: {
-      nickname: profileData.nickname,
-      email: profileData.email,
-      birth: profileData.birth ? dayjs(profileData.birth) : null,
+      nickname: profileData.data.nickname,
+      email: profileData.data.email,
+      birth: profileData.data.birth ? dayjs(profileData.data.birth) : null,
     },
   });
   const profileUrlRegister = register("profileUrl");
@@ -53,7 +53,7 @@ export const useProfilePage = () => {
 
   const { imageUrl, handleUpload, handleReset } = useUpload({
     onReset: () => resetField("profileUrl"),
-    defaultUrl: profileData?.profileUrl,
+    defaultUrl: profileData?.data?.profileUrl,
   });
 
   const handleSubmit = _handleSubmit(
@@ -80,9 +80,9 @@ export const useProfilePage = () => {
           });
           refetchProfileData().then(({ data }) => {
             reset({
-              nickname: data!.nickname,
-              email: data!.email,
-              birth: dayjs(data!.birth),
+              nickname: data!.data.nickname,
+              email: data!.data.email,
+              birth: dayjs(data!.data.birth),
             });
           });
         },

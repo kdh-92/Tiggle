@@ -7,11 +7,11 @@ import cn from "classnames";
 
 import FilterSelect from "@/components/molecules/FilterSelect/FilterSelect";
 import {
-  AssetApiControllerService,
   CategoryApiControllerService,
   TagApiControllerService,
 } from "@/generated";
-import { assetKeys, categoryKeys, tagKeys } from "@/query/queryKeys";
+import useAuth from "@/hooks/useAuth";
+import { categoryKeys, tagKeys } from "@/query/queryKeys";
 
 import {
   ETCFilterHeaderStyle,
@@ -27,27 +27,23 @@ interface ETCFilterProps {
 
 const ETCFilter = ({}: ETCFilterProps) => {
   const { control, watch } = useFormContext<FilterInputs>();
+  const { profile } = useAuth();
   const [isAccordionOpen, setIsAccordionOpen] = useState<boolean>(false);
   const accordionRef = useRef<HTMLDivElement | null>(null);
 
-  const { data: assetsData } = useQuery({
-    queryKey: assetKeys.lists(),
-    queryFn: async () => AssetApiControllerService.getAllAsset(),
-  });
-  const assetOptions = useMemo(
-    () =>
-      assetsData?.map(({ id, name }) => ({ label: name!, value: id! })) ?? [],
-    [assetsData],
-  );
-
   const { data: categoriesData } = useQuery({
     queryKey: categoryKeys.lists(),
-    queryFn: async () => CategoryApiControllerService.getAllCategory(),
+    queryFn: async () =>
+      CategoryApiControllerService.getCategoryByMemberIdOrDefaults(),
+    enabled: !!profile?.data?.id,
   });
+
   const categoryOptions = useMemo(
     () =>
-      categoriesData?.map(({ id, name }) => ({ label: name!, value: id! })) ??
-      [],
+      categoriesData?.data?.categories?.map(({ id, name }) => ({
+        label: name!,
+        value: id!,
+      })) ?? [],
     [categoriesData],
   );
 
@@ -56,7 +52,8 @@ const ETCFilter = ({}: ETCFilterProps) => {
     queryFn: async () => TagApiControllerService.getAllDefaultTag(),
   });
   const tagOptions = useMemo(
-    () => tagsData?.map(({ name }) => ({ label: name!, value: name! })) ?? [],
+    () =>
+      tagsData?.data?.map(({ name }) => ({ label: name!, value: name! })) ?? [],
     [tagsData],
   );
 
@@ -71,21 +68,15 @@ const ETCFilter = ({}: ETCFilterProps) => {
     [isAccordionOpen],
   );
 
-  const watchSelected = watch(["assetIds", "categoryIds", "tagNames"]);
+  const watchSelected = watch(["categoryIds", "tagNames"]);
 
   const selectedETCTags = useMemo(() => {
-    const [assetIds, categoryIds, tagNames] = watchSelected;
-
-    const assetTags = assetIds
-      ?.map(id => assetsData?.find(data => data.id === id))
-      .map(asset => ({
-        label: `${asset!.name}`,
-        value: asset!.id,
-        keyName: "assetIds" as const,
-      }));
+    const [categoryIds, tagNames] = watchSelected;
 
     const categoryTags = categoryIds
-      ?.map(id => categoriesData?.find(data => data.id === id))
+      ?.map(id =>
+        categoriesData?.data?.categories?.find(data => data.id === id),
+      )
       .map(category => ({
         label: `${category!.name}`,
         value: category!.id,
@@ -93,14 +84,14 @@ const ETCFilter = ({}: ETCFilterProps) => {
       }));
 
     const tagTags = tagNames
-      ?.map(name => tagsData?.find(data => data.name === name))
+      ?.map(name => tagsData?.data?.find(data => data.name === name))
       .map(tag => ({
         label: `#${tag!.name}`,
         value: name,
         keyName: "tagNames" as const,
       }));
 
-    return [...(assetTags ?? []), ...(categoryTags ?? []), ...(tagTags ?? [])];
+    return [...(categoryTags ?? []), ...(tagTags ?? [])];
   }, [watchSelected]);
 
   return (
@@ -137,17 +128,6 @@ const ETCFilter = ({}: ETCFilterProps) => {
         $height={accordionHeight}
       >
         <div className="container">
-          <Controller
-            control={control}
-            name="assetIds"
-            render={({ field }) => (
-              <FilterSelect
-                placeholder="자산"
-                options={assetOptions}
-                {...field}
-              />
-            )}
-          />
           <Controller
             control={control}
             name="categoryIds"

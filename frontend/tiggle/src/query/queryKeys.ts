@@ -22,15 +22,6 @@ export const reactionKeys = {
   detail: (id: number) => [...reactionKeys.details(), id] as const,
 };
 
-export const assetKeys = {
-  key: "asset" as const,
-  lists: () => [assetKeys.key, "list"] as const,
-  list: (filter: Record<string, any>) =>
-    [...assetKeys.lists(), filter] as const,
-  details: () => [assetKeys.key, "detail"] as const,
-  detail: (id: number) => [...assetKeys.details(), id] as const,
-};
-
 export const categoryKeys = {
   key: "category" as const,
   lists: () => [categoryKeys.key, "list"] as const,

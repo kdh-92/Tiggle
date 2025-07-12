@@ -13,7 +13,7 @@
     "build-storybook": "storybook build",
     "transform-token": "node transform-token.js",
     "chromatic": "npx chromatic --project-token=chpt_bf3f5c4ddba9975",
-    "generate": "node --trace-warnings generate-openapi.js"
+    "generate": "node --trace-warnings generate-openapi.cjs"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^1.9.5",
@@ -74,7 +74,8 @@
     "vite-plugin-eslint": "^1.8.1",
     "vite-plugin-svgr": "^4.2.0",
     "vite-tsconfig-paths": "^4.3.1",
-    "vitest": "^1.3.0"
+    "vitest": "^1.3.0",
+    "dotenv": "^17.0.1"
   },
   "browserslist": {
     "production": [

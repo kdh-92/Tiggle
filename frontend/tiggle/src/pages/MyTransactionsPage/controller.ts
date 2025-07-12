@@ -30,7 +30,6 @@ export const useMyTransactionsPage = (profile: Required<MemberDto>) => {
         100,
         undefined, // dayjs(filterWatch.date).date(1).format(),
         undefined, // dayjs(filterWatch.date).add(1, "month").date(1).subtract(1, "day").format(),
-        filterWatch.txType,
         filterWatch.categoryIds,
         filterWatch.assetIds,
         filterWatch.tagNames,
@@ -40,7 +39,9 @@ export const useMyTransactionsPage = (profile: Required<MemberDto>) => {
   const [index, setIndex] = useState(0);
   const sliceSize = useMemo(() => (index + 1) * pageSize, [index]);
   const isLoadable = useMemo(
-    () => filteredTxData?.content && sliceSize < filteredTxData.content.length,
+    () =>
+      filteredTxData?.data?.content &&
+      sliceSize < filteredTxData.data.content.length,
     [filteredTxData, sliceSize],
   );
 
@@ -71,7 +72,7 @@ export const useMyTransactionsPage = (profile: Required<MemberDto>) => {
   return {
     form: { method, handleSubmit },
     data: {
-      transactions: filteredTxData?.content,
+      transactions: filteredTxData?.data?.content,
       isLoadable,
       loaderRef,
     },

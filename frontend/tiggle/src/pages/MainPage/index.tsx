@@ -9,16 +9,21 @@ import TransactionCells from "@/pages/MainPage/TransactionCell/TransactionCells"
 import { transactionKeys } from "@/query/queryKeys";
 
 const MainPage = () => {
-  const { data } = useQuery({
+  const { data, isLoading, isError } = useQuery({
     queryKey: transactionKeys.lists(),
-    queryFn: () => TransactionApiControllerService.getAllTransaction(),
+    queryFn: () =>
+      TransactionApiControllerService.getCountOffsetTransaction(0, 100),
   });
 
   return (
     <>
       <MainPageStyle>
         <Banner />
-        <TransactionCells data={data!} />
+        <TransactionCells
+          data={data?.data?.transactions}
+          isLoading={isLoading}
+          isError={isError}
+        />
         <BottomTab />
       </MainPageStyle>
     </>

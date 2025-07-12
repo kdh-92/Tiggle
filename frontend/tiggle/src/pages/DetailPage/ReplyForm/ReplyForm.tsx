@@ -39,11 +39,7 @@ function ReplyForm({ onSubmit }: ReplyFormProps) {
           />
         )}
       />
-      <CTAButton
-        size="md"
-        color={convertTxTypeToColor(txType)}
-        variant="secondary"
-      >
+      <CTAButton size="md" color={convertTxTypeToColor()} variant="secondary">
         답글 등록
       </CTAButton>
     </ReplyFormStyle>
