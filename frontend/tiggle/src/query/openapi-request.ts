@@ -5,19 +5,85 @@ import type { ApiRequestOptions } from "@/generated/core/ApiRequestOptions";
 import useCookie from "@/hooks/useCookie";
 
 export const getAxiosInstance = () => {
-  const { getCookie } = useCookie();
+  console.log("getAxiosInstance 호출됨");
+  const { getCookie, setCookie, removeCookie } = useCookie();
   const token = getCookie("Authorization");
 
-  const headers = {
-    Accept: "application/json",
-    "Content-Type": "application/json",
-    ...(token && { Authorization: `Bearer ${token}` }),
-  };
-
-  return axios.create({
+  const axiosInstance = axios.create({
     baseURL: import.meta.env.VITE_API_URL,
-    headers,
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      ...(token && { Authorization: `Bearer ${token}` }),
+    },
   });
+
+  axiosInstance.interceptors.response.use(
+    response => response,
+    async error => {
+      const originalRequest = error.config;
+
+      if (error.response?.status === 401 && !originalRequest._retry) {
+        console.log("401 에러 감지, refresh 시도");
+        originalRequest._retry = true;
+        const refreshToken = getCookie("RefreshToken");
+
+        console.log("RefreshToken:", refreshToken);
+
+        if (refreshToken) {
+          try {
+            console.log("refresh API 호출 시작");
+            const refreshResponse = await axios.post(
+              `${import.meta.env.VITE_API_URL}api/auth/refresh`,
+              null,
+              {
+                headers: {
+                  "Refresh-Token": refreshToken,
+                  "Content-Type": "application/json",
+                },
+              },
+            );
+
+            const { data } = refreshResponse.data;
+            const { accessToken, refreshToken: newRefreshToken } = data;
+
+            setCookie("Authorization", accessToken, {
+              path: "/",
+              maxAge: 60 * 60 * 24,
+            });
+            setCookie("RefreshToken", newRefreshToken, {
+              path: "/",
+              maxAge: 60 * 60 * 24 * 7,
+            });
+
+            originalRequest.headers.Authorization = `Bearer ${accessToken}`;
+            return axios.request(originalRequest);
+          } catch (refreshError) {
+            console.error("Token refresh failed:", refreshError);
+
+            removeCookie("Authorization");
+            removeCookie("RefreshToken");
+
+            if (window.location.pathname !== "/login") {
+              window.location.href = "/login";
+            }
+
+            return Promise.reject(refreshError);
+          }
+        } else {
+          removeCookie("Authorization");
+
+          if (window.location.pathname !== "/login") {
+            window.location.href = "/login";
+          }
+        }
+      }
+
+      return Promise.reject(error);
+    },
+  );
+
+  return axiosInstance;
 };
 
 export const request = <T>(
