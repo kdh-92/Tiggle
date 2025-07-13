@@ -26,7 +26,7 @@ class OAuth2SuccessHandler(
 ): SimpleUrlAuthenticationSuccessHandler() {
 
     companion object {
-        private const val ACCESS_TOKEN_COOKIE_MAX_AGE = 60 * 30 // 30분
+        private const val ACCESS_TOKEN_COOKIE_MAX_AGE = 60 * 30 * 24 // 1일
         private const val REFRESH_TOKEN_COOKIE_MAX_AGE = 60 * 60 * 24 * 7 // 7일
     }
 
@@ -38,7 +38,7 @@ class OAuth2SuccessHandler(
      * 1. OAuth2 인증 정보에서 사용자 정보 추출
      * 2. 데이터베이스에 사용자 정보 저장/업데이트
      * 3. Access Token 및 Refresh Token 발급
-     * 4. 토큰을 HttpOnly 쿠키로 설정
+     * 4. 토큰을 HttpOnly 쿠키로 설정 (TODO)
      * 5. 클라이언트로 리다이렉트
      *
      * @param request HTTP 요청 객체
@@ -56,18 +56,21 @@ class OAuth2SuccessHandler(
         val refreshToken: String = jwtTokenProvider.getRefreshToken(authMember.id, "ROLE_USER")
         refreshTokenService.saveRefreshToken(authMember.id, refreshToken)
 
-        // Access Token을 쿠키에 담아서 보낸다
         val accessCookie = Cookie("Authorization", accessToken)
         accessCookie.maxAge = ACCESS_TOKEN_COOKIE_MAX_AGE
         accessCookie.path = "/"
-        accessCookie.isHttpOnly = true
-        // accessCookie.secure = true // HTTPS 환경에서만 활성화
+        // TODO: HttpOnly 설정 추가 필요 - 프론트엔드 쿠키 처리 방식 변경 후 활성화
+        // accessCookie.isHttpOnly = true
+        // TODO: Secure 설정 추가 필요 - HTTPS 환경에서 활성화
+        // accessCookie.secure = true
 
         val refreshCookie = Cookie("RefreshToken", refreshToken)
         refreshCookie.maxAge = REFRESH_TOKEN_COOKIE_MAX_AGE
         refreshCookie.path = "/"
-        refreshCookie.isHttpOnly = true
-        // refreshCookie.secure = true // HTTPS 환경에서만 활성화
+        // TODO: HttpOnly 설정 추가 필요 - 프론트엔드 쿠키 처리 방식 변경 후 활성화
+        // refreshCookie.isHttpOnly = true
+        // TODO: Secure 설정 추가 필요 - HTTPS 환경에서 활성화
+        // refreshCookie.secure = true
 
         response.addCookie(accessCookie)
         response.addCookie(refreshCookie)

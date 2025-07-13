@@ -24,7 +24,7 @@ class JwtTokenProvider(
     private val secret = "secrettigglesecrettigglesecrettiggle"
     private val secretKey: SecretKey = Keys.hmacShaKeyFor(secret.toByteArray(StandardCharsets.UTF_8))
 
-    private val tokenExpiry = 60L * 30L
+    private val tokenExpiry = 60L * 60L * 24L
     private val refreshTokenExpiry = 60L * 60L * 24L * 7L
 
     private val zone = ZoneId.systemDefault()
