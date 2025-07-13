@@ -7,6 +7,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.stereotype.Component
 import org.springframework.web.multipart.MultipartFile
 import java.io.File
+import java.nio.file.Files
 import java.nio.file.Paths
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -60,6 +61,12 @@ class TransactionFileUploadUtil {
         return saveName.replace("\\", "/")
     }
 
+    fun uploadTransactionImages(files: List<MultipartFile>): List<String> {
+        return files.map { file ->
+            uploadTransactionImage(file)
+        }
+    }
+
     private fun validateFileNameAndGetExtension(file: MultipartFile): String {
         val originalName: String = file.originalFilename ?: throw IllegalArgumentException("파일명이 없습니다")
 
@@ -100,6 +107,14 @@ class TransactionFileUploadUtil {
         }
 
         return folderPath
+    }
+
+    fun deleteTransactionImage(imagePath: String): Boolean {
+        return try{
+            Files.deleteIfExists(Paths.get(imagePath))
+        } catch (e: Exception){
+            throw TransactionException(TransactionErrorCode.PHOTO_DELETE_FAILED, e)
+        }
     }
 
     fun deleteEmptyDateFolder() {

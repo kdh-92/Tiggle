@@ -1,11 +1,11 @@
 package com.side.tiggle.domain.transaction.service
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import com.side.tiggle.domain.category.service.CategoryService
 import com.side.tiggle.domain.member.service.MemberService
 import com.side.tiggle.domain.transaction.dto.internal.TransactionInfo
 import com.side.tiggle.domain.transaction.dto.req.TransactionCreateReqDto
 import com.side.tiggle.domain.transaction.dto.req.TransactionUpdateReqDto
-import com.side.tiggle.domain.transaction.dto.resp.TransactionListRespDto
 import com.side.tiggle.domain.transaction.dto.resp.TransactionPageRespDto
 import com.side.tiggle.domain.transaction.dto.resp.TransactionRespDto
 import com.side.tiggle.domain.transaction.dto.view.TransactionDtoWithCount
@@ -31,20 +31,23 @@ class TransactionServiceImpl(
     private val memberService: MemberService,
     private val categoryService: CategoryService,
     private val transactionMapper: TransactionMapper,
-    private val transactionFileUploadUtil: TransactionFileUploadUtil
+    private val transactionFileUploadUtil: TransactionFileUploadUtil,
+    private val objectMapper: ObjectMapper
 ) : TransactionService {
 
     @Transactional
     override fun createTransaction(
         memberId: Long,
         dto: TransactionCreateReqDto,
-        file: MultipartFile
+        files: List<MultipartFile>
     ) {
-        var savePath: Path? = null
+        var savedPaths: List<Path>? = null
         try {
-            val uploadedFilePath = transactionFileUploadUtil.uploadTransactionImage(file)
-            savePath = Paths.get(uploadedFilePath)
-            dto.imageUrl = uploadedFilePath
+            val uploadedFilePaths = transactionFileUploadUtil.uploadTransactionImages(files)
+            savedPaths = uploadedFilePaths.map { Paths.get(it) }
+
+            val imageUrlsJson = objectMapper.writeValueAsString(uploadedFilePaths)
+            dto.imageUrls = imageUrlsJson
 
             val member = memberService.getMemberReference(memberId)
             val category = categoryService.getCategoryReference(dto.categoryId)
@@ -53,9 +56,7 @@ class TransactionServiceImpl(
                 dto.toEntity(member, category)
             )
         } catch (e: Exception) {
-            if (savePath != null) {
-                Files.deleteIfExists(savePath)
-            }
+            savedPaths?.forEach { Files.deleteIfExists(it) }
             transactionFileUploadUtil.deleteEmptyDateFolder()
             throw e
         }
@@ -168,5 +169,60 @@ class TransactionServiceImpl(
 
         val dtoWithCountPage = memberTxPage.map { mapTxRespDto(it) }
         return TransactionPageRespDto.fromPage(dtoWithCountPage)
+    }
+
+    @Transactional
+    override fun addTransactionPhotos(memberId: Long, transactionId: Long, files: List<MultipartFile>) {
+        val transaction = transactionRepository.findByIdWithMemberAndCategory(transactionId)
+            ?: throw TransactionException(TransactionErrorCode.TRANSACTION_NOT_FOUND)
+
+        if (transaction.member.id != memberId) {
+            throw TransactionException(TransactionErrorCode.TRANSACTION_ACCESS_DENIED)
+        }
+
+        val newImagePaths = transactionFileUploadUtil.uploadTransactionImages(files)
+
+        val existingPaths = if (!transaction.imageUrls.isNullOrEmpty()) {
+            objectMapper.readValue(transaction.imageUrls, Array<String>::class.java).toList()
+        } else {
+            emptyList()
+        }
+
+        val allPaths = existingPaths + newImagePaths
+        transaction.imageUrls = objectMapper.writeValueAsString(allPaths)
+
+        transactionRepository.save(transaction)
+    }
+
+    @Transactional
+    override fun deleteTransactionPhoto(memberId: Long, transactionId: Long, photoIndex: Int) {
+        val transaction = transactionRepository.findByIdWithMemberAndCategory(transactionId)
+            ?: throw TransactionException(TransactionErrorCode.TRANSACTION_NOT_FOUND)
+
+        if (transaction.member.id != memberId) {
+            throw TransactionException(TransactionErrorCode.TRANSACTION_ACCESS_DENIED)
+        }
+
+        val imagePaths = if (!transaction.imageUrls.isNullOrEmpty()) {
+            objectMapper.readValue(transaction.imageUrls, Array<String>::class.java).toMutableList()
+        } else {
+            throw TransactionException(TransactionErrorCode.PHOTO_NOT_FOUND)
+        }
+
+        if (photoIndex < 0 || photoIndex >= imagePaths.size) {
+            throw TransactionException(TransactionErrorCode.PHOTO_NOT_FOUND)
+        }
+
+        if (imagePaths.size == 1) {
+            throw TransactionException(TransactionErrorCode.MINIMUM_PHOTO_REQUIRED)
+        }
+
+        val pathToDelete = imagePaths[photoIndex]
+        transactionFileUploadUtil.deleteTransactionImage(pathToDelete)
+
+        imagePaths.removeAt(photoIndex)
+        transaction.imageUrls = objectMapper.writeValueAsString(imagePaths)
+
+        transactionRepository.save(transaction)
     }
 }

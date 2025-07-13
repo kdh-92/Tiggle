@@ -22,8 +22,8 @@ class Transaction(
     @JoinColumn(name = "category_id")
     val category: Category,
 
-    @Column(length = 1000)
-    val imageUrl: String? = null,
+    @Column(length = 2000)
+    var imageUrls: String? = null,
 
     @Column(nullable = false)
     var amount: Int,

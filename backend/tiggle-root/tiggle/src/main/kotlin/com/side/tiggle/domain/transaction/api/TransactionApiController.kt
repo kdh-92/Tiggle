@@ -40,9 +40,9 @@ class TransactionApiController(
         @Parameter(hidden = true)
         @RequestHeader(name = HttpHeaders.MEMBER_ID) memberId: Long,
         @RequestPart @Valid dto: TransactionCreateReqDto,
-        @RequestPart(value = "multipartFile", required = true) file: MultipartFile
+        @RequestPart(value = "multipartFile", required = true) files: List<MultipartFile>
     ): ResponseEntity<ApiResponse<Nothing>> {
-        transactionService.createTransaction(memberId, dto, file)
+        transactionService.createTransaction(memberId, dto, files)
         return ResponseEntity
             .status(HttpStatus.CREATED)
             .body(ApiResponse.success(null, message = "거래가 생성되었습니다."))
@@ -149,5 +149,31 @@ class TransactionApiController(
     companion object {
         private const val DEFAULT_INDEX = "0"
         private const val DEFAULT_PAGE_SIZE = "5"
+    }
+
+    @PostMapping("/{id}/photos")
+    @Operation(description = "거래 사진 추가", security = [SecurityRequirement(name = "bearer-key")])
+    fun addTransactionPhotos(
+        @Parameter(hidden = true)
+        @RequestHeader(name = HttpHeaders.MEMBER_ID) memberId: Long,
+        @PathVariable("id") @Min(1) transactionId: Long,
+        @RequestPart(value = "files", required = true) files: List<MultipartFile>
+    ): ResponseEntity<ApiResponse<Nothing>> {
+        transactionService.addTransactionPhotos(memberId, transactionId, files)
+        return ResponseEntity
+            .ok(ApiResponse.success(null, message = "사진이 추가되었습니다."))
+    }
+
+    @DeleteMapping("/{id}/photos/{photoIndex}")
+    @Operation(description = "거래 사진 삭제", security = [SecurityRequirement(name = "bearer-key")])
+    fun deleteTransactionPhoto(
+        @Parameter(hidden = true)
+        @RequestHeader(name = HttpHeaders.MEMBER_ID) memberId: Long,
+        @PathVariable("id") @Min(1) transactionId: Long,
+        @PathVariable("photoIndex") @Min(0) photoIndex: Int
+    ): ResponseEntity<ApiResponse<Nothing>> {
+        transactionService.deleteTransactionPhoto(memberId, transactionId, photoIndex)
+        return ResponseEntity
+            .ok(ApiResponse.success(null, message = "사진이 삭제되었습니다."))
     }
 }

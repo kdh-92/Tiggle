@@ -15,8 +15,8 @@ data class TransactionCreateReqDto(
     @field:Min(value = 1, message = "올바른 카테고리 ID를 입력해주세요")
     val categoryId:Long,
 
-    @field:Size(max = 1000, message = "이미지 URL은 1000자 이하여야 합니다")
-    var imageUrl: String?,
+    @field:Size(max = 2000, message = "이미지 URL은 2000자 이하여야 합니다")
+    var imageUrls: String?,
 
     @field:NotNull(message = "금액은 필수입니다")
     @field:PositiveOrZero(message = "금액은 0원 이상이어야 합니다")
@@ -44,7 +44,7 @@ data class TransactionCreateReqDto(
         return Transaction(
             member = member,
             category = category,
-            imageUrl = this.imageUrl,
+            imageUrls = this.imageUrls,
             amount = this.amount,
             date = this.date,
             content = this.content,
