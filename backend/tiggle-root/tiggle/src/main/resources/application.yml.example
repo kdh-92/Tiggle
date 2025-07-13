@@ -81,6 +81,11 @@ part:
 app:
   client-redirect-uri: https://tiggle.duckdns.org/login/success
 
+jwt:
+  secret: ${JWT_SECRET}
+  access-token-expiry: 86400
+  refresh-token-expiry: 604800
+
 log:
   rolling:
     directory: logs

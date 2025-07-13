@@ -7,25 +7,31 @@ import io.jsonwebtoken.Claims
 import io.jsonwebtoken.JwtException
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.security.Keys
+import jakarta.servlet.http.HttpServletRequest
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
 import java.nio.charset.StandardCharsets
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.util.*
-import jakarta.servlet.http.HttpServletRequest
 import javax.crypto.SecretKey
 
 @Component
 class JwtTokenProvider(
     private val memberRepository: MemberRepository
 ) {
+    @Value("\${jwt.secret}")
+    private lateinit var secret: String
 
-    // TODO: @Value로 받아야 한다
-    private val secret = "secrettigglesecrettigglesecrettiggle"
-    private val secretKey: SecretKey = Keys.hmacShaKeyFor(secret.toByteArray(StandardCharsets.UTF_8))
+    private val secretKey: SecretKey by lazy {
+        Keys.hmacShaKeyFor(secret.toByteArray(StandardCharsets.UTF_8))
+    }
 
-    private val tokenExpiry = 60L * 60L * 24L
-    private val refreshTokenExpiry = 60L * 60L * 24L * 7L
+    @Value("\${jwt.access-token-expiry:86400}")
+    private val tokenExpiry: Long = 0
+
+    @Value("\${jwt.refresh-token-expiry:604800}")
+    private val refreshTokenExpiry: Long = 0
 
     private val zone = ZoneId.systemDefault()
 
