@@ -22,9 +22,6 @@ enum class GlobalErrorCode(
     INVALID_REFRESH_TOKEN(HttpStatus.UNAUTHORIZED, 90006, "유효하지 않은 refresh token입니다"),
     EXPIRED_REFRESH_TOKEN(HttpStatus.UNAUTHORIZED, 90007, "refresh token이 만료되었습니다"),
 
-    // 권한 관련 오류 (90006~90010)
-    NOT_AUTHORIZED(HttpStatus.FORBIDDEN, 90006, "권한이 없습니다"),
-
     // 요청 관련 오류
     ILLEGAL_ARGUMENT(HttpStatus.BAD_REQUEST, 90011, "잘못된 파라미터입니다"),
     METHOD_ARGUMENT_NOT_VALID(HttpStatus.BAD_REQUEST, 90012, "유효성 검사에 실패했습니다"),
