@@ -1,19 +1,17 @@
 package com.side.tiggle.global.filter
 
 import com.side.tiggle.global.auth.jwt.JwtTokenProvider
-import com.side.tiggle.global.exception.AuthException
-import com.side.tiggle.global.exception.error.GlobalErrorCode
-import org.slf4j.LoggerFactory
-import org.springframework.core.annotation.Order
-import org.springframework.http.HttpHeaders
-import com.side.tiggle.global.common.constants.HttpHeaders as CustomHeaders
-import org.springframework.web.filter.OncePerRequestFilter
-import java.util.*
 import jakarta.servlet.FilterChain
+import org.springframework.http.MediaType
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletRequestWrapper
 import jakarta.servlet.http.HttpServletResponse
-import kotlin.collections.HashMap
+import org.slf4j.LoggerFactory
+import org.springframework.core.annotation.Order
+import org.springframework.http.HttpHeaders
+import org.springframework.web.filter.OncePerRequestFilter
+import java.util.*
+import com.side.tiggle.global.common.constants.HttpHeaders as CustomHeaders
 
 
 @Order(0)
@@ -36,7 +34,21 @@ class JwtRequestFilter(
         if (authHeader.isNullOrEmpty().not()) {
             val accessToken = authHeader.replace("Bearer ", "")
             if (jwtTokenProvider.isTokenValid(accessToken).not()) {
-                throw AuthException(GlobalErrorCode.INVALID_TOKEN)
+                response.status = HttpServletResponse.SC_UNAUTHORIZED
+                response.contentType = MediaType.APPLICATION_JSON_VALUE
+                response.characterEncoding = "UTF-8"
+
+                val errorResponse = """
+                    {
+                        "success": false,
+                        "code": "90002",
+                        "message": "유효하지 않은 토큰입니다"
+                    }
+                """.trimIndent()
+
+                response.writer.write(errorResponse)
+                response.writer.flush()
+                return
             }
 
             val memberId = jwtTokenProvider.getUserId(accessToken)

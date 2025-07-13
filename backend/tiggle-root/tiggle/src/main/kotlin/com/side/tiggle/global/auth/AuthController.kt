@@ -60,12 +60,10 @@ class AuthController(
         @Parameter(hidden = true)
         @RequestHeader(name = HttpHeaders.MEMBER_ID) memberId: Long
     ): ResponseEntity<ApiResponse<Unit>> {
-        // memberId가 -1이면 인증되지 않은 사용자
         if (memberId == -1L) {
             throw AuthException(GlobalErrorCode.NOT_AUTHENTICATED)
         }
 
-        // Refresh Token 삭제
         refreshTokenService.deleteRefreshToken(memberId)
 
         return ResponseEntity.ok(ApiResponse.success(Unit, "로그아웃이 완료되었습니다"))
