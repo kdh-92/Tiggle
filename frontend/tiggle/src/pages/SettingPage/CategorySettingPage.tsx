@@ -4,6 +4,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 
 import { Loading } from "@/components/atoms";
 import { CategoryApiControllerService } from "@/generated";
+import useAuth from "@/hooks/useAuth";
 import useMessage from "@/hooks/useMessage";
 import queryClient from "@/query/queryClient";
 import { categoryKeys } from "@/query/queryKeys";
@@ -17,18 +18,23 @@ interface CategorySettingPageProps extends AuthProps {}
 
 const CategorySettingPage = ({}: CategorySettingPageProps) => {
   const messageApi = useMessage();
+  const { profile } = useAuth();
   const { data: categoriesData, isLoading } = useQuery({
     // queryKey: categoryKeys.list({ type: Tx.OUTCOME }),
     // queryFn: async () => CategoryApiControllerService.getCategory(Tx.OUTCOME),
     queryKey: categoryKeys.list(),
-    queryFn: async () => CategoryApiControllerService.getCategory(),
+    queryFn: async () =>
+      CategoryApiControllerService.getCategoryByMemberIdOrDefaults(
+        profile?.data?.id || 0,
+      ),
+    enabled: !!profile?.data?.id,
   });
   // const { mutate: createMutate } = useMutation(async (name: string) =>
   //   CategoryApiControllerService.createCategory({ name }),
   // );
 
   const { mutate: createMutate } = useMutation(async (name: string) =>
-    CategoryApiControllerService.createCategory({
+    CategoryApiControllerService.createCategory(profile?.data?.id || 0, {
       name,
       // type: Tx.OUTCOME,
       defaults: true,
@@ -105,7 +111,7 @@ const CategorySettingPage = ({}: CategorySettingPageProps) => {
       {isLoading && <Loading />}
       {!isLoading && categoriesData && (
         <SettingForm
-          data={categoriesData.map(({ id, name }) => ({
+          data={categoriesData.data?.categories?.map(({ id, name }) => ({
             sid: id!,
             name: name!,
           }))}

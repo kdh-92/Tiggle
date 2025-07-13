@@ -64,14 +64,14 @@ part:
   upload:
     path: upload/image/
     profile:
-      path: upload/profile/
+      path: upload/profile
       max-size: 5242880  # 5MB
       allowed-types:
         - image/jpeg
         - image/png
         - image/gif
     transaction:
-      path: upload/transaction/
+      path: upload/transaction
       max-size: 10485760  # 10MB
       allowed-types:
         - image/jpeg

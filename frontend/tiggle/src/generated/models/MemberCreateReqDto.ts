@@ -3,10 +3,9 @@
 /* tslint:disable */
 /* eslint-disable */
 
-export type MemberRequestDto = {
-    email?: string;
-    profileUrl?: string;
-    nickname?: string;
-    birth?: string;
+export type MemberCreateReqDto = {
+    email: string;
+    profileUrl: string;
+    nickname: string;
+    birth: string;
 };
-

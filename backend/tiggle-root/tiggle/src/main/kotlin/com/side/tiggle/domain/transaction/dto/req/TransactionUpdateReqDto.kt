@@ -23,10 +23,6 @@ data class TransactionUpdateReqDto(
     @field:Size(max = 300, message = "사유는 300자 이하여야 합니다")
     val reason: String,
 
-    @field:NotNull(message = "자산 ID는 필수입니다")
-    @field:Min(value = 1, message = "올바른 자산 ID를 입력해주세요")
-    val assetId: Long,
-
     @field:NotNull(message = "카테고리 ID는 필수입니다")
     @field:Min(value = 1, message = "올바른 카테고리 ID를 입력해주세요")
     val categoryId: Long,

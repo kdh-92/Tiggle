@@ -1,5 +1,7 @@
 package com.side.tiggle.domain.transaction.model
 
+import com.side.tiggle.domain.category.model.Category
+import com.side.tiggle.domain.member.model.Member
 import com.side.tiggle.global.common.model.BaseEntity
 import jakarta.persistence.*
 import org.hibernate.annotations.SQLDelete
@@ -12,8 +14,13 @@ import java.time.LocalDate
 @SQLRestriction("deleted = false")
 @Table(name = "transactions")
 class Transaction(
-    val memberId: Long,
-    val categoryId: Long,
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id")
+    val member: Member,
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id")
+    val category: Category,
 
     @Column(length = 1000)
     val imageUrl: String? = null,

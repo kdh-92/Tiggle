@@ -1,5 +1,6 @@
 package com.side.tiggle.domain.comment.model
 
+import com.side.tiggle.domain.member.model.Member
 import com.side.tiggle.global.common.model.BaseEntity
 import org.hibernate.annotations.SQLDelete
 import jakarta.persistence.*
@@ -13,11 +14,13 @@ class Comment(
     @Column(name = "tx_id", nullable = false)
     val txId: Long,
 
-    @Column(name = "sender_id", nullable = false)
-    val senderId: Long,
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "sender_id")
+    val sender: Member,
 
-    @Column(name = "receiver_id", nullable = false)
-    val receiverId: Long,
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "receiver_id")
+    val receiver: Member,
 
     @Column(name = "content", nullable = false)
     var content: String,

@@ -31,7 +31,7 @@ const MyPage = ({ profile }: MyPageProps) => {
     { staleTime: 1000 * 60 * 10, enabled: isLogin },
   );
 
-  const sortArray = data?.content?.sort((a, b) =>
+  const sortArray = data?.data?.content?.sort((a, b) =>
     dayjs(b.date).diff(dayjs(a.date)),
   );
 

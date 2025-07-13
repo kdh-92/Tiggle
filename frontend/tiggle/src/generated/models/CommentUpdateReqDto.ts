@@ -4,6 +4,5 @@
 /* eslint-disable */
 
 export type CommentUpdateReqDto = {
-    content?: string;
+    content: string;
 };
-

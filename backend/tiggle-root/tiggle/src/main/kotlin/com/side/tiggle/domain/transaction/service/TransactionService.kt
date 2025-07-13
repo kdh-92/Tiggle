@@ -11,7 +11,7 @@ import java.time.LocalDate
 
 interface TransactionService {
 
-    fun createTransaction(memberId: Long, dto: TransactionCreateReqDto, file: MultipartFile?)
+    fun createTransaction(memberId: Long, dto: TransactionCreateReqDto, file: MultipartFile)
     fun updateTransaction(memberId: Long, transactionId: Long, dto: TransactionUpdateReqDto)
     fun deleteTransaction(memberId: Long, txId: Long)
     fun getTransactionDetail(id: Long): TransactionRespDto
@@ -26,5 +26,4 @@ interface TransactionService {
         categoryIds: List<Long>?,
         tagNames: List<String>?
     ): TransactionPageRespDto
-    fun getAllUndeletedTransaction(): TransactionListRespDto
 }

@@ -3,27 +3,19 @@
 /* tslint:disable */
 /* eslint-disable */
 
-import type { MemberResponseDto } from './MemberResponseDto';
-import type { TransactionDto } from './TransactionDto';
-import { CategoryRespDto } from "@/generated";
+import type { CategoryRespDto } from './CategoryRespDto';
+import type { MemberRespDto } from './MemberRespDto';
 
 export type TransactionRespDto = {
-    id?: number;
-    member?: MemberResponseDto;
-    // asset?: AssetRespDto;
-    category?: CategoryRespDto;
-    txTagNames?: string;
-    createdAt?: string;
+    id: number;
+    member: MemberRespDto;
+    category: CategoryRespDto;
+    tagNames?: Array<string>;
+    createdAt: string;
     parentId?: number;
-    type?: 'INCOME' | 'OUTCOME' | 'REFUND';
     imageUrl?: string;
-    amount?: number;
-    date?: string;
-    content?: string;
-    reason?: string;
-    parentTx?: TransactionDto;
-    txUpCount?: number;
-    txDownCount?: number;
-    txCommentCount?: number;
+    amount: number;
+    date: string;
+    content: string;
+    reason: string;
 };
-

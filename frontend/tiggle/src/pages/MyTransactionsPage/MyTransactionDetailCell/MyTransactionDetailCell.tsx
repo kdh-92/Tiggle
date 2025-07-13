@@ -1,14 +1,12 @@
 import cn from "classnames";
 
 import { TypeTag } from "@/components/atoms";
-import { TxType } from "@/types";
 import { formatNumber } from "@/utils/format";
 
 import { MyTransactionDetailCellStyle } from "./MyTransactionDetailCellStyle";
 
 export interface MyTransactionDetailCellProps {
   id: number;
-  type: TxType;
   amount: number;
   content: string;
   reason: string;
@@ -16,11 +14,12 @@ export interface MyTransactionDetailCellProps {
 
 const MyTransactionDetailCell = ({
   id,
-  type,
   amount,
   content,
   reason,
 }: MyTransactionDetailCellProps) => {
+  const type = "OUTCOME";
+
   return (
     <a href={`/detail/${id}`}>
       <MyTransactionDetailCellStyle>

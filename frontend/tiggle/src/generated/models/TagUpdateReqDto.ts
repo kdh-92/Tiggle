@@ -3,8 +3,6 @@
 /* tslint:disable */
 /* eslint-disable */
 
-export type AssetUpdateReqDto = {
-    name?: string;
-    defaults?: boolean;
+export type TagUpdateReqDto = {
+    name: string;
 };
-

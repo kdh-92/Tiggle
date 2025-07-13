@@ -3,4 +3,9 @@
 /* tslint:disable */
 /* eslint-disable */
 
-export type Unit = Record<string, any>;
+export type ApiResponse = {
+    success: boolean;
+    code: string;
+    message: string;
+    data?: any;
+};

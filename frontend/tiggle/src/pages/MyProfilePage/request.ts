@@ -29,5 +29,5 @@ export const updateProfile = async ({
         "Content-Type": "multipart/form-data",
       },
     })
-    .then(({ data }) => data);
+    .then(({ data }) => data.data);
 };

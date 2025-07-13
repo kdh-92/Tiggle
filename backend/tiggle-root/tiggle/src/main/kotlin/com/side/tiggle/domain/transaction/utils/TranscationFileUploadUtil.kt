@@ -57,7 +57,7 @@ class TransactionFileUploadUtil {
             throw IllegalStateException("파일 저장 중 오류가 발생했습니다: ${e.message}", e)
         }
 
-        return saveName
+        return saveName.replace("\\", "/")
     }
 
     private fun validateFileNameAndGetExtension(file: MultipartFile): String {

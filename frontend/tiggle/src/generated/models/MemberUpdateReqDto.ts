@@ -3,9 +3,7 @@
 /* tslint:disable */
 /* eslint-disable */
 
-export type AssetRespDto = {
-    id?: number;
-    name?: string;
-    defaults?: boolean;
+export type MemberUpdateReqDto = {
+    nickname?: string;
+    birth?: string;
 };
-
