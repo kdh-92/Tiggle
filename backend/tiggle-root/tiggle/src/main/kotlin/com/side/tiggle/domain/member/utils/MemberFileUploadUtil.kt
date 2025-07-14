@@ -13,7 +13,7 @@ import java.util.*
 
 @Component
 @ConfigurationProperties(prefix = "part.upload.profile")
-class FileUploadUtil {
+class MemberFileUploadUtil {
     lateinit var path: String
     var maxSize: Long = 0
     lateinit var allowedTypes: List<String>
@@ -56,7 +56,7 @@ class FileUploadUtil {
             throw IllegalStateException("프로필 이미지 저장 중 오류가 발생했습니다: ${e.message}", e)
         }
 
-        return savePath.toString()
+        return "$path/$memberId/$safeFilename"
     }
 
     private fun validateFileNameAndGetExtension(file: MultipartFile): String {
@@ -92,7 +92,15 @@ class FileUploadUtil {
     fun deleteProfileImage(profileUrl: String?) {
         if (profileUrl != null && !profileUrl.startsWith("http")) {
             try {
-                val file = File(profileUrl)
+                val absolutePath = if (profileUrl.startsWith("upload/profile/")) {
+
+                    val relativePath = profileUrl.substringAfter("upload/profile/")
+                    File(path, relativePath).absolutePath
+                } else {
+                    profileUrl
+                }
+
+                val file = File(absolutePath)
                 if (file.exists() && !file.delete()) {
                     throw MemberException(MemberErrorCode.PROFILE_IMAGE_DELETE_FAILED)
                 }
