@@ -23,17 +23,11 @@ const MultiUpload = forwardRef<HTMLInputElement, MultiUploadProps>(
   ({ name = "multiUpload", onChange, onReset, error, ...props }, ref) => {
     const desktop = isDesktop();
 
-    const {
-      files,
-      imageUrls,
-      handleUpload,
-      handleReset,
-      removeFile,
-      isResizing,
-    } = useMultiUpload({
-      onChange,
-      onReset,
-    });
+    const { files, imageUrls, handleUpload, handleReset, removeFile } =
+      useMultiUpload({
+        onChange,
+        onReset,
+      });
 
     const filled = useMemo(() => files.length > 0, [files]);
 
@@ -66,18 +60,17 @@ const MultiUpload = forwardRef<HTMLInputElement, MultiUploadProps>(
                 ref={ref}
                 name={name}
                 onChange={handleUpload}
-                disabled={isResizing}
                 {...props}
               />
               {files.length > 0 ? (
                 <div className="upload-filled">
                   <Plus size={desktop ? 24 : 20} />
-                  <p>{isResizing ? "처리중..." : "추가"}</p>
+                  <p>추가</p>
                 </div>
               ) : (
                 <div className="upload-empty">
                   <Plus size={desktop ? 24 : 20} />
-                  <p>{isResizing ? "처리중..." : "업로드"}</p>
+                  <p>업로드</p>
                 </div>
               )}
             </label>

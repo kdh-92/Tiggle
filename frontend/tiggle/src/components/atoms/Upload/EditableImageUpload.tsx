@@ -8,7 +8,6 @@ import {
   ErrorMessageStyle,
 } from "@/components/atoms/Upload/UploadStyle";
 import { isDesktop } from "@/styles/util/screen";
-import { resizeTransactionImage } from "@/utils/imageResize";
 
 interface EditableImageUploadProps
   extends React.InputHTMLAttributes<HTMLInputElement> {
@@ -45,7 +44,6 @@ const EditableImageUpload = forwardRef<
 
     const [newFiles, setNewFiles] = useState<File[]>([]);
     const [newImageUrls, setNewImageUrls] = useState<string[]>([]);
-    const [isResizing, setIsResizing] = useState(false);
 
     const [displayExistingImages, setDisplayExistingImages] =
       useState<string[]>(existingImages);
@@ -54,14 +52,14 @@ const EditableImageUpload = forwardRef<
       setDisplayExistingImages(existingImages);
     }, [existingImages]);
 
-    const encodeFilesToImageUrls = (files: File[]) => {
+    const encodeFilesToImageUrls = (fileList: FileList) => {
+      const files = Array.from(fileList);
       const urls: string[] = [];
 
       files.forEach((file, index) => {
         const reader = new FileReader();
         reader.onload = function () {
           urls[index] = reader.result as string;
-
           if (urls.length === files.length) {
             setNewImageUrls(prev => [...prev, ...urls]);
           }
@@ -70,32 +68,13 @@ const EditableImageUpload = forwardRef<
       });
     };
 
-    const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
       onChange?.(e);
       const uploadedFiles = e.target.files;
-
       if (uploadedFiles && uploadedFiles.length > 0) {
-        setIsResizing(true);
-
-        try {
-          const fileArray = Array.from(uploadedFiles);
-          const resizedFiles: File[] = [];
-
-          for (const file of fileArray) {
-            try {
-              const resizedFile = await resizeTransactionImage(file);
-              resizedFiles.push(resizedFile);
-            } catch (error) {
-              console.error(`파일 리사이즈 실패 (${file.name}):`, error);
-              resizedFiles.push(file);
-            }
-          }
-
-          setNewFiles(prev => [...prev, ...resizedFiles]);
-          encodeFilesToImageUrls(resizedFiles);
-        } finally {
-          setIsResizing(false);
-        }
+        const files = Array.from(uploadedFiles);
+        setNewFiles(prev => [...prev, ...files]);
+        encodeFilesToImageUrls(uploadedFiles);
       }
     };
 
@@ -182,14 +161,11 @@ const EditableImageUpload = forwardRef<
                 ref={ref}
                 name={name}
                 onChange={handleUpload}
-                disabled={isResizing}
                 {...props}
               />
               <div className={hasImages ? "upload-filled" : "upload-empty"}>
                 <Plus size={desktop ? 24 : 20} />
-                <p>
-                  {isResizing ? "처리중..." : hasImages ? "추가" : "업로드"}
-                </p>
+                <p>{hasImages ? "추가" : "업로드"}</p>
               </div>
             </label>
 
