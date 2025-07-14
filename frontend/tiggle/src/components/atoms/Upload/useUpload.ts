@@ -1,5 +1,7 @@
 import { ChangeEvent, ChangeEventHandler, useState } from "react";
 
+import { resizeProfileImage } from "@/utils/imageResize";
+
 type UseUploadOptions = {
   onChange: ChangeEventHandler<HTMLInputElement>;
   onReset: () => void;
@@ -13,6 +15,7 @@ const useUpload = ({
 }: Partial<UseUploadOptions>) => {
   const [file, setFile] = useState<File | null>(null);
   const [imageUrl, setImageUrl] = useState(defaultUrl ?? "");
+  const [isResizing, setIsResizing] = useState(false);
 
   const encodeFileToImageUrl = (file: File) => {
     const reader = new FileReader();
@@ -22,12 +25,25 @@ const useUpload = ({
     reader.readAsDataURL(file);
   };
 
-  const handleUpload = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleUpload = async (e: ChangeEvent<HTMLInputElement>) => {
     onChange?.(e);
     const uploadedFile = e.target.files?.[0];
+
     if (uploadedFile) {
-      setFile(uploadedFile);
-      encodeFileToImageUrl(uploadedFile);
+      setIsResizing(true);
+
+      try {
+        const resizedFile = await resizeProfileImage(uploadedFile);
+
+        setFile(resizedFile);
+        encodeFileToImageUrl(resizedFile);
+      } catch (error) {
+        console.error("이미지 리사이즈 실패:", error);
+        setFile(uploadedFile);
+        encodeFileToImageUrl(uploadedFile);
+      } finally {
+        setIsResizing(false);
+      }
     }
   };
 
@@ -42,6 +58,7 @@ const useUpload = ({
     imageUrl,
     handleUpload,
     handleReset,
+    isResizing,
   };
 };
 

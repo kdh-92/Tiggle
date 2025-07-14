@@ -23,10 +23,12 @@ const Upload = forwardRef<HTMLInputElement, UploadProps>(
   ({ name = "upload", onChange, onReset, error, ...props }, ref) => {
     const desktop = isDesktop();
 
-    const { file, imageUrl, handleUpload, handleReset } = useUpload({
-      onChange,
-      onReset,
-    });
+    const { file, imageUrl, handleUpload, handleReset, isResizing } = useUpload(
+      {
+        onChange,
+        onReset,
+      },
+    );
 
     const filled = useMemo(() => file !== null, [file]);
 
@@ -47,17 +49,18 @@ const Upload = forwardRef<HTMLInputElement, UploadProps>(
                 ref={ref}
                 name={name}
                 onChange={handleUpload}
+                disabled={isResizing}
                 {...props}
               />
               {file ? (
                 <div className="upload-filled">
                   <UploadIcon size={desktop ? 20 : 16} strokeWidth={1.5} />
-                  <p>다시 업로드</p>
+                  <p>{isResizing ? "처리중..." : "다시 업로드"}</p>
                 </div>
               ) : (
                 <div className="upload-empty">
                   <Plus size={desktop ? 24 : 20} />
-                  <p>사진 업로드</p>
+                  <p>{isResizing ? "처리중..." : "사진 업로드"}</p>
                 </div>
               )}
             </label>
