@@ -1,12 +1,18 @@
 import { useForm } from "react-hook-form";
 import { useLoaderData, useNavigate } from "react-router-dom";
 
-import { QueryClient, useMutation, useQuery } from "@tanstack/react-query";
+import {
+  QueryClient,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
 import dayjs from "dayjs";
 
 import useUpload from "@/components/atoms/Upload/useUpload";
 import { MemberApiControllerService } from "@/generated";
 import useMessage from "@/hooks/useMessage";
+import { memberKeys } from "@/query/queryKeys";
 import { getProfileImageUrl } from "@/utils/imageUrl";
 
 import { MemberFormData, updateProfile } from "./request";
@@ -24,6 +30,7 @@ export const loader = (queryClient: QueryClient) => () =>
 export const useProfilePage = () => {
   const messageApi = useMessage();
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   const initialData = useLoaderData() as Awaited<
     ReturnType<ReturnType<typeof loader>>
@@ -85,6 +92,10 @@ export const useProfilePage = () => {
               birth: data.data.birth ? dayjs(data.data.birth) : null,
             });
           }
+        });
+
+        queryClient.invalidateQueries({
+          queryKey: memberKeys.detail("me"),
         });
       },
       onError: () => {
