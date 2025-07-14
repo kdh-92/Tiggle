@@ -51,7 +51,9 @@ class OAuth2SuccessHandler(
         )
         val member = memberRepository.findByEmail(attributes.email)
         val authMember: Member = member?.apply {
-            profileUrl = attributes.profileUrl
+            if (profileUrl == null || profileUrl!!.startsWith("http")) {
+                profileUrl = attributes.profileUrl
+            }
             provider = authenticationToken.authorizedClientRegistrationId
         }
             ?: Member(
