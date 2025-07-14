@@ -111,6 +111,31 @@ export const UploadStyle = styled.div`
     .reset {
       ${({ theme }) => expandTypography(theme.typography.body.medium.regular)}
     }
+
+    .image-item {
+      position: relative;
+      display: inline-block;
+    }
+
+    .image-item img {
+      width: 80px;
+      height: 80px;
+      object-fit: cover;
+      border-radius: 4px;
+      border: 1px solid #ddd;
+    }
+
+    .remove-btn {
+      position: absolute;
+      top: -8px;
+      right: -8px;
+      background: red;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 24px;
+      height: 24px;
+    }
   }
 `;
 
