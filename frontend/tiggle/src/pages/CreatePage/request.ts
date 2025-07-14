@@ -1,48 +1,66 @@
-import {
-  TransactionApiControllerService,
-  TransactionRespDto,
-  TransactionUpdateReqDto,
-} from "@/generated";
+import { TransactionApiControllerService } from "@/generated";
 import { getAxiosInstance } from "@/query/openapi-request";
 
-export type TransactionFormData = Exclude<
-  Parameters<typeof TransactionApiControllerService.createTransaction>[0],
-  undefined
->;
+export interface TransactionFormData {
+  dto: {
+    categoryId: number;
+    amount: number;
+    content: string;
+    reason: string;
+    tagNames: string[];
+    date: string;
+  };
+  files: File[];
+}
 
-export type TransactionUpdateData = {
+export interface TransactionUpdateData {
   transactionId: number;
-  dto: TransactionUpdateReqDto;
+  dto: {
+    categoryId: number;
+    amount: number;
+    content: string;
+    reason: string;
+    tagNames: string[];
+    date: string;
+  };
+}
+
+export interface AddPhotosData {
+  transactionId: number;
+  files: File[];
+}
+
+export const createTransaction = async (data: TransactionFormData) => {
+  return TransactionApiControllerService.createTransaction({
+    dto: data.dto,
+    files: data.files,
+  });
 };
 
-export const createTransaction = async ({
-  dto,
-  multipartFile,
-}: TransactionFormData) => {
+export const updateTransaction = async (data: TransactionUpdateData) => {
+  return TransactionApiControllerService.updateTransaction(
+    data.transactionId,
+    data.dto,
+  );
+};
+
+export const addTransactionPhotos = async (data: AddPhotosData) => {
   const formData = new FormData();
-  formData.append("dto", JSON.stringify(dto));
+  data.files.forEach(file => {
+    formData.append("files", file);
+  });
 
-  if (multipartFile && multipartFile.length > 0) {
-    (multipartFile as File[]).forEach(file => {
-      formData.append("files", file);
-    });
-  }
+  const axiosInstance = getAxiosInstance();
 
-  return getAxiosInstance()
-    .post<TransactionRespDto>("/api/v1/transaction", formData, {
-      baseURL: import.meta.env.VITE_API_URL,
+  const response = await axiosInstance.post(
+    `/api/v1/transaction/${data.transactionId}/photos`,
+    formData,
+    {
       headers: {
         "Content-Type": "multipart/form-data",
       },
-    })
-    .then(({ data }) => data);
-};
+    },
+  );
 
-export const updateTransaction = async ({
-  transactionId,
-  dto,
-}: TransactionUpdateData) => {
-  return getAxiosInstance()
-    .put(`/api/v1/transaction/${transactionId}`, dto)
-    .then(({ data }) => data);
+  return response.data;
 };
