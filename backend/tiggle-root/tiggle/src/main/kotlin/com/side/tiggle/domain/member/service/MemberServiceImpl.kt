@@ -54,6 +54,8 @@ class MemberServiceImpl(
         val member: Member = getMemberEntityOrThrow(memberId)
 
         if (file != null && !file.isEmpty) {
+            fileUploadUtil.deleteProfileImage(member.profileUrl)
+
             member.profileUrl = fileUploadUtil.uploadProfileImage(memberId, file)
             isModified = true
         }

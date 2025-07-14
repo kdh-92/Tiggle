@@ -75,8 +75,6 @@ class FileUploadUtil {
         return extension.lowercase()
     }
 
-
-
     private fun validateFile(file: MultipartFile) {
         if (!allowedTypes.contains(file.contentType)) {
             throw MemberException(MemberErrorCode.INVALID_FILE_TYPE)
@@ -88,6 +86,20 @@ class FileUploadUtil {
 
         if (file.isEmpty) {
             throw MemberException(MemberErrorCode.EMPTY_FILE)
+        }
+    }
+
+    fun deleteProfileImage(profileUrl: String?) {
+        if (profileUrl != null && !profileUrl.startsWith("http")) {
+            try {
+                val file = File(profileUrl)
+                if (file.exists() && !file.delete()) {
+                    throw MemberException(MemberErrorCode.PROFILE_IMAGE_DELETE_FAILED)
+                }
+            } catch (e: Exception) {
+                if (e is MemberException) throw e
+                throw MemberException(MemberErrorCode.PROFILE_IMAGE_DELETE_FAILED, e)
+            }
         }
     }
 }
