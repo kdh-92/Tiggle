@@ -151,7 +151,7 @@ class TransactionApiController(
         private const val DEFAULT_PAGE_SIZE = "5"
     }
 
-    @PostMapping("/{id}/photos")
+    @PostMapping("/{id}/photos", consumes = [MediaType.MULTIPART_FORM_DATA_VALUE])
     @Operation(description = "거래 사진 추가", security = [SecurityRequirement(name = "bearer-key")])
     fun addTransactionPhotos(
         @Parameter(hidden = true)
