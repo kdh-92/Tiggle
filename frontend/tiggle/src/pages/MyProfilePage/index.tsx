@@ -4,7 +4,6 @@ import { Controller } from "react-hook-form";
 import { Avatar } from "antd";
 
 import { CTAButton, DatePicker, Input, TextButton } from "@/components/atoms";
-import { getProfileImageUrl } from "@/utils/imageUrl";
 import withAuth from "@/utils/withAuth";
 
 import { MypageDetailPageStyle } from "./MyDetailPageCommonStyle";
@@ -34,10 +33,7 @@ const MyProfilePage = () => {
       <form encType="multipart/form-data" onSubmit={handleSubmit}>
         <ProfileImageSectionStyle>
           <div className="profile-avatar">
-            <Avatar
-              size={{ md: 120, lg: 160 }}
-              src={getProfileImageUrl(profileUrl)}
-            />
+            <Avatar size={{ md: 120, lg: 160 }} src={profileUrl} />
             <label className="profile-edit">
               <input
                 type="file"
