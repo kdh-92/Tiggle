@@ -31,9 +31,19 @@ export interface AddPhotosData {
 }
 
 export const createTransaction = async (data: TransactionFormData) => {
-  return TransactionApiControllerService.createTransaction({
-    dto: data.dto,
-    files: data.files,
+  const formData = new FormData();
+
+  formData.append("dto", JSON.stringify(data.dto));
+
+  data.files.forEach(file => {
+    formData.append("files", file);
+  });
+
+  const axiosInstance = getAxiosInstance();
+  return axiosInstance.post("/api/v1/transaction", formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
   });
 };
 
