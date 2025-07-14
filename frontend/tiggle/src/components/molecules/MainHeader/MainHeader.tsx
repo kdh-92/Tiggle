@@ -12,6 +12,7 @@ import {
 } from "@/components/molecules/MainHeader/MainHeaderStyle";
 import useAuth from "@/hooks/useAuth";
 import useScroll from "@/hooks/useScroll";
+import { getProfileImageUrl } from "@/utils/imageUrl";
 
 export default function MainHeader() {
   const { isLogin, profile, requireAuth } = useAuth();
@@ -38,7 +39,10 @@ export default function MainHeader() {
                     <Bell size={20} />
                   </button>
                   <Link to={"/mypage"} className="right-bar-btn">
-                    <Avatar size={24} src={profile?.data?.profileUrl} />
+                    <Avatar
+                      size={24}
+                      src={getProfileImageUrl(profile?.data?.profileUrl)}
+                    />
                   </Link>
                 </>
               ) : (

@@ -8,6 +8,7 @@ import { TransactionApiControllerService } from "@/generated";
 import useAuth from "@/hooks/useAuth";
 import { MypageStyle } from "@/pages/MyPage/MypageStyle";
 import { transactionKeys } from "@/query/queryKeys";
+import { getProfileImageUrl } from "@/utils/imageUrl";
 import withAuth, { AuthProps } from "@/utils/withAuth";
 
 import MyTransactionCell from "./MyTransactionCell/MyTransactionCell";
@@ -44,7 +45,7 @@ const MyPage = ({ profile }: MyPageProps) => {
               <img
                 className="user-profile"
                 alt="user-profile"
-                src={profile.profileUrl}
+                src={getProfileImageUrl(profile.profileUrl)}
               />
             ) : (
               <Avatar />

@@ -7,6 +7,7 @@ import dayjs from "dayjs";
 import useUpload from "@/components/atoms/Upload/useUpload";
 import { MemberApiControllerService } from "@/generated";
 import useMessage from "@/hooks/useMessage";
+import { getProfileImageUrl } from "@/utils/imageUrl";
 
 import { MemberFormData, updateProfile } from "./request";
 
@@ -49,52 +50,50 @@ export const useProfilePage = () => {
     },
   });
   const profileUrlRegister = register("profileUrl");
-  const isDirty = _isDirty && Object.keys(dirtyFields).length > 0;
 
-  const { imageUrl, handleUpload, handleReset } = useUpload({
+  const { imageUrl, handleUpload, handleReset, file } = useUpload({
     onReset: () => resetField("profileUrl"),
-    defaultUrl: profileData?.data?.profileUrl,
+    defaultUrl: getProfileImageUrl(profileData?.data?.profileUrl),
   });
 
-  const handleSubmit = _handleSubmit(
-    ({ nickname, birth, email, profileUrl }: ProfileInputs) => {
-      if (Object.keys(dirtyFields).length === 0) {
-        return;
-      }
+  const isDirty =
+    (_isDirty && Object.keys(dirtyFields).length > 0) || file !== null;
 
-      const formData: MemberFormData = {
-        // TODO: xMemberId 삭제
-        memberRequestDto: {
-          ...(dirtyFields["nickname"] && { nickname }),
-          ...(dirtyFields["email"] && { email }),
-          ...(dirtyFields["birth"] && { birth: dayjs(birth).toISOString() }),
-        },
-        multipartFile: dirtyFields["profileUrl"] && profileUrl![0],
-      };
+  const handleSubmit = _handleSubmit(({ nickname, birth }: ProfileInputs) => {
+    if (Object.keys(dirtyFields).length === 0 && !file) {
+      return;
+    }
 
-      mutate(formData, {
-        onSuccess: () => {
-          messageApi.open({
-            type: "success",
-            content: "프로필 수정이 완료되었습니다.",
+    const formData: MemberFormData = {
+      dto: {
+        ...(dirtyFields["nickname"] && { nickname }),
+        ...(dirtyFields["birth"] && { birth: dayjs(birth).toISOString() }),
+      },
+      multipartFile: file,
+    };
+
+    mutate(formData, {
+      onSuccess: () => {
+        messageApi.open({
+          type: "success",
+          content: "프로필 수정이 완료되었습니다.",
+        });
+        refetchProfileData().then(({ data }) => {
+          reset({
+            nickname: data!.data.nickname,
+            email: data!.data.email,
+            birth: dayjs(data!.data.birth),
           });
-          refetchProfileData().then(({ data }) => {
-            reset({
-              nickname: data!.data.nickname,
-              email: data!.data.email,
-              birth: dayjs(data!.data.birth),
-            });
-          });
-        },
-        onError: () => {
-          messageApi.open({
-            type: "error",
-            content: "프로필 수정에 실패했습니다.",
-          });
-        },
-      });
-    },
-  );
+        });
+      },
+      onError: () => {
+        messageApi.open({
+          type: "error",
+          content: "프로필 수정에 실패했습니다.",
+        });
+      },
+    });
+  });
 
   const handleCancel = () => {
     navigate(-1);
