@@ -50,14 +50,13 @@ export const useProfilePage = () => {
     },
   });
   const profileUrlRegister = register("profileUrl");
+  const isDirty =
+    (_isDirty && Object.keys(dirtyFields).length > 0) || file !== null;
 
   const { imageUrl, handleUpload, handleReset, file } = useUpload({
     onReset: () => resetField("profileUrl"),
     defaultUrl: getProfileImageUrl(profileData?.data?.profileUrl),
   });
-
-  const isDirty =
-    (_isDirty && Object.keys(dirtyFields).length > 0) || file !== null;
 
   const handleSubmit = _handleSubmit(({ nickname, birth }: ProfileInputs) => {
     if (Object.keys(dirtyFields).length === 0 && !file) {

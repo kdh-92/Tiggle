@@ -139,7 +139,7 @@ const CreatePage = () => {
           date: dayjs(date).toISOString(),
           ...rest,
         },
-        multipartFile: selectedFiles,
+        files: selectedFiles,
       };
 
       mutate(formData, {

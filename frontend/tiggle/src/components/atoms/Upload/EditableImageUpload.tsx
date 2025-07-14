@@ -8,6 +8,7 @@ import {
   ErrorMessageStyle,
 } from "@/components/atoms/Upload/UploadStyle";
 import { isDesktop } from "@/styles/util/screen";
+import { resizeTransactionImage } from "@/utils/imageResize";
 
 interface EditableImageUploadProps
   extends React.InputHTMLAttributes<HTMLInputElement> {
@@ -68,13 +69,35 @@ const EditableImageUpload = forwardRef<
       });
     };
 
-    const handleUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
       onChange?.(e);
       const uploadedFiles = e.target.files;
       if (uploadedFiles && uploadedFiles.length > 0) {
-        const files = Array.from(uploadedFiles);
-        setNewFiles(prev => [...prev, ...files]);
-        encodeFilesToImageUrls(uploadedFiles);
+        const fileArray = Array.from(uploadedFiles);
+        const resizedFiles: File[] = [];
+
+        for (const file of fileArray) {
+          try {
+            const resizedFile = await resizeTransactionImage(file);
+            resizedFiles.push(resizedFile);
+          } catch (error) {
+            console.error(`리사이즈 실패: ${file.name}`, error);
+            resizedFiles.push(file);
+          }
+        }
+
+        setNewFiles(prev => [...prev, ...resizedFiles]);
+
+        const dataTransfer = new DataTransfer();
+        [...newFiles, ...resizedFiles].forEach(file =>
+          dataTransfer.items.add(file),
+        );
+
+        if (e.target) {
+          e.target.files = dataTransfer.files;
+        }
+
+        encodeFilesToImageUrls(dataTransfer.files);
       }
     };
 

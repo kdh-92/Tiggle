@@ -1,5 +1,7 @@
 import { ChangeEvent, ChangeEventHandler, useState } from "react";
 
+import { resizeTransactionImage } from "@/utils/imageResize";
+
 type UseMultiUploadOptions = {
   onChange: ChangeEventHandler<HTMLInputElement>;
   onReset: () => void;
@@ -28,13 +30,34 @@ const useMultiUpload = ({
     });
   };
 
-  const handleUpload = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleUpload = async (e: ChangeEvent<HTMLInputElement>) => {
     onChange?.(e);
     const uploadedFiles = e.target.files;
+
     if (uploadedFiles && uploadedFiles.length > 0) {
-      const newFiles = Array.from(uploadedFiles);
-      setFiles(prev => [...prev, ...newFiles]);
-      encodeFilesToImageUrls(uploadedFiles);
+      const fileArray = Array.from(uploadedFiles);
+      const resizedFiles: File[] = [];
+
+      for (const file of fileArray) {
+        try {
+          const resizedFile = await resizeTransactionImage(file);
+          resizedFiles.push(resizedFile);
+        } catch (error) {
+          console.error(`리사이즈 실패: ${file.name}`, error);
+          resizedFiles.push(file);
+        }
+      }
+
+      setFiles(prev => [...prev, ...resizedFiles]);
+
+      const dataTransfer = new DataTransfer();
+      [...files, ...resizedFiles].forEach(file => dataTransfer.items.add(file));
+
+      if (e.target) {
+        e.target.files = dataTransfer.files;
+      }
+
+      encodeFilesToImageUrls(dataTransfer.files);
     }
   };
 
