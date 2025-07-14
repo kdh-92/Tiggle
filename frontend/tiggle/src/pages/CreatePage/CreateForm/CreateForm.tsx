@@ -18,7 +18,7 @@ import {
   Select,
   TextArea,
   TextButton,
-  Upload,
+  MultiUpload,
 } from "@/components/atoms";
 import {
   CategoryApiControllerService,
@@ -37,7 +37,7 @@ export interface FormInputs {
   reason: string;
   tags: Array<string>;
   date: Dayjs;
-  imageUrl: FileList;
+  imageUrls: FileList;
 }
 
 type FormInputsKey = keyof FormInputs;
@@ -94,7 +94,7 @@ function CreateForm({
   });
 
   const handleResetImageUrl = () => {
-    resetField("imageUrl");
+    resetField("imageUrls");
   };
 
   return (
@@ -226,11 +226,11 @@ function CreateForm({
 
       <div className="form-item">
         <label>사진</label>
-        <Upload
+        <MultiUpload
           onReset={handleResetImageUrl}
-          disabled={disabledInputs?.includes("imageUrl")}
-          {...register("imageUrl", { required: "사진을 업로드 해주세요" })}
-          error={errors.imageUrl}
+          disabled={disabledInputs?.includes("imageUrls")}
+          {...register("imageUrls", { required: "사진을 업로드 해주세요" })}
+          error={errors.imageUrls}
         />
         <div className="form-item-caption">
           <Info size={12} />

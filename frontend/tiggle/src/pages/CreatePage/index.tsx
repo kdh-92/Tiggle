@@ -65,10 +65,10 @@ const CreatePage = () => {
   const { mutate: updateMutation } = useMutation(updateTransaction);
 
   const handleOnSubmit: SubmitHandler<FormInputs> = data => {
-    const { date, imageUrl, ...rest } = data;
-    const selectedFile = imageUrl.item(0);
+    const { date, imageUrls, ...rest } = data;
+    const selectedFiles = Array.from(imageUrls);
 
-    if (!selectedFile) {
+    if (selectedFiles.length === 0) {
       messageApi.open({
         type: "error",
         content: "파일을 선택해주세요.",
@@ -117,7 +117,7 @@ const CreatePage = () => {
           date: dayjs(date).toISOString(),
           ...rest,
         },
-        multipartFile: selectedFile,
+        multipartFile: selectedFiles,
       };
 
       mutate(formData, {

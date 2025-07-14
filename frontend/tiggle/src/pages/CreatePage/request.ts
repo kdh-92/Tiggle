@@ -21,8 +21,11 @@ export const createTransaction = async ({
 }: TransactionFormData) => {
   const formData = new FormData();
   formData.append("dto", JSON.stringify(dto));
-  if (multipartFile) {
-    formData.append("multipartFile", multipartFile);
+
+  if (multipartFile && multipartFile.length > 0) {
+    (multipartFile as File[]).forEach(file => {
+      formData.append("files", file);
+    });
   }
 
   return getAxiosInstance()
