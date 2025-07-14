@@ -1,11 +1,9 @@
 import { ButtonHTMLAttributes } from "react";
 import { Frown, Smile } from "react-feather";
-import { useSelector } from "react-redux";
 
 import cn from "classnames";
 
 import { ReactionButtonStyle } from "@/pages/DetailPage/ReactionButton/ReactionButtonStyle";
-import { RootState } from "@/store";
 import { Reaction, ReactionType } from "@/types";
 
 export interface ReactionButtonProps
@@ -21,7 +19,7 @@ export default function ReactionButton({
   checked,
   ...props
 }: ReactionButtonProps) {
-  const txType = useSelector((state: RootState) => state.detailPage.txType);
+  const txType = "OUTCOME";
 
   return (
     <ReactionButtonStyle className={cn({ checked }, txType)} {...props}>

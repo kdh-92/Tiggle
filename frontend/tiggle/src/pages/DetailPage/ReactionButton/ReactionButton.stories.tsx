@@ -1,9 +1,7 @@
-import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useState } from "react";
 
 import { Meta, StoryObj } from "@storybook/react";
 
-import detailPageStore from "@/store/detailPage";
 import { Tx, TxType } from "@/types";
 
 import ReactionButton, { ReactionButtonProps } from "./ReactionButton";
@@ -14,14 +12,10 @@ export default {
   title: "atoms/ReactionButton",
   component: ReactionButton,
   render: ({ txType, ...args }) => {
-    const dispatch = useDispatch();
     const [checked, setChecked] = useState(false);
     const toggle = () => {
       setChecked(!checked);
     };
-    useEffect(() => {
-      dispatch(detailPageStore.actions.setType(txType));
-    }, [txType]);
     return <ReactionButton {...args} checked={checked} onClick={toggle} />;
   },
   argTypes: {

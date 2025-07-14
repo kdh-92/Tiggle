@@ -7,7 +7,7 @@ import { FilterInputs } from "../types";
 interface ETCFilterTagProps {
   label: string;
   value: number | string;
-  keyName: keyof Pick<FilterInputs, "assetIds" | "categoryIds" | "tagNames">;
+  keyName: keyof Pick<FilterInputs, "categoryIds" | "tagNames">;
 }
 
 const ETCFilterTag = ({ label, value, keyName }: ETCFilterTagProps) => {
@@ -15,11 +15,14 @@ const ETCFilterTag = ({ label, value, keyName }: ETCFilterTagProps) => {
 
   const deleteTag = () => {
     if (keyName === "tagNames") {
-      // TODO: Tag 삭제 동작하지 않는 문제 해결
-      const filteredValues = getValues(keyName).filter(v => v !== value);
+      const filteredValues = getValues(keyName).filter(
+        v => v !== value,
+      ) as string[];
       setValue(keyName, filteredValues);
     } else {
-      const filteredValues = getValues(keyName).filter(v => v !== value);
+      const filteredValues = getValues(keyName).filter(
+        v => v !== value,
+      ) as number[];
       setValue(keyName, filteredValues);
     }
   };

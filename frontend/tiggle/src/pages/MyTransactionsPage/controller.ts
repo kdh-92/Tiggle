@@ -4,14 +4,14 @@ import { useForm } from "react-hook-form";
 import { useQuery } from "@tanstack/react-query";
 import dayjs from "dayjs";
 
-import { MemberDto, TransactionApiControllerService } from "@/generated";
+import { MemberRespDto, TransactionApiControllerService } from "@/generated";
 import { transactionKeys } from "@/query/queryKeys";
 
 import { FilterInputs } from "./types";
 
 const pageSize = 3;
 
-export const useMyTransactionsPage = (profile: Required<MemberDto>) => {
+export const useMyTransactionsPage = (profile: Required<MemberRespDto>) => {
   const method = useForm<FilterInputs>({ defaultValues: { date: dayjs() } });
   const handleSubmit: FormEventHandler<HTMLFormElement> = e => {
     e.preventDefault();
@@ -31,7 +31,7 @@ export const useMyTransactionsPage = (profile: Required<MemberDto>) => {
         undefined, // dayjs(filterWatch.date).date(1).format(),
         undefined, // dayjs(filterWatch.date).add(1, "month").date(1).subtract(1, "day").format(),
         filterWatch.categoryIds,
-        filterWatch.assetIds,
+        undefined,
         filterWatch.tagNames,
       ),
   });
@@ -40,8 +40,8 @@ export const useMyTransactionsPage = (profile: Required<MemberDto>) => {
   const sliceSize = useMemo(() => (index + 1) * pageSize, [index]);
   const isLoadable = useMemo(
     () =>
-      filteredTxData?.data?.content &&
-      sliceSize < filteredTxData.data.content.length,
+      filteredTxData?.data?.transactions &&
+      sliceSize < filteredTxData.data.transactions.length,
     [filteredTxData, sliceSize],
   );
 
@@ -72,7 +72,7 @@ export const useMyTransactionsPage = (profile: Required<MemberDto>) => {
   return {
     form: { method, handleSubmit },
     data: {
-      transactions: filteredTxData?.data?.content,
+      transactions: filteredTxData?.data?.transactions,
       isLoadable,
       loaderRef,
     },
