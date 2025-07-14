@@ -35,6 +35,11 @@ export const useProfilePage = () => {
 
   const { mutate } = useMutation(updateProfile);
 
+  const { imageUrl, handleUpload, handleReset, file } = useUpload({
+    onReset: () => resetField("profileUrl"),
+    defaultUrl: getProfileImageUrl(profileData?.data?.profileUrl),
+  });
+
   const {
     control,
     register,
@@ -44,19 +49,14 @@ export const useProfilePage = () => {
     formState: { isDirty: _isDirty, dirtyFields },
   } = useForm<ProfileInputs>({
     defaultValues: {
-      nickname: profileData.data.nickname,
-      email: profileData.data.email,
-      birth: profileData.data.birth ? dayjs(profileData.data.birth) : null,
+      nickname: profileData?.data?.nickname || "",
+      email: profileData?.data?.email || "",
+      birth: profileData?.data?.birth ? dayjs(profileData.data.birth) : null,
     },
   });
   const profileUrlRegister = register("profileUrl");
   const isDirty =
     (_isDirty && Object.keys(dirtyFields).length > 0) || file !== null;
-
-  const { imageUrl, handleUpload, handleReset, file } = useUpload({
-    onReset: () => resetField("profileUrl"),
-    defaultUrl: getProfileImageUrl(profileData?.data?.profileUrl),
-  });
 
   const handleSubmit = _handleSubmit(({ nickname, birth }: ProfileInputs) => {
     if (Object.keys(dirtyFields).length === 0 && !file) {
@@ -68,7 +68,7 @@ export const useProfilePage = () => {
         ...(dirtyFields["nickname"] && { nickname }),
         ...(dirtyFields["birth"] && { birth: dayjs(birth).toISOString() }),
       },
-      multipartFile: file,
+      ...(file && { multipartFile: file }),
     };
 
     mutate(formData, {
@@ -78,11 +78,13 @@ export const useProfilePage = () => {
           content: "프로필 수정이 완료되었습니다.",
         });
         refetchProfileData().then(({ data }) => {
-          reset({
-            nickname: data!.data.nickname,
-            email: data!.data.email,
-            birth: dayjs(data!.data.birth),
-          });
+          if (data?.data) {
+            reset({
+              nickname: data.data.nickname,
+              email: data.data.email,
+              birth: data.data.birth ? dayjs(data.data.birth) : null,
+            });
+          }
         });
       },
       onError: () => {
