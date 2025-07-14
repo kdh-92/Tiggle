@@ -62,10 +62,17 @@ const MultiUpload = forwardRef<HTMLInputElement, MultiUploadProps>(
                 onChange={handleUpload}
                 {...props}
               />
-              <div className="upload-area">
-                <Plus size={desktop ? 24 : 20} />
-                <p>{files.length > 0 ? "사진 추가" : "사진 업로드"}</p>
-              </div>
+              {files.length > 0 ? (
+                <div className="upload-filled">
+                  <Plus size={desktop ? 24 : 20} />
+                  <p>추가</p>
+                </div>
+              ) : (
+                <div className="upload-empty">
+                  <Plus size={desktop ? 24 : 20} />
+                  <p>업로드</p>
+                </div>
+              )}
             </label>
 
             {filled && (

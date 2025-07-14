@@ -47,6 +47,14 @@ export const UploadStyle = styled.div`
     }
   }
 
+  .view .remove-btn {
+    pointer-events: auto;
+  }
+
+  .view .image-item {
+    pointer-events: auto;
+  }
+
   .controller {
     color: ${({ theme }) => theme.color.blue[500].value};
     display: flex;
@@ -55,11 +63,13 @@ export const UploadStyle = styled.div`
 
   .upload {
     cursor: pointer;
+    min-width: 80px;
 
     &-filled {
       ${({ theme }) => expandTypography(theme.typography.body.small.regular)}
       display: flex;
       gap: 4px;
+      white-space: nowrap;
     }
 
     &-empty {
@@ -68,6 +78,7 @@ export const UploadStyle = styled.div`
       flex-direction: column;
       align-items: center;
       gap: 4px;
+      white-space: nowrap;
     }
   }
 
@@ -115,6 +126,11 @@ export const UploadStyle = styled.div`
     .image-item {
       position: relative;
       display: inline-block;
+      margin: 12px;
+    }
+
+    .image-item:hover .remove-btn {
+      display: flex;
     }
 
     .image-item img {
