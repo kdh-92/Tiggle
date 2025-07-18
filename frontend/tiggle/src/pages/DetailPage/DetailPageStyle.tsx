@@ -55,9 +55,10 @@ export const DetailPageContentStyle = styled.div`
     .images {
       grid-template-columns: repeat(2, 1fr);
     }
-  
-  .gallery-image {
-    height: 150px;
+
+    .gallery-image {
+      height: 150px;
+    }
   }
 
   .image {
