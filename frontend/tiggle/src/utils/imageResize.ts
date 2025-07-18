@@ -8,6 +8,13 @@ const resizeImage = (
     const canvas = document.createElement("canvas");
     const ctx = canvas.getContext("2d");
     const img = new Image();
+    let objectUrl: string | null = null;
+
+    if (!ctx) {
+      if (objectUrl) URL.revokeObjectURL(objectUrl);
+      reject(new Error("Canvas context is not available"));
+      return;
+    }
 
     img.onload = () => {
       const { width: originalWidth, height: originalHeight } = img;
@@ -27,10 +34,14 @@ const resizeImage = (
       canvas.width = newWidth;
       canvas.height = newHeight;
 
-      ctx?.drawImage(img, 0, 0, newWidth, newHeight);
+      ctx.drawImage(img, 0, 0, newWidth, newHeight);
 
       canvas.toBlob(
         blob => {
+          if (objectUrl) {
+            URL.revokeObjectURL(objectUrl);
+          }
+
           if (blob) {
             const resizedFile = new File([blob], file.name, {
               type: file.type,
@@ -47,10 +58,14 @@ const resizeImage = (
     };
 
     img.onerror = () => {
+      if (objectUrl) {
+        URL.revokeObjectURL(objectUrl);
+      }
       reject(new Error("Image load failed"));
     };
 
-    img.src = URL.createObjectURL(file);
+    objectUrl = URL.createObjectURL(file);
+    img.src = objectUrl;
   });
 };
 
