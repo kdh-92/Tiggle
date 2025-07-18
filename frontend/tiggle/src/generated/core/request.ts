@@ -5,7 +5,6 @@ import type { ApiRequestOptions } from "@/generated/core/ApiRequestOptions";
 import useCookie from "@/hooks/useCookie";
 
 export const getAxiosInstance = () => {
-  console.log("getAxiosInstance 호출됨");
   const { getCookie, setCookie, removeCookie } = useCookie();
   const token = getCookie("Authorization");
 
@@ -24,15 +23,11 @@ export const getAxiosInstance = () => {
       const originalRequest = error.config;
 
       if (error.response?.status === 401 && !originalRequest._retry) {
-        console.log("401 에러 감지, refresh 시도");
         originalRequest._retry = true;
         const refreshToken = getCookie("RefreshToken");
 
-        console.log("RefreshToken:", refreshToken);
-
         if (refreshToken) {
           try {
-            console.log("refresh API 호출 시작");
             const refreshResponse = await axios.post(
               `${import.meta.env.VITE_API_URL}api/auth/refresh`,
               null,
