@@ -27,18 +27,14 @@ class AuthController(
         val refreshToken = jwtTokenProvider.resolveRefreshToken(request)
             ?: throw AuthException(GlobalErrorCode.INVALID_REFRESH_TOKEN)
 
-        // Refresh Token 유효성 검증
         if (!jwtTokenProvider.validateRefreshToken(refreshToken)) {
             throw AuthException(GlobalErrorCode.INVALID_REFRESH_TOKEN)
         }
 
-        // 사용자 ID 추출
         val memberId = jwtTokenProvider.getUserIdFromRefreshToken(refreshToken)
 
-        // 새로운 Access Token 발급
         val newAccessToken = jwtTokenProvider.getAccessToken(memberId, "ROLE_USER")
 
-        // 새로운 Refresh Token 발급 (Token Rotation)
         val newRefreshToken = jwtTokenProvider.getRefreshToken(memberId, "ROLE_USER")
         refreshTokenService.saveRefreshToken(memberId, newRefreshToken)
 
