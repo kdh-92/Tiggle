@@ -9,6 +9,7 @@ import com.side.tiggle.global.exception.AuthException
 import com.side.tiggle.global.exception.error.GlobalErrorCode
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
+import io.swagger.v3.oas.annotations.enums.ParameterIn
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -22,7 +23,17 @@ class AuthController(
 ) {
 
     @PostMapping("/refresh")
-    @Operation(summary = "토큰 갱신", description = "Refresh Token을 사용하여 새로운 Access Token을 발급받습니다")
+    @Operation(
+        summary = "토큰 갱신",
+        description = "Refresh-Token 헤더를 사용하여 새로운 Access Token을 발급받습니다"
+    )
+    @Parameter(
+        name = "Refresh-Token",
+        description = "리프레시 토큰",
+        required = true,
+        `in` = ParameterIn.HEADER,
+        example = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+    )
     fun refreshToken(request: HttpServletRequest): ResponseEntity<ApiResponse<TokenResponse>> {
         val refreshToken = jwtTokenProvider.resolveRefreshToken(request)
             ?: throw AuthException(GlobalErrorCode.INVALID_REFRESH_TOKEN)
