@@ -52,7 +52,7 @@ export const getAxiosInstance = () => {
             });
 
             originalRequest.headers.Authorization = `Bearer ${accessToken}`;
-            return axios.request(originalRequest);
+            return axiosInstance.request(originalRequest);
           } catch (refreshError) {
             console.error("Token refresh failed:", refreshError);
 
