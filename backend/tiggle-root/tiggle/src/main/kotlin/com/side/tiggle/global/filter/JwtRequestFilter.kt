@@ -12,11 +12,14 @@ import org.springframework.http.HttpHeaders
 import org.springframework.web.filter.OncePerRequestFilter
 import java.util.*
 import com.side.tiggle.global.common.constants.HttpHeaders as CustomHeaders
+import com.side.tiggle.global.exception.error.GlobalErrorCode
+import com.fasterxml.jackson.databind.ObjectMapper
 
 
 @Order(0)
 class JwtRequestFilter(
-        private val jwtTokenProvider: JwtTokenProvider
+        private val jwtTokenProvider: JwtTokenProvider,
+        private val objectMapper: ObjectMapper
 ): OncePerRequestFilter() {
 
     private val logger = LoggerFactory.getLogger(this.javaClass)
@@ -31,22 +34,22 @@ class JwtRequestFilter(
     override fun doFilterInternal(request: HttpServletRequest, response: HttpServletResponse, filterChain: FilterChain) {
         val requestWrapper = HeaderMapRequestWrapper(request)
         val authHeader = request.getHeader(HttpHeaders.AUTHORIZATION)
+
         if (authHeader.isNullOrEmpty().not()) {
             val accessToken = authHeader.replace("Bearer ", "")
             if (jwtTokenProvider.isTokenValid(accessToken).not()) {
-                response.status = HttpServletResponse.SC_UNAUTHORIZED
+                val errorCode = GlobalErrorCode.INVALID_TOKEN
+                response.status = errorCode.httpStatus().value()
                 response.contentType = MediaType.APPLICATION_JSON_VALUE
                 response.characterEncoding = "UTF-8"
 
-                val errorResponse = """
-                    {
-                        "success": false,
-                        "code": "90002",
-                        "message": "유효하지 않은 토큰입니다"
-                    }
-                """.trimIndent()
+                val errorResponse = mapOf(
+                    "success" to false,
+                    "code" to errorCode.codeNumber().toString(),
+                    "message" to errorCode.message()
+                )
 
-                response.writer.write(errorResponse)
+                response.writer.write(objectMapper.writeValueAsString(errorResponse))
                 response.writer.flush()
                 return
             }
