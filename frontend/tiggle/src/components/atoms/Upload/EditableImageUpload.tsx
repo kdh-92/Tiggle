@@ -8,6 +8,7 @@ import {
   ErrorMessageStyle,
 } from "@/components/atoms/Upload/UploadStyle";
 import { isDesktop } from "@/styles/util/screen";
+import { encodeFilesToDataUrls } from "@/utils/fileReader";
 import { resizeTransactionImage } from "@/utils/imageResize";
 
 interface EditableImageUploadProps
@@ -53,22 +54,6 @@ const EditableImageUpload = forwardRef<
       setDisplayExistingImages(existingImages);
     }, [existingImages]);
 
-    const encodeFilesToImageUrls = (fileList: FileList) => {
-      const files = Array.from(fileList);
-      const urls: string[] = [];
-
-      files.forEach((file, index) => {
-        const reader = new FileReader();
-        reader.onload = function () {
-          urls[index] = reader.result as string;
-          if (urls.length === files.length) {
-            setNewImageUrls(prev => [...prev, ...urls]);
-          }
-        };
-        reader.readAsDataURL(file);
-      });
-    };
-
     const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
       onChange?.(e);
       const uploadedFiles = e.target.files;
@@ -97,7 +82,12 @@ const EditableImageUpload = forwardRef<
           e.target.files = dataTransfer.files;
         }
 
-        encodeFilesToImageUrls(dataTransfer.files);
+        try {
+          const urls = await encodeFilesToDataUrls(dataTransfer.files);
+          setNewImageUrls(prev => [...prev, ...urls]);
+        } catch (error) {
+          console.error("파일 읽기 실패:", error);
+        }
       }
     };
 

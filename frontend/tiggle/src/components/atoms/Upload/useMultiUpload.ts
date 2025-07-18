@@ -1,5 +1,6 @@
 import { ChangeEvent, ChangeEventHandler, useState } from "react";
 
+import { encodeFilesToDataUrls } from "@/utils/fileReader";
 import { resizeTransactionImage } from "@/utils/imageResize";
 
 type UseMultiUploadOptions = {
@@ -13,22 +14,6 @@ const useMultiUpload = ({
 }: Partial<UseMultiUploadOptions>) => {
   const [files, setFiles] = useState<File[]>([]);
   const [imageUrls, setImageUrls] = useState<string[]>([]);
-
-  const encodeFilesToImageUrls = (fileList: FileList) => {
-    const newFiles = Array.from(fileList);
-    const newUrls: string[] = [];
-
-    newFiles.forEach((file, index) => {
-      const reader = new FileReader();
-      reader.onload = function () {
-        newUrls[index] = reader.result as string;
-        if (newUrls.length === newFiles.length) {
-          setImageUrls(prev => [...prev, ...newUrls]);
-        }
-      };
-      reader.readAsDataURL(file);
-    });
-  };
 
   const handleUpload = async (e: ChangeEvent<HTMLInputElement>) => {
     onChange?.(e);
@@ -57,7 +42,12 @@ const useMultiUpload = ({
         e.target.files = dataTransfer.files;
       }
 
-      encodeFilesToImageUrls(dataTransfer.files);
+      try {
+        const urls = await encodeFilesToDataUrls(dataTransfer.files);
+        setImageUrls(prev => [...prev, ...urls]);
+      } catch (error) {
+        console.error("파일 읽기 실패:", error);
+      }
     }
   };
 
