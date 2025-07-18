@@ -87,6 +87,9 @@ class JwtTokenProvider(
     }
 
     fun getUserIdFromRefreshToken(token: String): Long {
+        if (!validateRefreshToken(token)) {
+            throw AuthException(GlobalErrorCode.INVALID_REFRESH_TOKEN)
+        }
         return extractClaims(token).subject.toLong()
     }
 
