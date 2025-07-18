@@ -125,15 +125,14 @@ interface ReplyCellProps
   > {}
 
 function ReplyCell({ id, content, createdAt, sender }: ReplyCellProps) {
+  const profileImageUrl = getProfileImageUrl(sender!.profileUrl);
+
   return (
     <ReplyCellStyle id={`comment-reply-${id}`}>
       <CommentSenderStyle className="user">
         <Avatar
           size={32}
-          src={
-            getProfileImageUrl(getProfileImageUrl(sender!.profileUrl)) ??
-            "/assets/user-placeholder.png"
-          }
+          src={profileImageUrl || "/assets/user-placeholder.png"}
           alt={`${sender!.nickname} profile`}
         />
         <div>
