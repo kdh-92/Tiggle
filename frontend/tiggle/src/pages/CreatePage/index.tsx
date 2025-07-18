@@ -28,7 +28,7 @@ import {
   updateTransaction,
   TransactionFormData,
   TransactionUpdateData,
-  addTransactionPhotos, // 새 사진 추가 API
+  addTransactionPhotos,
 } from "./request";
 
 export const transactionQuery = (id: number) => ({
@@ -70,7 +70,6 @@ const CreatePage = () => {
     const selectedFiles = Array.from(imageUrls);
 
     if (isEditMode) {
-      // 수정 모드: 기본 정보 업데이트 + 새 사진 추가 (별도 API)
       const updateData: TransactionUpdateData = {
         transactionId: transactionId!,
         dto: {
@@ -82,7 +81,6 @@ const CreatePage = () => {
 
       updateMutation(updateData, {
         onSuccess: () => {
-          // 새 사진이 있으면 추가 API 호출
           if (selectedFiles.length > 0) {
             addPhotosMutation(
               {
@@ -124,7 +122,6 @@ const CreatePage = () => {
         },
       });
     } else {
-      // 생성 모드: 기존 로직 유지
       if (selectedFiles.length === 0) {
         messageApi.open({
           type: "error",
@@ -190,13 +187,11 @@ const CreatePage = () => {
         reason: transaction.reason,
         tags: transaction.tagNames || [],
         date: dayjs(transaction.date),
-        // imageUrls는 기존 이미지 표시용이므로 defaultValues에서 제외
       };
     }
     return undefined;
   };
 
-  // 기존 이미지 URL 파싱
   const getExistingImageUrls = (): string[] => {
     if (!isEditMode || !editTransactionData?.data?.imageUrls) return [];
 
