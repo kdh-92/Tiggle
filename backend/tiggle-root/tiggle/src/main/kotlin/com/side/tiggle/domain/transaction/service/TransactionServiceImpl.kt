@@ -15,6 +15,8 @@ import com.side.tiggle.domain.transaction.mapper.TransactionMapper
 import com.side.tiggle.domain.transaction.model.Transaction
 import com.side.tiggle.domain.transaction.repository.TransactionRepository
 import com.side.tiggle.domain.transaction.utils.TransactionFileUploadUtil
+import com.side.tiggle.global.common.logging.KLog
+import com.side.tiggle.global.common.logging.log
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort
 import org.springframework.stereotype.Service
@@ -25,6 +27,7 @@ import java.nio.file.Path
 import java.nio.file.Paths
 import java.time.LocalDate
 
+@KLog
 @Service
 class TransactionServiceImpl(
     private val transactionRepository: TransactionRepository,
@@ -180,18 +183,37 @@ class TransactionServiceImpl(
             throw TransactionException(TransactionErrorCode.TRANSACTION_ACCESS_DENIED)
         }
 
-        val newImagePaths = transactionFileUploadUtil.uploadTransactionImages(files)
+        var newImagePaths: List<String>? = null
+        try {
+            newImagePaths = transactionFileUploadUtil.uploadTransactionImages(files)
 
-        val existingPaths = if (!transaction.imageUrls.isNullOrEmpty()) {
-            objectMapper.readValue(transaction.imageUrls, Array<String>::class.java).toList()
-        } else {
-            emptyList()
+            val existingPaths = if (!transaction.imageUrls.isNullOrEmpty()) {
+                objectMapper.readValue(transaction.imageUrls, Array<String>::class.java).toList()
+            } else {
+                emptyList()
+            }
+
+            val allPaths = existingPaths + newImagePaths
+            transaction.imageUrls = objectMapper.writeValueAsString(allPaths)
+
+            transactionRepository.save(transaction)
+        } catch (e: Exception) {
+            newImagePaths?.forEach { path ->
+                try {
+                    Files.deleteIfExists(Paths.get(path))
+                } catch (deleteError: Exception) {
+                    log.debug("임시 파일 정리 실패: $path", deleteError)
+                }
+            }
+
+            try {
+                transactionFileUploadUtil.deleteEmptyDateFolder()
+            } catch (folderDeleteError: Exception) {
+                log.debug("임시 폴더 정리 실패", folderDeleteError)
+            }
+
+            throw e
         }
-
-        val allPaths = existingPaths + newImagePaths
-        transaction.imageUrls = objectMapper.writeValueAsString(allPaths)
-
-        transactionRepository.save(transaction)
     }
 
     @Transactional
