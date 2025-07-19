@@ -87,9 +87,8 @@ class JwtTokenProvider(
     }
 
     fun getUserIdFromRefreshToken(token: String): Long {
-        if (!validateRefreshToken(token)) {
-            throw AuthException(GlobalErrorCode.INVALID_REFRESH_TOKEN)
-        }
+        validateRefreshToken(token)
+
         return extractClaims(token).subject.toLong()
     }
 
@@ -103,19 +102,19 @@ class JwtTokenProvider(
     }
 
     fun validateRefreshToken(token: String): Boolean {
-        return try {
-            if (!isTokenValid(token)) {
-                return false
-            }
-
-            val member = memberRepository.findByRefreshToken(token)
-                ?: return false
-
-            val now = LocalDateTime.now()
-            member.refreshTokenExpiresAt?.isAfter(now) == true
-        } catch (e: Exception) {
-            false
+        if (!isTokenValid(token)) {
+            throw AuthException(GlobalErrorCode.EXPIRED_REFRESH_TOKEN)
         }
+
+        val member = memberRepository.findByRefreshToken(token)
+            ?: throw AuthException(GlobalErrorCode.INVALID_REFRESH_TOKEN)
+
+        val now = LocalDateTime.now()
+        if (member.refreshTokenExpiresAt?.isAfter(now) != true) {
+            throw AuthException(GlobalErrorCode.EXPIRED_REFRESH_TOKEN)
+        }
+
+        return true
     }
 
     private fun extractClaims(

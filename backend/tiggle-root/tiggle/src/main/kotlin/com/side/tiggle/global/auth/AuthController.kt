@@ -38,9 +38,7 @@ class AuthController(
         val refreshToken = jwtTokenProvider.resolveRefreshToken(request)
             ?: throw AuthException(GlobalErrorCode.INVALID_REFRESH_TOKEN)
 
-        if (!jwtTokenProvider.validateRefreshToken(refreshToken)) {
-            throw AuthException(GlobalErrorCode.INVALID_REFRESH_TOKEN)
-        }
+        jwtTokenProvider.validateRefreshToken(refreshToken)
 
         val memberId = jwtTokenProvider.getUserIdFromRefreshToken(refreshToken)
 
