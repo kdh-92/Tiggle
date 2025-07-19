@@ -1,4 +1,4 @@
-package com.side.tiggle.global.auth
+package com.side.tiggle.global.auth.oauth2
 
 import com.side.tiggle.global.exception.AuthException
 import com.side.tiggle.global.exception.error.GlobalErrorCode
