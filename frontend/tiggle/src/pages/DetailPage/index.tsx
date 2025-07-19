@@ -67,16 +67,48 @@ const DetailPage = () => {
         />
 
         <DetailPageContentStyle>
-          <div className="image">
-            <img
-              src={
-                transactionData.data.imageUrl
-                  ? `${import.meta.env.VITE_API_URL}${transactionData.data.imageUrl}`
-                  : "/src/assets/tiggle.png"
+          <div className="images">
+            {(() => {
+              try {
+                const imageUrls = transactionData?.data?.imageUrls
+                  ? JSON.parse(transactionData.data.imageUrls)
+                  : [];
+
+                console.log("imageUrls:", imageUrls);
+                console.log("imageUrls.length:", imageUrls.length);
+
+                if (imageUrls.length === 0) {
+                  console.log("showing default image");
+                  return (
+                    <img
+                      src="/src/assets/tiggle.png"
+                      alt={transactionData?.data?.content || "default"}
+                      onError={handleImageError}
+                    />
+                  );
+                }
+
+                console.log("showing gallery images");
+                return imageUrls.map((url: string, index: number) => (
+                  <img
+                    key={index}
+                    src={`${import.meta.env.VITE_API_URL}${url}`}
+                    alt={`${transactionData?.data?.content || "image"} ${index + 1}`}
+                    onError={handleImageError}
+                    className="gallery-image"
+                  />
+                ));
+              } catch (e) {
+                console.log("parse error, showing default");
+                return (
+                  <img
+                    src="/src/assets/tiggle.png"
+                    alt={transactionData?.data?.content || "default"}
+                    onError={handleImageError}
+                  />
+                );
               }
-              alt={transactionData.data.content}
-              onError={handleImageError}
-            />
+            })()}
           </div>
           <div className="content">
             <p className="content-reason">{transactionData.data.reason}</p>

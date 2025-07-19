@@ -13,7 +13,7 @@ export type TransactionRespDto = {
     tagNames?: Array<string>;
     createdAt: string;
     parentId?: number;
-    imageUrl?: string;
+    imageUrls?: string;
     amount: number;
     date: string;
     content: string;

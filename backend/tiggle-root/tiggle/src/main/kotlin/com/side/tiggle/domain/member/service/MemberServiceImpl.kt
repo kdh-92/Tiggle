@@ -9,7 +9,7 @@ import com.side.tiggle.domain.member.exception.MemberException
 import com.side.tiggle.domain.member.exception.error.MemberErrorCode
 import com.side.tiggle.domain.member.model.Member
 import com.side.tiggle.domain.member.repository.MemberRepository
-import com.side.tiggle.domain.member.utils.FileUploadUtil
+import com.side.tiggle.domain.member.utils.MemberFileUploadUtil
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.multipart.MultipartFile
@@ -17,7 +17,7 @@ import org.springframework.web.multipart.MultipartFile
 @Service
 class MemberServiceImpl(
     private val memberRepository: MemberRepository,
-    private val fileUploadUtil: FileUploadUtil
+    private val fileUploadUtil: MemberFileUploadUtil
 ) : MemberService {
 
     @Transactional
@@ -54,6 +54,8 @@ class MemberServiceImpl(
         val member: Member = getMemberEntityOrThrow(memberId)
 
         if (file != null && !file.isEmpty) {
+            fileUploadUtil.deleteProfileImage(member.profileUrl)
+
             member.profileUrl = fileUploadUtil.uploadProfileImage(memberId, file)
             isModified = true
         }

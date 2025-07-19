@@ -5,15 +5,14 @@ import { TransactionRespDto } from "@/generated";
 import { MyTransactionCellStyle } from "@/pages/MyPage/MyTransactionCell/MyTransactionCellStyle";
 
 export default function MyTransactionCell({
-  type,
   id,
   amount,
   content,
 }: TransactionRespDto) {
   return (
-    <MyTransactionCellStyle className={cn(type, id)}>
-      <TypeTag className="tag" txType={type!} size={"md"} />
-      <div className={cn("amount", type)}>
+    <MyTransactionCellStyle className={cn("OUTCOME", id)}>
+      <TypeTag className="tag" txType={"OUTCOME"} size={"md"} />
+      <div className={cn("amount", "OUTCOME")}>
         <span className="amount-unit">₩ {amount}</span>
       </div>
       <div className="transaction-cell-section">

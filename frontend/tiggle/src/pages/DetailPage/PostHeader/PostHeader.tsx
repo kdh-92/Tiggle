@@ -20,6 +20,7 @@ import {
   StyledPostHeaderTitle,
 } from "@/pages/DetailPage/PostHeader/PostHeaderStyle";
 import { transactionKeys } from "@/query/queryKeys";
+import { getProfileImageUrl } from "@/utils/imageUrl";
 import { convertTxTypeToWord } from "@/utils/txType";
 
 export interface PostHeaderProps
@@ -109,7 +110,10 @@ export default function PostHeader({
           <img
             className="user-profile"
             alt="user profile"
-            src={sender.profileUrl ?? "/assets/user-placeholder.png"}
+            src={
+              getProfileImageUrl(sender.profileUrl) ??
+              "/assets/user-placeholder.png"
+            }
           />
           <p className="user-name">{sender.nickname}</p>
         </div>

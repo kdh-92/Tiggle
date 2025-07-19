@@ -1,8 +1,6 @@
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
-import { useSelector } from "react-redux";
 
 import { CTAButton, TextArea } from "@/components/atoms";
-import { RootState } from "@/store";
 import { convertTxTypeToColor } from "@/utils/txType";
 
 import { ReplyFormStyle } from "./ReplyFormStyle";
@@ -16,7 +14,6 @@ interface ReplyFormProps {
 }
 
 function ReplyForm({ onSubmit }: ReplyFormProps) {
-  const txType = useSelector((state: RootState) => state.detailPage.txType);
   const { control, handleSubmit, reset } = useForm<ReplyInputs>();
 
   const handleOnSubmit: SubmitHandler<ReplyInputs> = ({ reply }) => {

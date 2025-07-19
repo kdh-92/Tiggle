@@ -5,6 +5,8 @@ import com.side.tiggle.global.exception.error.ErrorCode
 /**
  * 사용자 정의 예외의 추상 클래스
  * 애플리케이션 전역에서 사용하는 공통 예외 상위 타입
+ *
+ * @author 양병학
  */
 abstract class CustomException : RuntimeException {
 

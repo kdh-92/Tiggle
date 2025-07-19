@@ -5,6 +5,8 @@ import com.side.tiggle.global.exception.error.ErrorCode
 /**
  * 인증/인가 관련 예외 클래스
  * JWT, OAuth2 등 인증 시스템에서 발생하는 예외 처리
+ *
+ * @author 양병학
  */
 class AuthException : CustomException {
 

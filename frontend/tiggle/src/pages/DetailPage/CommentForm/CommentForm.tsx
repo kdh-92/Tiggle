@@ -11,6 +11,7 @@ import useMessage from "@/hooks/useMessage";
 import { CommentSenderStyle } from "@/pages/DetailPage/CommentCell/CommentCellStyle";
 import { CommentFormStyle } from "@/pages/DetailPage/CommentForm/CommentFormStyle";
 import { commentKeys, reactionKeys } from "@/query/queryKeys";
+import { getProfileImageUrl } from "@/utils/imageUrl";
 import { convertTxTypeToColor } from "@/utils/txType";
 
 interface CommentFormProps extends FormHTMLAttributes<HTMLFormElement> {
@@ -65,7 +66,10 @@ export default function CommentForm({ txId, ...props }: CommentFormProps) {
       <CommentSenderStyle>
         {isLogin && profile ? (
           <>
-            <Avatar size={32} src={profile.data?.profileUrl} />
+            <Avatar
+              size={32}
+              src={getProfileImageUrl(profile.data?.profileUrl)}
+            />
             <p className="name">{profile.data?.nickname}</p>
           </>
         ) : (
