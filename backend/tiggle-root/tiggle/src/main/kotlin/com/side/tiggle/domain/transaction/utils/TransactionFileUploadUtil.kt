@@ -21,6 +21,7 @@ class TransactionFileUploadUtil : AbstractFileUploadUtil() {
     override val basePath: String get() = path
     override var maxSize: Long = 0
     override lateinit var allowedTypes: List<String>
+    private val folderDeletionLock = Any()
 
     fun uploadTransactionImage(file: MultipartFile): String {
         val folderPath = createDateFolder()
@@ -61,7 +62,7 @@ class TransactionFileUploadUtil : AbstractFileUploadUtil() {
         val str = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd"))
         val folderPath = str.replace("/", File.separator)
 
-        val uploadPathFolder = File(basePath, folderPath) // 변경: path -> basePath
+        val uploadPathFolder = File(basePath, folderPath)
         if (!uploadPathFolder.exists()) {
             uploadPathFolder.mkdirs()
         }
@@ -78,13 +79,15 @@ class TransactionFileUploadUtil : AbstractFileUploadUtil() {
     }
 
     fun deleteEmptyDateFolder() {
-        val str = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd"))
-        val folderPath = str.replace("/", File.separator)
-        val uploadPathFolder = File(basePath, folderPath) // 변경: path -> basePath
+        synchronized(folderDeletionLock) {
+            val str = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd"))
+            val folderPath = str.replace("/", File.separator)
+            val uploadPathFolder = File(basePath, folderPath)
 
-        if (uploadPathFolder.exists()) {
-            if (uploadPathFolder.list()?.isEmpty() == true) {
-                uploadPathFolder.delete()
+            if (uploadPathFolder.exists()) {
+                if (uploadPathFolder.list()?.isEmpty() == true) {
+                    uploadPathFolder.delete()
+                }
             }
         }
     }
