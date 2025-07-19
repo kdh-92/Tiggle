@@ -2,8 +2,8 @@ package com.side.tiggle.domain.transaction.utils
 
 import com.side.tiggle.domain.transaction.exception.TransactionException
 import com.side.tiggle.domain.transaction.exception.error.TransactionErrorCode
-import com.side.tiggle.global.common.file.AbstractFileUploadUtil // 추가: 추상 클래스 import
-import com.side.tiggle.global.common.file.FileValidationError // 추가: enum import
+import com.side.tiggle.global.common.file.AbstractFileUploadUtil
+import com.side.tiggle.global.common.file.FileValidationError
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.stereotype.Component
 import org.springframework.web.multipart.MultipartFile
@@ -89,3 +89,4 @@ class TransactionFileUploadUtil : AbstractFileUploadUtil() {
         }
     }
 }
+
