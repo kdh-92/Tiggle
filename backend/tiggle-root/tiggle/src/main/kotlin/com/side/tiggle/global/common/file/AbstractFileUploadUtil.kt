@@ -1,6 +1,7 @@
 package com.side.tiggle.global.common.file
 
 import jakarta.annotation.PostConstruct
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.web.multipart.MultipartFile
 import java.io.File
 import java.nio.file.Path
@@ -27,6 +28,9 @@ enum class FileValidationError {
  * 도메인별 파일 업로드 유틸리티의 공통 기능을 제공
  */
 abstract class AbstractFileUploadUtil {
+
+    @Value("\${part.upload.path}")
+    private lateinit var uploadBasePath: String
 
     abstract val basePath: String
     abstract val maxSize: Long
@@ -111,6 +115,13 @@ abstract class AbstractFileUploadUtil {
             throw IllegalStateException("파일 저장 중 오류가 발생했습니다: ${e.message}", e)
         }
 
-        return savePath.toString()
+        val absolutePath = savePath.toString().replace("\\", "/")
+        val uploadIndex = absolutePath.indexOf(uploadBasePath.removeSuffix("/"))
+
+        return if (uploadIndex != -1) {
+            absolutePath.substring(uploadIndex)
+        } else {
+            absolutePath
+        }
     }
 }
