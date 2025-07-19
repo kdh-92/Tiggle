@@ -19,16 +19,26 @@ interface TransactionRepository: JpaRepository<Transaction, Long> {
             AND (:startDate IS NULL OR t.date >= :startDate)
             AND (:endDate IS NULL OR t.date <= :endDate) 
             AND (:categoryIds IS NULL OR t.category_id IN (:categoryIds))
-            AND (:tagNames IS NULL OR JSON_OVERLAPS(t.tag_names, CAST(:tagNames AS JSON)))
+            AND (:tagNamesJson IS NULL OR JSON_OVERLAPS(t.tag_names, :tagNamesJson))
             ORDER BY t.created_at DESC
-        """, nativeQuery = true
+        """,
+        countQuery = """
+            SELECT count(*) FROM transactions t 
+            WHERE t.member_id = :memberId
+            AND t.deleted = false
+            AND (:startDate IS NULL OR t.date >= :startDate)
+            AND (:endDate IS NULL OR t.date <= :endDate) 
+            AND (:categoryIds IS NULL OR t.category_id IN (:categoryIds))
+            AND (:tagNamesJson IS NULL OR JSON_OVERLAPS(t.tag_names, :tagNamesJson))
+        """,
+        nativeQuery = true
     )
     fun findByMemberIdWithFilters(
         @Param("memberId") memberId: Long,
         @Param("startDate") startDate: LocalDate?,
         @Param("endDate") endDate: LocalDate?,
         @Param("categoryIds") categoryIds: List<Long>?,
-        @Param("tagNames") tagNames: List<String>?,
+        @Param("tagNamesJson") tagNamesJson: String?,
         pageable: Pageable
     ): Page<Transaction>
 

@@ -158,13 +158,19 @@ class TransactionServiceImpl(
         categoryIds: List<Long>?,
         tagNames: List<String>?
     ): TransactionPageRespDto {
+        val tagNamesJson = if (tagNames != null && tagNames.isNotEmpty()) {
+            objectMapper.writeValueAsString(tagNames)
+        } else {
+            null
+        }
+
         val memberTxPage = transactionRepository.findByMemberIdWithFilters(
             memberId = memberId,
             startDate = startDate,
             endDate = endDate,
             categoryIds = categoryIds,
-            tagNames = tagNames,
-            PageRequest.of(offset, count, Sort.by(Sort.Direction.DESC, "createdAt"))
+            tagNamesJson = tagNamesJson,
+            PageRequest.of(offset, count)
         )
         if (memberTxPage.isEmpty) {
             throw TransactionException(TransactionErrorCode.TRANSACTION_NOT_FOUND)
