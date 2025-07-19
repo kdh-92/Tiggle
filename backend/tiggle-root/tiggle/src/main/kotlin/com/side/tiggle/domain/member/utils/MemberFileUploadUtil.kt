@@ -2,90 +2,49 @@ package com.side.tiggle.domain.member.utils
 
 import com.side.tiggle.domain.member.exception.MemberException
 import com.side.tiggle.domain.member.exception.error.MemberErrorCode
-import jakarta.annotation.PostConstruct
+import com.side.tiggle.global.common.file.AbstractFileUploadUtil // 추가: 추상 클래스 import
+import com.side.tiggle.global.common.file.FileValidationError // 추가: enum import
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.stereotype.Component
 import org.springframework.web.multipart.MultipartFile
 import java.io.File
-import java.nio.file.Path
-import java.nio.file.Paths
-import java.util.*
 
 @Component
 @ConfigurationProperties(prefix = "part.upload.profile")
-class MemberFileUploadUtil {
+class MemberFileUploadUtil : AbstractFileUploadUtil() {
+
     lateinit var path: String
-    var maxSize: Long = 0
-    lateinit var allowedTypes: List<String>
-
-    @PostConstruct
-    fun validateConfiguration() {
-        if (!::path.isInitialized || path.isBlank()) {
-            throw IllegalStateException("업로드 경로(part.upload.profile.path)가 설정되지 않았습니다")
-        }
-
-        if (maxSize <= 0) {
-            throw IllegalStateException("최대 파일 크기(part.upload.profile.max-size)가 올바르게 설정되지 않았습니다")
-        }
-
-        if (!::allowedTypes.isInitialized || allowedTypes.isEmpty()) {
-            throw IllegalStateException("허용된 파일 타입(part.upload.profile.allowed-types)이 설정되지 않았습니다")
-        }
-
-        val uploadDir = File(path)
-        if (!uploadDir.exists() && !uploadDir.mkdirs()) {
-            throw IllegalStateException("업로드 디렉토리를 생성할 수 없습니다: $path")
-        }
-    }
+    override val basePath: String get() = path
+    override var maxSize: Long = 0
+    override lateinit var allowedTypes: List<String>
 
     fun uploadProfileImage(memberId: Long, file: MultipartFile): String {
-        validateFile(file)
-        val extension = validateFileNameAndGetExtension(file)
+        val savedPath = uploadFile(file, memberId.toString())
 
-        val uploadFolder = File(path, memberId.toString())
-        if (!uploadFolder.exists()) {
-            uploadFolder.mkdirs()
-        }
-
-        val safeFilename = "${System.currentTimeMillis()}_${UUID.randomUUID()}.$extension"
-        val savePath: Path = Paths.get(uploadFolder.absolutePath, safeFilename)
-
-        try {
-            file.transferTo(savePath)
-        } catch (e: Exception) {
-            throw IllegalStateException("프로필 이미지 저장 중 오류가 발생했습니다: ${e.message}", e)
-        }
-
-        return "$path/$memberId/$safeFilename"
+        return savedPath.replace("\\", "/").replace(basePath, "upload/profile")
     }
 
-    private fun validateFileNameAndGetExtension(file: MultipartFile): String {
-        val originalName: String = file.originalFilename ?: throw IllegalArgumentException("파일명이 없습니다")
-
-        val extension = originalName.substringAfterLast('.', "")
-        if (extension.isBlank()) {
-            throw IllegalArgumentException("파일 확장자가 없습니다")
+    override fun createTargetDirectory(vararg pathSegments: String): File {
+        val targetPath = if (pathSegments.isNotEmpty()) {
+            File(basePath, pathSegments.joinToString(File.separator))
+        } else {
+            File(basePath)
         }
 
-        val allowedExtensions = listOf("jpg", "jpeg", "png", "gif")
-        if (!allowedExtensions.contains(extension.lowercase())) {
-            throw MemberException(MemberErrorCode.INVALID_FILE_TYPE)
+        if (!targetPath.exists()) {
+            targetPath.mkdirs()
         }
 
-        return extension.lowercase()
+        return targetPath
     }
 
-    private fun validateFile(file: MultipartFile) {
-        if (!allowedTypes.contains(file.contentType)) {
-            throw MemberException(MemberErrorCode.INVALID_FILE_TYPE)
-        }
-
-        if (file.size > maxSize) {
-            throw MemberException(MemberErrorCode.FILE_SIZE_EXCEEDED)
-        }
-
-        if (file.isEmpty) {
-            throw MemberException(MemberErrorCode.EMPTY_FILE)
+    override fun createDomainException(errorType: FileValidationError, cause: Throwable?): RuntimeException {
+        return when (errorType) {
+            FileValidationError.EMPTY_FILE -> MemberException(MemberErrorCode.EMPTY_FILE)
+            FileValidationError.FILE_SIZE_EXCEEDED -> MemberException(MemberErrorCode.FILE_SIZE_EXCEEDED)
+            FileValidationError.INVALID_FILE_TYPE -> MemberException(MemberErrorCode.INVALID_FILE_TYPE)
+            FileValidationError.INVALID_EXTENSION -> MemberException(MemberErrorCode.INVALID_FILE_TYPE)
+            FileValidationError.MISSING_FILENAME -> MemberException(MemberErrorCode.INVALID_FILE_TYPE)
         }
     }
 
@@ -93,9 +52,8 @@ class MemberFileUploadUtil {
         if (profileUrl != null && !profileUrl.startsWith("http")) {
             try {
                 val absolutePath = if (profileUrl.startsWith("upload/profile/")) {
-
                     val relativePath = profileUrl.substringAfter("upload/profile/")
-                    File(path, relativePath).absolutePath
+                    File(basePath, relativePath).absolutePath // 변경: path -> basePath
                 } else {
                     profileUrl
                 }
