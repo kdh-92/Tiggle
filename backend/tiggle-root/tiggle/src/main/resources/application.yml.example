@@ -62,7 +62,7 @@ spring:
             user-name-attribute: id
 part:
   upload:
-    path: upload/image/
+    path: upload/
     profile:
       path: upload/profile
       max-size: 5242880  # 5MB
