@@ -14,8 +14,9 @@ import java.util.*
 import com.side.tiggle.global.common.constants.HttpHeaders as CustomHeaders
 import com.side.tiggle.global.exception.error.GlobalErrorCode
 import com.fasterxml.jackson.databind.ObjectMapper
+import org.springframework.stereotype.Component
 
-
+@Component
 @Order(0)
 class JwtRequestFilter(
         private val jwtTokenProvider: JwtTokenProvider,

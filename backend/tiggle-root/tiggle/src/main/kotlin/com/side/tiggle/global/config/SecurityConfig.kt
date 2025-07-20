@@ -18,7 +18,7 @@ import org.springframework.security.config.annotation.web.invoke
 @EnableWebSecurity
 @Configuration
 class SecurityConfig(
-    private val jwtTokenProvider: JwtTokenProvider
+    private val jwtRequestFilter: JwtRequestFilter
 ) {
     @Bean
     fun filterChain(http: HttpSecurity, successHandler: OAuth2SuccessHandler): SecurityFilterChain {
@@ -31,7 +31,7 @@ class SecurityConfig(
             sessionManagement {
                 sessionCreationPolicy = SessionCreationPolicy.STATELESS
             }
-            addFilterBefore<UsernamePasswordAuthenticationFilter>(JwtRequestFilter(jwtTokenProvider))
+            addFilterBefore<UsernamePasswordAuthenticationFilter>(jwtRequestFilter)
 
             authorizeHttpRequests {
                 authorize("/**", permitAll)
