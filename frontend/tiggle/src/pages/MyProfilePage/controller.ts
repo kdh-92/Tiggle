@@ -1,12 +1,19 @@
 import { useForm } from "react-hook-form";
 import { useLoaderData, useNavigate } from "react-router-dom";
 
-import { QueryClient, useMutation, useQuery } from "@tanstack/react-query";
+import {
+  QueryClient,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
 import dayjs from "dayjs";
 
 import useUpload from "@/components/atoms/Upload/useUpload";
 import { MemberApiControllerService } from "@/generated";
 import useMessage from "@/hooks/useMessage";
+import { memberKeys } from "@/query/queryKeys";
+import { getProfileImageUrl } from "@/utils/imageUrl";
 
 import { MemberFormData, updateProfile } from "./request";
 
@@ -23,6 +30,7 @@ export const loader = (queryClient: QueryClient) => () =>
 export const useProfilePage = () => {
   const messageApi = useMessage();
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   const initialData = useLoaderData() as Awaited<
     ReturnType<ReturnType<typeof loader>>
@@ -34,6 +42,11 @@ export const useProfilePage = () => {
 
   const { mutate } = useMutation(updateProfile);
 
+  const { imageUrl, handleUpload, handleReset, file } = useUpload({
+    onReset: () => resetField("profileUrl"),
+    defaultUrl: getProfileImageUrl(profileData?.data?.profileUrl),
+  });
+
   const {
     control,
     register,
@@ -43,58 +56,56 @@ export const useProfilePage = () => {
     formState: { isDirty: _isDirty, dirtyFields },
   } = useForm<ProfileInputs>({
     defaultValues: {
-      nickname: profileData.data.nickname,
-      email: profileData.data.email,
-      birth: profileData.data.birth ? dayjs(profileData.data.birth) : null,
+      nickname: profileData?.data?.nickname || "",
+      email: profileData?.data?.email || "",
+      birth: profileData?.data?.birth ? dayjs(profileData.data.birth) : null,
     },
   });
   const profileUrlRegister = register("profileUrl");
-  const isDirty = _isDirty && Object.keys(dirtyFields).length > 0;
+  const isDirty =
+    (_isDirty && Object.keys(dirtyFields).length > 0) || file !== null;
 
-  const { imageUrl, handleUpload, handleReset } = useUpload({
-    onReset: () => resetField("profileUrl"),
-    defaultUrl: profileData?.data?.profileUrl,
-  });
+  const handleSubmit = _handleSubmit(({ nickname, birth }: ProfileInputs) => {
+    if (Object.keys(dirtyFields).length === 0 && !file) {
+      return;
+    }
 
-  const handleSubmit = _handleSubmit(
-    ({ nickname, birth, email, profileUrl }: ProfileInputs) => {
-      if (Object.keys(dirtyFields).length === 0) {
-        return;
-      }
+    const formData: MemberFormData = {
+      dto: {
+        ...(dirtyFields["nickname"] && { nickname }),
+        ...(dirtyFields["birth"] && { birth: dayjs(birth).toISOString() }),
+      },
+      ...(file && { multipartFile: file }),
+    };
 
-      const formData: MemberFormData = {
-        // TODO: xMemberId 삭제
-        memberRequestDto: {
-          ...(dirtyFields["nickname"] && { nickname }),
-          ...(dirtyFields["email"] && { email }),
-          ...(dirtyFields["birth"] && { birth: dayjs(birth).toISOString() }),
-        },
-        multipartFile: dirtyFields["profileUrl"] && profileUrl![0],
-      };
-
-      mutate(formData, {
-        onSuccess: () => {
-          messageApi.open({
-            type: "success",
-            content: "프로필 수정이 완료되었습니다.",
-          });
-          refetchProfileData().then(({ data }) => {
+    mutate(formData, {
+      onSuccess: () => {
+        messageApi.open({
+          type: "success",
+          content: "프로필 수정이 완료되었습니다.",
+        });
+        refetchProfileData().then(({ data }) => {
+          if (data?.data) {
             reset({
-              nickname: data!.data.nickname,
-              email: data!.data.email,
-              birth: dayjs(data!.data.birth),
+              nickname: data.data.nickname,
+              email: data.data.email,
+              birth: data.data.birth ? dayjs(data.data.birth) : null,
             });
-          });
-        },
-        onError: () => {
-          messageApi.open({
-            type: "error",
-            content: "프로필 수정에 실패했습니다.",
-          });
-        },
-      });
-    },
-  );
+          }
+        });
+
+        queryClient.invalidateQueries({
+          queryKey: memberKeys.detail("me"),
+        });
+      },
+      onError: () => {
+        messageApi.open({
+          type: "error",
+          content: "프로필 수정에 실패했습니다.",
+        });
+      },
+    });
+  });
 
   const handleCancel = () => {
     navigate(-1);

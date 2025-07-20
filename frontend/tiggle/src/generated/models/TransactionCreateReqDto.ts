@@ -5,7 +5,7 @@
 
 export type TransactionCreateReqDto = {
     categoryId: number;
-    imageUrl?: string;
+    imageUrls?: string;
     amount: number;
     date: string;
     content: string;

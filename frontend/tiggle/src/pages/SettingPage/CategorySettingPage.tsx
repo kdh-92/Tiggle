@@ -36,8 +36,6 @@ const CategorySettingPage = ({}: CategorySettingPageProps) => {
   const { mutate: createMutate } = useMutation(async (name: string) =>
     CategoryApiControllerService.createCategory(profile?.data?.id || 0, {
       name,
-      // type: Tx.OUTCOME,
-      defaults: true,
     }),
   );
 
@@ -47,10 +45,9 @@ const CategorySettingPage = ({}: CategorySettingPageProps) => {
       callback?: (data: { id: number; name: string }) => void,
     ) => {
       createMutate(value, {
-        onSuccess: ({ id, name }) => {
-          callback?.({ id: id!, name: name! });
+        onSuccess: () => {
+          callback?.({ id: Date.now(), name: value });
           queryClient.invalidateQueries({
-            // queryKey: categoryKeys.list({ type: Tx.OUTCOME }),
             queryKey: categoryKeys.list(),
           });
           messageApi.open({ type: "success", content: "카테고리 생성 성공" });
@@ -71,7 +68,6 @@ const CategorySettingPage = ({}: CategorySettingPageProps) => {
     ) => {
       CategoryApiControllerService.updateCategory(sid, {
         name: newValue,
-        defaults: true,
       })
         .then(() => {
           callback?.({ id: sid, name: newValue });
@@ -111,10 +107,12 @@ const CategorySettingPage = ({}: CategorySettingPageProps) => {
       {isLoading && <Loading />}
       {!isLoading && categoriesData && (
         <SettingForm
-          data={categoriesData.data?.categories?.map(({ id, name }) => ({
-            sid: id!,
-            name: name!,
-          }))}
+          data={
+            categoriesData.data?.categories?.map(({ id, name }) => ({
+              sid: id!,
+              name: name!,
+            })) || []
+          }
           requests={{ create, update, remove }}
         />
       )}

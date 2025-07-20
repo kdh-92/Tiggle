@@ -1,11 +1,9 @@
 import { ButtonHTMLAttributes } from "react";
 import { MinusSquare, PlusSquare } from "react-feather";
-import { useSelector } from "react-redux";
 
 import cn from "classnames";
 
 import { ReplyToggleButtonStyle } from "@/pages/DetailPage/ReplyToggleButton/ReplyToggleButtonStyle";
-import { RootState } from "@/store";
 
 export interface ReplyToggleButtonProps
   extends ButtonHTMLAttributes<HTMLButtonElement> {
@@ -19,7 +17,7 @@ export default function ReplyToggleButton({
   className,
   ...props
 }: ReplyToggleButtonProps) {
-  const txType = useSelector((state: RootState) => state.detailPage.txType);
+  const txType = "OUTCOME";
 
   return (
     <ReplyToggleButtonStyle className={cn(txType, className)} {...props}>

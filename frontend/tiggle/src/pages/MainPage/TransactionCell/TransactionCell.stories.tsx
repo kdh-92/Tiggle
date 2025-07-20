@@ -12,16 +12,27 @@ type Story = StoryObj<typeof TransactionCell>;
 
 export const Default: Story = {
   args: {
-    id: 1,
-    type: Tx.OUTCOME,
-    amount: 50000,
-    content: "컨텐츠 제목",
-    reason: "컨텐츠 설명 컨텐츠 설명 컨텐츠 설명",
-    member: {
-      nickname: "사용자 이름",
-      profileUrl: "",
+    dto: {
+      id: 1,
+      amount: 50000,
+      content: "컨텐츠 제목",
+      reason: "컨텐츠 설명 컨텐츠 설명 컨텐츠 설명",
+      date: "2023-08-15",
+      category: {
+        id: 1,
+        name: "식비",
+        defaults: true,
+      },
+      member: {
+        id: 1,
+        email: "user@example.com",
+        nickname: "사용자 이름",
+        profileUrl: "",
+      },
+      createdAt: "2023-08-15T08:47:19",
     },
-    createdAt: "2023-08-15T08:47:19",
-    // number: 89,
+    upCount: 0,
+    downCount: 0,
+    commentCount: 0,
   },
 };

@@ -17,6 +17,8 @@ import jakarta.validation.ConstraintViolationException
 /**
  * 전역 예외 처리 클래스
  * 컨트롤러에서 발생한 예외를 공통적으로 처리한다.
+ *
+ * @author 양병학
  */
 @RestControllerAdvice
 class GlobalExceptionHandler {

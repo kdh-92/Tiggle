@@ -28,13 +28,14 @@ const withAuth =
     if (!isLogin) {
       recordContinueUrl();
       return <Navigate to={LOGIN_PATH} replace />;
-    }
+    } else {
+      if (!profile?.data) {
+        recordContinueUrl();
+        return <Navigate to={LOGIN_PATH} replace />;
+      }
 
-    if (!profile?.data) {
-      return <Navigate to={LOGIN_PATH} replace />;
+      return <Component {...(props as Props)} profile={profile.data} />;
     }
-
-    return <Component {...(props as Props)} profile={profile.data} />;
   };
 
 export default withAuth;

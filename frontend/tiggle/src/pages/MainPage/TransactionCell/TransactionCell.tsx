@@ -8,6 +8,7 @@ import cn from "classnames";
 import TypeTag from "@/components/atoms/TypeTag/TypeTag";
 import { TransactionDtoWithCount } from "@/generated/models/TransactionDtoWithCount";
 import { TransactionCellStyle } from "@/pages/MainPage/TransactionCell/TransactionCellStyle";
+import { getProfileImageUrl } from "@/utils/imageUrl";
 import timeDiff from "@/utils/timeDIff";
 
 export default function TransactionCell({
@@ -43,7 +44,7 @@ export default function TransactionCell({
               <img
                 className="user-profile"
                 alt="member profile"
-                src={dto.member!.profileUrl}
+                src={getProfileImageUrl(dto.member!.profileUrl)}
               />
             ) : (
               <Avatar />

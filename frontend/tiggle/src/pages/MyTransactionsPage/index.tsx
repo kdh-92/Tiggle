@@ -36,11 +36,11 @@ const MyTransactionsPage = ({ profile }: MyTransactionPageProps) => {
       <MyTransactionCellsStyle>
         {data.transactions?.map(data => (
           <MyTransactionDetailCell
-            key={`transaction-cell-${data.id}`}
-            id={data.id!}
-            amount={data.amount!}
-            content={data.content!}
-            reason={data.reason!}
+            key={`transaction-cell-${data.dto.id}`}
+            id={data.dto.id!}
+            amount={data.dto.amount!}
+            content={data.dto.content!}
+            reason={data.dto.reason!}
           />
         ))}
         {data.isLoadable && (

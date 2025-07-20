@@ -21,7 +21,10 @@ export { default as Select } from "./Select/Select";
 export { default as TextButton } from "./TextButton/TextButton";
 
 export { default as Upload } from "./Upload/Upload";
+export { default as MultiUpload } from "./Upload/MultiUpload";
+
 export { default as useUpload } from "./Upload/useUpload";
+export { default as useMultiUpload } from "./Upload/useMultiUpload";
 
 export { default as BottomSheet } from "./BottomSheet/BottomSheet";
 

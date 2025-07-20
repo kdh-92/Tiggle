@@ -111,12 +111,36 @@ pageSize: number = 5,
     public static createTransaction(
 formData?: {
 dto: TransactionCreateReqDto;
-multipartFile: Blob;
+files: Array<Blob>;
 },
 ): CancelablePromise<ApiResponse> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/api/v1/transaction',
+            formData: formData,
+            mediaType: 'multipart/form-data',
+        });
+    }
+
+    /**
+     * 거래 사진 추가
+     * @param id 
+     * @param formData 
+     * @returns ApiResponse OK
+     * @throws ApiError
+     */
+    public static addTransactionPhotos(
+id: number,
+formData?: {
+files: Array<Blob>;
+},
+): CancelablePromise<ApiResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/v1/transaction/{id}/photos',
+            path: {
+                'id': id,
+            },
             formData: formData,
             mediaType: 'multipart/form-data',
         });
@@ -186,6 +210,27 @@ tagNames?: Array<string>,
             },
             errors: {
                 400: `존재하지 않는 리소스 접근`,
+            },
+        });
+    }
+
+    /**
+     * 거래 사진 삭제
+     * @param id 
+     * @param photoIndex 
+     * @returns ApiResponse OK
+     * @throws ApiError
+     */
+    public static deleteTransactionPhoto(
+id: number,
+photoIndex: number,
+): CancelablePromise<ApiResponse> {
+        return __request(OpenAPI, {
+            method: 'DELETE',
+            url: '/api/v1/transaction/{id}/photos/{photoIndex}',
+            path: {
+                'id': id,
+                'photoIndex': photoIndex,
             },
         });
     }
