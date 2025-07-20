@@ -4,6 +4,7 @@ import com.side.tiggle.domain.member.model.Member
 import com.side.tiggle.domain.member.repository.MemberRepository
 import com.side.tiggle.global.exception.AuthException
 import com.side.tiggle.global.exception.error.GlobalErrorCode
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDateTime
@@ -14,16 +15,15 @@ class RefreshTokenServiceImpl(
     private val jwtTokenProvider: JwtTokenProvider
 ) : RefreshTokenService {
 
-    companion object {
-        private const val REFRESH_TOKEN_EXPIRY_SECONDS = 60L * 60L * 24L * 7L
-    }
+    @Value("\${jwt.refresh-token-expiry:604800}")  // 추가
+    private val refreshTokenExpirySeconds: Long = 0
 
     @Transactional
     override fun saveRefreshToken(memberId: Long, refreshToken: String) {
         val member = memberRepository.findById(memberId)
             .orElseThrow { AuthException(GlobalErrorCode.NOT_AUTHENTICATED) }
 
-        val expiresAt = LocalDateTime.now().plusSeconds(REFRESH_TOKEN_EXPIRY_SECONDS)
+        val expiresAt = LocalDateTime.now().plusSeconds(refreshTokenExpirySeconds)
 
         member.refreshToken = refreshToken
         member.refreshTokenExpiresAt = expiresAt
