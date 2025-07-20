@@ -34,7 +34,9 @@ const ETCFilter = ({}: ETCFilterProps) => {
   const { data: categoriesData } = useQuery({
     queryKey: categoryKeys.lists(),
     queryFn: async () =>
-      CategoryApiControllerService.getCategoryByMemberIdOrDefaults(),
+      CategoryApiControllerService.getCategoryByMemberIdOrDefaults(
+        profile?.data?.id || 0,
+      ),
     enabled: !!profile?.data?.id,
   });
 

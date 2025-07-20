@@ -17,6 +17,7 @@ import {
 } from "@/pages/DetailPage/CommentCell/CommentCellStyle";
 import { commentKeys, reactionKeys } from "@/query/queryKeys";
 import { calculateDateTimeDiff } from "@/utils/date";
+import { getProfileImageUrl } from "@/utils/imageUrl";
 import { convertTxTypeToColor } from "@/utils/txType";
 
 import ReplyToggleButton from "../ReplyToggleButton/ReplyToggleButton";
@@ -84,7 +85,7 @@ export default function CommentCell({
       <CommentSenderStyle>
         <Avatar
           size={32}
-          src={sender!.profileUrl}
+          src={getProfileImageUrl(sender!.profileUrl)}
           alt={`${sender!.nickname} profile`}
         />
         <div>
@@ -124,12 +125,14 @@ interface ReplyCellProps
   > {}
 
 function ReplyCell({ id, content, createdAt, sender }: ReplyCellProps) {
+  const profileImageUrl = getProfileImageUrl(sender!.profileUrl);
+
   return (
     <ReplyCellStyle id={`comment-reply-${id}`}>
       <CommentSenderStyle className="user">
         <Avatar
           size={32}
-          src={sender!.profileUrl ?? "/assets/user-placeholder.png"}
+          src={profileImageUrl || "/assets/user-placeholder.png"}
           alt={`${sender!.nickname} profile`}
         />
         <div>

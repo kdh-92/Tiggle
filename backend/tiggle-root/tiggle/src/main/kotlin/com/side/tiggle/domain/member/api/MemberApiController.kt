@@ -45,7 +45,6 @@ class MemberApiController(
             .ok(ApiResponse.success(memberDto))
     }
 
-    // 관리자 roles이 있는지 확인 필요
     @GetMapping("/all")
     fun getAllMember(): ResponseEntity<ApiResponse<MemberListRespDto>> {
         val members = memberService.getAllMember()
@@ -53,7 +52,6 @@ class MemberApiController(
             .ok(ApiResponse.success(members))
     }
 
-    // token에 id 값 있는지 확인 필요
     @GetMapping("/me")
     @Operation(summary = "내 정보 조회", security = [SecurityRequirement(name = "bearer-key")])
     fun getMe(

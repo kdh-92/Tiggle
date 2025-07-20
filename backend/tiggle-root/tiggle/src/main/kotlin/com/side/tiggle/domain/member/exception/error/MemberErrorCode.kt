@@ -20,7 +20,8 @@ enum class MemberErrorCode(
     PROFILE_UPLOAD_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, 10011, "프로필 이미지 업로드에 실패했습니다"),
     INVALID_FILE_TYPE(HttpStatus.BAD_REQUEST, 10012, "허용되지 않은 파일 형식입니다"),
     FILE_SIZE_EXCEEDED(HttpStatus.BAD_REQUEST, 10013, "파일 크기 제한을 초과했습니다"),
-    EMPTY_FILE(HttpStatus.BAD_REQUEST, 10014, "빈 파일은 업로드할 수 없습니다");
+    EMPTY_FILE(HttpStatus.BAD_REQUEST, 10014, "빈 파일은 업로드할 수 없습니다"),
+    PROFILE_IMAGE_DELETE_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, 10015, "기존 프로필 이미지 삭제에 실패했습니다");
 
     override fun httpStatus(): HttpStatus = status
     override fun codeNumber(): Int = code

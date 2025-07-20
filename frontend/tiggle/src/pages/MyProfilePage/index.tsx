@@ -41,7 +41,6 @@ const MyProfilePage = () => {
                 {...profileUrlRegister}
                 onChange={e => {
                   handleUpload(e);
-                  profileUrlRegister.onChange(e);
                 }}
               />
               <Camera strokeWidth={2} />
@@ -82,7 +81,7 @@ const MyProfilePage = () => {
               name="email"
               control={control}
               render={({ field }) => (
-                <Input placeholder="이메일을 입력하세요" {...field} />
+                <Input placeholder="이메일을 입력하세요" {...field} disabled />
               )}
             />
           </ProfileFormItemStyle>

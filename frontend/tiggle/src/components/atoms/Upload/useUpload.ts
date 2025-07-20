@@ -1,5 +1,7 @@
 import { ChangeEvent, ChangeEventHandler, useState } from "react";
 
+import { resizeMemberImage } from "@/utils/imageResize";
+
 type UseUploadOptions = {
   onChange: ChangeEventHandler<HTMLInputElement>;
   onReset: () => void;
@@ -22,12 +24,26 @@ const useUpload = ({
     reader.readAsDataURL(file);
   };
 
-  const handleUpload = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleUpload = async (e: ChangeEvent<HTMLInputElement>) => {
     onChange?.(e);
     const uploadedFile = e.target.files?.[0];
+
     if (uploadedFile) {
-      setFile(uploadedFile);
-      encodeFileToImageUrl(uploadedFile);
+      try {
+        const resizedFile = await resizeMemberImage(uploadedFile);
+        setFile(resizedFile);
+        encodeFileToImageUrl(resizedFile);
+
+        const dataTransfer = new DataTransfer();
+        dataTransfer.items.add(resizedFile);
+        if (e.target) {
+          e.target.files = dataTransfer.files;
+        }
+      } catch (error) {
+        console.error("Member 프로필 리사이즈 실패:", error);
+        setFile(uploadedFile);
+        encodeFileToImageUrl(uploadedFile);
+      }
     }
   };
 

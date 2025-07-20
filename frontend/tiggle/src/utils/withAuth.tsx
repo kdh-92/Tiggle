@@ -2,12 +2,12 @@ import { useDispatch } from "react-redux";
 import { Navigate, useLocation } from "react-router-dom";
 
 import LoadingPage from "@/components/templates/LoadingPage/LoadingPage";
-import { MemberResponseDto } from "@/generated";
+import { MemberRespDto } from "@/generated";
 import useAuth from "@/hooks/useAuth";
 import continueUrlStore from "@/store/continueUrl";
 
 export interface AuthProps {
-  profile: Required<MemberResponseDto>;
+  profile: Required<MemberRespDto>;
 }
 
 const LOGIN_PATH = "/login";
@@ -29,6 +29,11 @@ const withAuth =
       recordContinueUrl();
       return <Navigate to={LOGIN_PATH} replace />;
     } else {
+      if (!profile?.data) {
+        recordContinueUrl();
+        return <Navigate to={LOGIN_PATH} replace />;
+      }
+
       return <Component {...(props as Props)} profile={profile.data} />;
     }
   };

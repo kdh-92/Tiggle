@@ -3,6 +3,7 @@ import { calculateDateTimeDiff } from "@/utils/date";
 
 import { ReplyCellStyle } from "./ReplyCellStyle";
 import { CommentSenderStyle } from "../CommentCell/CommentCellStyle";
+import { getProfileImageUrl } from "@/utils/imageUrl";
 
 interface ReplyCellProps
   extends Pick<CommentRespDto, "id" | "content" | "createdAt" | "sender"> {}
@@ -13,7 +14,10 @@ function ReplyCell({ id, content, createdAt, sender }: ReplyCellProps) {
       <CommentSenderStyle className="user">
         <img
           className="profile"
-          src={sender!.profileUrl ?? "/assets/user-placeholder.png"}
+          src={
+            getProfileImageUrl(sender!.profileUrl) ??
+            "/assets/user-placeholder.png"
+          }
           alt={`${sender!.nickname} profile`}
         />
         <div>
