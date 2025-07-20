@@ -1,6 +1,5 @@
 package com.side.tiggle.global.config
 
-import com.side.tiggle.global.auth.jwt.JwtTokenProvider
 import com.side.tiggle.global.auth.oauth2.OAuth2SuccessHandler
 import com.side.tiggle.global.filter.JwtRequestFilter
 import org.springframework.context.annotation.Bean
