@@ -1,7 +1,9 @@
-package com.side.tiggle.global.auth
+package com.side.tiggle.global.auth.oauth2
 
 import com.side.tiggle.domain.member.model.Member
 import com.side.tiggle.domain.member.repository.MemberRepository
+import com.side.tiggle.global.auth.jwt.JwtTokenProvider
+import com.side.tiggle.global.auth.jwt.RefreshTokenService
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.security.core.Authentication
@@ -17,6 +19,13 @@ import jakarta.servlet.http.HttpServletResponse
 class OAuth2SuccessHandler(
     private val memberRepository: MemberRepository,
     private val jwtTokenProvider: JwtTokenProvider,
+    private val refreshTokenService: RefreshTokenService,
+
+    @Value("\${jwt.access-token-expiry}")
+    private val accessTokenExpiry: Long,
+
+    @Value("\${jwt.refresh-token-expiry}")
+    private val refreshTokenExpiry: Long,
 
     @Value("\${app.client-redirect-uri}")
     private val redirectUri: String
@@ -24,20 +33,56 @@ class OAuth2SuccessHandler(
 
     private val logger = LoggerFactory.getLogger(this::class.java)
 
+    /**
+     * OAuth2 인증 성공 시 토큰 발급 및 리다이렉트를 처리합니다.
+     *
+     * 1. OAuth2 인증 정보에서 사용자 정보 추출
+     * 2. 데이터베이스에 사용자 정보 저장/업데이트
+     * 3. Access Token 및 Refresh Token 발급
+     * 4. 토큰을 HttpOnly 쿠키로 설정 (TODO)
+     * 5. 클라이언트로 리다이렉트
+     *
+     * @param request HTTP 요청 객체
+     * @param response HTTP 응답 객체
+     * @param authentication OAuth2 인증 정보
+     * @since 2025-07-12
+     * @author 양병학
+     */
     override fun onAuthenticationSuccess(request: HttpServletRequest, response: HttpServletResponse, authentication: Authentication?) {
         val authenticationToken: OAuth2AuthenticationToken = authentication as OAuth2AuthenticationToken
         val authMember = getAndUpsert(authenticationToken)
 
-        val token: String = jwtTokenProvider.getAccessToken(authMember.id, "ROLE_USER")
+        val accessToken: String = jwtTokenProvider.getAccessToken(authMember.id, "ROLE_USER")
+        val refreshToken: String = jwtTokenProvider.getRefreshToken(authMember.id, "ROLE_USER")
+        refreshTokenService.saveRefreshToken(authMember.id, refreshToken)
 
-        val cookie = Cookie("Authorization", token)
-        cookie.maxAge = 60000
-        cookie.path = "/" // FIXME: 특정 경로에서만 사용 가능하도록 수정한다
+        val accessCookie = Cookie("Authorization", accessToken)
+        accessCookie.maxAge = accessTokenExpiry.toInt()
+        accessCookie.path = "/"
 
-        response.addCookie(cookie)
+        val refreshCookie = Cookie("RefreshToken", refreshToken)
+        refreshCookie.maxAge = refreshTokenExpiry.toInt()
+        refreshCookie.path = "/"
+
+        response.addCookie(accessCookie)
+        response.addCookie(refreshCookie)
         response.sendRedirect(redirectUri)
     }
 
+    /**
+     * OAuth2 인증 정보를 기반으로 사용자를 조회하거나 신규 생성합니다.
+     *
+     * 1. OAuth2 사용자 정보 추출
+     * 2. 이메일로 기존 사용자 조회
+     * 3. 기존 사용자인 경우 프로필 정보 업데이트
+     * 4. 신규 사용자인 경우 새로운 Member 생성
+     * 5. 데이터베이스에 저장
+     *
+     * @param authenticationToken OAuth2 인증 토큰
+     * @return 저장된 Member 엔티티
+     * @since 2025-07-12
+     * @author 양병학
+     */
     private fun getAndUpsert(authenticationToken: OAuth2AuthenticationToken): Member {
         val userPrincipal = authenticationToken.principal as DefaultOAuth2User
         logger.info("oAuth2User: $userPrincipal")

@@ -62,7 +62,7 @@ spring:
             user-name-attribute: id
 part:
   upload:
-    path: upload/image/
+    path: upload/
     profile:
       path: upload/profile
       max-size: 5242880  # 5MB
@@ -80,6 +80,11 @@ part:
 
 app:
   client-redirect-uri: https://tiggle.duckdns.org/login/success
+
+jwt:
+  secret: ${JWT_SECRET}
+  access-token-expiry: 86400
+  refresh-token-expiry: 604800
 
 log:
   rolling:

@@ -39,7 +39,7 @@ export const MyTransactionCellStyle = styled.div`
     }
 
     &.OUTCOME {
-      color: ${({ theme }) => theme.color.peach[600].value};
+      color: ${({ theme }) => theme.color.blue[600].value};
     }
 
     &.REFUND {

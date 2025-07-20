@@ -13,7 +13,7 @@ export default function MyTransactionCell({
     <MyTransactionCellStyle className={cn("OUTCOME", id)}>
       <TypeTag className="tag" txType={"OUTCOME"} size={"md"} />
       <div className={cn("amount", "OUTCOME")}>
-        <span className="amount-unit">₩ {amount}</span>
+        <span className="amount-unit">₩ {amount?.toLocaleString("ko-KR")}</span>
       </div>
       <div className="transaction-cell-section">
         <p className="content">{content}</p>

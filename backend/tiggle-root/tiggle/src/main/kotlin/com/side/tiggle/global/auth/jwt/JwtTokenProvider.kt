@@ -1,4 +1,4 @@
-package com.side.tiggle.global.auth
+package com.side.tiggle.global.auth.jwt
 
 import com.side.tiggle.domain.member.repository.MemberRepository
 import com.side.tiggle.global.exception.AuthException
@@ -7,25 +7,31 @@ import io.jsonwebtoken.Claims
 import io.jsonwebtoken.JwtException
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.security.Keys
+import jakarta.servlet.http.HttpServletRequest
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
 import java.nio.charset.StandardCharsets
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.util.*
-import jakarta.servlet.http.HttpServletRequest
 import javax.crypto.SecretKey
 
 @Component
 class JwtTokenProvider(
     private val memberRepository: MemberRepository
 ) {
+    @Value("\${jwt.secret}")
+    private lateinit var secret: String
 
-    // TODO: @Value로 받아야 한다
-    private val secret = "secrettigglesecrettigglesecrettiggle"
-    private val secretKey: SecretKey = Keys.hmacShaKeyFor(secret.toByteArray(StandardCharsets.UTF_8))
+    private val secretKey: SecretKey by lazy {
+        Keys.hmacShaKeyFor(secret.toByteArray(StandardCharsets.UTF_8))
+    }
 
-    private val tokenExpiry = 60L * 30L
-    private val refreshTokenExpiry = 60L * 60L * 24L
+    @Value("\${jwt.access-token-expiry:86400}")
+    private val tokenExpiry: Long = 0
+
+    @Value("\${jwt.refresh-token-expiry:604800}")
+    private val refreshTokenExpiry: Long = 0
 
     private val zone = ZoneId.systemDefault()
 
@@ -72,11 +78,17 @@ class JwtTokenProvider(
         return authHeader.substring("Bearer ".length)
     }
 
-    fun resolveRefreshToken(request: HttpServletRequest): String {
-        return request.getHeader("Refresh")
+    fun resolveRefreshToken(request: HttpServletRequest): String? {
+        return request.getHeader("Refresh-Token")
     }
 
     fun getUserId(token: String): Long {
+        return extractClaims(token).subject.toLong()
+    }
+
+    fun getUserIdFromRefreshToken(token: String): Long {
+        validateRefreshToken(token)
+
         return extractClaims(token).subject.toLong()
     }
 
@@ -87,6 +99,22 @@ class JwtTokenProvider(
         } catch (e: Exception) {
             false
         }
+    }
+
+    fun validateRefreshToken(token: String): Boolean {
+        if (!isTokenValid(token)) {
+            throw AuthException(GlobalErrorCode.EXPIRED_REFRESH_TOKEN)
+        }
+
+        val member = memberRepository.findByRefreshToken(token)
+            ?: throw AuthException(GlobalErrorCode.INVALID_REFRESH_TOKEN)
+
+        val now = LocalDateTime.now()
+        if (member.refreshTokenExpiresAt?.isAfter(now) != true) {
+            throw AuthException(GlobalErrorCode.EXPIRED_REFRESH_TOKEN)
+        }
+
+        return true
     }
 
     private fun extractClaims(
@@ -102,5 +130,4 @@ class JwtTokenProvider(
             throw AuthException(GlobalErrorCode.INVALID_TOKEN, e)
         }
     }
-
 }
