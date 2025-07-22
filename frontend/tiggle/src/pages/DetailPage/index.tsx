@@ -48,7 +48,7 @@ const DetailPage = () => {
     queryFn: async () => TransactionApiControllerService.getAllCommentsByTx(id),
   });
   const handleImageError = (e: React.SyntheticEvent<HTMLImageElement>) => {
-    e.currentTarget.src = "/src/assets/tiggle.png";
+    e.currentTarget.src = "/assets/tiggle.png";
   };
 
   if (!transactionData?.data) {
@@ -81,7 +81,7 @@ const DetailPage = () => {
                   console.log("showing default image");
                   return (
                     <img
-                      src="/src/assets/tiggle.png"
+                      src="/assets/tiggle.png"
                       alt={transactionData?.data?.content || "default"}
                       onError={handleImageError}
                     />
@@ -102,7 +102,7 @@ const DetailPage = () => {
                 console.log("parse error, showing default");
                 return (
                   <img
-                    src="/src/assets/tiggle.png"
+                    src="/assets/tiggle.png"
                     alt={transactionData?.data?.content || "default"}
                     onError={handleImageError}
                   />
