@@ -34,6 +34,7 @@ const DetailPage = () => {
   const initialData = useLoaderData() as Awaited<
     ReturnType<ReturnType<typeof detailPageLoader>>
   >;
+  const FALLBACK_IMAGE = `${import.meta.env.BASE_URL}assets/tiggle.png`;
 
   const { data: transactionData } = useQuery({
     ...transactionQuery(id),
@@ -48,7 +49,7 @@ const DetailPage = () => {
     queryFn: async () => TransactionApiControllerService.getAllCommentsByTx(id),
   });
   const handleImageError = (e: React.SyntheticEvent<HTMLImageElement>) => {
-    e.currentTarget.src = "/assets/tiggle.png";
+    e.currentTarget.src = FALLBACK_IMAGE;
   };
 
   if (!transactionData?.data) {
@@ -77,7 +78,7 @@ const DetailPage = () => {
                 if (imageUrls.length === 0) {
                   return (
                     <img
-                      src="/assets/tiggle.png"
+                      src={FALLBACK_IMAGE}
                       alt={transactionData?.data?.content || "default"}
                       onError={handleImageError}
                     />
@@ -96,7 +97,7 @@ const DetailPage = () => {
               } catch (e) {
                 return (
                   <img
-                    src="/assets/tiggle.png"
+                    src={FALLBACK_IMAGE}
                     alt={transactionData?.data?.content || "default"}
                     onError={handleImageError}
                   />
