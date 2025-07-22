@@ -74,11 +74,7 @@ const DetailPage = () => {
                   ? JSON.parse(transactionData.data.imageUrls)
                   : [];
 
-                console.log("imageUrls:", imageUrls);
-                console.log("imageUrls.length:", imageUrls.length);
-
                 if (imageUrls.length === 0) {
-                  console.log("showing default image");
                   return (
                     <img
                       src="/assets/tiggle.png"
@@ -88,7 +84,6 @@ const DetailPage = () => {
                   );
                 }
 
-                console.log("showing gallery images");
                 return imageUrls.map((url: string, index: number) => (
                   <img
                     key={index}
@@ -99,7 +94,6 @@ const DetailPage = () => {
                   />
                 ));
               } catch (e) {
-                console.log("parse error, showing default");
                 return (
                   <img
                     src="/assets/tiggle.png"
