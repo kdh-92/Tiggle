@@ -34,6 +34,7 @@ const DetailPage = () => {
   const initialData = useLoaderData() as Awaited<
     ReturnType<ReturnType<typeof detailPageLoader>>
   >;
+  const FALLBACK_IMAGE = `${import.meta.env.BASE_URL}assets/tiggle.png`;
 
   const { data: transactionData } = useQuery({
     ...transactionQuery(id),
@@ -48,7 +49,7 @@ const DetailPage = () => {
     queryFn: async () => TransactionApiControllerService.getAllCommentsByTx(id),
   });
   const handleImageError = (e: React.SyntheticEvent<HTMLImageElement>) => {
-    e.currentTarget.src = "/src/assets/tiggle.png";
+    e.currentTarget.src = FALLBACK_IMAGE;
   };
 
   if (!transactionData?.data) {
@@ -74,21 +75,16 @@ const DetailPage = () => {
                   ? JSON.parse(transactionData.data.imageUrls)
                   : [];
 
-                console.log("imageUrls:", imageUrls);
-                console.log("imageUrls.length:", imageUrls.length);
-
                 if (imageUrls.length === 0) {
-                  console.log("showing default image");
                   return (
                     <img
-                      src="/src/assets/tiggle.png"
+                      src={FALLBACK_IMAGE}
                       alt={transactionData?.data?.content || "default"}
                       onError={handleImageError}
                     />
                   );
                 }
 
-                console.log("showing gallery images");
                 return imageUrls.map((url: string, index: number) => (
                   <img
                     key={index}
@@ -99,10 +95,9 @@ const DetailPage = () => {
                   />
                 ));
               } catch (e) {
-                console.log("parse error, showing default");
                 return (
                   <img
-                    src="/src/assets/tiggle.png"
+                    src={FALLBACK_IMAGE}
                     alt={transactionData?.data?.content || "default"}
                     onError={handleImageError}
                   />
