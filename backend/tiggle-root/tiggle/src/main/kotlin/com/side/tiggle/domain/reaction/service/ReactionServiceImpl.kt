@@ -58,7 +58,7 @@ class ReactionServiceImpl(
             if (existingReaction != null) {
                 existingReaction.type = dto.type
                 reactionRepository.save(existingReaction)
-                log.debug("반응 타입 업데이트: txId=$txId, senderId=$senderId, type=${dto.type}")
+                log.debug("반응 타입 업데이트: txId={}, senderId={}, type={}", txId, senderId, dto.type)
             } else {
                 val newReaction = Reaction(
                     type = dto.type,
@@ -67,7 +67,7 @@ class ReactionServiceImpl(
                     receiverId = receiverId
                 )
                 reactionRepository.save(newReaction)
-                log.debug("새 반응 생성: txId=$txId, senderId=$senderId, type=${dto.type}")
+                log.debug("새 반응 생성: txId={}, senderId={}, type={}", txId, senderId, dto.type)
             }
         } catch (e: DataIntegrityViolationException) {
             val errorMessage = e.message?.lowercase() ?: ""

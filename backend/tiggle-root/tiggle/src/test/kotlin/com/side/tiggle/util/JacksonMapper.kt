@@ -10,4 +10,4 @@ val jacksonMapper = ObjectMapper()
     .registerKotlinModule()
 
 inline fun <reified T> String.toJson(): T = jacksonMapper.readValue(this, object: TypeReference<T>(){})
-inline fun Any.fromJson(): String = jacksonMapper.writeValueAsString(this)
+fun Any.fromJson(): String = jacksonMapper.writeValueAsString(this)
