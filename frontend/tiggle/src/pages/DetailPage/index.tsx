@@ -81,6 +81,7 @@ const DetailPage = () => {
                       src={FALLBACK_IMAGE}
                       alt={transactionData?.data?.content || "default"}
                       onError={handleImageError}
+                      className="gallery-image"
                     />
                   );
                 }
@@ -100,6 +101,7 @@ const DetailPage = () => {
                     src={FALLBACK_IMAGE}
                     alt={transactionData?.data?.content || "default"}
                     onError={handleImageError}
+                    className="gallery-image"
                   />
                 );
               }
