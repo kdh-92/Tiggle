@@ -29,13 +29,6 @@ dependencies {
 	implementation ("org.springframework.boot:spring-boot-starter-validation:3.5.0")
     implementation ("org.springframework.boot:spring-boot-devtools:3.5.0")
 	implementation ("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.9")
-//	testImplementation 'org.springframework.security:spring-security-test'
-
-	// configurationProperties를 사용하기 위해 추가
-//	kapt "org.springframework.boot:spring-boot-configuration-processor"
-
-//	// h2
-//	runtimeOnly 'com.h2database:h2'
 
 	// jwt
 	implementation ("io.jsonwebtoken:jjwt-api:0.12.6")
@@ -47,10 +40,10 @@ dependencies {
 
 	// test
 	testImplementation ("org.springframework.boot:spring-boot-starter-test:3.5.0")
-	testImplementation ("io.kotest:kotest-runner-junit5-jvm:5.3.2")
-	testImplementation ("io.kotest:kotest-assertions-core:5.3.2")
+	testImplementation ("io.kotest:kotest-assertions-core:5.9.1")
 	testImplementation("io.kotest.extensions:kotest-extensions-spring:1.1.3")
 	testImplementation ("io.mockk:mockk:1.12.4")
+	testImplementation("io.kotest:kotest-runner-junit5:5.9.0")
 
 	implementation ("org.springframework.kafka:spring-kafka:3.1.2")
 	implementation ("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.17.1")
@@ -62,7 +55,7 @@ allOpen {
 	annotation("jakarta.persistence.MappedSuperclass")
 }
 
-tasks.named<Test>("test") {
+tasks.test {
 	useJUnitPlatform()
 	finalizedBy(tasks.jacocoTestReport)
 }
@@ -92,6 +85,16 @@ tasks.jacocoTestReport {
 	}
 	// 필요하면 경로 지정 가능
 	// html.outputLocation.set(layout.buildDirectory.dir("jacocoHtml"))
+
+	classDirectories.setFrom(
+		files(
+			classDirectories.files.map {
+				fileTree(it) {
+					exclude("**/config/**", "**/dto/**")
+				}
+			}
+		)
+	)
 }
 
 tasks.jacocoTestCoverageVerification {

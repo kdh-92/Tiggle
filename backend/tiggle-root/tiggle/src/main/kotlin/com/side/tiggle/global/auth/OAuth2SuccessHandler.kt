@@ -2,6 +2,8 @@ package com.side.tiggle.global.auth
 
 import com.side.tiggle.domain.member.model.Member
 import com.side.tiggle.domain.member.repository.MemberRepository
+import com.side.tiggle.global.auth.jwt.JwtTokenProvider
+import com.side.tiggle.global.auth.oauth2.OAuth2Attribute
 import com.side.tiggle.global.common.logging.KLog
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
