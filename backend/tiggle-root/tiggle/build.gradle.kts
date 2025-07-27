@@ -90,7 +90,17 @@ tasks.jacocoTestReport {
 		files(
 			classDirectories.files.map {
 				fileTree(it) {
-					exclude("**/config/**", "**/dto/**")
+					exclude(
+						"**/config/**",
+						"**/dto/**",
+						"**/exception/**",
+						"**/model/**",
+						"**/repository/**",
+						"**/util/**",
+						"**/mapper/**",
+						"**/*Application*",
+						"**/*Exception*"
+					)
 				}
 			}
 		)
