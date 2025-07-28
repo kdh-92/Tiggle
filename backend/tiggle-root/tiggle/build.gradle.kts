@@ -76,6 +76,18 @@ jacoco {
 	reportsDirectory.set(layout.buildDirectory.dir("reports/jacoco"))
 }
 
+val jacocoExcludes = listOf(
+	"**/config/**",
+	"**/dto/**",
+	"**/exception/**",
+	"**/model/**",
+	"**/repository/**",
+	"**/utils/**",
+	"**/mapper/**",
+	"**/*Application*",
+	"**/*Exception*"
+)
+
 tasks.jacocoTestReport {
 	dependsOn(tasks.test)
 	reports {
@@ -90,17 +102,7 @@ tasks.jacocoTestReport {
 		files(
 			classDirectories.files.map {
 				fileTree(it) {
-					exclude(
-						"**/config/**",
-						"**/dto/**",
-						"**/exception/**",
-						"**/model/**",
-						"**/repository/**",
-						"**/util/**",
-						"**/mapper/**",
-						"**/*Application*",
-						"**/*Exception*"
-					)
+					exclude(jacocoExcludes)
 				}
 			}
 		)
@@ -125,11 +127,7 @@ tasks.jacocoTestCoverageVerification {
 				minimum = BigDecimal(0.0)
 			}
 
-			excludes = listOf(
-				"com.side.tiggle.TiggleApplication", // 메인 클래스 제외
-				"**.dto.**",                         // DTO 제외 예시
-				"**.config.**"                       // Config 제외 예시
-			)
+			excludes = jacocoExcludes
 		}
 	}
 }
