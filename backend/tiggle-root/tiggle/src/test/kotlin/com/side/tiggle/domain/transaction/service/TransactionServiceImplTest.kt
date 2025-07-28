@@ -8,7 +8,6 @@ import com.side.tiggle.domain.member.service.MemberService
 import com.side.tiggle.domain.transaction.dto.internal.TransactionInfo
 import com.side.tiggle.domain.transaction.dto.req.TransactionCreateReqDto
 import com.side.tiggle.domain.transaction.dto.req.TransactionUpdateReqDto
-import com.side.tiggle.domain.transaction.dto.resp.TransactionPageRespDto
 import com.side.tiggle.domain.transaction.dto.resp.TransactionRespDto
 import com.side.tiggle.domain.transaction.dto.view.TransactionDtoWithCount
 import com.side.tiggle.domain.transaction.exception.TransactionException
@@ -17,6 +16,8 @@ import com.side.tiggle.domain.transaction.mapper.TransactionMapper
 import com.side.tiggle.domain.transaction.model.Transaction
 import com.side.tiggle.domain.transaction.repository.TransactionRepository
 import com.side.tiggle.domain.transaction.utils.TransactionFileUploadUtil
+import com.side.tiggle.support.factory.TestMemberFactory
+import com.side.tiggle.support.factory.TestTransactionFactory
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
@@ -70,10 +71,12 @@ class TransactionServiceImplTest : StringSpec({
         val uploadedPaths = listOf("/path/to/image.jpg")
         val imageUrlsJson = """["/path/to/image.jpg"]"""
 
-        val member = Member("test@example.com", null, "테스트유저")
+        val member = TestMemberFactory.create(id = memberId)
         val category = Category("식비", false, memberId)
-        val transaction = Transaction(member, category, imageUrlsJson, 10000, LocalDate.now(), "점심식사", "회사 근처 식당에서 점심", listOf("식비", "점심"))
-
+        val transaction = TestTransactionFactory.create(
+            member = member,
+            category = category
+        )
         every { transactionFileUploadUtil.uploadTransactionImages(files) } returns uploadedPaths
         every { objectMapper.writeValueAsString(uploadedPaths) } returns imageUrlsJson
         every { memberService.getMemberReference(memberId) } returns member
@@ -136,9 +139,12 @@ class TransactionServiceImplTest : StringSpec({
             tagNames = listOf("회식", "저녁")
         )
 
-        val member = Member("test@example.com", null, "테스트유저").apply { id = memberId }
+        val member = TestMemberFactory.create(id = memberId)
         val category = Category("식비", false, memberId)
-        val transaction = Transaction(member, category, null, 10000, LocalDate.now(), "점심식사", "점심", listOf("점심"))
+        val transaction = TestTransactionFactory.create(
+            member = member,
+            category = category
+        )
 
         every { transactionRepository.findByIdWithMemberAndCategory(transactionId) } returns transaction
         every { transactionRepository.save(transaction) } returns transaction
@@ -190,9 +196,12 @@ class TransactionServiceImplTest : StringSpec({
             tagNames = null
         )
 
-        val otherMember = Member("other@example.com", null, "다른유저").apply { id = otherMemberId }
+        val otherMember = TestMemberFactory.create(id = otherMemberId)
         val category = Category("식비", false, otherMemberId)
-        val transaction = Transaction(otherMember, category, null, 10000, LocalDate.now(), "점심식사", "점심", null)
+        val transaction = TestTransactionFactory.create(
+            member = otherMember,
+            category = category
+        )
 
         every { transactionRepository.findByIdWithMemberAndCategory(transactionId) } returns transaction
 
@@ -207,9 +216,12 @@ class TransactionServiceImplTest : StringSpec({
         val memberId = 1L
         val transactionId = 10L
 
-        val member = Member("test@example.com", null, "테스트유저").apply { id = memberId }
+        val member = TestMemberFactory.create(id = memberId)
         val category = Category("식비", false, memberId)
-        val transaction = Transaction(member, category, null, 10000, LocalDate.now(), "점심식사", "점심", null)
+        val transaction = TestTransactionFactory.create(
+            member = member,
+            category = category
+        )
 
         every { transactionRepository.findById(transactionId) } returns Optional.of(transaction)
         every { transactionRepository.delete(transaction) } just Runs
@@ -240,9 +252,12 @@ class TransactionServiceImplTest : StringSpec({
         val otherMemberId = 2L
         val transactionId = 10L
 
-        val otherMember = Member("other@example.com", null, "다른유저").apply { id = otherMemberId }
+        val otherMember = TestMemberFactory.create(id = otherMemberId)
         val category = Category("식비", false, otherMemberId)
-        val transaction = Transaction(otherMember, category, null, 10000, LocalDate.now(), "점심식사", "점심", null)
+        val transaction = TestTransactionFactory.create(
+            member = otherMember,
+            category = category
+        )
 
         every { transactionRepository.findById(transactionId) } returns Optional.of(transaction)
 
@@ -254,12 +269,17 @@ class TransactionServiceImplTest : StringSpec({
 
     "거래 상세 정보를 조회합니다" {
         // given
+        val memberId = 1L
         val transactionId = 10L
-        val member = Member("test@example.com", null, "테스트유저").apply { id = 1L }
+        val member = TestMemberFactory.create(id = memberId)
         val category = Category("식비", false, 1L).apply { id = 2L }
-        val transaction = Transaction(member, category, null, 10000, LocalDate.now(), "점심식사", "점심", null).apply {
-            id = transactionId
+        val transaction = TestTransactionFactory.create(
+            id = transactionId,
+            member = member,
+            category = category
+        ).apply {
             createdAt = LocalDateTime.now()
+            updatedAt = LocalDateTime.now()
         }
 
         every { transactionRepository.findByIdWithMemberAndCategory(transactionId) } returns transaction
@@ -269,7 +289,7 @@ class TransactionServiceImplTest : StringSpec({
 
         // then
         result.id shouldBe transactionId
-        result.content shouldBe "점심식사"
+        result.content shouldBe "커피커피"
         result.amount shouldBe 10000
     }
 
@@ -287,10 +307,18 @@ class TransactionServiceImplTest : StringSpec({
 
     "내부용 거래 정보를 조회합니다" {
         // given
+        val memberId = 1L
         val transactionId = 10L
-        val member = Member("test@example.com", null, "테스트유저").apply { id = 1L }
+        val member = TestMemberFactory.create(id = memberId)
         val category = Category("식비", false, 1L).apply { id = 2L }
-        val transaction = Transaction(member, category, null, 10000, LocalDate.now(), "점심식사", "점심", null).apply { id = transactionId }
+        val transaction = TestTransactionFactory.create(
+            id = transactionId,
+            member = member,
+            category = category
+        ).apply {
+            createdAt = LocalDateTime.now()
+            updatedAt = LocalDateTime.now()
+        }
 
         every { transactionRepository.findByIdWithMemberAndCategory(transactionId) } returns transaction
 
@@ -303,20 +331,22 @@ class TransactionServiceImplTest : StringSpec({
 
     "전체 거래 목록을 페이징으로 조회합니다" {
         // given
+        val memberId = 1L
         val pageSize = 10
         val index = 0
-        val member = Member("test@example.com", null, "테스트유저").apply { id = 1L }
+        val member = TestMemberFactory.create(id = memberId)
         val category = Category("식비", false, 1L).apply { id = 2L }
-        val transaction = Transaction(member, category, null, 10000, LocalDate.now(), "점심식사", "점심", null).apply {
-            id = 1L
-            createdAt = LocalDateTime.now()
-        }
+        val transaction = TestTransactionFactory.create(
+            id = 1L,
+            member = member,
+            category = category
+        )
 
         val transactions = listOf(transaction)
         val page = PageImpl(transactions, PageRequest.of(index, pageSize, Sort.by(Sort.Direction.DESC, "createdAt")), 1)
         val mockRespDto = mockk<TransactionRespDto> {
             every { id } returns 1L
-            every { content } returns "점심식사"
+            every { content } returns "커피커피"
         }
         val dtoWithCount = TransactionDtoWithCount(mockRespDto, 5, 2, 3)
 
@@ -354,21 +384,22 @@ class TransactionServiceImplTest : StringSpec({
         val startDate = LocalDate.now().minusDays(30)
         val endDate = LocalDate.now()
         val categoryIds = listOf(1L, 2L)
-        val tagNames = listOf("식비", "점심")
-        val tagNamesJson = """["식비","점심"]"""
+        val tagNames = listOf("커피")
+        val tagNamesJson = """["커피"]"""
 
-        val member = Member("test@example.com", null, "테스트유저").apply { id = memberId }
-        val category = Category("식비", false, memberId).apply { id = 2L }
-        val transaction = Transaction(member, category, null, 10000, LocalDate.now(), "점심식사", "점심", tagNames).apply {
-            id = 1L
-            createdAt = LocalDateTime.now()
-        }
+        val member = TestMemberFactory.create(id = memberId)
+        val category = Category("커피", false, memberId).apply { id = 2L }
+        val transaction = TestTransactionFactory.create(
+            id = 1L,
+            member = member,
+            category = category
+        )
 
         val transactions = listOf(transaction)
         val page = PageImpl(transactions, PageRequest.of(offset, count), 1)
         val mockRespDto = mockk<TransactionRespDto> {
             every { id } returns 1L
-            every { content } returns "점심식사"
+            every { content } returns "커피커피"
         }
         val dtoWithCount = TransactionDtoWithCount(mockRespDto, 5, 2, 3)
 
@@ -391,18 +422,20 @@ class TransactionServiceImplTest : StringSpec({
         val count = 10
         val offset = 0
 
-        val member = Member("test@example.com", null, "테스트유저").apply { id = memberId }
+        val member = TestMemberFactory.create(id = memberId)
         val category = Category("식비", false, memberId).apply { id = 2L }
-        val transaction = Transaction(member, category, null, 10000, LocalDate.now(), "점심식사", "점심", null).apply {
-            id = 1L
-            createdAt = LocalDateTime.now()
-        }
+        val transaction = TestTransactionFactory.create(
+            id = 1L,
+            member = member,
+            category = category,
+            tagNames = null
+        )
 
         val transactions = listOf(transaction)
         val page = PageImpl(transactions, PageRequest.of(offset, count), 1)
         val mockRespDto = mockk<TransactionRespDto> {
             every { id } returns 1L
-            every { content } returns "점심식사"
+            every { content } returns "커피커피"
         }
         val dtoWithCount = TransactionDtoWithCount(mockRespDto, 5, 2, 3)
 
@@ -426,9 +459,13 @@ class TransactionServiceImplTest : StringSpec({
         val existingJson = """["/path/to/existing.jpg"]"""
         val allPathsJson = """["/path/to/existing.jpg","/path/to/new.jpg"]"""
 
-        val member = Member("test@example.com", null, "테스트유저").apply { id = memberId }
+        val member = TestMemberFactory.create(id = memberId)
         val category = Category("식비", false, memberId)
-        val transaction = Transaction(member, category, existingJson, 10000, LocalDate.now(), "점심식사", "점심", null)
+        val transaction = TestTransactionFactory.create(
+            member = member,
+            category = category,
+            imageUrls = existingJson
+        )
 
         every { transactionRepository.findByIdWithMemberAndCategory(transactionId) } returns transaction
         every { transactionFileUploadUtil.uploadTransactionImages(files) } returns newPaths
@@ -451,9 +488,12 @@ class TransactionServiceImplTest : StringSpec({
         val transactionId = 10L
         val files = listOf<MultipartFile>(mockk())
 
-        val otherMember = Member("other@example.com", null, "다른유저").apply { id = otherMemberId }
+        val otherMember = TestMemberFactory.create(id = otherMemberId)
         val category = Category("식비", false, otherMemberId)
-        val transaction = Transaction(otherMember, category, null, 10000, LocalDate.now(), "점심식사", "점심", null)
+        val transaction = TestTransactionFactory.create(
+            member = otherMember,
+            category = category
+        )
 
         every { transactionRepository.findByIdWithMemberAndCategory(transactionId) } returns transaction
 
@@ -472,9 +512,13 @@ class TransactionServiceImplTest : StringSpec({
         val imagePathsJson = """["/path/to/image1.jpg","/path/to/image2.jpg"]"""
         val updatedPathsJson = """["/path/to/image2.jpg"]"""
 
-        val member = Member("test@example.com", null, "테스트유저").apply { id = memberId }
+        val member = TestMemberFactory.create(id = memberId)
         val category = Category("식비", false, memberId)
-        val transaction = Transaction(member, category, imagePathsJson, 10000, LocalDate.now(), "점심식사", "점심", null)
+        val transaction = TestTransactionFactory.create(
+            member = member,
+            category = category,
+            imageUrls = imagePathsJson
+        )
 
         every { transactionRepository.findByIdWithMemberAndCategory(transactionId) } returns transaction
         every { objectMapper.readValue(imagePathsJson, Array<String>::class.java) } returns imagePaths.toTypedArray()
@@ -499,9 +543,13 @@ class TransactionServiceImplTest : StringSpec({
         val imagePaths = mutableListOf("/path/to/image1.jpg")
         val imagePathsJson = """["/path/to/image1.jpg"]"""
 
-        val member = Member("test@example.com", null, "테스트유저").apply { id = memberId }
+        val member = TestMemberFactory.create(id = memberId)
         val category = Category("식비", false, memberId)
-        val transaction = Transaction(member, category, imagePathsJson, 10000, LocalDate.now(), "점심식사", "점심", null)
+        val transaction = TestTransactionFactory.create(
+            member = member,
+            category = category,
+            imageUrls = imagePathsJson
+        )
 
         every { transactionRepository.findByIdWithMemberAndCategory(transactionId) } returns transaction
         every { objectMapper.readValue(imagePathsJson, Array<String>::class.java) } returns imagePaths.toTypedArray()
@@ -520,9 +568,13 @@ class TransactionServiceImplTest : StringSpec({
         val imagePaths = mutableListOf("/path/to/image1.jpg", "/path/to/image2.jpg")
         val imagePathsJson = """["/path/to/image1.jpg","/path/to/image2.jpg"]"""
 
-        val member = Member("test@example.com", null, "테스트유저").apply { id = memberId }
+        val member = TestMemberFactory.create(id = memberId)
         val category = Category("식비", false, memberId)
-        val transaction = Transaction(member, category, imagePathsJson, 10000, LocalDate.now(), "점심식사", "점심", null)
+        val transaction = TestTransactionFactory.create(
+            member = member,
+            category = category,
+            imageUrls = imagePathsJson
+        )
 
         every { transactionRepository.findByIdWithMemberAndCategory(transactionId) } returns transaction
         every { objectMapper.readValue(imagePathsJson, Array<String>::class.java) } returns imagePaths.toTypedArray()
