@@ -15,7 +15,7 @@ object TestTransactionFactory {
         content: String = "커피커피",
         reason: String = "멋사 4기 점심식사후 아인슈페너 한잔",
         imageUrls: String? = null,
-        tagNames: List<String>? = null
+        tagNames: List<String>? = listOf("커피")
     ): Transaction {
         val transaction = Transaction(
             member = member,
