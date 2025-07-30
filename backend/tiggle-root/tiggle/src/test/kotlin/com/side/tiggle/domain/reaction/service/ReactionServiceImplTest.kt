@@ -3,7 +3,6 @@ package com.side.tiggle.domain.reaction.service
 import com.side.tiggle.domain.comment.service.CommentService
 import com.side.tiggle.domain.reaction.dto.req.ReactionCreateReqDto
 import com.side.tiggle.domain.reaction.dto.resp.ReactionRespDto
-import com.side.tiggle.domain.reaction.dto.resp.ReactionSummaryRespDto
 import com.side.tiggle.domain.reaction.model.Reaction
 import com.side.tiggle.domain.reaction.model.ReactionType
 import com.side.tiggle.domain.reaction.repository.ReactionRepository
