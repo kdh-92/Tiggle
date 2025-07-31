@@ -92,27 +92,6 @@ class CommentServiceImplTest : StringSpec({
         verify { notificationService.sendCommentNotification(any(), null, tx, 1L) }
     }
 
-    "댓글 생성 시 부모 댓글이 존재하지 않으면 예외를 던진다" {
-        val tx = mockk<TransactionInfo> {
-            every { memberId } returns 2L
-        }
-
-        val sender = mockk<Member> { every { id } returns 1L }
-        val receiver = mockk<Member> { every { id } returns 2L }
-
-        val commentDto = mockk<CommentCreateReqDto> {
-            every { parentId } returns 999L
-            every { toEntity(sender, receiver) } returns mockk()
-        }
-
-        every { memberService.getMemberReference(1L) } returns sender
-        every { memberService.getMemberReference(2L) } returns receiver
-        every { commentRepository.findByIdWithSender(999L) } returns null
-
-        shouldThrow<CommentException> {
-            commentService.createComment(1L, tx, commentDto)
-        }
-    }
 
     "댓글을 수정한다 - 정상 케이스" {
         val sender = TestMemberFactory.create(id = 1L, nickname = "tester1")
@@ -182,4 +161,51 @@ class CommentServiceImplTest : StringSpec({
             commentService.deleteComment(1L, 1L)
         }.getErrorCode() shouldBe CommentErrorCode.COMMENT_ACCESS_DENIED
     }
+
+    "부모 댓글이 존재할 때 부모 댓글을 조회한다" {
+        // given
+        val parentId = 1L
+        val tx = mockk<TransactionInfo> {
+            every { memberId } returns 2L
+        }
+        val parentComment = mockk<Comment>()
+
+        every { commentRepository.findByIdWithSender(parentId) } returns parentComment
+        every { commentRepository.save(any()) } returns mockk()
+
+        val req = CommentCreateReqDto(
+            txId = 1L,
+            content = "대댓글입니다",
+            parentId = parentId
+        )
+
+        // when
+        commentService.createComment(1L, tx, req)
+
+        // then
+        verify { commentRepository.findByIdWithSender(parentId) }
+    }
+
+    "댓글 생성 시 부모 댓글이 존재하지 않으면 예외를 던진다" {
+        val tx = mockk<TransactionInfo> {
+            every { memberId } returns 2L
+        }
+
+        val sender = mockk<Member> { every { id } returns 1L }
+        val receiver = mockk<Member> { every { id } returns 2L }
+
+        val commentDto = mockk<CommentCreateReqDto> {
+            every { parentId } returns 999L
+            every { toEntity(sender, receiver) } returns mockk()
+        }
+
+        every { memberService.getMemberReference(1L) } returns sender
+        every { memberService.getMemberReference(2L) } returns receiver
+        every { commentRepository.findByIdWithSender(999L) } returns null
+
+        shouldThrow<CommentException> {
+            commentService.createComment(1L, tx, commentDto)
+        }
+    }
+
 })
