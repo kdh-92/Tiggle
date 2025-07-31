@@ -207,5 +207,4 @@ class CommentServiceImplTest : StringSpec({
             commentService.createComment(1L, tx, commentDto)
         }
     }
-
 })
