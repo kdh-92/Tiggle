@@ -3,7 +3,6 @@ package com.side.tiggle.domain.transaction.service
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.side.tiggle.domain.category.model.Category
 import com.side.tiggle.domain.category.service.CategoryService
-import com.side.tiggle.domain.member.model.Member
 import com.side.tiggle.domain.member.service.MemberService
 import com.side.tiggle.domain.transaction.dto.internal.TransactionInfo
 import com.side.tiggle.domain.transaction.dto.req.TransactionCreateReqDto
