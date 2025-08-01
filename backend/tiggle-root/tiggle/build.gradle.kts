@@ -50,7 +50,7 @@ dependencies {
 	testImplementation ("io.mockk:mockk:1.12.4")
 	testImplementation("io.kotest:kotest-runner-junit5:5.9.0")
 
-	implementation ("org.springframework.kafka:spring-kafka:3.1.2")
+	implementation ("org.springframework.kafka:spring-kafka:3.3.8")
 	implementation ("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.17.1")
 }
 
