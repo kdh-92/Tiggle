@@ -85,7 +85,8 @@ val jacocoExcludes = listOf(
 	"**/utils/**",
 	"**/mapper/**",
 	"**/*Application*",
-	"**/*Exception*"
+	"**/*Exception*",
+	"**/global/*"
 )
 
 tasks.jacocoTestReport {
