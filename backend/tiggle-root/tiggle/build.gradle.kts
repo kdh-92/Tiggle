@@ -49,8 +49,12 @@ dependencies {
 	testImplementation("io.kotest.extensions:kotest-extensions-spring:1.1.3")
 	testImplementation ("io.mockk:mockk:1.12.4")
 	testImplementation("io.kotest:kotest-runner-junit5:5.9.0")
+	testImplementation("org.springframework.kafka:spring-kafka-test:3.3.8")
+	testImplementation("commons-io:commons-io:2.18.0")
+	testImplementation("org.apache.commons:commons-lang3:3.18.0")
 
 	implementation ("org.springframework.kafka:spring-kafka:3.3.8")
+
 	implementation ("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.17.1")
 }
 
