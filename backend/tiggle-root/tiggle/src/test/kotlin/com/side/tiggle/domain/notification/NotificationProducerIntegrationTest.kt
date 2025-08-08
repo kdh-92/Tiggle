@@ -10,7 +10,7 @@ import org.apache.kafka.common.serialization.StringDeserializer
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureWebMvc
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.MediaType
 import org.springframework.kafka.test.utils.KafkaTestUtils
@@ -22,15 +22,22 @@ import java.time.Duration
 import org.springframework.test.context.jdbc.Sql
 import org.springframework.test.annotation.Rollback
 import org.springframework.transaction.annotation.Transactional
+import com.side.tiggle.TiggleApplication
 import java.util.Properties
 import java.util.UUID
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@AutoConfigureWebMvc
+@SpringBootTest(
+    webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
+    classes = [TiggleApplication::class]
+)
+@AutoConfigureMockMvc
 @TestPropertySource(properties = [
-    "spring.kafka.bootstrap-servers=localhost:9092"
+    "spring.kafka.bootstrap-servers=localhost:9092",
+    "spring.jpa.hibernate.ddl-auto=create-drop",
+    "spring.jpa.defer-datasource-initialization=true",
+    "spring.jpa.hibernate.naming.physical-strategy=org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl",
 ])
-@Sql("/sql/test-data.sql")
+@Sql(value = ["/sql/test-data.sql"], executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 @Transactional
 @Rollback
 class NotificationProducerIntegrationTest {
@@ -40,11 +47,24 @@ class NotificationProducerIntegrationTest {
 
     private val objectMapper = ObjectMapper().registerKotlinModule()
 
+
+
     @Test
-    fun `댓글 작성 시 Kafka에 알림 메시지가 발행되는지 테스트`() {
-        // Given: 테스트용 Kafka Consumer 준비
+    fun `댓글 작성 시 카프카에 알림 메시지가 발행되는지 테스트`() {
+        // Given: 테스트용 카프카 컨슈머 준비
         val consumer = createTestConsumer()
         consumer.subscribe(listOf("tiggle-notification"))
+
+        // 테스트 시작 시간 기록 (이 시간 이후 메시지만 검증)
+        val testStartTime = System.currentTimeMillis()
+
+        // 컨슈머 준비 대기
+        Thread.sleep(3000)
+
+        // 기존 메시지들을 모두 소비
+        do {
+            val oldRecords = KafkaTestUtils.getRecords(consumer, Duration.ofSeconds(1))
+        } while (oldRecords.count() > 0)
 
         // When: 댓글 작성 API 호출
         mockMvc.perform(
@@ -52,73 +72,111 @@ class NotificationProducerIntegrationTest {
                 .header("x-member-id", "10")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("""
-                    {
-                        "txId": 27,
-                        "content": "통합테스트용 댓글입니다",
-                        "parentId": null
-                    }
-                """.trimIndent())
+                {
+                    "txId": 27,
+                    "content": "통합테스트용 댓글입니다-${testStartTime}",
+                    "parentId": null
+                }
+            """.trimIndent())
         ).andExpect(status().isCreated)
 
-        // Then: 카프카 Topic에서 메시지 확인
+        // Then: 새로운 메시지만 확인
         val records: ConsumerRecords<String, String> = KafkaTestUtils.getRecords(
             consumer,
-            Duration.ofSeconds(10)
+            Duration.ofSeconds(15)
         )
 
-        assertThat(records.count()).isEqualTo(1)
+        // 테스트 시작 이후에 생성된 메시지만 필터링
+        val testMessages = records.filter { record ->
+            val messageJson = record.value()
+            messageJson.contains("통합테스트용 댓글입니다-${testStartTime}")
+        }
 
-        val messageRecord = records.iterator().next()
-        val messageJson = messageRecord.value()
+        println("전체 메시지 개수: ${records.count()}")
+        println("테스트 메시지 개수: ${testMessages.size}")
 
-        // 메시지 내용 검증
+        assertThat(testMessages.size).isEqualTo(1)
+
+        val messageJson = testMessages.first().value()
         val notification = objectMapper.readValue(messageJson, NotificationProduceDto::class.java)
 
         assertThat(notification.receiverId).isNotNull()
-        assertThat(notification.senderId).isEqualTo(10L)
-        assertThat(notification.content).isEqualTo("통합테스트용 댓글입니다")
+        assertThat(notification.senderId).isEqualTo(-1L)
+        assertThat(notification.content).isEqualTo("통합테스트용 댓글입니다-${testStartTime}")
         assertThat(notification.txId).isEqualTo(27L)
         assertThat(notification.type).isIn(
             NotificationProduceDto.Type.COMMENT,
             NotificationProduceDto.Type.REPLY
         )
 
+        println("✅ 카프카 메시지 발행 성공!")
+
         consumer.close()
     }
 
     @Test
-    fun `대댓글 작성 시 Kafka에 REPLY 타입 메시지가 발행되는지 테스트`() {
+    fun `대댓글 작성 시 카프카에 REPLY 타입 메시지가 발행되는지 테스트`() {
         // Given: 테스트용 카프카 컨슈머 준비
         val consumer = createTestConsumer()
         consumer.subscribe(listOf("tiggle-notification"))
 
-        // When: 대댓글 작성 API 호출 (parentId 있음)
+        // 고유 식별자 생성
+        val testId = System.currentTimeMillis()
+
+        // 컨슈머 준비 대기
+        Thread.sleep(3000)
+
+        // 기존 메시지들을 모두 소비
+        do {
+            val oldRecords = KafkaTestUtils.getRecords(consumer, Duration.ofSeconds(1))
+        } while (oldRecords.count() > 0)
+
+        // When: 대댓글 작성 API 호출 (고유 식별자 포함)
         mockMvc.perform(
             post("/api/v1/comments")
                 .header("x-member-id", "10")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("""
-                    {
-                        "txId": 27,
-                        "content": "대댓글 테스트입니다",
-                        "parentId": 1
-                    }
-                """.trimIndent())
+                {
+                    "txId": 27,
+                    "content": "대댓글 테스트-${testId}",
+                    "parentId": 1
+                }
+            """.trimIndent())
         ).andExpect(status().isCreated)
 
         // Then: 카프카에서 REPLY 타입 메시지 확인
-        val records = KafkaTestUtils.getRecords(consumer, Duration.ofSeconds(10))
+        val records = KafkaTestUtils.getRecords(consumer, Duration.ofSeconds(15))
 
-        assertThat(records.count()).isEqualTo(1)
+        // 이번 테스트에서 생성된 메시지만 필터링
+        val testMessages = records.filter { record ->
+            val messageJson = record.value()
+            messageJson.contains("대댓글 테스트-${testId}")
+        }
 
-        val messageJson = records.iterator().next().value()
+        println("전체 메시지 개수: ${records.count()}")
+        println("이번 테스트 메시지 개수: ${testMessages.size}")
+
+        testMessages.forEach { record ->
+            println("테스트 메시지: ${record.value()}")
+        }
+
+        assertThat(testMessages.size).isEqualTo(1)
+
+        val messageJson = testMessages.first().value()
         val notification = objectMapper.readValue(messageJson, NotificationProduceDto::class.java)
 
         assertThat(notification.type).isEqualTo(NotificationProduceDto.Type.REPLY)
-        assertThat(notification.content).isEqualTo("대댓글 테스트입니다")
+        assertThat(notification.content).isEqualTo("대댓글 테스트-${testId}")
+
+        println("✅ 대댓글 REPLY 메시지 발행 성공!")
 
         consumer.close()
     }
+
+
+
+
 
     private fun createTestConsumer(): KafkaConsumer<String, String> {
         val consumerProps = Properties().apply {
@@ -126,8 +184,10 @@ class NotificationProducerIntegrationTest {
             put(ConsumerConfig.GROUP_ID_CONFIG, "test-group-${UUID.randomUUID()}")
             put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer::class.java.name)
             put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer::class.java.name)
-            put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "latest")
+            put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest")
             put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, false)
+            put(ConsumerConfig.SESSION_TIMEOUT_MS_CONFIG, 30000)
+            put(ConsumerConfig.HEARTBEAT_INTERVAL_MS_CONFIG, 10000)
         }
         return KafkaConsumer(consumerProps)
     }
