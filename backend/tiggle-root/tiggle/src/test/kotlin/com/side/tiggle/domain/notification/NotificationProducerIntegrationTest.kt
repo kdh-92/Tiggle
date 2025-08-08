@@ -44,10 +44,7 @@ class NotificationProducerIntegrationTest {
 
     @Autowired
     private lateinit var mockMvc: MockMvc
-
     private val objectMapper = ObjectMapper().registerKotlinModule()
-
-
 
     @Test
     fun `댓글 작성 시 카프카에 알림 메시지가 발행되는지 테스트`() {
@@ -55,13 +52,9 @@ class NotificationProducerIntegrationTest {
         val consumer = createTestConsumer()
         consumer.subscribe(listOf("tiggle-notification"))
 
-        // 테스트 시작 시간 기록 (이 시간 이후 메시지만 검증)
         val testStartTime = System.currentTimeMillis()
-
-        // 컨슈머 준비 대기
         Thread.sleep(3000)
 
-        // 기존 메시지들을 모두 소비
         do {
             val oldRecords = KafkaTestUtils.getRecords(consumer, Duration.ofSeconds(1))
         } while (oldRecords.count() > 0)
@@ -86,14 +79,10 @@ class NotificationProducerIntegrationTest {
             Duration.ofSeconds(15)
         )
 
-        // 테스트 시작 이후에 생성된 메시지만 필터링
         val testMessages = records.filter { record ->
             val messageJson = record.value()
             messageJson.contains("통합테스트용 댓글입니다-${testStartTime}")
         }
-
-        println("전체 메시지 개수: ${records.count()}")
-        println("테스트 메시지 개수: ${testMessages.size}")
 
         assertThat(testMessages.size).isEqualTo(1)
 
@@ -109,8 +98,6 @@ class NotificationProducerIntegrationTest {
             NotificationProduceDto.Type.REPLY
         )
 
-        println("✅ 카프카 메시지 발행 성공!")
-
         consumer.close()
     }
 
@@ -120,13 +107,9 @@ class NotificationProducerIntegrationTest {
         val consumer = createTestConsumer()
         consumer.subscribe(listOf("tiggle-notification"))
 
-        // 고유 식별자 생성
         val testId = System.currentTimeMillis()
-
-        // 컨슈머 준비 대기
         Thread.sleep(3000)
 
-        // 기존 메시지들을 모두 소비
         do {
             val oldRecords = KafkaTestUtils.getRecords(consumer, Duration.ofSeconds(1))
         } while (oldRecords.count() > 0)
@@ -148,17 +131,9 @@ class NotificationProducerIntegrationTest {
         // Then: 카프카에서 REPLY 타입 메시지 확인
         val records = KafkaTestUtils.getRecords(consumer, Duration.ofSeconds(15))
 
-        // 이번 테스트에서 생성된 메시지만 필터링
         val testMessages = records.filter { record ->
             val messageJson = record.value()
             messageJson.contains("대댓글 테스트-${testId}")
-        }
-
-        println("전체 메시지 개수: ${records.count()}")
-        println("이번 테스트 메시지 개수: ${testMessages.size}")
-
-        testMessages.forEach { record ->
-            println("테스트 메시지: ${record.value()}")
         }
 
         assertThat(testMessages.size).isEqualTo(1)
@@ -168,9 +143,6 @@ class NotificationProducerIntegrationTest {
 
         assertThat(notification.type).isEqualTo(NotificationProduceDto.Type.REPLY)
         assertThat(notification.content).isEqualTo("대댓글 테스트-${testId}")
-
-        println("✅ 대댓글 REPLY 메시지 발행 성공!")
-
         consumer.close()
     }
 
