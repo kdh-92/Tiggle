@@ -10,4 +10,5 @@ interface TagService {
     fun getTag(tagId: Long): TagRespDto
     fun getAllDefaultTag(): List<TagRespDto>
     fun updateTag(tagId: Long, updateReqDto: TagUpdateReqDto)
+    fun deleteTag(tagId: Long)
 }

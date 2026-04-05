@@ -7,4 +7,6 @@ import org.springframework.stereotype.Repository
 @Repository
 interface NotificationRepository: JpaRepository<Notification, Long> {
     fun findAllByReceiverId(receiverId: Long): List<Notification>
+    fun findAllByReceiverIdAndViewedAtIsNull(receiverId: Long): List<Notification>
+    fun countByReceiverIdAndViewedAtIsNull(receiverId: Long): Long
 }

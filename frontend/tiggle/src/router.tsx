@@ -8,15 +8,16 @@ import MainPage from "@/pages/MainPage";
 import MyPage from "@/pages/MyPage";
 import MyProfilePage, { myProfilePageLoader } from "@/pages/MyProfilePage";
 import MyTransactionsPage from "@/pages/MyTransactionsPage";
+import NotFoundPage from "@/pages/NotFoundPage";
 import CategorySettingPage from "@/pages/SettingPage/CategorySettingPage";
 import queryClient from "@/query/queryClient";
 import GeneralTemplate from "@/templates/GeneralTemplate";
 
-// TODO: Error element 만들기 & 지정하기
 const router = createBrowserRouter([
   {
     path: "",
     element: <GeneralTemplate />,
+    errorElement: <NotFoundPage />,
     children: [
       {
         path: "/",
@@ -62,6 +63,10 @@ const router = createBrowserRouter([
   {
     path: "/login/success",
     element: <LoginRedirectPage />,
+  },
+  {
+    path: "*",
+    element: <NotFoundPage />,
   },
 ]);
 

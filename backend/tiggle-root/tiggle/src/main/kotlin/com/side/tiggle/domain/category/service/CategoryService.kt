@@ -13,9 +13,9 @@ interface CategoryService {
 
     fun getCategoryByMemberIdOrDefaults(memberId: Long): CategoryListRespDto
 
-    fun updateCategory(id: Long, dto: CategoryUpdateReqDto)
+    fun updateCategory(id: Long, memberId: Long, dto: CategoryUpdateReqDto)
 
-    fun deleteCategory(categoryId: Long)
+    fun deleteCategory(categoryId: Long, memberId: Long)
 
     fun getCategoryReference(categoryId: Long): Category
 }

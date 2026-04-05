@@ -39,7 +39,7 @@ class OAuth2SuccessHandler(
      * 1. OAuth2 인증 정보에서 사용자 정보 추출
      * 2. 데이터베이스에 사용자 정보 저장/업데이트
      * 3. Access Token 및 Refresh Token 발급
-     * 4. 토큰을 HttpOnly 쿠키로 설정 (TODO)
+     * 4. 토큰을 HttpOnly 쿠키로 설정
      * 5. 클라이언트로 리다이렉트
      *
      * @param request HTTP 요청 객체
@@ -56,13 +56,21 @@ class OAuth2SuccessHandler(
         val refreshToken: String = jwtTokenProvider.getRefreshToken(authMember.id, "ROLE_USER")
         refreshTokenService.saveRefreshToken(authMember.id, refreshToken)
 
-        val accessCookie = Cookie("Authorization", accessToken)
-        accessCookie.maxAge = accessTokenExpiry.toInt()
-        accessCookie.path = "/"
+        val accessCookie = Cookie("Authorization", accessToken).apply {
+            maxAge = accessTokenExpiry.toInt()
+            path = "/"
+            isHttpOnly = true
+            secure = true
+            setAttribute("SameSite", "Lax")
+        }
 
-        val refreshCookie = Cookie("RefreshToken", refreshToken)
-        refreshCookie.maxAge = refreshTokenExpiry.toInt()
-        refreshCookie.path = "/"
+        val refreshCookie = Cookie("RefreshToken", refreshToken).apply {
+            maxAge = refreshTokenExpiry.toInt()
+            path = "/"
+            isHttpOnly = true
+            secure = true
+            setAttribute("SameSite", "Lax")
+        }
 
         response.addCookie(accessCookie)
         response.addCookie(refreshCookie)

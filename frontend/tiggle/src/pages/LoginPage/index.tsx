@@ -2,24 +2,14 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 import useAuth from "@/hooks/useAuth";
-import useCookie from "@/hooks/useCookie";
-import { scrollToTop } from "@/hooks/useScroll";
+import { useScrollToTop } from "@/hooks/useScroll";
 import LoginHeader from "@/pages/LoginPage/LoginHeader/LoginHeader";
 import { LoginPageStyle } from "@/pages/LoginPage/LoginPageStyle";
 import SocialLoginButton from "@/pages/LoginPage/SocialLoginButton/SocialLoginButton";
 
 const LoginPage = () => {
   const navigate = useNavigate();
-  scrollToTop();
-  const { setCookie } = useCookie();
-
-  const onSet = () => {
-    setCookie("key", "value", {
-      path: "/",
-      secure: true,
-      maxAge: 3000,
-    });
-  };
+  useScrollToTop();
 
   const { isLogin } = useAuth();
 
@@ -43,7 +33,6 @@ const LoginPage = () => {
       <SocialLoginButton
         social_logo={"google"}
         href={import.meta.env.VITE_GOOGLE_REDIRECT_URL ?? "#"}
-        onClick={onSet}
       />
     </LoginPageStyle>
   );

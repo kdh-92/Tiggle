@@ -53,7 +53,6 @@ export const useMyTransactionsPage = (profile: Required<MemberRespDto>) => {
 
   useEffect(() => {
     if (entry?.isIntersecting && isLoadable) {
-      console.log("load more!");
       setIndex(index + 1);
     }
   }, [entry, isLoadable]);
@@ -66,7 +65,7 @@ export const useMyTransactionsPage = (profile: Required<MemberRespDto>) => {
     const observer = new IntersectionObserver(updateEntry, observerParams);
     observer.observe(node);
 
-    () => observer.disconnect();
+    return () => observer.disconnect();
   }, [loaderRef?.current, isLoadable]);
 
   return {

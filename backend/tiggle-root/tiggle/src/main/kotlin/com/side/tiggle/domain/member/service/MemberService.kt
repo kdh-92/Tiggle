@@ -21,4 +21,6 @@ interface MemberService {
     fun updateMember(memberId: Long, memberUpdateReqDto: MemberUpdateReqDto, file: MultipartFile?)
 
     fun getMemberReference(memberId: Long): Member
+
+    fun deleteMember(memberId: Long)
 }

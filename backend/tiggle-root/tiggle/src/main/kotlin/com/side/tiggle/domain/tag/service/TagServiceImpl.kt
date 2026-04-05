@@ -42,4 +42,11 @@ class TagServiceImpl(
 
         tagRepository.save(tag)
     }
+
+    @Transactional
+    override fun deleteTag(tagId: Long) {
+        val tag = tagRepository.findById(tagId)
+            .orElseThrow { TagException(TagErrorCode.TAG_NOT_FOUND) }
+        tagRepository.delete(tag)
+    }
 }

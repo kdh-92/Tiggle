@@ -11,6 +11,7 @@ import com.side.tiggle.domain.notification.exception.error.NotificationErrorCode
 import com.side.tiggle.domain.notification.repository.NotificationRepository
 import com.side.tiggle.domain.transaction.dto.internal.TransactionInfo
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDateTime
 
 @Service
@@ -19,16 +20,16 @@ class NotificationServiceImpl(
     private val notificationProducer: NotificationProducer,
 ) : NotificationService {
 
+    @Transactional(readOnly = true)
     override fun getAllByMemberId(memberId: Long): List<NotificationRespDto> {
         val notiList = notificationRepository.findAllByReceiverId(memberId)
         return notiList.map { notification ->
             val sender = notification.sender?.let { MemberRespDto.fromEntity(it) }
 
             val receiver = notification.receiver?.let { MemberRespDto.fromEntity(it) }
-                ?: throw IllegalStateException("Notification receiver cannot be null")
+                ?: throw NotificationException(NotificationErrorCode.NOTIFICATION_NOT_FOUND)
 
             val comment = notification.comment?.let { CommentRespDto.fromEntity(it) }
-                ?: throw IllegalStateException("Notification comment cannot be null")
 
             NotificationRespDto.fromEntity(notification).apply {
                 this.sender = sender
@@ -61,14 +62,30 @@ class NotificationServiceImpl(
         )
     }
 
+    @Transactional
     override fun readNotificationById(memberId: Long, id: Long) {
         val noti = notificationRepository.findById(id).orElseThrow {
             NotificationException(NotificationErrorCode.NOTIFICATION_NOT_FOUND)
         }
-        if (noti.receiver!!.id != memberId) {
+        val receiverId = noti.receiver?.id
+            ?: throw NotificationException(NotificationErrorCode.NOTIFICATION_ACCESS_DENIED)
+        if (receiverId != memberId) {
             throw NotificationException(NotificationErrorCode.NOTIFICATION_ACCESS_DENIED)
         }
         noti.viewedAt = LocalDateTime.now()
         notificationRepository.save(noti)
+    }
+
+    @Transactional
+    override fun readAllNotifications(memberId: Long) {
+        val unreadList = notificationRepository.findAllByReceiverIdAndViewedAtIsNull(memberId)
+        val now = LocalDateTime.now()
+        unreadList.forEach { it.viewedAt = now }
+        notificationRepository.saveAll(unreadList)
+    }
+
+    @Transactional(readOnly = true)
+    override fun getUnreadCount(memberId: Long): Long {
+        return notificationRepository.countByReceiverIdAndViewedAtIsNull(memberId)
     }
 }
