@@ -1,45 +1,21 @@
 package com.side.tiggle.domain.category.service
 
-import com.side.tiggle.domain.category.dto.CategoryDto
+import com.side.tiggle.domain.category.dto.req.CategoryCreateReqDto
+import com.side.tiggle.domain.category.dto.req.CategoryUpdateReqDto
+import com.side.tiggle.domain.category.dto.resp.CategoryListRespDto
 import com.side.tiggle.domain.category.model.Category
-import com.side.tiggle.domain.category.model.CategoryType
-import com.side.tiggle.domain.category.repository.CategoryRepository
-import com.side.tiggle.global.exception.NotFoundException
-import org.springframework.stereotype.Service
 
-@Service
-class CategoryService(
-    private val categoryRepository: CategoryRepository
-) {
-    fun createCategory(dto: CategoryDto): Category {
-        return categoryRepository.save(dto.toEntity())
-    }
+interface CategoryService {
 
-    fun getCategory(categoryId: Long): Category {
-        return categoryRepository.findById(categoryId)
-            .orElseThrow { NotFoundException() }
-    }
+    fun createCategory(dto: CategoryCreateReqDto, memberId: Long)
 
-    fun getCategoryType(type: CategoryType): List<Category> {
-        return categoryRepository.findByType(type)
-    }
+    fun getCategoryEntity(categoryId: Long): Category
 
-    fun getAllCategory(): List<Category> {
-        return categoryRepository.findAll()
-    }
+    fun getCategoryByMemberIdOrDefaults(memberId: Long): CategoryListRespDto
 
-    fun updateCategory(id: Long, dto: CategoryDto): Category {
-        val category = categoryRepository.findById(id)
-            .orElseThrow { NotFoundException() }
-        category.apply {
-            type = dto.type
-            name = dto.name
-            defaults = dto.defaults
-        }
-        return categoryRepository.save(category)
-    }
+    fun updateCategory(id: Long, dto: CategoryUpdateReqDto)
 
-    fun deleteCategory(categoryId: Long) {
-        categoryRepository.deleteById(categoryId)
-    }
+    fun deleteCategory(categoryId: Long)
+
+    fun getCategoryReference(categoryId: Long): Category
 }

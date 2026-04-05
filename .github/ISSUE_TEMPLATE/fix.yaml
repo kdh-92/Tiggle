@@ -1,0 +1,26 @@
+name: 🛠 Fix
+description: 잘못된 동작이나 결과를 고치는 이슈
+title: "[FIX] "
+labels: ["fix"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: 문제 설명
+    validations:
+      required: true
+
+  - type: textarea
+    id: cause
+    attributes:
+      label: 원인 분석
+      description: (가능하면) 어떤 코드가 문제인지
+    validations:
+      required: false
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: 수정 방안
+    validations:
+      required: true

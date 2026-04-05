@@ -1,0 +1,43 @@
+name: 🐞 Bug
+description: 버그 발생 시 작성해주세요
+title: "[BUG] "
+labels: ["bug"]
+body:
+  - type: input
+    id: environment
+    attributes:
+      label: 환경 정보
+      placeholder: ex) macOS, Chrome 124, Kotlin 1.9
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: 재현 단계
+      placeholder: |
+        1. 로그인 페이지 접속
+        2. 버튼 클릭
+        3. 에러 발생
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: 예상 동작
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: 실제 동작
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: 콘솔/서버 로그
+      description: 로그가 있다면 붙여주세요 (선택)

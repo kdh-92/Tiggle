@@ -1,42 +1,13 @@
 package com.side.tiggle.domain.tag.service
 
-import com.side.tiggle.domain.tag.dto.TagDto
-import com.side.tiggle.domain.tag.model.Tag
-import com.side.tiggle.domain.tag.repository.TagRepository
-import com.side.tiggle.global.exception.NotFoundException
-import org.springframework.stereotype.Service
+import com.side.tiggle.domain.tag.dto.req.TagCreateReqDto
+import com.side.tiggle.domain.tag.dto.req.TagUpdateReqDto
+import com.side.tiggle.domain.tag.dto.resp.TagRespDto
 
-@Service
-class TagService(
-    private val tagRepository: TagRepository
-) {
+interface TagService {
 
-    fun createTag(tagDto: TagDto): TagDto {
-        val tag = Tag(tagDto.name)
-        return TagDto.fromEntity(tagRepository.save(tag))
-    }
-
-    fun getTag(tagId: Long): TagDto {
-        val tag = tagRepository.findById(tagId).orElseThrow {
-            NotFoundException()
-        }
-        return TagDto.fromEntity(tag)
-    }
-
-    fun getAllTag(): List<Tag> {
-        return tagRepository.findAll()
-    }
-
-    fun getAllDefaultTag(): List<Tag> {
-        return tagRepository.findByDefaultsTrue()
-    }
-
-    fun updateTag(tagId: Long, tagDto: TagDto): TagDto {
-        val tag = tagRepository.findById(tagId)
-            .orElseThrow { NotFoundException() }
-            .apply {
-                name = tagDto.name
-            }
-        return TagDto.fromEntity(tagRepository.save(tag))
-    }
+    fun createTag(createReqDto: TagCreateReqDto)
+    fun getTag(tagId: Long): TagRespDto
+    fun getAllDefaultTag(): List<TagRespDto>
+    fun updateTag(tagId: Long, updateReqDto: TagUpdateReqDto)
 }

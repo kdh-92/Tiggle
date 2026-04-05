@@ -8,9 +8,7 @@ import MainPage from "@/pages/MainPage";
 import MyPage from "@/pages/MyPage";
 import MyProfilePage, { myProfilePageLoader } from "@/pages/MyProfilePage";
 import MyTransactionsPage from "@/pages/MyTransactionsPage";
-import AssetSettingPage from "@/pages/SettingPage/AssetSettingPage";
-import IncomeCategorySettingPage from "@/pages/SettingPage/IncomeCategorySettingPage";
-import OutcomeCategorySettingPage from "@/pages/SettingPage/OutcomeCategorySettingPage";
+import CategorySettingPage from "@/pages/SettingPage/CategorySettingPage";
 import queryClient from "@/query/queryClient";
 import GeneralTemplate from "@/templates/GeneralTemplate";
 
@@ -30,16 +28,12 @@ const router = createBrowserRouter([
         loader: detailPageLoader(queryClient),
       },
       {
-        path: "/create/income", // TODO: optional segment 이용해서 반복 줄이기
-        element: <CreatePage type="INCOME" />,
+        path: "/create",
+        element: <CreatePage />,
       },
       {
-        path: "/create/outcome", // TODO: optional segment 이용해서 반복 줄이기
-        element: <CreatePage type="OUTCOME" />,
-      },
-      {
-        path: "/create/refund/:id", // TODO: optional segment 이용해서 반복 줄이기
-        element: <CreatePage type="REFUND" />,
+        path: "/create/edit/:id",
+        element: <CreatePage />,
         loader: createPageLoader(queryClient),
       },
       {
@@ -56,16 +50,8 @@ const router = createBrowserRouter([
         element: <MyTransactionsPage />,
       },
       {
-        path: "/mypage/setting/asset",
-        element: <AssetSettingPage />,
-      },
-      {
-        path: "/mypage/setting/income-category",
-        element: <IncomeCategorySettingPage />,
-      },
-      {
-        path: "/mypage/setting/outcome-category",
-        element: <OutcomeCategorySettingPage />,
+        path: "/mypage/setting/category",
+        element: <CategorySettingPage />,
       },
     ],
   },

@@ -31,6 +31,36 @@ export const DetailPageStyle = styled.div`
 export const DetailPageContentStyle = styled.div`
   width: 100%;
 
+  .images {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+
+  .gallery-image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: transform 0.2s;
+  }
+
+  .gallery-image:hover {
+    transform: scale(1.02);
+  }
+
+  @media (max-width: 768px) {
+    .images {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .gallery-image {
+      height: 150px;
+    }
+  }
+
   .image {
     width: 100%;
     height: 210px;

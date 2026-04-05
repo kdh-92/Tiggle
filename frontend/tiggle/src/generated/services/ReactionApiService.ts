@@ -2,9 +2,9 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { ReactionCreateDto } from '../models/ReactionCreateDto';
-import type { ReactionDto } from '../models/ReactionDto';
-import type { ReactionSummaryDto } from '../models/ReactionSummaryDto';
+import type { ApiResponse } from '../models/ApiResponse';
+import type { ApiResponseReactionSummaryRespDto } from '../models/ApiResponseReactionSummaryRespDto';
+import type { ReactionCreateReqDto } from '../models/ReactionCreateReqDto';
 
 import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
@@ -14,101 +14,76 @@ export class ReactionApiService {
 
     /**
      * 해당 tx에 대한 나의 reaction을 조회
-     * @param id
-     * @returns ReactionDto OK
+     * @param id 
+     * @returns any OK
      * @throws ApiError
      */
     public static getReaction(
-        id: number,
-    ): CancelablePromise<ReactionDto> {
+id: number,
+): CancelablePromise<Record<string, any>> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/v1/transaction/{id}/reaction',
             path: {
                 'id': id,
-            },
-            errors: {
-                400: `Bad Request`,
-                401: `Unauthorized`,
-                404: `Not Found`,
-                500: `Internal Server Error`,
             },
         });
     }
 
     /**
      * 리액션을 추가하거나 수정함
-     * @param id
-     * @param reactionDto
-     * @returns ReactionDto OK
+     * @param id 
+     * @param requestBody 
+     * @returns ApiResponse OK
      * @throws ApiError
      */
     public static upsertReaction(
-        id: number,
-        reactionDto: ReactionCreateDto,
-    ): CancelablePromise<ReactionDto> {
+id: number,
+requestBody: ReactionCreateReqDto,
+): CancelablePromise<ApiResponse> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/api/v1/transaction/{id}/reaction',
             path: {
                 'id': id,
             },
-            query: {
-                'reactionDto': reactionDto,
-            },
-            errors: {
-                400: `Bad Request`,
-                401: `Unauthorized`,
-                404: `Not Found`,
-                500: `Internal Server Error`,
-            },
+            body: requestBody,
+            mediaType: 'application/json',
         });
     }
 
     /**
      * Reaction을 제거
-     * @param id
-     * @returns number OK
+     * @param id 
+     * @returns ApiResponse OK
      * @throws ApiError
      */
     public static deleteReaction(
-        id: number,
-    ): CancelablePromise<number> {
+id: number,
+): CancelablePromise<ApiResponse> {
         return __request(OpenAPI, {
             method: 'DELETE',
             url: '/api/v1/transaction/{id}/reaction',
             path: {
                 'id': id,
             },
-            errors: {
-                400: `Bad Request`,
-                401: `Unauthorized`,
-                404: `Not Found`,
-                500: `Internal Server Error`,
-            },
         });
     }
 
     /**
      * 해당 tx의 전체 reaction과 comment의 수를 조회
-     * @param id
-     * @returns ReactionSummaryDto OK
+     * @param id 
+     * @returns ApiResponseReactionSummaryRespDto OK
      * @throws ApiError
      */
     public static getReactionSummary(
-        id: number,
-    ): CancelablePromise<ReactionSummaryDto> {
+id: number,
+): CancelablePromise<ApiResponseReactionSummaryRespDto> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/v1/transaction/{id}/reaction/summary',
             path: {
                 'id': id,
-            },
-            errors: {
-                400: `Bad Request`,
-                401: `Unauthorized`,
-                404: `Not Found`,
-                500: `Internal Server Error`,
             },
         });
     }

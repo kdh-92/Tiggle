@@ -1,0 +1,24 @@
+name: 🧹 Refactor
+description: 기능 변화 없이 코드 구조를 개선하고 싶을 때 사용
+title: "[REFACTOR] "
+labels: ["refactor"]
+body:
+  - type: textarea
+    id: target
+    attributes:
+      label: 리팩토링 대상 코드
+    validations:
+      required: true
+
+  - type: textarea
+    id: motivation
+    attributes:
+      label: 리팩토링 이유
+      description: 왜 리팩토링이 필요한지
+    validations:
+      required: true
+
+  - type: textarea
+    id: plan
+    attributes:
+      label: 변경 계획 및 범위

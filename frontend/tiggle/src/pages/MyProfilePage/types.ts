@@ -1,9 +1,9 @@
 import { Dayjs } from "dayjs";
 
-import { MemberDto } from "@/generated";
+import { MemberRespDto } from "@/generated";
 
 export type ProfileInputs = Partial<
-  Omit<MemberDto, "id" | "birth" | "profileUrl"> & {
+  Omit<MemberRespDto, "id" | "birth" | "profileUrl"> & {
     birth: Dayjs | null;
     profileUrl: File[];
   }

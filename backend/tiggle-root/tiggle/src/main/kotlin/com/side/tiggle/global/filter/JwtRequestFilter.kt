@@ -1,24 +1,26 @@
 package com.side.tiggle.global.filter
 
-import com.side.tiggle.global.auth.JwtTokenProvider
-import com.side.tiggle.global.exception.NotAuthenticatedException
+import com.side.tiggle.global.auth.jwt.JwtTokenProvider
+import jakarta.servlet.FilterChain
+import org.springframework.http.MediaType
+import jakarta.servlet.http.HttpServletRequest
+import jakarta.servlet.http.HttpServletRequestWrapper
+import jakarta.servlet.http.HttpServletResponse
 import org.slf4j.LoggerFactory
 import org.springframework.core.annotation.Order
 import org.springframework.http.HttpHeaders
-import com.side.tiggle.global.common.constants.HttpHeaders as CustomHeaders
 import org.springframework.web.filter.OncePerRequestFilter
-import java.lang.Exception
 import java.util.*
-import javax.servlet.FilterChain
-import javax.servlet.http.HttpServletRequest
-import javax.servlet.http.HttpServletRequestWrapper
-import javax.servlet.http.HttpServletResponse
-import kotlin.collections.HashMap
+import com.side.tiggle.global.common.constants.HttpHeaders as CustomHeaders
+import com.side.tiggle.global.exception.error.GlobalErrorCode
+import com.fasterxml.jackson.databind.ObjectMapper
+import org.springframework.stereotype.Component
 
-
+@Component
 @Order(0)
 class JwtRequestFilter(
-        private val jwtTokenProvider: JwtTokenProvider
+        private val jwtTokenProvider: JwtTokenProvider,
+        private val objectMapper: ObjectMapper
 ): OncePerRequestFilter() {
 
     private val logger = LoggerFactory.getLogger(this.javaClass)
@@ -33,10 +35,24 @@ class JwtRequestFilter(
     override fun doFilterInternal(request: HttpServletRequest, response: HttpServletResponse, filterChain: FilterChain) {
         val requestWrapper = HeaderMapRequestWrapper(request)
         val authHeader = request.getHeader(HttpHeaders.AUTHORIZATION)
+
         if (authHeader.isNullOrEmpty().not()) {
             val accessToken = authHeader.replace("Bearer ", "")
             if (jwtTokenProvider.isTokenValid(accessToken).not()) {
-                throw NotAuthenticatedException("Invalid Token")
+                val errorCode = GlobalErrorCode.INVALID_TOKEN
+                response.status = errorCode.httpStatus().value()
+                response.contentType = MediaType.APPLICATION_JSON_VALUE
+                response.characterEncoding = "UTF-8"
+
+                val errorResponse = mapOf(
+                    "success" to false,
+                    "code" to errorCode.codeNumber().toString(),
+                    "message" to errorCode.message()
+                )
+
+                response.writer.write(objectMapper.writeValueAsString(errorResponse))
+                response.writer.flush()
+                return
             }
 
             val memberId = jwtTokenProvider.getUserId(accessToken)
@@ -49,10 +65,6 @@ class JwtRequestFilter(
             filterChain.doFilter(requestWrapper, response)
         }
     }
-
-    /*
-    eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI1Iiwicm9sZXMiOiJST0xFX1VTRVIiLCJpYXQiOjE3MDM0OTE1MzMsImV4cCI6MTcwMzQ5MzMzM30.vxb0rr_sx8xGJ06Xh2vN-gPmNe_HWKYW6yeqH88hob8
-     */
 
     override fun shouldNotFilter(request: HttpServletRequest): Boolean {
         return excludeUrl.any {

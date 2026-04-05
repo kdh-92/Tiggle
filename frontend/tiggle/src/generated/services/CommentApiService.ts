@@ -2,10 +2,10 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+import type { ApiResponse } from '../models/ApiResponse';
+import type { ApiResponseCommentPageRespDto } from '../models/ApiResponseCommentPageRespDto';
 import type { CommentCreateReqDto } from '../models/CommentCreateReqDto';
-import type { CommentRespDto } from '../models/CommentRespDto';
 import type { CommentUpdateReqDto } from '../models/CommentUpdateReqDto';
-import type { PageCommentRespDto } from '../models/PageCommentRespDto';
 
 import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
@@ -15,15 +15,15 @@ export class CommentApiService {
 
     /**
      * 코멘트 수정
-     * @param id
-     * @param requestBody
-     * @returns CommentRespDto OK
+     * @param id 
+     * @param requestBody 
+     * @returns ApiResponse OK
      * @throws ApiError
      */
     public static updateComment(
-        id: number,
-        requestBody: CommentUpdateReqDto,
-    ): CancelablePromise<CommentRespDto> {
+id: number,
+requestBody: CommentUpdateReqDto,
+): CancelablePromise<ApiResponse> {
         return __request(OpenAPI, {
             method: 'PUT',
             url: '/api/v1/comments/{id}',
@@ -32,76 +32,58 @@ export class CommentApiService {
             },
             body: requestBody,
             mediaType: 'application/json',
-            errors: {
-                400: `Bad Request`,
-                401: `Unauthorized`,
-                404: `Not Found`,
-                500: `Internal Server Error`,
-            },
         });
     }
 
     /**
      * 코멘트 삭제
-     * @param id
-     * @returns any OK
+     * @param id 
+     * @returns ApiResponse OK
      * @throws ApiError
      */
     public static deleteComment(
-        id: number,
-    ): CancelablePromise<Record<string, any>> {
+id: number,
+): CancelablePromise<ApiResponse> {
         return __request(OpenAPI, {
             method: 'DELETE',
             url: '/api/v1/comments/{id}',
             path: {
                 'id': id,
             },
-            errors: {
-                400: `Bad Request`,
-                401: `Unauthorized`,
-                404: `Not Found`,
-                500: `Internal Server Error`,
-            },
         });
     }
 
     /**
      * 코멘트 작성
-     * @param requestBody
-     * @returns CommentRespDto OK
+     * @param requestBody 
+     * @returns ApiResponse OK
      * @throws ApiError
      */
     public static createComment(
-        requestBody: CommentCreateReqDto,
-    ): CancelablePromise<CommentRespDto> {
+requestBody: CommentCreateReqDto,
+): CancelablePromise<ApiResponse> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/api/v1/comments',
             body: requestBody,
             mediaType: 'application/json',
-            errors: {
-                400: `Bad Request`,
-                401: `Unauthorized`,
-                404: `Not Found`,
-                500: `Internal Server Error`,
-            },
         });
     }
 
     /**
      * 대댓글 조회 API
      * 댓글의 id를 가지고 대댓글을 조회한다
-     * @param id
-     * @param index
-     * @param pageSize
-     * @returns PageCommentRespDto OK
+     * @param id 
+     * @param index 
+     * @param pageSize 
+     * @returns ApiResponseCommentPageRespDto OK
      * @throws ApiError
      */
     public static getAllCommentsByCommentId(
-        id: number,
-        index?: number,
-        pageSize: number = 5,
-    ): CancelablePromise<PageCommentRespDto> {
+id: number,
+index?: number,
+pageSize: number = 5,
+): CancelablePromise<ApiResponseCommentPageRespDto> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/v1/comments/{id}/replies',
@@ -112,11 +94,30 @@ export class CommentApiService {
                 'index': index,
                 'pageSize': pageSize,
             },
-            errors: {
-                400: `Bad Request`,
-                401: `Unauthorized`,
-                404: `Not Found`,
-                500: `Internal Server Error`,
+        });
+    }
+
+    /**
+     * @param id 
+     * @param index 
+     * @param pageSize 
+     * @returns ApiResponseCommentPageRespDto OK
+     * @throws ApiError
+     */
+    public static getAllCommentsByTx1(
+id: number,
+index?: number,
+pageSize: number = 5,
+): CancelablePromise<ApiResponseCommentPageRespDto> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/v1/comments/{id}/comments',
+            path: {
+                'id': id,
+            },
+            query: {
+                'index': index,
+                'pageSize': pageSize,
             },
         });
     }

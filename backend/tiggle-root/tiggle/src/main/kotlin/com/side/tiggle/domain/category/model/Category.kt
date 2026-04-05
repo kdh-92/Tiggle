@@ -1,15 +1,17 @@
 package com.side.tiggle.domain.category.model
 
-import javax.persistence.*
+import com.side.tiggle.global.common.model.BaseEntity
+import jakarta.persistence.*
+import org.hibernate.annotations.SQLRestriction
 
 @Entity
+@SQLRestriction("deleted = false")
 @Table(name = "categories")
 class Category(
     var name: String,
-    @Enumerated(EnumType.STRING)
-    var type: CategoryType,
-    var defaults: Boolean
-) {
+    var defaults: Boolean,
+    val memberId: Long
+): BaseEntity() {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

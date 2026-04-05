@@ -4,7 +4,7 @@ import com.side.tiggle.domain.comment.model.Comment
 import com.side.tiggle.domain.member.model.Member
 import com.side.tiggle.domain.transaction.model.Transaction
 import java.time.LocalDateTime
-import javax.persistence.*
+import jakarta.persistence.*
 
 @Entity
 @Table(name = "notifications")

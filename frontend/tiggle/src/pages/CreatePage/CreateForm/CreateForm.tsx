@@ -7,7 +7,7 @@ import {
   useForm,
 } from "react-hook-form";
 
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Dayjs } from "dayjs";
 
 import {
@@ -18,69 +18,109 @@ import {
   Select,
   TextArea,
   TextButton,
-  Upload,
+  MultiUpload,
 } from "@/components/atoms";
+import EditableImageUpload from "@/components/atoms/Upload/EditableImageUpload";
 import {
-  AssetApiControllerService,
   CategoryApiControllerService,
   TagApiControllerService,
+  TransactionApiControllerService,
 } from "@/generated";
+import useAuth from "@/hooks/useAuth";
+import useMessage from "@/hooks/useMessage";
 import { CreateFormStyle } from "@/pages/CreatePage/CreateForm/CreateFormStyle";
-import { assetKeys, categoryKeys, tagKeys } from "@/query/queryKeys";
-import { TxType } from "@/types";
+import { categoryKeys, tagKeys, transactionKeys } from "@/query/queryKeys";
 import { convertTxTypeToWord } from "@/utils/txType";
 
 export interface FormInputs {
-  assetId: number;
   categoryId: number;
   amount: number;
   content: string;
   reason: string;
   tags: Array<string>;
   date: Dayjs;
-  imageUrl: FileList;
+  imageUrls: FileList;
 }
 
 type FormInputsKey = keyof FormInputs;
 
 interface CreateFormProps {
-  type: TxType;
   onSubmit: SubmitHandler<FormInputs>;
   onCancel: () => void;
   defaultValues?: Partial<FormInputs>;
-  disabledInputs?: Array<FormInputsKey>;
+  disabledInputs?: FormInputsKey[];
+  isEditMode?: boolean;
+  transactionId?: number;
+  existingImageUrls?: string[];
 }
 
 function CreateForm({
-  type,
   onSubmit,
   onCancel,
   defaultValues,
   disabledInputs,
+  isEditMode = false,
+  transactionId,
+  existingImageUrls = [],
 }: CreateFormProps) {
-  const { data: assetsData, isLoading: isAssetsLoading } = useQuery(
-    assetKeys.lists(),
-    async () => AssetApiControllerService.getAllAsset(),
-  );
-  const { data: categoriesData, isLoading: isCategoriesLoading } = useQuery(
-    categoryKeys.lists(),
-    async () => CategoryApiControllerService.getAllCategory(),
-  );
-  const { data: tagsData, isLoading: isTagsLoading } = useQuery(
-    tagKeys.lists(),
-    async () => TagApiControllerService.getAllDefaultTag(),
-  );
+  const { profile } = useAuth();
+  const messageApi = useMessage();
+  const queryClient = useQueryClient();
 
-  const assets = useMemo(
-    () => assetsData?.map(({ name, id }) => ({ value: id, label: name })),
-    [assetsData],
-  );
+  const { data: categoriesData, isLoading: isCategoriesLoading } = useQuery({
+    queryKey: categoryKeys.lists(),
+    queryFn: async () =>
+      CategoryApiControllerService.getCategoryByMemberIdOrDefaults(
+        profile?.data?.id as number,
+      ),
+    enabled: !!profile?.data?.id,
+  });
+
+  const { data: tagsData, isLoading: isTagsLoading } = useQuery({
+    queryKey: tagKeys.lists(),
+    queryFn: async () => TagApiControllerService.getAllDefaultTag(),
+  });
+
+  // 기존 이미지 삭제 API 호출
+  const deleteImageMutation = useMutation({
+    mutationFn: async (photoIndex: number) => {
+      if (!transactionId) throw new Error("Transaction ID is required");
+      return TransactionApiControllerService.deleteTransactionPhoto(
+        transactionId,
+        photoIndex,
+      );
+    },
+    onSuccess: () => {
+      messageApi.open({
+        type: "success",
+        content: "사진이 삭제되었습니다.",
+      });
+      // 쿼리 무효화하여 데이터 새로고침
+      queryClient.invalidateQueries({
+        queryKey: transactionKeys.detail(transactionId!),
+      });
+    },
+    onError: error => {
+      console.error("이미지 삭제 실패:", error);
+      messageApi.open({
+        type: "error",
+        content: "사진 삭제에 실패했습니다.",
+      });
+    },
+  });
+
   const categories = useMemo(
-    () => categoriesData?.map(({ name, id }) => ({ value: id, label: name })),
+    () =>
+      categoriesData?.data?.categories?.map(({ name, id }) => ({
+        value: id,
+        label: name,
+      })),
     [categoriesData],
   );
+
   const tags = useMemo(
-    () => tagsData?.map(({ name }) => ({ value: name, label: `#${name}` })),
+    () =>
+      tagsData?.data?.map(({ name }) => ({ value: name, label: `#${name}` })),
     [tagsData],
   );
 
@@ -95,8 +135,30 @@ function CreateForm({
   });
 
   const handleResetImageUrl = () => {
-    resetField("imageUrl");
+    resetField("imageUrls");
   };
+
+  const handleDeleteExistingImage = async (photoIndex: number) => {
+    return deleteImageMutation.mutateAsync(photoIndex);
+  };
+
+  // 기존 이미지 URL 파싱
+  const parsedExistingImages = useMemo(() => {
+    if (!existingImageUrls || existingImageUrls.length === 0) return [];
+
+    // existingImageUrls가 이미 배열이면 그대로 사용, 문자열이면 파싱
+    if (Array.isArray(existingImageUrls)) {
+      return existingImageUrls;
+    }
+
+    try {
+      return typeof existingImageUrls === "string"
+        ? JSON.parse(existingImageUrls)
+        : [];
+    } catch {
+      return [];
+    }
+  }, [existingImageUrls]);
 
   return (
     <CreateFormStyle
@@ -104,26 +166,6 @@ function CreateForm({
       onSubmit={handleSubmit(onSubmit)}
       encType="multipart/form-data"
     >
-      <div className="form-item">
-        <label>자산</label>
-        <Controller
-          name="assetId"
-          control={control}
-          rules={{ required: "자산을 선택해 주세요." }}
-          render={({ field }) => (
-            <Select
-              placeholder="자산 선택"
-              options={assets}
-              // TODO: loading ui 추가
-              notFoundContent={isAssetsLoading ? <p>loading...</p> : null}
-              disabled={disabledInputs?.includes("assetId")}
-              error={errors.assetId}
-              {...field}
-            />
-          )}
-        />
-      </div>
-
       <div className="form-item">
         <label>카테고리</label>
         <Controller
@@ -134,7 +176,6 @@ function CreateForm({
             <Select
               placeholder="카테고리 선택"
               options={categories}
-              // TODO: loading ui 추가
               notFoundContent={isCategoriesLoading ? <p>loading...</p> : null}
               disabled={disabledInputs?.includes("categoryId")}
               error={errors.categoryId}
@@ -187,7 +228,7 @@ function CreateForm({
       </div>
 
       <div className="form-item">
-        <label>{convertTxTypeToWord(type)}일자</label>
+        <label>{convertTxTypeToWord()}일자</label>
         <Controller
           name="date"
           control={control}
@@ -214,7 +255,7 @@ function CreateForm({
           }}
           render={({ field }) => (
             <TextArea
-              placeholder={`${convertTxTypeToWord(type)} 이유를 입력하세요.`}
+              placeholder={`${convertTxTypeToWord()} 이유를 입력하세요.`}
               count={{ show: true, max: 300 }}
               disabled={disabledInputs?.includes("reason")}
               error={errors.reason}
@@ -231,18 +272,10 @@ function CreateForm({
         <Controller
           name="tags"
           control={control}
-          rules={{
-            required: "해시태그를 1개 이상 선택해 주세요.",
-            max: {
-              value: 5,
-              message: "해시태그는 최대 5개까지 선택 가능합니다.",
-            },
-          }}
           render={({ field }) => (
             <MultiSelect
               placeholder="해시태그 선택"
               options={tags}
-              // TODO: loading ui 추가
               notFoundContent={isTagsLoading ? <p>loading...</p> : null}
               disabled={disabledInputs?.includes("tags")}
               error={errors.tags as FieldError}
@@ -254,23 +287,44 @@ function CreateForm({
 
       <div className="form-item">
         <label>사진</label>
-        <Upload
-          onReset={handleResetImageUrl}
-          disabled={disabledInputs?.includes("imageUrl")}
-          {...register("imageUrl", { required: "사진을 업로드 해주세요" })}
-          error={errors.imageUrl}
-        />
+        {isEditMode ? (
+          <EditableImageUpload
+            onReset={handleResetImageUrl}
+            disabled={disabledInputs?.includes("imageUrls")}
+            error={errors.imageUrls}
+            existingImages={parsedExistingImages}
+            onDeleteExistingImage={handleDeleteExistingImage}
+            transactionId={transactionId}
+            isEditMode={true}
+            {...register("imageUrls", {
+              required:
+                !isEditMode || parsedExistingImages.length === 0
+                  ? "사진을 업로드 해주세요"
+                  : false,
+            })}
+          />
+        ) : (
+          <MultiUpload
+            onReset={handleResetImageUrl}
+            disabled={disabledInputs?.includes("imageUrls")}
+            error={errors.imageUrls}
+            {...register("imageUrls", { required: "사진을 업로드 해주세요" })}
+          />
+        )}
+
         <div className="form-item-caption">
           <Info size={12} />
           <p>
-            {convertTxTypeToWord(type)}을 증빙할 수 있는 사진을 업로드 해주세요.
+            {convertTxTypeToWord()}을 증빙할 수 있는 사진을 업로드 해주세요.
+            {isEditMode &&
+              " (기존 사진은 개별 삭제 가능하며, 새 사진을 추가할 수 있습니다.)"}
           </p>
         </div>
       </div>
 
       <div className="form-controller">
         <CTAButton type="submit" size="lg" fullWidth disabled={!isValid}>
-          등록하기
+          {isEditMode ? "수정하기" : "등록하기"}
         </CTAButton>
         <TextButton color="bluishGray500" onClick={onCancel}>
           취소

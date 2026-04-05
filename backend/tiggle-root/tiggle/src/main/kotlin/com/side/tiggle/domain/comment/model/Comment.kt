@@ -1,31 +1,25 @@
 package com.side.tiggle.domain.comment.model
 
-import com.fasterxml.jackson.annotation.JsonIgnore
 import com.side.tiggle.domain.member.model.Member
-import com.side.tiggle.domain.transaction.model.Transaction
 import com.side.tiggle.global.common.model.BaseEntity
 import org.hibernate.annotations.SQLDelete
-import org.hibernate.annotations.Where
-import javax.persistence.*
+import jakarta.persistence.*
+import org.hibernate.annotations.SQLRestriction
 
 @Entity
-@Where(clause = "deleted = false")
+@SQLRestriction("deleted = false")
 @SQLDelete(sql = "UPDATE comments SET deleted_at = CURRENT_TIMESTAMP, deleted = true where id = ?")
 @Table(name = "comments")
 class Comment(
-    @JsonIgnore
-    @JoinColumn(name = "tx_id", nullable = false)
-    @ManyToOne
-    val tx: Transaction,
+    @Column(name = "tx_id", nullable = false)
+    val txId: Long,
 
-    @JsonIgnore
-    @JoinColumn(name = "sender_id", nullable = false)
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "sender_id")
     val sender: Member,
 
-    @JsonIgnore
-    @JoinColumn(name = "receiver_id", nullable = false)
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "receiver_id")
     val receiver: Member,
 
     @Column(name = "content", nullable = false)

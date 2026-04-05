@@ -1,10 +1,17 @@
 #!/bin/bash
 
-# 실행 중인 컨테이너 전체 제거
-docker-compose -f docker-compose.yml -f docker-compose.kafka.yml down
+set -e  # 하나라도 에러나면 스크립트 즉시 종료
 
-# tiggle & mysql 백그라운드 실행
-docker-compose  -f docker-compose.yml -f docker-compose.kafka.yml up -d --build
+ # 실행 중인 컨테이너 전체 제거
+echo "Stopping and removing existing containers..."
+docker compose -f docker-compose.yml -f docker-compose.kafka.yml down
 
-# 이미지를 새로 생성하며 기존 unused (dangling) 이미지 삭제 처리
-docker image prune --force
+# 백그라운드로 컨테이너 빌드 및 실행
+echo "Building and starting containers..."
+docker compose -f docker-compose.yml -f docker-compose.kafka.yml up -d --build
+
+# 사용하지 않는 이미지 정리
+echo "Cleaning up unused images..."
+docker image prune -f
+
+echo "✅ Deployment completed successfully!"

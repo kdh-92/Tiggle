@@ -1,13 +1,12 @@
 import { useState } from "react";
 import { SubmitHandler, useForm, Controller } from "react-hook-form";
-import { useSelector } from "react-redux";
 
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Avatar } from "antd";
 
 import CTAButton from "@/components/atoms/CTAButton/CTAButton";
 import TextArea from "@/components/atoms/TextArea/TextArea";
-import { CommentApiService, CommentRespDto } from "@/generated";
+import { CommentApiService, CommentChildRespDto } from "@/generated";
 import useMessage from "@/hooks/useMessage";
 import {
   CommentCellStyle,
@@ -16,17 +15,16 @@ import {
   CommentSenderStyle,
   ReplyFormStyle,
 } from "@/pages/DetailPage/CommentCell/CommentCellStyle";
-import queryClient from "@/query/queryClient";
-import { commentKeys } from "@/query/queryKeys";
-import { RootState } from "@/store";
+import { commentKeys, reactionKeys } from "@/query/queryKeys";
 import { calculateDateTimeDiff } from "@/utils/date";
+import { getProfileImageUrl } from "@/utils/imageUrl";
 import { convertTxTypeToColor } from "@/utils/txType";
 
 import ReplyToggleButton from "../ReplyToggleButton/ReplyToggleButton";
 
 export type CommentCellProps = Pick<
-  CommentRespDto,
-  "id" | "txId" | "content" | "createdAt" | "childCount" | "sender"
+  CommentChildRespDto,
+  "id" | "txId" | "content" | "createdAt" | "childCommentCount" | "sender"
 >;
 
 export default function CommentCell({
@@ -34,9 +32,10 @@ export default function CommentCell({
   txId,
   content,
   createdAt,
-  childCount,
+  childCommentCount,
   sender,
 }: CommentCellProps) {
+  const queryClient = useQueryClient();
   const messageApi = useMessage();
   const [replyOpen, setReplyOpen] = useState(false);
 
@@ -68,7 +67,15 @@ export default function CommentCell({
           type: "success",
           content: "답댓글이 등록되었습니다.",
         });
-        queryClient.invalidateQueries(["comment", "replies", id]);
+        queryClient.invalidateQueries({
+          queryKey: commentKeys.reply(id!),
+        });
+        queryClient.invalidateQueries({
+          queryKey: commentKeys.list(txId!),
+        });
+        queryClient.invalidateQueries({
+          queryKey: reactionKeys.detail(txId!),
+        });
       },
     });
   };
@@ -78,7 +85,7 @@ export default function CommentCell({
       <CommentSenderStyle>
         <Avatar
           size={32}
-          src={sender!.profileUrl}
+          src={getProfileImageUrl(sender!.profileUrl)}
           alt={`${sender!.nickname} profile`}
         />
         <div>
@@ -91,17 +98,18 @@ export default function CommentCell({
 
       <ReplyToggleButton
         open={replyOpen}
-        repliesCount={childCount!}
+        repliesCount={childCommentCount!}
         onClick={toggleReplySection}
       />
 
       {replyOpen && (
         <CommentRepliesStyle>
-          {childCount! > 0 && <div className="divider" />}
+          {childCommentCount! > 0 && <div className="divider" />}
 
-          {repliesData?.content?.map(reply => (
-            <ReplyCell key={`comment-reply-${reply.id}`} {...reply} />
-          ))}
+          {repliesData?.data &&
+            repliesData.data.comments.map(reply => (
+              <ReplyCell key={`comment-reply-${reply.id}`} {...reply} />
+            ))}
 
           <ReplyForm onSubmit={onSubmitReply} />
         </CommentRepliesStyle>
@@ -111,15 +119,20 @@ export default function CommentCell({
 }
 
 interface ReplyCellProps
-  extends Pick<CommentRespDto, "id" | "content" | "createdAt" | "sender"> {}
+  extends Pick<
+    CommentChildRespDto,
+    "id" | "content" | "createdAt" | "sender"
+  > {}
 
 function ReplyCell({ id, content, createdAt, sender }: ReplyCellProps) {
+  const profileImageUrl = getProfileImageUrl(sender!.profileUrl);
+
   return (
     <ReplyCellStyle id={`comment-reply-${id}`}>
       <CommentSenderStyle className="user">
-        <img
-          className="profile"
-          src={sender!.profileUrl ?? "/assets/user-placeholder.png"}
+        <Avatar
+          size={32}
+          src={profileImageUrl || "/assets/user-placeholder.png"}
           alt={`${sender!.nickname} profile`}
         />
         <div>
@@ -142,7 +155,6 @@ interface ReplyFormProps {
 }
 
 function ReplyForm({ onSubmit }: ReplyFormProps) {
-  const txType = useSelector((state: RootState) => state.detailPage.txType);
   const { control, handleSubmit, reset } = useForm<ReplyInputs>();
 
   const handleOnSubmit: SubmitHandler<ReplyInputs> = ({ reply }) => {
@@ -165,11 +177,7 @@ function ReplyForm({ onSubmit }: ReplyFormProps) {
           />
         )}
       />
-      <CTAButton
-        size="md"
-        color={convertTxTypeToColor(txType)}
-        variant="secondary"
-      >
+      <CTAButton size="md" color={convertTxTypeToColor()} variant="secondary">
         답글 등록
       </CTAButton>
     </ReplyFormStyle>

@@ -1,8 +1,6 @@
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
-import { useSelector } from "react-redux";
 
 import { CTAButton, TextArea } from "@/components/atoms";
-import { RootState } from "@/store";
 import { convertTxTypeToColor } from "@/utils/txType";
 
 import { ReplyFormStyle } from "./ReplyFormStyle";
@@ -16,7 +14,6 @@ interface ReplyFormProps {
 }
 
 function ReplyForm({ onSubmit }: ReplyFormProps) {
-  const txType = useSelector((state: RootState) => state.detailPage.txType);
   const { control, handleSubmit, reset } = useForm<ReplyInputs>();
 
   const handleOnSubmit: SubmitHandler<ReplyInputs> = ({ reply }) => {
@@ -39,11 +36,7 @@ function ReplyForm({ onSubmit }: ReplyFormProps) {
           />
         )}
       />
-      <CTAButton
-        size="md"
-        color={convertTxTypeToColor(txType)}
-        variant="secondary"
-      >
+      <CTAButton size="md" color={convertTxTypeToColor()} variant="secondary">
         답글 등록
       </CTAButton>
     </ReplyFormStyle>

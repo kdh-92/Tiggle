@@ -1,7 +1,6 @@
 package com.side.tiggle.global.config
 
-import com.side.tiggle.global.auth.JwtTokenProvider
-import com.side.tiggle.global.auth.OAuth2SuccessHandler
+import com.side.tiggle.global.auth.oauth2.OAuth2SuccessHandler
 import com.side.tiggle.global.filter.JwtRequestFilter
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -13,24 +12,34 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration
 import org.springframework.web.cors.CorsConfigurationSource
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource
+import org.springframework.security.config.annotation.web.invoke
 
 @EnableWebSecurity
 @Configuration
 class SecurityConfig(
-    private val jwtTokenProvider: JwtTokenProvider
+    private val jwtRequestFilter: JwtRequestFilter
 ) {
     @Bean
     fun filterChain(http: HttpSecurity, successHandler: OAuth2SuccessHandler): SecurityFilterChain {
-        http.httpBasic().disable()
-            .cors().configurationSource(corsConfigurationSource()).and()
-            .csrf().disable()
-            .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-            .and()
-            .addFilterBefore(JwtRequestFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter::class.java)
-            .authorizeRequests()
-            .antMatchers("/**").permitAll()
-        http.oauth2Login()
-            .successHandler(successHandler)
+        http {
+            httpBasic { disable() }
+            cors {
+                configurationSource = corsConfigurationSource()
+            }
+            csrf { disable() }
+            sessionManagement {
+                sessionCreationPolicy = SessionCreationPolicy.STATELESS
+            }
+            addFilterBefore<UsernamePasswordAuthenticationFilter>(jwtRequestFilter)
+
+            authorizeHttpRequests {
+                authorize("/**", permitAll)
+            }
+            oauth2Login {
+                authenticationSuccessHandler = successHandler
+            }
+        }
+
         return http.build()
     }
 

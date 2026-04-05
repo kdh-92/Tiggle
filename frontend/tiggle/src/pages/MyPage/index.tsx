@@ -4,10 +4,14 @@ import { useQuery } from "@tanstack/react-query";
 import { Avatar } from "antd";
 import dayjs from "dayjs";
 
-import { TransactionApiControllerService } from "@/generated";
+import {
+  TransactionApiControllerService,
+  TransactionDtoWithCount,
+} from "@/generated";
 import useAuth from "@/hooks/useAuth";
 import { MypageStyle } from "@/pages/MyPage/MypageStyle";
 import { transactionKeys } from "@/query/queryKeys";
+import { getProfileImageUrl } from "@/utils/imageUrl";
 import withAuth, { AuthProps } from "@/utils/withAuth";
 
 import MyTransactionCell from "./MyTransactionCell/MyTransactionCell";
@@ -31,8 +35,9 @@ const MyPage = ({ profile }: MyPageProps) => {
     { staleTime: 1000 * 60 * 10, enabled: isLogin },
   );
 
-  const sortArray = data?.content?.sort((a, b) =>
-    dayjs(b.date).diff(dayjs(a.date)),
+  const sortArray = data?.data?.transactions?.sort(
+    (a: TransactionDtoWithCount, b: TransactionDtoWithCount) =>
+      dayjs(b.dto.date).diff(dayjs(a.dto.date)),
   );
 
   return (
@@ -44,7 +49,7 @@ const MyPage = ({ profile }: MyPageProps) => {
               <img
                 className="user-profile"
                 alt="user-profile"
-                src={profile.profileUrl}
+                src={getProfileImageUrl(profile.profileUrl)}
               />
             ) : (
               <Avatar />
@@ -68,7 +73,10 @@ const MyPage = ({ profile }: MyPageProps) => {
             {sortArray
               ?.slice(0, 3)
               .map(props => (
-                <MyTransactionCell key={`tx-cell-${props.id}`} {...props} />
+                <MyTransactionCell
+                  key={`tx-cell-${props.dto.id}`}
+                  {...props.dto}
+                />
               ))}
             <a href="/mypage/my-transactions">
               <div className="transaction-cell">
@@ -81,21 +89,21 @@ const MyPage = ({ profile }: MyPageProps) => {
       <div className="user-setting">
         <p className="setting-title">설정</p>
         <div className="setting-cells">
-          <a href="/mypage/setting/asset">
+          {/*<a href="/mypage/setting/asset">*/}
+          {/*  <button className="setting-cell">*/}
+          {/*    <span>자산 관리</span> <ChevronRight />*/}
+          {/*  </button>*/}
+          {/*</a>*/}
+          <a href="/mypage/setting/category">
             <button className="setting-cell">
-              <span>자산 관리</span> <ChevronRight />
+              <span>카테고리 관리</span> <ChevronRight />
             </button>
           </a>
-          <a href="/mypage/setting/outcome-category">
-            <button className="setting-cell">
-              <span>지출 카테고리 관리</span> <ChevronRight />
-            </button>
-          </a>
-          <a href="/mypage/setting/income-category">
-            <button className="setting-cell">
-              <span>수입 카테고리 관리</span> <ChevronRight />
-            </button>
-          </a>
+          {/*<a href="/mypage/setting/income-category">*/}
+          {/*  <button className="setting-cell">*/}
+          {/*    <span>수입 카테고리 관리</span> <ChevronRight />*/}
+          {/*  </button>*/}
+          {/*</a>*/}
         </div>
       </div>
       <button onClick={() => logOut()} className="logout-button">

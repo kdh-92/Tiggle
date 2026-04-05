@@ -4,8 +4,7 @@
 /* eslint-disable */
 
 export type CommentCreateReqDto = {
-    txId?: number;
+    txId: number;
     parentId?: number;
-    content?: string;
+    content: string;
 };
-

@@ -1,5 +1,4 @@
 import { ButtonHTMLAttributes } from "react";
-import { Link } from "react-router-dom";
 
 import Google from "@/assets/google_logo.svg?react";
 import Kakao from "@/assets/kakao_logo.svg?react";
@@ -17,7 +16,7 @@ export default function SocialLoginButton({
   href,
 }: SocialLoginButtonProps) {
   return (
-    <Link to={href} className="login-link">
+    <a href={href} className="login-link">
       <SocialLoginButtonStyle className={social_logo}>
         {social_logo === "kakao" ? (
           <Kakao />
@@ -35,6 +34,6 @@ export default function SocialLoginButton({
           로그인
         </span>
       </SocialLoginButtonStyle>
-    </Link>
+    </a>
   );
 }

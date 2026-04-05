@@ -1,0 +1,19 @@
+name: 🧾 Chore
+description: 문서화, 설정 변경, CI/CD 등 개발 환경 관련 작업
+title: "[CHORE] "
+labels: ["chore"]
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: 작업 내용
+    validations:
+      required: true
+
+  - type: textarea
+    id: reason
+    attributes:
+      label: 작업 이유
+      placeholder: 왜 이 작업이 필요한지
+    validations:
+      required: true

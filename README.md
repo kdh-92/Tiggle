@@ -14,7 +14,8 @@
 ![Apache Kafka](https://img.shields.io/badge/Apache%20Kafka-000?style=for-the-badge&logo=apachekafka)
 
 ### ETC
-![Figma](https://img.shields.io/badge/figma-%23F24E1E.svg?style=for-the-badge&logo=figma&logoColor=white)
+![Figma](https://img.shields.io/badge/figma-%23F24E1E.svg?style=for-the-badge&logo=figma&logoColor=white)  
+![CodeRabbit Pull Request Reviews](https://img.shields.io/coderabbit/prs/github/kdh-92/Tiggle?utm_source=oss&utm_medium=github&utm_campaign=kdh-92%2FTiggle&labelColor=171717&color=FF570A&link=https%3A%2F%2Fcoderabbit.ai&label=CodeRabbit+Reviews)
 
 <br/>
 

@@ -2,7 +2,11 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { TagDto } from '../models/TagDto';
+import type { ApiResponse } from '../models/ApiResponse';
+import type { ApiResponseListTagRespDto } from '../models/ApiResponseListTagRespDto';
+import type { ApiResponseTagRespDto } from '../models/ApiResponseTagRespDto';
+import type { TagCreateReqDto } from '../models/TagCreateReqDto';
+import type { TagUpdateReqDto } from '../models/TagUpdateReqDto';
 
 import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
@@ -11,38 +15,32 @@ import { request as __request } from '../core/request';
 export class TagApiControllerService {
 
     /**
-     * @param id
-     * @returns TagDto OK
+     * @param id 
+     * @returns ApiResponseTagRespDto OK
      * @throws ApiError
      */
     public static getTag(
-        id: number,
-    ): CancelablePromise<TagDto> {
+id: number,
+): CancelablePromise<ApiResponseTagRespDto> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/v1/tag/{id}',
             path: {
                 'id': id,
             },
-            errors: {
-                400: `Bad Request`,
-                401: `Unauthorized`,
-                404: `Not Found`,
-                500: `Internal Server Error`,
-            },
         });
     }
 
     /**
-     * @param id
-     * @param requestBody
-     * @returns TagDto OK
+     * @param id 
+     * @param requestBody 
+     * @returns ApiResponse OK
      * @throws ApiError
      */
     public static updateTag(
-        id: number,
-        requestBody: TagDto,
-    ): CancelablePromise<TagDto> {
+id: number,
+requestBody: TagUpdateReqDto,
+): CancelablePromise<ApiResponse> {
         return __request(OpenAPI, {
             method: 'PUT',
             url: '/api/v1/tag/{id}',
@@ -51,51 +49,33 @@ export class TagApiControllerService {
             },
             body: requestBody,
             mediaType: 'application/json',
-            errors: {
-                400: `Bad Request`,
-                401: `Unauthorized`,
-                404: `Not Found`,
-                500: `Internal Server Error`,
-            },
         });
     }
 
     /**
-     * @param requestBody
-     * @returns TagDto OK
+     * @param requestBody 
+     * @returns ApiResponse OK
      * @throws ApiError
      */
     public static createTag(
-        requestBody: TagDto,
-    ): CancelablePromise<TagDto> {
+requestBody: TagCreateReqDto,
+): CancelablePromise<ApiResponse> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/api/v1/tag',
             body: requestBody,
             mediaType: 'application/json',
-            errors: {
-                400: `Bad Request`,
-                401: `Unauthorized`,
-                404: `Not Found`,
-                500: `Internal Server Error`,
-            },
         });
     }
 
     /**
-     * @returns TagDto OK
+     * @returns ApiResponseListTagRespDto OK
      * @throws ApiError
      */
-    public static getAllDefaultTag(): CancelablePromise<Array<TagDto>> {
+    public static getAllDefaultTag(): CancelablePromise<ApiResponseListTagRespDto> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/v1/tag/all',
-            errors: {
-                400: `Bad Request`,
-                401: `Unauthorized`,
-                404: `Not Found`,
-                500: `Internal Server Error`,
-            },
         });
     }
 

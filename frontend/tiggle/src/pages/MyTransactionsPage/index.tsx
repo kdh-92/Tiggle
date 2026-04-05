@@ -10,7 +10,6 @@ import {
   FilteBoxStyle,
   MyTransactionCellsStyle,
 } from "./MyTransactionsPageStyle";
-import TxTypeFilter from "./TxTypeFilter/TxTypeFilter";
 import { useMyTransactionsPage } from "./controller";
 import { MypageDetailPageStyle } from "../MyProfilePage/MyDetailPageCommonStyle";
 
@@ -30,11 +29,6 @@ const MyTransactionsPage = ({ profile }: MyTransactionPageProps) => {
             name="date"
             render={({ field }) => <DateFilter {...field} />}
           />
-          <Controller
-            control={form.method.control}
-            name="txType"
-            render={({ field }) => <TxTypeFilter {...field} />}
-          />
           <ETCFilter />
         </FilteBoxStyle>
       </FormProvider>
@@ -42,12 +36,11 @@ const MyTransactionsPage = ({ profile }: MyTransactionPageProps) => {
       <MyTransactionCellsStyle>
         {data.transactions?.map(data => (
           <MyTransactionDetailCell
-            key={`transaction-cell-${data.id}`}
-            id={data.id!}
-            type={data.type!}
-            amount={data.amount!}
-            content={data.content!}
-            reason={data.reason!}
+            key={`transaction-cell-${data.dto.id}`}
+            id={data.dto.id!}
+            amount={data.dto.amount!}
+            content={data.dto.content!}
+            reason={data.dto.reason!}
           />
         ))}
         {data.isLoadable && (
