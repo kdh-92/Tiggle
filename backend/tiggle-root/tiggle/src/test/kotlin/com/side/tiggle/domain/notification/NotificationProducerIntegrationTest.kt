@@ -23,9 +23,11 @@ import org.springframework.test.context.jdbc.Sql
 import org.springframework.test.annotation.Rollback
 import org.springframework.transaction.annotation.Transactional
 import com.side.tiggle.TiggleApplication
+import org.junit.jupiter.api.Tag
 import java.util.Properties
 import java.util.UUID
 
+@Tag("integration")
 @SpringBootTest(
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
     classes = [TiggleApplication::class]

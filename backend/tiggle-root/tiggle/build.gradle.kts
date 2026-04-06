@@ -65,8 +65,18 @@ allOpen {
 }
 
 tasks.test {
-	useJUnitPlatform()
+	useJUnitPlatform {
+		excludeTags("integration")
+	}
 	finalizedBy(tasks.jacocoTestReport)
+}
+
+tasks.register<Test>("integrationTest") {
+	useJUnitPlatform {
+		includeTags("integration")
+	}
+	description = "Runs integration tests (requires Kafka, etc.)"
+	group = "verification"
 }
 
 tasks.withType<KotlinCompile>().configureEach {
