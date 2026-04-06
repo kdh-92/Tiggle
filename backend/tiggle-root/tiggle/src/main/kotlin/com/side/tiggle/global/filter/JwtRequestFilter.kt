@@ -23,7 +23,6 @@ class JwtRequestFilter(
         private val objectMapper: ObjectMapper
 ): OncePerRequestFilter() {
 
-    private val logger = LoggerFactory.getLogger(this.javaClass)
     private val excludeUrl = listOf(
             "/swagger-ui",
             "/static",

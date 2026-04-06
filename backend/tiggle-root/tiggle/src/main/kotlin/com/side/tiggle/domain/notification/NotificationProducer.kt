@@ -18,14 +18,13 @@ class NotificationProducer(
 
     @Async
     fun send(notificationProduceDto: NotificationProduceDto) {
-        // TODO: 현재 카프카가 죽은 경우 hang 이 걸리는 문제가 있어서 임시로 비활성화 합니다.
-//        try {
-//            kafkaTemplate.send(
-//                "tiggle-notification",
-//                objectMapper.writeValueAsString(notificationProduceDto)
-//            )
-//        } catch (e: Exception) {
-//            logger.error(e.message, e)
-//        }
+        try {
+            kafkaTemplate.send(
+                "tiggle-notification",
+                objectMapper.writeValueAsString(notificationProduceDto)
+            )
+        } catch (e: Exception) {
+            logger.error(e.message, e)
+        }
     }
 }

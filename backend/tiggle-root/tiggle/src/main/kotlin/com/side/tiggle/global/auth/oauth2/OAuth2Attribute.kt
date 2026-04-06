@@ -55,7 +55,7 @@ class OAuth2Attribute(
             userNameAttributeName: String,
             attributes: Map<String, Any>
         ): OAuth2Attribute {
-            val response = attributes["response"] as Map<String, Any>
+            val response = attributes["response"] as Map<*, *>
             return OAuth2Attribute(
                 email = response["email"] as String,
                 nickname = response["name"] as String,
@@ -70,9 +70,9 @@ class OAuth2Attribute(
             userNameAttributeName: String,
             attributes: Map<String, Any>
         ): OAuth2Attribute {
-            val kakaoAccount = attributes["kakao_account"] as? Map<String, Any>
+            val kakaoAccount = attributes["kakao_account"] as? Map<*, *>
                 ?: throw AuthException(GlobalErrorCode.OAUTH2_AUTHENTICATION_FAILED)
-            val profile = kakaoAccount["profile"] as? Map<String, Any>
+            val profile = kakaoAccount["profile"] as? Map<*, *>
                 ?: throw AuthException(GlobalErrorCode.OAUTH2_AUTHENTICATION_FAILED)
             return OAuth2Attribute(
                 email = kakaoAccount["email"] as? String ?: "",

@@ -1,0 +1,157 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
+plugins {
+	id("org.jetbrains.kotlin.jvm") version "1.9.25"
+	id("org.jetbrains.kotlin.plugin.spring") version "1.9.25"
+	id("org.jetbrains.kotlin.plugin.jpa") version "1.9.25"
+	id("org.jetbrains.kotlin.kapt") version "1.9.25"
+	id("jacoco")
+}
+
+repositories {
+	mavenCentral()
+	maven {
+		url = uri("https://repo.spring.io/milestone")
+	}
+	maven {
+		url = uri("https://repo.spring.io/snapshot")
+	}
+}
+
+
+dependencies {
+	implementation ("org.jetbrains.kotlin:kotlin-reflect:1.9.25")
+	implementation ("com.fasterxml.jackson.module:jackson-module-kotlin:2.17.1")
+	implementation ("org.springframework.boot:spring-boot-starter-data-jpa:3.5.0")
+	implementation ("org.springframework.boot:spring-boot-starter-oauth2-client:3.5.0")
+	implementation ("org.springframework.boot:spring-boot-starter-security:3.5.0")
+	implementation ("org.springframework.boot:spring-boot-starter-web:3.5.0")
+	implementation ("org.springframework.boot:spring-boot-starter-validation:3.5.0")
+    implementation ("org.springframework.boot:spring-boot-devtools:3.5.0")
+	implementation ("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.9")
+
+	// jwt
+	implementation ("io.jsonwebtoken:jjwt-api:0.12.6")
+	runtimeOnly ("io.jsonwebtoken:jjwt-impl:0.12.6")
+	runtimeOnly ("io.jsonwebtoken:jjwt-jackson:0.12.6")
+
+	// DB 셋업이 없는 동안 임시 설정
+	runtimeOnly ("com.h2database:h2:2.2.224")
+
+	// test
+	testImplementation("org.springframework.boot:spring-boot-starter-test:3.5.0") {
+		exclude(group = "org.mockito", module = "mockito-core")
+	}
+	testImplementation("org.mockito:mockito-inline:5.2.0")
+	testImplementation("org.mockito.kotlin:mockito-kotlin:5.1.0")
+
+	testImplementation ("io.kotest:kotest-assertions-core:5.9.1")
+	testImplementation("io.kotest.extensions:kotest-extensions-spring:1.1.3")
+	testImplementation ("io.mockk:mockk:1.12.4")
+	testImplementation("io.kotest:kotest-runner-junit5:5.9.0")
+	testImplementation("org.springframework.kafka:spring-kafka-test:3.3.8")
+	testImplementation("commons-io:commons-io:2.18.0")
+	testImplementation("org.apache.commons:commons-lang3:3.18.0")
+
+	implementation ("org.springframework.kafka:spring-kafka:3.3.8")
+
+	implementation ("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.17.1")
+}
+
+allOpen {
+	annotation("jakarta.persistence.Entity")
+	annotation("jakarta.persistence.Embeddable")
+	annotation("jakarta.persistence.MappedSuperclass")
+}
+
+tasks.test {
+	useJUnitPlatform {
+		excludeTags("integration")
+	}
+	finalizedBy(tasks.jacocoTestReport)
+}
+
+tasks.register<Test>("integrationTest") {
+	useJUnitPlatform {
+		includeTags("integration")
+	}
+	description = "Runs integration tests (requires Kafka, etc.)"
+	group = "verification"
+}
+
+tasks.withType<KotlinCompile>().configureEach {
+	kotlinOptions {
+		freeCompilerArgs = freeCompilerArgs + listOf("-Xjsr305=strict")
+		jvmTarget = "21"
+	}
+}
+
+tasks.jar {
+	enabled = false
+}
+
+jacoco {
+	toolVersion = "0.8.12"
+	reportsDirectory.set(layout.buildDirectory.dir("reports/jacoco"))
+}
+
+val jacocoExcludes = listOf(
+	"**/config/**",
+	"**/dto/**",
+	"**/exception/**",
+	"**/model/**",
+	"**/repository/**",
+	"**/utils/**",
+	"**/mapper/**",
+	"**/*Application*",
+	"**/*Exception*",
+	"**/global/*"
+)
+
+tasks.jacocoTestReport {
+	dependsOn(tasks.test)
+	reports {
+		html.required.set(true)
+		xml.required.set(false)
+		csv.required.set(false)
+	}
+	// 필요하면 경로 지정 가능
+	// html.outputLocation.set(layout.buildDirectory.dir("jacocoHtml"))
+
+	classDirectories.setFrom(
+		files(
+			classDirectories.files.map {
+				fileTree(it) {
+					exclude(jacocoExcludes)
+				}
+			}
+		)
+	)
+}
+
+tasks.jacocoTestCoverageVerification {
+	violationRules {
+		rule {
+			element = "CLASS"
+			enabled = true
+
+			limit {
+				counter = "LINE"
+				value = "COVEREDRATIO"
+				minimum = BigDecimal(0.0)
+			}
+
+			limit {
+				counter = "BRANCH"
+				value = "COVEREDRATIO"
+				minimum = BigDecimal(0.0)
+			}
+
+			excludes = jacocoExcludes
+		}
+	}
+}
+
+tasks.check {
+	dependsOn(tasks.jacocoTestCoverageVerification)
+}

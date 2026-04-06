@@ -42,7 +42,7 @@ class LogbackConfig {
         val consoleAppender = createConsoleAppender(context)
         val fileAppender = createFileAppender(context)
 
-        configureRootLogger(context, consoleAppender, fileAppender)
+        configureRootLogger(consoleAppender, fileAppender)
     }
 
     private fun initializeLoggerContext(): LoggerContext {
@@ -121,13 +121,12 @@ class LogbackConfig {
     }
 
     private fun configureRootLogger(
-        context: LoggerContext,
         consoleAppender: ConsoleAppender<ILoggingEvent>,
         fileAppender: RollingFileAppender<ILoggingEvent>
     ) {
         val logger = LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME)
         if (logger is ch.qos.logback.classic.Logger) {
-            val rootLogger = logger as ch.qos.logback.classic.Logger
+            val rootLogger = logger
             rootLogger.level = Level.INFO
             rootLogger.addAppender(consoleAppender)
             rootLogger.addAppender(fileAppender)

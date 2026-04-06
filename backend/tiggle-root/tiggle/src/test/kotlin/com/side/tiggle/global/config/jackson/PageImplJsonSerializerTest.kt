@@ -1,26 +1,27 @@
 package com.side.tiggle.global.config.jackson
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import org.junit.jupiter.api.Test
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.autoconfigure.json.JsonTest
+import com.fasterxml.jackson.databind.module.SimpleModule
+import io.kotest.core.spec.style.StringSpec
+import io.kotest.matchers.string.shouldContain
 import org.springframework.data.domain.PageImpl
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort
 
-@JsonTest
-class PageImplJsonSerializerTest {
+class PageImplJsonSerializerTest : StringSpec({
 
-    @Autowired
-    private lateinit var objectMapper: ObjectMapper
+    val objectMapper = ObjectMapper().apply {
+        val module = SimpleModule()
+        module.addSerializer(PageImpl::class.java, PageImplJsonSerializer())
+        registerModule(module)
+    }
 
     data class TestContent(
         val id: Long,
         val name: String
     )
 
-    @Test
-    fun `페이지 직렬화 기본 테스트`() {
+    "페이지 직렬화 기본 테스트" {
         val content = listOf(
             TestContent(1L, "Item 1"),
             TestContent(2L, "Item 2")
@@ -31,38 +32,63 @@ class PageImplJsonSerializerTest {
 
         val json = objectMapper.writeValueAsString(page)
 
-        assert(json.contains("\"content\""))
-        assert(json.contains("\"totalElements\":10"))
-        assert(json.contains("\"totalPages\":5"))
-        assert(json.contains("\"first\":true"))
-        assert(json.contains("\"last\":false"))
-        assert(json.contains("\"pageable\""))
+        json shouldContain "\"content\""
+        json shouldContain "\"totalElements\":10"
+        json shouldContain "\"totalPages\":5"
+        json shouldContain "\"first\":true"
+        json shouldContain "\"last\":false"
+        json shouldContain "\"pageable\""
     }
 
-    @Test
-    fun `빈 페이지 직렬화 테스트`() {
+    "빈 페이지 직렬화 테스트" {
         val content = emptyList<TestContent>()
         val pageable = PageRequest.of(0, 10)
         val page = PageImpl(content, pageable, 0)
 
         val json = objectMapper.writeValueAsString(page)
 
-        assert(json.contains("\"content\":[]"))
-        assert(json.contains("\"totalElements\":0"))
-        assert(json.contains("\"first\":true"))
-        assert(json.contains("\"last\":true"))
+        json shouldContain "\"content\":[]"
+        json shouldContain "\"totalElements\":0"
+        json shouldContain "\"first\":true"
+        json shouldContain "\"last\":true"
     }
 
-    @Test
-    fun `정렬된 페이지 직렬화 테스트`() {
+    "정렬된 페이지 직렬화 테스트" {
         val content = listOf(TestContent(1L, "Apple"))
         val pageable = PageRequest.of(0, 10, Sort.by("name"))
         val page = PageImpl(content, pageable, 1)
 
         val json = objectMapper.writeValueAsString(page)
 
-        assert(json.contains("\"sorted\":true"))
-        assert(json.contains("\"pageable\""))
-        assert(json.contains("\"pageSize\":10"))
+        json shouldContain "\"pageable\""
+        json shouldContain "\"pageSize\":10"
     }
-}
+
+    "페이지 번호와 오프셋이 정확하게 직렬화된다" {
+        val content = listOf(TestContent(1L, "Item"))
+        val pageable = PageRequest.of(2, 5)
+        val page = PageImpl(content, pageable, 20)
+
+        val json = objectMapper.writeValueAsString(page)
+
+        json shouldContain "\"number\":2"
+        json shouldContain "\"size\":5"
+        json shouldContain "\"totalPages\":4"
+        json shouldContain "\"first\":false"
+        json shouldContain "\"last\":false"
+        json shouldContain "\"offset\":10"
+        json shouldContain "\"pageNumber\":2"
+    }
+
+    "마지막 페이지 직렬화 테스트" {
+        val content = listOf(TestContent(1L, "Last"))
+        val pageable = PageRequest.of(4, 2)
+        val page = PageImpl(content, pageable, 9)
+
+        val json = objectMapper.writeValueAsString(page)
+
+        json shouldContain "\"last\":true"
+        json shouldContain "\"first\":false"
+        json shouldContain "\"numberOfElements\":1"
+    }
+})
