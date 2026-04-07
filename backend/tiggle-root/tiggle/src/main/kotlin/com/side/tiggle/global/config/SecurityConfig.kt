@@ -33,7 +33,22 @@ class SecurityConfig(
             addFilterBefore<UsernamePasswordAuthenticationFilter>(jwtRequestFilter)
 
             authorizeHttpRequests {
-                authorize("/**", permitAll)
+                authorize("/api/v1/member", permitAll)
+                authorize("/api/v1/member/{id}", permitAll)
+                authorize("/api/v1/member/all", permitAll)
+                authorize("/api/v1/transaction", permitAll)
+                authorize("/api/v1/transaction/{id}", permitAll)
+                authorize("/api/v1/transaction/search", permitAll)
+                authorize("/api/v1/transaction/{id}/reaction/summary", permitAll)
+                authorize("/api/v1/transaction/{id}/comments", permitAll)
+                authorize("/api/v1/tag/all", permitAll)
+                authorize("/api/v1/tag/{id}", permitAll)
+                authorize("/swagger-ui/**", permitAll)
+                authorize("/v3/api-docs/**", permitAll)
+                authorize("/api/auth/**", permitAll)
+                authorize("/login/**", permitAll)
+                authorize("/oauth2/**", permitAll)
+                authorize("/**", authenticated)
             }
             oauth2Login {
                 authenticationSuccessHandler = successHandler
@@ -47,7 +62,12 @@ class SecurityConfig(
     fun corsConfigurationSource(): CorsConfigurationSource {
         val config = CorsConfiguration()
             .apply {
-                allowedOriginPatterns = listOf("*")
+                allowedOriginPatterns = listOf(
+                    "https://tiggle.duckdns.org",
+                    "https://tiggle.duckdns.org:*",
+                    "http://localhost:3000",
+                    "http://localhost:5173"
+                )
                 allowedMethods = listOf("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS")
                 allowedHeaders = listOf("*")
                 exposedHeaders = listOf("*")

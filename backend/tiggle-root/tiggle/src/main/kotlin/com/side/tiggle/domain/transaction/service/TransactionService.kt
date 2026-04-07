@@ -29,4 +29,5 @@ interface TransactionService {
 
     fun addTransactionPhotos(memberId: Long, transactionId: Long, files: List<MultipartFile>)
     fun deleteTransactionPhoto(memberId: Long, transactionId: Long, photoIndex: Int)
+    fun searchTransactions(keyword: String, pageSize: Int, index: Int): TransactionPageRespDto
 }

@@ -20,7 +20,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPat
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@AutoConfigureMockMvc
+@AutoConfigureMockMvc(addFilters = false)
 class CategoryApiControllerTest(
     @Autowired private val mockMvc: MockMvc,
     @Autowired private val objectMapper: ObjectMapper,
@@ -46,7 +46,7 @@ class CategoryApiControllerTest(
     init {
         "POST /api/v1/category - 카테고리 생성 성공" {
             // given
-            val memberId = -1L
+            val memberId = 1L
             val request = CategoryCreateReqDto(
                 name = "새로운카테고리"
             )
@@ -69,7 +69,7 @@ class CategoryApiControllerTest(
 
         "GET /api/v1/category - 사용자 카테고리 조회 성공" {
             // given
-            val memberId = -1L
+            val memberId = 1L
             val categories = listOf(
                 createMockCategoryRespDto(1L, "식비", true),
                 createMockCategoryRespDto(2L, "교통비", true),
@@ -100,7 +100,7 @@ class CategoryApiControllerTest(
 
         "GET /api/v1/category - 빈 카테고리 목록 조회 성공" {
             // given
-            val memberId = -1L
+            val memberId = 1L
             val expectedResponse = CategoryListRespDto(emptyList())
 
             given(categoryService.getCategoryByMemberIdOrDefaults(memberId)).willReturn(expectedResponse)
@@ -120,16 +120,18 @@ class CategoryApiControllerTest(
 
         "PUT /api/v1/category/{id} - 카테고리 수정 성공" {
             // given
+            val memberId = 1L
             val categoryId = 1L
             val updateRequest = CategoryUpdateReqDto(
                 name = "수정된카테고리명"
             )
 
-            doNothing().`when`(categoryService).updateCategory(any(), any())
+            doNothing().`when`(categoryService).updateCategory(any(), any(), any())
 
             // when & then
             mockMvc.perform(
                 put("/api/v1/category/$categoryId")
+                    .header("x-member-id", "1")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(updateRequest))
             )
@@ -137,29 +139,31 @@ class CategoryApiControllerTest(
                 .andExpect(jsonPath("$.success").value(true))
                 .andExpect(jsonPath("$.message").value("카테고리가 수정되었습니다."))
 
-            verify(categoryService).updateCategory(eq(categoryId), any<CategoryUpdateReqDto>())
+            verify(categoryService).updateCategory(eq(categoryId), eq(memberId), any<CategoryUpdateReqDto>())
         }
 
         "DELETE /api/v1/category/{id} - 카테고리 삭제 성공" {
             // given
+            val memberId = 1L
             val categoryId = 1L
 
-            doNothing().`when`(categoryService).deleteCategory(any())
+            doNothing().`when`(categoryService).deleteCategory(any(), any())
 
             // when & then
             mockMvc.perform(
                 delete("/api/v1/category/$categoryId")
+                    .header("x-member-id", "1")
             )
                 .andExpect(status().isOk)
                 .andExpect(jsonPath("$.success").value(true))
                 .andExpect(jsonPath("$.message").value("카테고리가 삭제되었습니다."))
 
-            verify(categoryService).deleteCategory(categoryId)
+            verify(categoryService).deleteCategory(eq(categoryId), eq(memberId))
         }
 
         "GET /api/v1/category - 기본 카테고리와 사용자 카테고리 혼합 조회" {
             // given
-            val memberId = -1L
+            val memberId = 1L
             val mixedCategories = listOf(
                 createMockCategoryRespDto(1L, "식비", true),
                 createMockCategoryRespDto(2L, "교통비", true),
@@ -195,13 +199,14 @@ class CategoryApiControllerTest(
 
         "PUT /api/v1/category/{id} - 여러 카테고리 순차 수정 테스트" {
             // given
+            val memberId = 1L
             val categoryUpdates = mapOf(
                 1L to "수정된식비",
                 2L to "수정된교통비",
                 3L to "수정된문화생활"
             )
 
-            doNothing().`when`(categoryService).updateCategory(any(), any())
+            doNothing().`when`(categoryService).updateCategory(any(), any(), any())
 
             // when & then
             categoryUpdates.forEach { (categoryId, newName) ->
@@ -209,6 +214,7 @@ class CategoryApiControllerTest(
 
                 mockMvc.perform(
                     put("/api/v1/category/$categoryId")
+                        .header("x-member-id", "1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(updateRequest))
                 )
@@ -216,7 +222,7 @@ class CategoryApiControllerTest(
                     .andExpect(jsonPath("$.success").value(true))
                     .andExpect(jsonPath("$.message").value("카테고리가 수정되었습니다."))
 
-                verify(categoryService).updateCategory(eq(categoryId), any<CategoryUpdateReqDto>())
+                verify(categoryService).updateCategory(eq(categoryId), eq(memberId), any<CategoryUpdateReqDto>())
             }
         }
     }

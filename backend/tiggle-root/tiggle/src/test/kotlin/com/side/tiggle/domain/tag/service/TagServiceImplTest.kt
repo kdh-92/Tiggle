@@ -132,6 +132,34 @@ class TagServiceImplTest : StringSpec({
         }.getErrorCode() shouldBe TagErrorCode.TAG_NOT_FOUND
     }
 
+    "태그를 삭제합니다" {
+        // given
+        val tagId = 1L
+        val tag = Tag("삭제할태그").apply { id = tagId }
+
+        every { tagRepository.findById(tagId) } returns Optional.of(tag)
+        every { tagRepository.delete(tag) } just runs
+
+        // when
+        tagService.deleteTag(tagId)
+
+        // then
+        verify(exactly = 1) { tagRepository.findById(tagId) }
+        verify(exactly = 1) { tagRepository.delete(tag) }
+    }
+
+    "태그 삭제 시 존재하지 않는 ID라면 예외를 던집니다" {
+        // given
+        val tagId = 999L
+
+        every { tagRepository.findById(tagId) } returns Optional.empty()
+
+        // when & then
+        shouldThrow<TagException> {
+            tagService.deleteTag(tagId)
+        }.getErrorCode() shouldBe TagErrorCode.TAG_NOT_FOUND
+    }
+
     "태그 생성 시 기본값으로 defaults가 false로 설정됩니다" {
         // given
         val dto = TagCreateReqDto(name = "사용자정의태그")

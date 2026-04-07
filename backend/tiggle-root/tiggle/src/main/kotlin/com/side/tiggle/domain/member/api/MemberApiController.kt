@@ -76,5 +76,14 @@ class MemberApiController(
             .ok(ApiResponse.success(null, message = "멤버 정보가 수정되었습니다."))
     }
 
-//    @DeleteMapping("/{id}")
+    @DeleteMapping("/me")
+    @Operation(summary = "회원 탈퇴", security = [SecurityRequirement(name = "bearer-key")])
+    fun deleteMe(
+        @Parameter(hidden = true)
+        @RequestHeader(name = HttpHeaders.MEMBER_ID) memberId: Long
+    ): ResponseEntity<ApiResponse<Nothing>> {
+        memberService.deleteMember(memberId)
+        return ResponseEntity
+            .ok(ApiResponse.success(null, message = "회원 탈퇴가 완료되었습니다."))
+    }
 }

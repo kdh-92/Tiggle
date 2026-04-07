@@ -47,4 +47,23 @@ interface TransactionRepository: JpaRepository<Transaction, Long> {
 
     @Query("SELECT t FROM Transaction t JOIN FETCH t.member JOIN FETCH t.category WHERE t.id = :id")
     fun findByIdWithMemberAndCategory(@Param("id") id: Long): Transaction?
+
+    @Query(
+        value = """
+            SELECT t.* FROM transactions t
+            WHERE t.deleted = false
+            AND (t.content LIKE CONCAT('%', :keyword, '%') OR t.reason LIKE CONCAT('%', :keyword, '%'))
+            ORDER BY t.created_at DESC
+        """,
+        countQuery = """
+            SELECT count(*) FROM transactions t
+            WHERE t.deleted = false
+            AND (t.content LIKE CONCAT('%', :keyword, '%') OR t.reason LIKE CONCAT('%', :keyword, '%'))
+        """,
+        nativeQuery = true
+    )
+    fun searchByKeyword(
+        @Param("keyword") keyword: String,
+        pageable: Pageable
+    ): Page<Transaction>
 }

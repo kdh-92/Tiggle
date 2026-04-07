@@ -20,7 +20,7 @@ export type OpenAPIConfig = {
 };
 
 export const OpenAPI: OpenAPIConfig = {
-    BASE: 'https://tiggle.duckdns.org:8180',
+    BASE: (typeof import.meta !== 'undefined' && import.meta.env?.VITE_API_URL) || 'https://tiggle.duckdns.org:8180',
     VERSION: '1.0.0',
     WITH_CREDENTIALS: false,
     CREDENTIALS: 'include',

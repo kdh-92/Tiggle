@@ -253,4 +253,17 @@ class TransactionServiceImpl(
 
         transactionRepository.save(transaction)
     }
+
+    @Transactional(readOnly = true)
+    override fun searchTransactions(keyword: String, pageSize: Int, index: Int): TransactionPageRespDto {
+        val txPage = transactionRepository.searchByKeyword(
+            keyword = keyword,
+            pageable = PageRequest.of(index, pageSize)
+        )
+        if (txPage.isEmpty) {
+            throw TransactionException(TransactionErrorCode.TRANSACTION_NOT_FOUND)
+        }
+        val dtoWithCountPage = txPage.map { mapTxRespDto(it) }
+        return TransactionPageRespDto.fromPage(dtoWithCountPage)
+    }
 }

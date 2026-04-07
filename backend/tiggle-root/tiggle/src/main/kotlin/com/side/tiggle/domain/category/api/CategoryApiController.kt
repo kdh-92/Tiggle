@@ -42,19 +42,21 @@ class CategoryApiController(
 
     @PutMapping("/{id}")
     fun updateCategory(
+        @RequestHeader(name = HttpHeaders.MEMBER_ID) memberId: Long,
         @PathVariable("id") @Min(1) categoryId: Long,
         @RequestBody @Valid dto: CategoryUpdateReqDto
     ): ResponseEntity<ApiResponse<Nothing>> {
-        categoryService.updateCategory(categoryId, dto)
+        categoryService.updateCategory(categoryId, memberId, dto)
         return ResponseEntity
             .ok(ApiResponse.success(null, message = "카테고리가 수정되었습니다."))
     }
 
     @DeleteMapping("/{id}")
     fun deleteCategory(
+        @RequestHeader(name = HttpHeaders.MEMBER_ID) memberId: Long,
         @PathVariable("id") @Min(1) categoryId: Long
     ): ResponseEntity<ApiResponse<Nothing>> {
-        categoryService.deleteCategory(categoryId)
+        categoryService.deleteCategory(categoryId, memberId)
         return ResponseEntity
             .ok(ApiResponse.success(null, message = "카테고리가 삭제되었습니다."))
     }

@@ -23,7 +23,7 @@ import org.springframework.web.multipart.MultipartFile
 import java.time.LocalDate
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@AutoConfigureMockMvc
+@AutoConfigureMockMvc(addFilters = false)
 class MemberApiControllerTest(
     @Autowired private val mockMvc: MockMvc,
     @Autowired private val objectMapper: ObjectMapper,
@@ -123,7 +123,7 @@ class MemberApiControllerTest(
 
         "GET /api/v1/member/me - 내 정보 조회 성공" {
             // given
-            val memberId = -1L // 테스트 환경에서 헤더값
+            val memberId = 1L // 테스트 환경에서 헤더값
             val expectedResponse = createMockMemberRespDto(1L, "me@test.com", "내정보")
 
             given(memberService.getMember(memberId)).willReturn(expectedResponse)
@@ -143,7 +143,7 @@ class MemberApiControllerTest(
 
         "PUT /api/v1/member/me - 프로필 업데이트 성공 (DTO + 파일)" {
             // given
-            val memberId = -1L
+            val memberId = 1L
             val updateRequest = MemberUpdateReqDto(
                 nickname = "수정된닉네임",
                 birth = LocalDate.of(1992, 5, 10)
@@ -185,7 +185,7 @@ class MemberApiControllerTest(
 
         "PUT /api/v1/member/me - 프로필 업데이트 성공 (DTO만)" {
             // given
-            val memberId = -1L
+            val memberId = 1L
             val updateRequest = MemberUpdateReqDto(
                 nickname = "닉네임만수정",
                 birth = null
@@ -219,7 +219,7 @@ class MemberApiControllerTest(
 
         "PUT /api/v1/member/me - 프로필 업데이트 성공 (파일만)" {
             // given
-            val memberId = -1L
+            val memberId = 1L
 
             val profileImage = MockMultipartFile(
                 "multipartFile",

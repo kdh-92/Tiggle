@@ -744,4 +744,54 @@ class TransactionServiceImplTest : StringSpec({
             transactionService.deleteTransactionPhoto(memberId, transactionId, photoIndex)
         }.getErrorCode() shouldBe TransactionErrorCode.PHOTO_NOT_FOUND
     }
+
+    "키워드로 거래를 검색합니다" {
+        // given
+        val keyword = "점심"
+        val pageSize = 10
+        val index = 0
+        val memberId = 1L
+        val member = TestMemberFactory.create(id = memberId)
+        val category = Category("식비", false, memberId).apply { id = 2L }
+        val transaction = TestTransactionFactory.create(
+            id = 1L,
+            member = member,
+            category = category
+        )
+
+        val transactions = listOf(transaction)
+        val page = PageImpl(transactions, PageRequest.of(index, pageSize), 1)
+        val mockRespDto = mockk<TransactionRespDto> {
+            every { id } returns 1L
+            every { content } returns "점심식사"
+        }
+        val dtoWithCount = TransactionDtoWithCount(mockRespDto, 5, 2, 3)
+
+        every { transactionRepository.searchByKeyword(keyword, any()) } returns page
+        every { transactionMapper.toDtoWithCount(transaction) } returns dtoWithCount
+
+        // when
+        val result = transactionService.searchTransactions(keyword, pageSize, index)
+
+        // then
+        result.transactions.size shouldBe 1
+        result.pageSize shouldBe pageSize
+        result.pageNumber shouldBe index
+        verify(exactly = 1) { transactionRepository.searchByKeyword(keyword, any()) }
+    }
+
+    "키워드 검색 시 결과가 없으면 예외를 던집니다" {
+        // given
+        val keyword = "없는키워드"
+        val pageSize = 10
+        val index = 0
+        val emptyPage = PageImpl<Transaction>(emptyList(), PageRequest.of(index, pageSize), 0)
+
+        every { transactionRepository.searchByKeyword(keyword, any()) } returns emptyPage
+
+        // when & then
+        shouldThrow<TransactionException> {
+            transactionService.searchTransactions(keyword, pageSize, index)
+        }.getErrorCode() shouldBe TransactionErrorCode.TRANSACTION_NOT_FOUND
+    }
 })

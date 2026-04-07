@@ -340,12 +340,12 @@ class NotificationServiceImplTest : StringSpec({
         every { notificationRepository.findAllByReceiverId(memberId) } returns listOf(notification)
 
         // when & then
-        shouldThrow<IllegalStateException> {
+        shouldThrow<NotificationException> {
             notificationService.getAllByMemberId(memberId)
-        }
+        }.getErrorCode() shouldBe NotificationErrorCode.NOTIFICATION_NOT_FOUND
     }
 
-    "알림 조회 시 comment가 null이면 예외를 던집니다" {
+    "알림 조회 시 comment가 null이면 comment 필드가 null로 반환됩니다" {
         // given
         val memberId = 1L
         val senderId = 2L
@@ -367,9 +367,115 @@ class NotificationServiceImplTest : StringSpec({
 
         every { notificationRepository.findAllByReceiverId(memberId) } returns listOf(notification)
 
-        // when & then
-        shouldThrow<IllegalStateException> {
-            notificationService.getAllByMemberId(memberId)
+        // when
+        val result = notificationService.getAllByMemberId(memberId)
+
+        // then
+        result.size shouldBe 1
+        result[0].comment shouldBe null
+        result[0].receiver?.id shouldBe memberId
+    }
+
+    "모든 알림을 읽음 처리합니다" {
+        // given
+        val memberId = 1L
+        val receiver = TestMemberFactory.create(id = memberId)
+
+        val notification1 = Notification(
+            type = NotificationType.COMMENT,
+            title = "새 댓글 1",
+            content = "댓글이 달렸습니다 1"
+        ).apply {
+            id = 1L
+            this.receiver = receiver
+            createdAt = LocalDateTime.now()
+            viewedAt = null
         }
+
+        val notification2 = Notification(
+            type = NotificationType.COMMENT,
+            title = "새 댓글 2",
+            content = "댓글이 달렸습니다 2"
+        ).apply {
+            id = 2L
+            this.receiver = receiver
+            createdAt = LocalDateTime.now()
+            viewedAt = null
+        }
+
+        every { notificationRepository.findAllByReceiverIdAndViewedAtIsNull(memberId) } returns listOf(notification1, notification2)
+        every { notificationRepository.saveAll(any<List<Notification>>()) } returns listOf(notification1, notification2)
+
+        // when
+        notificationService.readAllNotifications(memberId)
+
+        // then
+        notification1.viewedAt shouldNotBe null
+        notification2.viewedAt shouldNotBe null
+        verify(exactly = 1) { notificationRepository.saveAll(any<List<Notification>>()) }
+    }
+
+    "모든 알림 읽음 처리 시 읽지 않은 알림이 없으면 빈 리스트를 처리합니다" {
+        // given
+        val memberId = 1L
+
+        every { notificationRepository.findAllByReceiverIdAndViewedAtIsNull(memberId) } returns emptyList()
+        every { notificationRepository.saveAll(any<List<Notification>>()) } returns emptyList()
+
+        // when
+        notificationService.readAllNotifications(memberId)
+
+        // then
+        verify(exactly = 1) { notificationRepository.saveAll(emptyList()) }
+    }
+
+    "읽지 않은 알림 개수를 반환합니다" {
+        // given
+        val memberId = 1L
+
+        every { notificationRepository.countByReceiverIdAndViewedAtIsNull(memberId) } returns 5L
+
+        // when
+        val result = notificationService.getUnreadCount(memberId)
+
+        // then
+        result shouldBe 5L
+        verify(exactly = 1) { notificationRepository.countByReceiverIdAndViewedAtIsNull(memberId) }
+    }
+
+    "읽지 않은 알림이 없으면 0을 반환합니다" {
+        // given
+        val memberId = 1L
+
+        every { notificationRepository.countByReceiverIdAndViewedAtIsNull(memberId) } returns 0L
+
+        // when
+        val result = notificationService.getUnreadCount(memberId)
+
+        // then
+        result shouldBe 0L
+    }
+
+    "알림 읽음 처리 시 receiver가 null이면 예외를 던집니다" {
+        // given
+        val memberId = 1L
+        val notificationId = 10L
+
+        val notification = Notification(
+            type = NotificationType.COMMENT,
+            title = "새 댓글",
+            content = "댓글이 달렸습니다"
+        ).apply {
+            id = notificationId
+            this.receiver = null
+            createdAt = LocalDateTime.now()
+        }
+
+        every { notificationRepository.findById(notificationId) } returns Optional.of(notification)
+
+        // when & then
+        shouldThrow<NotificationException> {
+            notificationService.readNotificationById(memberId, notificationId)
+        }.getErrorCode() shouldBe NotificationErrorCode.NOTIFICATION_ACCESS_DENIED
     }
 })

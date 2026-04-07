@@ -19,7 +19,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPat
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@AutoConfigureMockMvc
+@AutoConfigureMockMvc(addFilters = false)
 class TagApiControllerTest(
     @Autowired private val mockMvc: MockMvc,
     @Autowired private val objectMapper: ObjectMapper,
@@ -48,6 +48,7 @@ class TagApiControllerTest(
             // when & then
             mockMvc.perform(
                 post("/api/v1/tag")
+                    .header("x-member-id", "1")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(request))
             )
@@ -135,6 +136,7 @@ class TagApiControllerTest(
             // when & then
             mockMvc.perform(
                 put("/api/v1/tag/$tagId")
+                    .header("x-member-id", "1")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(updateRequest))
             )
@@ -145,6 +147,23 @@ class TagApiControllerTest(
             verify(tagService).updateTag(eq(tagId), any<TagUpdateReqDto>())
         }
 
+        "DELETE /api/v1/tag/{id} - 태그 삭제 성공" {
+            // given
+            val tagId = 1L
+
+            doNothing().`when`(tagService).deleteTag(any())
+
+            // when & then
+            mockMvc.perform(
+                delete("/api/v1/tag/$tagId")
+                    .header("x-member-id", "1")
+            )
+                .andExpect(status().isOk)
+                .andExpect(jsonPath("$.success").value(true))
+                .andExpect(jsonPath("$.message").value("태그가 삭제되었습니다."))
+
+            verify(tagService).deleteTag(eq(tagId))
+        }
 
     }
 }
