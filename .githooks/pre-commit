@@ -1,0 +1,14 @@
+#!/bin/bash
+# Prevent case-duplicate paths from being committed.
+# On case-insensitive filesystems (macOS), git can track both
+# "TypeTag/Foo.tsx" and "typeTag/Foo.tsx" which causes persistent conflicts.
+
+duplicates=$(git diff --cached --name-only | sort -f | uniq -di)
+if [ -n "$duplicates" ]; then
+  echo "ERROR: Case-duplicate file paths detected in staged files:"
+  echo "$duplicates"
+  echo ""
+  echo "This will cause issues on case-insensitive filesystems (macOS)."
+  echo "Please resolve the casing conflict before committing."
+  exit 1
+fi
