@@ -3,6 +3,7 @@ package com.side.tiggle.support.factory
 import com.side.tiggle.domain.category.model.Category
 import com.side.tiggle.domain.member.model.Member
 import com.side.tiggle.domain.transaction.model.Transaction
+import com.side.tiggle.domain.transaction.model.TxType
 import java.time.LocalDate
 
 object TestTransactionFactory {
@@ -10,6 +11,7 @@ object TestTransactionFactory {
         id: Long? = null,
         member: Member = TestMemberFactory.create(),
         category: Category = Category("식비", false, 1L),
+        txType: TxType = TxType.OUTCOME,
         amount: Int = 10000,
         date: LocalDate = LocalDate.now(),
         content: String = "커피커피",
@@ -20,6 +22,7 @@ object TestTransactionFactory {
         val transaction = Transaction(
             member = member,
             category = category,
+            txType = txType,
             imageUrls = imageUrls,
             amount = amount,
             date = date,

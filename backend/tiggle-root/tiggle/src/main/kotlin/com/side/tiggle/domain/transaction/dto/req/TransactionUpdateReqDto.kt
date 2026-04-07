@@ -1,5 +1,6 @@
 package com.side.tiggle.domain.transaction.dto.req
 
+import com.side.tiggle.domain.transaction.model.TxType
 import jakarta.validation.constraints.Min
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.NotNull
@@ -8,6 +9,9 @@ import jakarta.validation.constraints.Size
 import java.time.LocalDate
 
 data class TransactionUpdateReqDto(
+    @field:NotNull(message = "거래 유형은 필수입니다")
+    val txType: TxType = TxType.OUTCOME,
+
     @field:NotNull(message = "금액은 필수입니다")
     @field:PositiveOrZero(message = "금액은 0원 이상이어야 합니다")
     val amount: Int,

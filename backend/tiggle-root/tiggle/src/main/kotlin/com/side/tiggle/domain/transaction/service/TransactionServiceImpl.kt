@@ -77,6 +77,7 @@ class TransactionServiceImpl(
         }
 
         transaction.apply {
+            txType = dto.txType
             amount = dto.amount
             date = dto.date
             content = dto.content
