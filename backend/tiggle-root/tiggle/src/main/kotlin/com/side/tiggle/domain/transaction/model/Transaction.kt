@@ -25,6 +25,10 @@ class Transaction(
     @Column(length = 2000)
     var imageUrls: String? = null,
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "tx_type", nullable = false, length = 20)
+    var txType: TxType = TxType.OUTCOME,
+
     @Column(nullable = false)
     var amount: Int,
 

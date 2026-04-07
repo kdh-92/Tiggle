@@ -3,6 +3,7 @@ package com.side.tiggle.domain.transaction.dto.req
 import com.side.tiggle.domain.category.model.Category
 import com.side.tiggle.domain.member.model.Member
 import com.side.tiggle.domain.transaction.model.Transaction
+import com.side.tiggle.domain.transaction.model.TxType
 import jakarta.validation.constraints.Min
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.NotNull
@@ -11,6 +12,9 @@ import jakarta.validation.constraints.Size
 import java.time.LocalDate
 
 data class TransactionCreateReqDto(
+    @field:NotNull(message = "거래 유형은 필수입니다")
+    val txType: TxType = TxType.OUTCOME,
+
     @field:NotNull(message = "카테고리 ID는 필수입니다")
     @field:Min(value = 1, message = "올바른 카테고리 ID를 입력해주세요")
     val categoryId:Long,
@@ -44,6 +48,7 @@ data class TransactionCreateReqDto(
         return Transaction(
             member = member,
             category = category,
+            txType = this.txType,
             imageUrls = this.imageUrls,
             amount = this.amount,
             date = this.date,

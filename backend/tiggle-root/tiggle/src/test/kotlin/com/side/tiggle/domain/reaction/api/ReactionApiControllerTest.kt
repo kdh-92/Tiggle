@@ -55,6 +55,7 @@ class ReactionApiControllerTest(
             id = id,
             memberId = memberId,
             categoryId = 1L,
+            txType = com.side.tiggle.domain.transaction.model.TxType.OUTCOME,
             imageUrls = null,
             amount = 10000,
             date = LocalDate.now(),

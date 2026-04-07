@@ -3,6 +3,7 @@ package com.side.tiggle.domain.transaction.dto.resp
 import com.side.tiggle.domain.category.dto.resp.CategoryRespDto
 import com.side.tiggle.domain.member.dto.resp.MemberRespDto
 import com.side.tiggle.domain.transaction.model.Transaction
+import com.side.tiggle.domain.transaction.model.TxType
 import java.time.LocalDate
 import java.time.LocalDateTime
 
@@ -10,6 +11,7 @@ data class TransactionRespDto(
     val id: Long,
     val member: MemberRespDto,
     val category: CategoryRespDto,
+    val txType: TxType,
     val tagNames: List<String>?,
     val createdAt: LocalDateTime,
     val parentId: Long? = null,
@@ -25,6 +27,7 @@ data class TransactionRespDto(
                 id = tx.id!!,
                 member = MemberRespDto.fromEntity(tx.member),
                 category = CategoryRespDto.fromEntity(tx.category),
+                txType = tx.txType,
                 imageUrls = tx.imageUrls,
                 amount = tx.amount,
                 date = tx.date,

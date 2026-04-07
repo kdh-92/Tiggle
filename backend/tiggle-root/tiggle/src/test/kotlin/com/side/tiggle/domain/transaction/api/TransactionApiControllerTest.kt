@@ -42,6 +42,7 @@ class TransactionApiControllerTest(
             id = id,
             member = MemberRespDto.fromEntity(member),
             category = CategoryRespDto.fromEntity(category),
+            txType = com.side.tiggle.domain.transaction.model.TxType.OUTCOME,
             tagNames = listOf("커피"),
             createdAt = LocalDateTime.now(),
             parentId = null,
