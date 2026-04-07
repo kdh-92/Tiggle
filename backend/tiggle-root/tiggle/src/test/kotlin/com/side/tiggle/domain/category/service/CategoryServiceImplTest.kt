@@ -75,13 +75,14 @@ class CategoryServiceImplTest : StringSpec({
     }
 
     "카테고리 이름을 수정한다" {
-        val existing = Category(name = "Old", defaults = false, memberId = 1L)
+        val memberId = 1L
+        val existing = Category(name = "Old", defaults = false, memberId = memberId)
         val dto = CategoryUpdateReqDto(name = "New")
 
         every { categoryRepository.findById(1L) } returns Optional.of(existing)
         every { categoryRepository.save(existing) } returns existing
 
-        categoryService.updateCategory(1L, dto)
+        categoryService.updateCategory(1L, memberId, dto)
 
         existing.name shouldBe "New"
         verify { categoryRepository.save(existing) }
@@ -93,19 +94,35 @@ class CategoryServiceImplTest : StringSpec({
 
         // when & then
         shouldThrow<CategoryException> {
-            categoryService.updateCategory(999L, CategoryUpdateReqDto("Updated"))
+            categoryService.updateCategory(999L, 1L, CategoryUpdateReqDto("Updated"))
         }.getErrorCode() shouldBe CategoryErrorCode.CATEGORY_NOT_FOUND
     }
 
+    "카테고리 수정 시 권한이 없으면 예외를 던진다" {
+        // given
+        val categoryId = 1L
+        val ownerId = 1L
+        val otherMemberId = 2L
+        val existing = Category(name = "Old", defaults = false, memberId = ownerId)
+        val dto = CategoryUpdateReqDto(name = "New")
+
+        every { categoryRepository.findById(categoryId) } returns Optional.of(existing)
+
+        // when & then
+        shouldThrow<CategoryException> {
+            categoryService.updateCategory(categoryId, otherMemberId, dto)
+        }.getErrorCode() shouldBe CategoryErrorCode.CATEGORY_ACCESS_DENIED
+    }
 
     "카테고리를 삭제한다 (soft delete)" {
         val now = LocalDateTime.now()
-        val category = Category(name = "DeleteMe", defaults = false, memberId = 1L)
+        val memberId = 1L
+        val category = Category(name = "DeleteMe", defaults = false, memberId = memberId)
 
         every { categoryRepository.findById(1L) } returns Optional.of(category)
         every { categoryRepository.save(category) } returns category
 
-        categoryService.deleteCategory(1L)
+        categoryService.deleteCategory(1L, memberId)
 
         category.deleted shouldBe true
         category.deletedAt?.shouldBeGreaterThan(now)
@@ -118,8 +135,23 @@ class CategoryServiceImplTest : StringSpec({
 
         // when & then
         shouldThrow<CategoryException> {
-            categoryService.deleteCategory(999L)
+            categoryService.deleteCategory(999L, 1L)
         }.getErrorCode() shouldBe CategoryErrorCode.CATEGORY_NOT_FOUND
+    }
+
+    "카테고리 삭제 시 권한이 없으면 예외를 던진다" {
+        // given
+        val categoryId = 1L
+        val ownerId = 1L
+        val otherMemberId = 2L
+        val category = Category(name = "DeleteMe", defaults = false, memberId = ownerId)
+
+        every { categoryRepository.findById(categoryId) } returns Optional.of(category)
+
+        // when & then
+        shouldThrow<CategoryException> {
+            categoryService.deleteCategory(categoryId, otherMemberId)
+        }.getErrorCode() shouldBe CategoryErrorCode.CATEGORY_ACCESS_DENIED
     }
 
     "카테고리 ID로 getReferenceById를 호출한다" {

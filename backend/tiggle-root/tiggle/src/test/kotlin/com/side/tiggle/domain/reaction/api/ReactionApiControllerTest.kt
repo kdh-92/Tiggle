@@ -24,7 +24,7 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@AutoConfigureMockMvc
+@AutoConfigureMockMvc(addFilters = false)
 class ReactionApiControllerTest(
     @Autowired private val mockMvc: MockMvc,
     @Autowired private val objectMapper: ObjectMapper,
@@ -71,7 +71,7 @@ class ReactionApiControllerTest(
             val senderId = 2L
             val expectedResponse = createMockReactionRespDto(txId, senderId)
 
-            given(reactionService.getReaction(txId, -1L)).willReturn(expectedResponse)
+            given(reactionService.getReaction(txId, senderId)).willReturn(expectedResponse)
 
             // when & then
             mockMvc.perform(
@@ -84,7 +84,7 @@ class ReactionApiControllerTest(
                 .andExpect(jsonPath("$.data.senderId").value(senderId))
                 .andExpect(jsonPath("$.data.type").value("UP"))
 
-            verify(reactionService).getReaction(txId, -1L)
+            verify(reactionService).getReaction(txId, senderId)
         }
 
         "GET /api/v1/transaction/{id}/reaction - 반응이 없을 때 204 응답" {
@@ -92,16 +92,17 @@ class ReactionApiControllerTest(
             val txId = 1L
             val senderId = 2L
 
-            given(reactionService.getReaction(txId, -1L)).willReturn(null)
+            given(reactionService.getReaction(txId, senderId)).willReturn(null)
 
             // when & then
             mockMvc.perform(
                 get("/api/v1/transaction/$txId/reaction")
                     .header("x-member-id", senderId.toString())
             )
-                .andExpect(status().isNoContent)
+                .andExpect(status().isOk)
+                .andExpect(jsonPath("$.message").value("반응이 없습니다."))
 
-            verify(reactionService).getReaction(txId, -1L)
+            verify(reactionService).getReaction(txId, senderId)
         }
 
         "GET /api/v1/transaction/{id}/reaction/summary - 반응 요약 조회 성공" {
@@ -152,7 +153,7 @@ class ReactionApiControllerTest(
                 .andExpect(jsonPath("$.message").value("반응이 생성/수정되었습니다."))
 
             verify(transactionService).getTransactionOrThrow(txId)
-            verify(reactionService).upsertReaction(eq(txId), eq(-1L), eq(receiverId), any<ReactionCreateReqDto>())
+            verify(reactionService).upsertReaction(eq(txId), eq(senderId), eq(receiverId), any<ReactionCreateReqDto>())
         }
 
         "POST /api/v1/transaction/{id}/reaction - DOWN 타입 반응 생성 성공" {
@@ -178,7 +179,7 @@ class ReactionApiControllerTest(
                 .andExpect(jsonPath("$.message").value("반응이 생성/수정되었습니다."))
 
             verify(transactionService).getTransactionOrThrow(txId)
-            verify(reactionService).upsertReaction(eq(txId), eq(-1L), eq(receiverId), any<ReactionCreateReqDto>())
+            verify(reactionService).upsertReaction(eq(txId), eq(senderId), eq(receiverId), any<ReactionCreateReqDto>())
         }
 
         "DELETE /api/v1/transaction/{id}/reaction - 반응 삭제 성공" {
@@ -197,7 +198,7 @@ class ReactionApiControllerTest(
                 .andExpect(jsonPath("$.success").value(true))
                 .andExpect(jsonPath("$.message").value("반응이 삭제되었습니다."))
 
-            verify(reactionService).deleteReaction(txId, -1L)
+            verify(reactionService).deleteReaction(txId, senderId)
         }
     }
 }

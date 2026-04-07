@@ -29,14 +29,14 @@ class NotificationApiController(
     fun getAllByMember(
         @Parameter(hidden = true)
         @RequestHeader(name = HttpHeaders.MEMBER_ID) memberId: Long,
-        @RequestHeader(name = "member-id") overrideMemberId: Long?,
     ): ResponseEntity<ApiResponse<List<NotificationRespDto>>> {
-        val result = notificationService.getAllByMemberId(overrideMemberId ?: memberId)
+        val result = notificationService.getAllByMemberId(memberId)
         return ResponseEntity
             .ok(ApiResponse.success(result))
     }
 
     @PutMapping("/{id}")
+    @Operation(summary = "알림 읽음 처리", security = [SecurityRequirement(name = "bearer-key")])
     fun readNotification(
         @Parameter(hidden = true)
         @RequestHeader(name = HttpHeaders.MEMBER_ID) memberId: Long,
@@ -45,5 +45,27 @@ class NotificationApiController(
         notificationService.readNotificationById(memberId, id)
         return ResponseEntity
             .ok(ApiResponse.success(null))
+    }
+
+    @PutMapping("/read-all")
+    @Operation(summary = "모든 알림 읽음 처리", security = [SecurityRequirement(name = "bearer-key")])
+    fun readAllNotifications(
+        @Parameter(hidden = true)
+        @RequestHeader(name = HttpHeaders.MEMBER_ID) memberId: Long,
+    ): ResponseEntity<ApiResponse<Nothing>> {
+        notificationService.readAllNotifications(memberId)
+        return ResponseEntity
+            .ok(ApiResponse.success(null, message = "모든 알림을 읽음 처리했습니다."))
+    }
+
+    @GetMapping("/unread-count")
+    @Operation(summary = "미읽음 알림 수 조회", security = [SecurityRequirement(name = "bearer-key")])
+    fun getUnreadCount(
+        @Parameter(hidden = true)
+        @RequestHeader(name = HttpHeaders.MEMBER_ID) memberId: Long,
+    ): ResponseEntity<ApiResponse<Long>> {
+        val count = notificationService.getUnreadCount(memberId)
+        return ResponseEntity
+            .ok(ApiResponse.success(count))
     }
 }

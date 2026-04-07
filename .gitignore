@@ -25,6 +25,22 @@ replay_pid*
 application.yml
 
 .idea
+.DS_Store
+**/.DS_Store
 
 docker-compose.yml
 **/db/
+
+# Logs
+logs/
+
+# Environment files
+.env
+.env.local
+.env.*.local
+**/.env
+**/.env.prod
+**/.env.dev
+
+# Claude
+.claude/

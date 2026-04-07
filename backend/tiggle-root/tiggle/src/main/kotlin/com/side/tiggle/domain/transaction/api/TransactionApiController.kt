@@ -146,6 +146,21 @@ class TransactionApiController(
             .ok(ApiResponse.success(pagedCommentsRespDto))
     }
 
+    @Operation(summary = "거래 검색", description = "제목 또는 내용으로 거래를 검색합니다.")
+    @GetMapping("/search")
+    fun searchTransactions(
+        @Parameter(name = "keyword", description = "검색 키워드")
+        @RequestParam keyword: String,
+        @Parameter(name = "index", description = "페이지 번호")
+        @RequestParam(defaultValue = DEFAULT_INDEX) @Min(0) index: Int,
+        @Parameter(name = "pageSize", description = "페이지 크기")
+        @RequestParam(defaultValue = DEFAULT_PAGE_SIZE) @Min(1) @Max(100) pageSize: Int
+    ): ResponseEntity<ApiResponse<TransactionPageRespDto>> {
+        val txPage = transactionService.searchTransactions(keyword, pageSize, index)
+        return ResponseEntity
+            .ok(ApiResponse.success(txPage))
+    }
+
     companion object {
         private const val DEFAULT_INDEX = "0"
         private const val DEFAULT_PAGE_SIZE = "5"

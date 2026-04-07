@@ -34,16 +34,15 @@ class ReactionApiController(
     private val transactionService: TransactionService
 ) {
 
-    //TODO out Any? 필요한지 체크 후 반환 타입 수정
     @Operation(description = "해당 tx에 대한 나의 reaction을 조회", security = [SecurityRequirement(name = "bearer-key")])
     @GetMapping
     fun getReaction(
         @Parameter(hidden = true)
         @RequestHeader(name = HttpHeaders.MEMBER_ID) senderId: Long,
         @PathVariable(name = "id") @Min(1) txId: Long
-//    ): ResponseEntity<ReactionRespDto> {
-    ): ResponseEntity<out Any?> {
-        val reaction = reactionService.getReaction(txId, senderId) ?: return ResponseEntity.noContent().build()
+    ): ResponseEntity<ApiResponse<ReactionRespDto?>> {
+        val reaction = reactionService.getReaction(txId, senderId)
+            ?: return ResponseEntity.ok(ApiResponse.success(null, message = "반응이 없습니다."))
         return ResponseEntity
             .ok(ApiResponse.success(reaction))
     }

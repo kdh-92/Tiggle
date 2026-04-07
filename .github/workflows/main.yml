@@ -4,17 +4,17 @@ on:
   push:
     branches: [ main ]
 
-jobs:     
+jobs:
   deploy:
     name: Deploy
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
-            
+        uses: actions/checkout@v4
+
       - name: ssh connect
-        uses: appleboy/ssh-action@master
+        uses: appleboy/ssh-action@v1.2.0
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}

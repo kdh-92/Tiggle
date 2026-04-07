@@ -28,7 +28,7 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@AutoConfigureMockMvc
+@AutoConfigureMockMvc(addFilters = false)
 class TransactionApiControllerTest(
     @Autowired private val mockMvc: MockMvc,
     @Autowired private val objectMapper: ObjectMapper,
@@ -191,7 +191,7 @@ class TransactionApiControllerTest(
                 .andExpect(jsonPath("$.success").value(true))
                 .andExpect(jsonPath("$.message").value("거래가 생성되었습니다."))
 
-            verify(transactionService).createTransaction(eq(-1L), any<TransactionCreateReqDto>(), any<List<MultipartFile>>())
+            verify(transactionService).createTransaction(eq(1L), any<TransactionCreateReqDto>(), any<List<MultipartFile>>())
         }
 
         "PUT /api/v1/transaction/{id} - 거래 수정 성공" {
@@ -220,7 +220,7 @@ class TransactionApiControllerTest(
                 .andExpect(jsonPath("$.success").value(true))
                 .andExpect(jsonPath("$.message").value("거래가 수정되었습니다."))
 
-            verify(transactionService).updateTransaction(eq(-1L), eq(1L), any<TransactionUpdateReqDto>())
+            verify(transactionService).updateTransaction(eq(1L), eq(1L), any<TransactionUpdateReqDto>())
         }
 
         "DELETE /api/v1/transaction/{id} - 거래 삭제 성공" {
@@ -238,7 +238,7 @@ class TransactionApiControllerTest(
                 .andExpect(status().isOk)
                 .andExpect(jsonPath("$.success").value(true))
 
-            verify(transactionService).deleteTransaction(eq(-1L), eq(1L))
+            verify(transactionService).deleteTransaction(eq(1L), eq(1L))
         }
     }
 }

@@ -35,9 +35,13 @@ class CategoryServiceImpl(
     }
 
     @Transactional
-    override fun updateCategory(id: Long, dto: CategoryUpdateReqDto) {
+    override fun updateCategory(id: Long, memberId: Long, dto: CategoryUpdateReqDto) {
         val category = categoryRepository.findById(id)
             .orElseThrow { CategoryException(CategoryErrorCode.CATEGORY_NOT_FOUND) }
+
+        if (category.memberId != memberId) {
+            throw CategoryException(CategoryErrorCode.CATEGORY_ACCESS_DENIED)
+        }
 
         category.apply {
             name = dto.name
@@ -47,9 +51,13 @@ class CategoryServiceImpl(
     }
 
     @Transactional
-    override fun deleteCategory(categoryId: Long) {
+    override fun deleteCategory(categoryId: Long, memberId: Long) {
         val category = categoryRepository.findById(categoryId)
             .orElseThrow { CategoryException(CategoryErrorCode.CATEGORY_NOT_FOUND) }
+
+        if (category.memberId != memberId) {
+            throw CategoryException(CategoryErrorCode.CATEGORY_ACCESS_DENIED)
+        }
 
         category.apply {
             deleted = true

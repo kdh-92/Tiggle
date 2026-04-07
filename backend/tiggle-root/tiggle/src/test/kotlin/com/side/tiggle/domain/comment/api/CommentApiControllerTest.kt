@@ -25,7 +25,7 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@AutoConfigureMockMvc
+@AutoConfigureMockMvc(addFilters = false)
 class CommentApiControllerTest(
     @Autowired private val mockMvc: MockMvc,
     @Autowired private val objectMapper: ObjectMapper,
@@ -144,7 +144,7 @@ class CommentApiControllerTest(
 
         "POST /api/v1/comments - 댓글 생성 성공" {
             // given
-            val memberId = -1L
+            val memberId = 1L
             val txId = 1L
             val request = CommentCreateReqDto(
                 txId = txId,
@@ -173,7 +173,7 @@ class CommentApiControllerTest(
 
         "POST /api/v1/comments - 대댓글 생성 성공" {
             // given
-            val memberId = -1L
+            val memberId = 1L
             val txId = 1L
             val parentId = 5L
             val request = CommentCreateReqDto(
@@ -203,7 +203,7 @@ class CommentApiControllerTest(
 
         "PUT /api/v1/comments/{id} - 댓글 수정 성공" {
             // given
-            val memberId = -1L
+            val memberId = 1L
             val commentId = 1L
             val updateRequest = CommentUpdateReqDto(
                 content = "수정된 댓글 내용"
@@ -227,7 +227,7 @@ class CommentApiControllerTest(
 
         "DELETE /api/v1/comments/{id} - 댓글 삭제 성공" {
             // given
-            val memberId = -1L
+            val memberId = 1L
             val commentId = 1L
 
             doNothing().`when`(commentService).deleteComment(any(), any())

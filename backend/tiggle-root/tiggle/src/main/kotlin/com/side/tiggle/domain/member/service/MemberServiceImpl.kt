@@ -95,4 +95,11 @@ class MemberServiceImpl(
     override fun getMemberReference(memberId: Long): Member {
         return memberRepository.getReferenceById(memberId)
     }
+
+    @Transactional
+    override fun deleteMember(memberId: Long) {
+        val member = memberRepository.findById(memberId)
+            .orElseThrow { MemberException(MemberErrorCode.MEMBER_NOT_FOUND) }
+        memberRepository.delete(member)
+    }
 }

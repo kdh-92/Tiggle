@@ -14,4 +14,6 @@ interface NotificationService {
         senderId: Long
     )
     fun readNotificationById(memberId: Long, id: Long)
+    fun readAllNotifications(memberId: Long)
+    fun getUnreadCount(memberId: Long): Long
 }

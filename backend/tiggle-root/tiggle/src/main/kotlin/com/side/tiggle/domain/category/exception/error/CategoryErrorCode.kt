@@ -13,7 +13,10 @@ enum class CategoryErrorCode(
     private val msg: String
 ) : ErrorCode {
     // 조회 관련 오류 (20001~20010)
-    CATEGORY_NOT_FOUND(HttpStatus.NOT_FOUND, 20001, "카테고리를 찾을 수 없습니다");
+    CATEGORY_NOT_FOUND(HttpStatus.NOT_FOUND, 20001, "카테고리를 찾을 수 없습니다"),
+
+    // 권한 관련 오류 (20011~20020)
+    CATEGORY_ACCESS_DENIED(HttpStatus.FORBIDDEN, 20011, "카테고리에 대한 권한이 없습니다");
 
     override fun httpStatus(): HttpStatus = status
     override fun codeNumber(): Int = code
