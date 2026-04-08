@@ -1,5 +1,6 @@
 package com.side.tiggle.domain.member.model
 
+import com.side.tiggle.domain.character.model.ColorRarity
 import com.side.tiggle.global.common.model.BaseEntity
 import java.time.LocalDate
 import jakarta.persistence.*
@@ -26,4 +27,17 @@ class Member (
 
     @Column(name = "refresh_token_expires_at")
     var refreshTokenExpiresAt: LocalDateTime? = null
+
+    @Column(name = "color_hue")
+    var colorHue: Int? = null
+
+    @Column(name = "color_saturation")
+    var colorSaturation: Int? = null
+
+    @Column(name = "color_lightness")
+    var colorLightness: Int? = null
+
+    @Column(name = "color_rarity", length = 20)
+    @Enumerated(EnumType.STRING)
+    var colorRarity: ColorRarity? = null
 }
