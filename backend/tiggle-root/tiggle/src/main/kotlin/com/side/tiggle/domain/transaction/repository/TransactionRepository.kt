@@ -66,4 +66,49 @@ interface TransactionRepository: JpaRepository<Transaction, Long> {
         @Param("keyword") keyword: String,
         pageable: Pageable
     ): Page<Transaction>
+
+    @Query(
+        value = """
+            SELECT tx_type, SUM(amount) as total, COUNT(*) as cnt
+            FROM transactions
+            WHERE member_id = :memberId AND date BETWEEN :startDate AND :endDate AND deleted = false
+            GROUP BY tx_type
+        """,
+        nativeQuery = true
+    )
+    fun sumByMemberIdAndDateRange(
+        @Param("memberId") memberId: Long,
+        @Param("startDate") startDate: LocalDate,
+        @Param("endDate") endDate: LocalDate
+    ): List<Array<Any>>
+
+    @Query(
+        value = """
+            SELECT category_id, SUM(amount) as total
+            FROM transactions
+            WHERE member_id = :memberId AND date BETWEEN :startDate AND :endDate AND tx_type = 'OUTCOME' AND deleted = false
+            GROUP BY category_id ORDER BY total DESC LIMIT 1
+        """,
+        nativeQuery = true
+    )
+    fun findTopCategoryByOutcome(
+        @Param("memberId") memberId: Long,
+        @Param("startDate") startDate: LocalDate,
+        @Param("endDate") endDate: LocalDate
+    ): List<Array<Any>>
+
+    @Query(
+        value = """
+            SELECT category_id, SUM(amount) as total
+            FROM transactions
+            WHERE member_id = :memberId AND date BETWEEN :startDate AND :endDate AND tx_type = 'OUTCOME' AND deleted = false
+            GROUP BY category_id ORDER BY total DESC
+        """,
+        nativeQuery = true
+    )
+    fun findCategoryBreakdownByOutcome(
+        @Param("memberId") memberId: Long,
+        @Param("startDate") startDate: LocalDate,
+        @Param("endDate") endDate: LocalDate
+    ): List<Array<Any>>
 }
