@@ -43,6 +43,8 @@ class SecurityConfig(
                 authorize("/api/v1/transaction/{id}/comments", permitAll)
                 authorize("/api/v1/tag/all", permitAll)
                 authorize("/api/v1/tag/{id}", permitAll)
+                authorize("/api/v1/character/catalog", permitAll)
+                authorize("/api/v1/character/{memberId}", permitAll)
                 authorize("/swagger-ui/**", permitAll)
                 authorize("/v3/api-docs/**", permitAll)
                 authorize("/api/auth/**", permitAll)
