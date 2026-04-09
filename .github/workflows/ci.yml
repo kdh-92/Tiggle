@@ -1,15 +1,14 @@
-name: Deploy to NAS Server
+name: CI
 
 on:
-  push:
+  pull_request:
     branches: [main]
 
 permissions:
   contents: read
 
 jobs:
-  # ── Gate: Backend tests must pass before deploy ──
-  test-backend:
+  backend-test:
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -25,12 +24,13 @@ jobs:
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v3
+        with:
+          cache-read-only: true
 
       - name: Test
         run: ./gradlew :tiggle:test
 
-  # ── Gate: Frontend tests must pass before deploy ──
-  test-frontend:
+  frontend-test:
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -56,27 +56,3 @@ jobs:
 
       - name: Build
         run: npm run build
-
-  # ── Deploy (only after all tests pass) ──
-  deploy:
-    name: Deploy
-    needs: [test-backend, test-frontend]
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: SSH Deploy to NAS
-        uses: appleboy/ssh-action@v1.2.0
-        with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USERNAME }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          port: ${{ secrets.PORT }}
-          command_timeout: 15m
-          script: |
-            bash -l -c "
-              cd Tiggle
-              git pull origin main
-              ./server.sh
-            "
