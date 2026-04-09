@@ -3,6 +3,7 @@ package com.side.tiggle.domain.transaction.service
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.side.tiggle.domain.category.model.Category
 import com.side.tiggle.domain.category.service.CategoryService
+import com.side.tiggle.domain.character.service.CharacterService
 import com.side.tiggle.domain.member.service.MemberService
 import com.side.tiggle.domain.transaction.dto.internal.TransactionInfo
 import com.side.tiggle.domain.transaction.dto.req.TransactionCreateReqDto
@@ -39,6 +40,7 @@ class TransactionServiceImplTest : StringSpec({
     val transactionMapper: TransactionMapper = mockk()
     val transactionFileUploadUtil: TransactionFileUploadUtil = mockk()
     val objectMapper: ObjectMapper = mockk()
+    val characterService: CharacterService = mockk(relaxed = true)
 
     val transactionService: TransactionService = TransactionServiceImpl(
         transactionRepository,
@@ -46,7 +48,8 @@ class TransactionServiceImplTest : StringSpec({
         categoryService,
         transactionMapper,
         transactionFileUploadUtil,
-        objectMapper
+        objectMapper,
+        characterService
     )
 
     beforeEach {

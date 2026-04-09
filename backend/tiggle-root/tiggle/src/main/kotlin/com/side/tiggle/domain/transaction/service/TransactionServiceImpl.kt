@@ -2,6 +2,7 @@ package com.side.tiggle.domain.transaction.service
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.side.tiggle.domain.category.service.CategoryService
+import com.side.tiggle.domain.character.service.CharacterService
 import com.side.tiggle.domain.member.service.MemberService
 import com.side.tiggle.domain.transaction.dto.internal.TransactionInfo
 import com.side.tiggle.domain.transaction.dto.req.TransactionCreateReqDto
@@ -35,7 +36,8 @@ class TransactionServiceImpl(
     private val categoryService: CategoryService,
     private val transactionMapper: TransactionMapper,
     private val transactionFileUploadUtil: TransactionFileUploadUtil,
-    private val objectMapper: ObjectMapper
+    private val objectMapper: ObjectMapper,
+    private val characterService: CharacterService
 ) : TransactionService {
 
     @Transactional
@@ -58,6 +60,14 @@ class TransactionServiceImpl(
             transactionRepository.save(
                 dto.toEntity(member, category)
             )
+
+            // 캐릭터 경험치 연동
+            try {
+                characterService.incrementEggRecords(memberId)
+                characterService.addExperience(memberId, 10, "TRANSACTION_RECORD")
+            } catch (charEx: Exception) {
+                log.warn("캐릭터 업데이트 실패 - memberId: $memberId", charEx)
+            }
         } catch (e: Exception) {
             savedPaths?.forEach { Files.deleteIfExists(it) }
             transactionFileUploadUtil.deleteEmptyDateFolder()
