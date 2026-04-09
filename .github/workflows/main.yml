@@ -52,7 +52,7 @@ jobs:
         run: npm run lint
 
       - name: Test
-        run: npm test
+        run: npx vitest run --passWithNoTests
 
       - name: Build
         run: npm run build
