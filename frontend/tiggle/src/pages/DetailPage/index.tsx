@@ -55,7 +55,14 @@ const DetailPage = () => {
   if (!transactionData?.data) {
     return (
       <DetailPageStyle className="page-container">
-        <div style={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "50vh" }}>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            minHeight: "50vh",
+          }}
+        >
           불러오는 중...
         </div>
       </DetailPageStyle>
