@@ -56,3 +56,8 @@ export { NotificationApiControllerService } from './services/NotificationApiCont
 export { ReactionApiService } from './services/ReactionApiService';
 export { TagApiControllerService } from './services/TagApiControllerService';
 export { TransactionApiControllerService } from './services/TransactionApiControllerService';
+export { StatisticsApiControllerService } from './services/StatisticsApiControllerService';
+export { CharacterApiControllerService } from './services/CharacterApiControllerService';
+export { ItemApiControllerService } from './services/ItemApiControllerService';
+export { AchievementApiControllerService } from './services/AchievementApiControllerService';
+export { ChallengeApiControllerService } from './services/ChallengeApiControllerService';
