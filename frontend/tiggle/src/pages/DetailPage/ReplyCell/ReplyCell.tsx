@@ -1,9 +1,9 @@
 import { CommentRespDto } from "@/generated";
 import { calculateDateTimeDiff } from "@/utils/date";
+import { getProfileImageUrl } from "@/utils/imageUrl";
 
 import { ReplyCellStyle } from "./ReplyCellStyle";
 import { CommentSenderStyle } from "../CommentCell/CommentCellStyle";
-import { getProfileImageUrl } from "@/utils/imageUrl";
 
 interface ReplyCellProps
   extends Pick<CommentRespDto, "id" | "content" | "createdAt" | "sender"> {}

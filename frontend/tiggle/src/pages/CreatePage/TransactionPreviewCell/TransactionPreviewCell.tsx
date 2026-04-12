@@ -1,8 +1,8 @@
 import cn from "classnames";
 
 import { TypeTag } from "@/components/atoms";
-import { TxType } from "@/types";
 import { TransactionRespDto } from "@/generated";
+import { TxType } from "@/types";
 import { convertTxTypeToWord } from "@/utils/txType";
 
 import { TransactionPreviewCellStyle } from "./TransactionPreviewCellStyle";
