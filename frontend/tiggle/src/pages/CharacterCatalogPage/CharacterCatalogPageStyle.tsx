@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 import styled from "styled-components";
 
 import { expandTypography } from "@/styles/util/expandTypography";
@@ -143,7 +145,7 @@ export const EmptyState = styled.div`
   text-align: center;
 `;
 
-export const BackLink = styled.a`
+export const BackLink = styled(Link)`
   color: ${({ theme }) => theme.color.blue[600].value};
   ${({ theme }) => expandTypography(theme.typography.body.medium.bold)}
   text-decoration: none;

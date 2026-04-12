@@ -5,6 +5,7 @@ import { expandTypography } from "@/styles/util";
 export const ChallengePageStyle = styled.div`
   width: 100%;
   max-width: 480px;
+  box-sizing: border-box;
   margin: 0 auto;
   padding: 24px;
 

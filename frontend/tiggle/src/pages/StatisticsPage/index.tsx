@@ -16,20 +16,28 @@ const formatAmount = (amount: number): string =>
   `${amount.toLocaleString("ko-KR")}원`;
 
 const StatisticsPage = () => {
-  const { data: weeklyResp, isLoading: isWeeklyLoading } = useQuery(
-    statisticsKeys.weekly(0),
-    () => StatisticsApiControllerService.getWeeklyComparison(0),
-  );
+  const {
+    data: weeklyResp,
+    isLoading: isWeeklyLoading,
+    isError: isWeeklyError,
+  } = useQuery({
+    queryKey: statisticsKeys.weekly(0),
+    queryFn: () => StatisticsApiControllerService.getWeeklyComparison(0),
+  });
 
   const now = new Date();
-  const { data: monthlyResp, isLoading: isMonthlyLoading } = useQuery(
-    statisticsKeys.monthly(now.getFullYear(), now.getMonth() + 1),
-    () =>
+  const {
+    data: monthlyResp,
+    isLoading: isMonthlyLoading,
+    isError: isMonthlyError,
+  } = useQuery({
+    queryKey: statisticsKeys.monthly(now.getFullYear(), now.getMonth() + 1),
+    queryFn: () =>
       StatisticsApiControllerService.getMonthlySummary(
         now.getFullYear(),
         now.getMonth() + 1,
       ),
-  );
+  });
 
   const isLoading = isWeeklyLoading || isMonthlyLoading;
 
@@ -47,6 +55,17 @@ const StatisticsPage = () => {
         <p className="page-title">소비 통계</p>
         <div className="loading-container">
           <p>불러오는 중...</p>
+        </div>
+      </StatisticsPageWrapper>
+    );
+  }
+
+  if (isWeeklyError && isMonthlyError) {
+    return (
+      <StatisticsPageWrapper>
+        <p className="page-title">소비 통계</p>
+        <div className="loading-container">
+          <p>통계를 불러올 수 없습니다. 잠시 후 다시 시도해 주세요.</p>
         </div>
       </StatisticsPageWrapper>
     );

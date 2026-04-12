@@ -3,14 +3,16 @@ import styled from "styled-components";
 import { expandTypography } from "@/styles/util/expandTypography";
 
 export const CategoryBreakdownWrapper = styled.div`
-  width: 327px;
+  width: 100%;
+  max-width: 327px;
+  box-sizing: border-box;
   background: ${({ theme }) => theme.color.white.value};
   border-radius: 16px;
   padding: 24px;
   margin-bottom: 24px;
 
   ${({ theme }) => theme.mq.desktop} {
-    width: 480px;
+    max-width: 480px;
     padding: 32px;
   }
 

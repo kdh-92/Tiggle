@@ -45,9 +45,7 @@ export class ChallengeApiControllerService {
    * @returns ApiResponse 챌린지 상세 정보
    * @throws ApiError
    */
-  public static getChallengeDetail(
-    id: number,
-  ): CancelablePromise<ApiResponse> {
+  public static getChallengeDetail(id: number): CancelablePromise<ApiResponse> {
     return __request(OpenAPI, {
       method: "GET",
       url: "/api/v1/challenges/{id}",

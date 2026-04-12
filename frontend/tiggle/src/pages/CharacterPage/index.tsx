@@ -35,11 +35,11 @@ const PATH_LABELS: Record<string, string> = {
 interface CharacterPageProps extends AuthProps {}
 
 const CharacterPage = ({ profile }: CharacterPageProps) => {
-  const { data, isLoading, isError } = useQuery(
-    characterKeys.me(),
-    () => CharacterApiControllerService.getMyCharacter(),
-    { staleTime: 1000 * 60 * 5 },
-  );
+  const { data, isLoading, isError } = useQuery({
+    queryKey: characterKeys.me(),
+    queryFn: () => CharacterApiControllerService.getMyCharacter(),
+    staleTime: 1000 * 60 * 5,
+  });
 
   const character = data?.data as CharacterDetailRespDto | undefined;
 
@@ -132,7 +132,7 @@ const CharacterPage = ({ profile }: CharacterPageProps) => {
         )}
       </CharacterSection>
 
-      <CatalogLink href="/mypage/character/catalog">
+      <CatalogLink to="/mypage/character/catalog">
         캐릭터 도감 보기 <ChevronRight size={18} />
       </CatalogLink>
     </CharacterPageStyle>

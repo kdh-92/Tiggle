@@ -51,9 +51,7 @@ export class ItemApiControllerService {
    * @returns ApiResponse 장착 정보
    * @throws ApiError
    */
-  public static getEquipment(
-    memberId: number,
-  ): CancelablePromise<ApiResponse> {
+  public static getEquipment(memberId: number): CancelablePromise<ApiResponse> {
     return __request(OpenAPI, {
       method: "GET",
       url: "/api/v1/items/equipment/{memberId}",

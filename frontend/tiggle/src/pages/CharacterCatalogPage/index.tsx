@@ -57,11 +57,11 @@ const TIER_COLORS: Record<CharacterTierType, string> = {
 };
 
 const CharacterCatalogPage = () => {
-  const { data, isLoading, isError } = useQuery(
-    characterKeys.catalog(),
-    () => CharacterApiControllerService.getCatalog(),
-    { staleTime: 1000 * 60 * 10 },
-  );
+  const { data, isLoading, isError } = useQuery({
+    queryKey: characterKeys.catalog(),
+    queryFn: () => CharacterApiControllerService.getCatalog(),
+    staleTime: 1000 * 60 * 10,
+  });
 
   const catalog = (data?.data as CharacterCatalogDto[] | undefined) ?? [];
 
@@ -117,7 +117,7 @@ const CharacterCatalogPage = () => {
 
   return (
     <CatalogPageStyle>
-      <BackLink href="/mypage/character">← 캐릭터로 돌아가기</BackLink>
+      <BackLink to="/mypage/character">← 캐릭터로 돌아가기</BackLink>
       <CatalogTitle>캐릭터 도감</CatalogTitle>
 
       {PATH_ORDER.map(path => {

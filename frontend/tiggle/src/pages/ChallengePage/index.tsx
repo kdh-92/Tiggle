@@ -49,13 +49,15 @@ const ChallengePage = () => {
         </div>
       )}
 
-      <Link to="/challenges/create" style={{ textDecoration: "none" }}>
-        <button className="create-button" disabled={hasActiveChallenge}>
-          {hasActiveChallenge
-            ? "진행 중인 챌린지가 있습니다"
-            : "새 챌린지 시작"}
+      {hasActiveChallenge ? (
+        <button className="create-button" disabled>
+          진행 중인 챌린지가 있습니다
         </button>
-      </Link>
+      ) : (
+        <Link to="/challenges/create" style={{ textDecoration: "none" }}>
+          <button className="create-button">새 챌린지 시작</button>
+        </Link>
+      )}
 
       <div className="history-section">
         <h2 className="history-title">히스토리</h2>

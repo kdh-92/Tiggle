@@ -27,9 +27,7 @@ export class CharacterApiControllerService {
    * @returns ApiResponse 캐릭터 상세 정보
    * @throws ApiError
    */
-  public static getCharacter(
-    memberId: number,
-  ): CancelablePromise<ApiResponse> {
+  public static getCharacter(memberId: number): CancelablePromise<ApiResponse> {
     return __request(OpenAPI, {
       method: "GET",
       url: "/api/v1/character/{memberId}",

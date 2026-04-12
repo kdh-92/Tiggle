@@ -30,6 +30,8 @@ const ChallengeHistoryCard = ({ challenge }: ChallengeHistoryCardProps) => {
 
   return (
     <ChallengeHistoryCardStyle
+      as="button"
+      type="button"
       $status={status}
       onClick={() => navigate(`/challenges/${id}`)}
     >

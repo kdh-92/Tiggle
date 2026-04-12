@@ -34,6 +34,7 @@ export const TabContainer = styled.div`
 export const TabButton = styled.button<{ $active: boolean }>`
   flex: 1;
   padding: 12px 0;
+  border: none;
   ${({ theme }) => expandTypography(theme.typography.body.medium.bold)}
   color: ${({ theme, $active }) =>
     $active ? theme.color.blue[600].value : theme.color.bluishGray[400].value};
@@ -48,6 +49,11 @@ export const TabButton = styled.button<{ $active: boolean }>`
 
   &:hover {
     color: ${({ theme }) => theme.color.blue[600].value};
+  }
+
+  &:focus-visible {
+    outline: 2px solid ${({ theme }) => theme.color.blue[400].value};
+    outline-offset: -2px;
   }
 `;
 

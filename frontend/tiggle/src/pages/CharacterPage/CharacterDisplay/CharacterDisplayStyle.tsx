@@ -95,6 +95,11 @@ export const CharacterOrb = styled.div<{
         ${holoGradient} 3s ease infinite,
         ${pulseGlow} 2s ease-in-out infinite;
     `}
+
+  @media (prefers-reduced-motion: reduce) {
+    animation: none !important;
+    transition: none;
+  }
 `;
 
 export const EggPhaseText = styled.span`

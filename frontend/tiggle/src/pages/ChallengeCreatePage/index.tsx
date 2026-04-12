@@ -25,7 +25,7 @@ const ChallengeCreatePage = () => {
   const [targetDays, setTargetDays] = useState<number>(7);
 
   const startDate = dayjs();
-  const endDate = startDate.add(targetDays, "day");
+  const endDate = startDate.add(targetDays - 1, "day");
 
   const { mutate, isLoading } = useMutation({
     mutationFn: () =>

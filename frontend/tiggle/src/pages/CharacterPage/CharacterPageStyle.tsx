@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 import styled from "styled-components";
 
 import { expandTypography } from "@/styles/util/expandTypography";
@@ -64,7 +66,7 @@ export const InfoValue = styled.span`
   ${({ theme }) => expandTypography(theme.typography.body.medium.bold)}
 `;
 
-export const CatalogLink = styled.a`
+export const CatalogLink = styled(Link)`
   display: flex;
   align-items: center;
   justify-content: center;
